@@ -275,13 +275,13 @@
             width: 100%; overflow-x: auto; background-color: var(--bg-secondary);
             border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.01);
         }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 700px; }
         th {
-            background-color: #fafafa; padding: 20px 24px; font-weight: 700;
+            background-color: #fafafa; padding: 16px; font-weight: 700;
             font-size: 0.9rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);
             text-transform: uppercase; letter-spacing: 0.5px;
         }
-        td { padding: 20px 24px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        td { padding: 16px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background-color: rgba(0,0,0,0.005); }
 
@@ -409,15 +409,168 @@ footer p {
             .lecturer-images { flex-wrap: wrap; }
             .social-links { justify-content: center; }
         }
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.8rem; }
-            .nav-links { display: none; }
-            .section-title { font-size: 2rem; }
-            .features-grid { grid-template-columns: 1fr; }
-            .hof-grid { grid-template-columns: 1fr; }
-            .register-box { padding: 32px; }
-        }
-    </style>
+        
+.hamburger{
+    display:none;
+    font-size:1.4rem;
+    cursor:pointer;
+}
+
+.mobile-menu{
+    display:none;
+    position:absolute;
+    top:80px;
+    left:0;
+    width:100%;
+    background:white;
+    list-style:none;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.mobile-menu li{
+    margin-bottom:15px;
+}
+
+.mobile-menu a{
+    text-decoration:none;
+    color:var(--text-main);
+    font-weight:600;
+}
+
+.mobile-menu.show{
+    display:block;
+}
+
+@media (max-width: 768px) {
+
+    .hero-title{
+        font-size:2.5rem;
+        line-height:1.2;
+    }
+
+    .hero-slogan{
+        font-size:1rem;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .hero-buttons a{
+        width:100%;
+        max-width:300px;
+        text-align:center;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .hamburger{
+        display:block;
+    }
+
+    .cta-btn{
+        display:none;
+    }
+
+    .section-title{
+        font-size:2rem;
+    }
+
+    .section-subtitle{
+        font-size:.95rem;
+    }
+
+    .features-grid{
+        grid-template-columns:1fr;
+    }
+
+    .lecturer-images{
+        flex-direction:column;
+        align-items:center;
+    }
+
+    .zoomable-image{
+        width:100%;
+        max-width:320px;
+        height:auto;
+    }
+
+    .image-placeholder{
+        width:100%;
+        max-width:320px;
+        height:250px;
+    }
+
+    .lecturer-name{
+        font-size:2rem;
+    }
+
+    .hof-cat-card{
+        width:100%;
+    }
+
+    .album-preview img{
+        height:100px;
+    }
+
+    .register-box{
+        padding:28px 20px;
+    }
+
+    .container{
+        padding:0 16px;
+    }
+}    
+
+.floating-contact{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    z-index:9999;
+}
+
+.floating-main{
+    width:60px;
+    height:60px;
+    border:none;
+    border-radius:50%;
+    background:var(--bg-dark);
+    color:white;
+    font-size:1.4rem;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+.floating-menu{
+    display:none;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.floating-menu a{
+    background:white;
+    color:var(--text-main);
+    text-decoration:none;
+    padding:12px 16px;
+    border-radius:12px;
+    border:1px solid var(--border-color);
+    white-space:nowrap;
+    font-weight:600;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.floating-menu.show{
+    display:flex;
+}
+
+
+
+</style>
 </head>
 <body>
 
@@ -432,7 +585,23 @@ footer p {
                 <li><a href="#schedule">Lớp Đang Mở</a></li>
                 <li><a href="#halloffame">Hall of Fame</a></li>
             </ul>
-            <a href="#register" class="cta-btn">Đăng Ký Ngay</a>
+            
+<div class="hamburger" onclick="toggleMenu()">
+
+<ul class="mobile-menu" id="mobileMenu">
+    <li><a href="#features">Đặc Quyền</a></li>
+    <li><a href="#recordings">Học Thử</a></li>
+    <li><a href="#lecturers">Giảng Viên</a></li>
+    <li><a href="#schedule">Lớp Đang Mở</a></li>
+    <li><a href="#halloffame">Hall of Fame</a></li>
+    <li><a href="#register">Đăng Ký Ngay</a></li>
+</ul>
+
+    <i class="fa-solid fa-bars"></i>
+</div>
+
+
+<a href="#register" class="cta-btn">Đăng Ký Ngay</a>
         </div>
     </header>
 
@@ -549,7 +718,14 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         <div class="social-links">
                             <a href="https://www.facebook.com/maybebach1510" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
                             <a href="https://www.tiktok.com/@ndh.bach?lang=en" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                            <a href="tel:0901234569" class="contact-phone"><i class="fa-solid fa-phone"></i> 076.302.6187</a>
+                            <a href="https://zalo.me/0763026187"
+   class="contact-phone"
+   target="_blank">
+
+   <i class="fa-solid fa-comment"></i>
+   Zalo
+
+</a>
                         </div>
                     </div>
                 </div>
@@ -574,7 +750,16 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         <div class="social-links">
                             <a href="https://www.facebook.com/tnhi.911" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
                             <a href="https://www.tiktok.com/@nt.tuenhi?lang=en" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                            <a href="tel:0901234568" class="contact-phone"><i class="fa-solid fa-phone"></i> 0931.438.640</a>
+                            
+<a href="https://zalo.me/0931438640"
+   class="contact-phone"
+   target="_blank">
+
+   <i class="fa-solid fa-comment"></i>
+   Zalo
+
+</a>
+
                         </div>
                     </div>
                 </div>
@@ -593,7 +778,16 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         <div class="social-links">
                             <a href="https://www.facebook.com/laogiakhanglxag/" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
                             <a href="https://www.tiktok.com/@ieltswithkane?lang=en" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-                            <a href="tel:0901234567" class="contact-phone"><i class="fa-solid fa-phone"></i> 0846.909.330</a>
+                            
+<a href="https://zalo.me/0846909330"
+   class="contact-phone"
+   target="_blank">
+
+   <i class="fa-solid fa-comment"></i>
+   Zalo
+
+</a>
+
                         </div>
                     </div>
                 </div>
@@ -1073,6 +1267,56 @@ closeRecording();
 });
 
 </script>
+
+<script>
+
+function toggleMenu(){
+    document
+        .getElementById("mobileMenu")
+        .classList
+        .toggle("show");
+}
+
+function toggleContact(){
+
+    document
+    .getElementById("floatingMenu")
+    .classList
+    .toggle("show");
+
+}
+
+
+</script>
+
+
+<!-- Floating Contact -->
+
+<div class="floating-contact">
+
+    <button class="floating-main" onclick="toggleContact()">
+        <i class="fa-solid fa-comments"></i>
+    </button>
+
+    <div class="floating-menu" id="floatingMenu">
+
+        <a href="https://m.me/maybebach1510" target="_blank">
+            👨‍🏫 Hồ Bách
+        </a>
+
+        <a href="https://m.me/tnhi.911" target="_blank">
+            👩‍🏫 Tuệ Nhi
+        </a>
+
+        <a href="https://m.me/laogiakhanglxag" target="_blank">
+            👨‍🏫 Gia Khang
+        </a>
+
+    </div>
+
+</div>
+
+
 
 </body>
 </html>
