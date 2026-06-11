@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>may(be)ielts. - Chuyên sâu IELTS Writing & Speaking</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #f4f4f6;
+            --bg-secondary: #ffffff;
+            --bg-dark: #111113;
+            --bg-card: #f9f9fa;
+            --text-main: #1c1c1e;
+            --text-muted: #636366;
+            --text-light: #f5f5f7;
+            --accent: #2c2c2e;
+            --border-color: #e5e5ea;
+            --status-low: #ff3b30;
+            --status-ok: #34c759;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility Classes */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-padding { padding: 100px 0; }
+        .section-title {
+            font-size: 2.5rem; font-weight: 800; text-align: center;
+            margin-bottom: 16px; letter-spacing: -1px;
+        }
+        .section-subtitle {
+            font-size: 1.1rem; color: var(--text-muted); text-align: center;
+            margin-bottom: 60px; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+
+        /* Navbar */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(244, 244, 246, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none; letter-spacing: -0.5px; }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--text-muted); }
+        .cta-btn {
+            background-color: var(--bg-dark); color: var(--text-light);
+            padding: 12px 24px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem; transition: var(--transition);
+            border: 1px solid var(--bg-dark);
+        }
+        .cta-btn:hover { background-color: transparent; color: var(--text-main); }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding-top: 80px; background: linear-gradient(180deg, rgba(244,244,246,1) 0%, rgba(230,230,235,1) 100%);
+            position: relative;
+        }
+        .hero-content { text-align: center; max-width: 900px; margin: 0 auto; }
+        .hero-title { font-size: 4.5rem; font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 24px; color: var(--text-main); }
+        .hero-slogan { font-size: 1.35rem; font-weight: 400; color: var(--text-muted); margin-bottom: 40px; letter-spacing: 1px; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; }
+        .btn-secondary {
+            background-color: transparent; color: var(--text-main);
+            padding: 12px 24px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem; transition: var(--transition);
+            border: 1px solid var(--border-color);
+        }
+        .btn-secondary:hover { background-color: rgba(0, 0, 0, 0.03); border-color: var(--text-main); }
+
+        /* Features Section */
+        #features { background-color: var(--bg-secondary); }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+        .feature-card {
+            background-color: var(--bg-card); padding: 40px 24px; border-radius: 16px;
+            border: 1px solid var(--border-color); transition: var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.02); }
+        .feature-icon { font-size: 2rem; color: var(--bg-dark); margin-bottom: 24px; }
+        .feature-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; flex-grow: 1; }
+
+        /* Video Recordings Section */
+    
+
+.teacher-grid{
+    display:flex;
+    justify-content:center;
+    gap:32px;
+    flex-wrap:wrap;
+}
+.teacher-recording-card{
+    width:320px;
+    text-align:center;
+    padding:40px 24px;
+    border-radius:16px;
+    background:white;
+    border:1px solid var(--border-color);
+}
+
+.teacher-recording-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 15px 30px rgba(0,0,0,.05);
+}
+
+.teacher-recording-card i{
+    font-size:2rem;
+    margin-bottom:16px;
+}
+
+.teacher-recording-card h3{
+    font-size:1.4rem;
+    margin-bottom:10px;
+}
+
+.teacher-recording-card .aim{
+    color:var(--text-muted);
+    margin-bottom:20px;
+}
+
+.teacher-recording-card button{
+    border:none;
+    background:var(--bg-dark);
+    color:white;
+    padding:12px 24px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.recording-modal{
+    display:none;
+    position:fixed;
+    z-index:5000;
+    inset:0;
+    background:rgba(0,0,0,.85);
+    backdrop-filter:blur(6px);
+}
+
+.recording-modal-content{
+    width:min(1000px,90%);
+    margin:50px auto;
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    animation:zoomIn .25s ease;
+}
+
+.recording-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.recording-close{
+    font-size:30px;
+    cursor:pointer;
+}
+
+.recording-video-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.recording-video-tabs button{
+    border:none;
+    background:#eee;
+    padding:10px 16px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.recording-video-tabs button.active{
+    background:var(--bg-dark);
+    color:white;
+}
+
+.recording-player{
+    position:relative;
+    padding-bottom:56.25%;
+    height:0;
+    overflow:hidden;
+    border-radius:12px;
+}
+
+.recording-player iframe{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:none;
+}
+
+@media(max-width:768px){
+
+    .teacher-grid{
+        grid-template-columns:1fr;
+    }
+
+    .recording-modal-content{
+        width:95%;
+        padding:20px;
+    }
+}
+
+        /* Lecturers Section */
+        #lecturers { background-color: var(--bg-secondary); }
+        .lecturer-grid { display: flex; flex-direction: column; gap: 80px; }
+        .lecturer-row { display: flex; align-items: center; gap: 60px; }
+        .lecturer-row:nth-child(even) { flex-direction: row-reverse; }
+        .lecturer-images { flex: 1; display: flex; gap: 20px; justify-content: center; }
+        
+        .zoomable-image {
+            width: 260px; height: 340px; object-fit: cover; border-radius: 16px;
+            cursor: zoom-in; transition: var(--transition); border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .zoomable-image:hover { transform: scale(1.02); }
+        .image-placeholder {
+            width: 260px; height: 340px; background-color: var(--bg-primary);
+            border-radius: 16px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; border: 2px dashed #d1d1d6;
+            color: var(--text-muted); font-size: 0.9rem; gap: 12px; cursor: pointer;
+        }
+
+        .lecturer-info { flex: 1; }
+        .lecturer-badge {
+            display: inline-block; padding: 6px 12px; background-color: var(--bg-primary);
+            border-radius: 6px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; text-transform: lowercase;
+        }
+        .lecturer-name { font-size: 2.5rem; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .lecturer-score { font-size: 1.1rem; font-weight: 600; color: var(--text-muted); margin-bottom: 20px; }
+        .lecturer-desc { color: var(--text-muted); margin-bottom: 24px; }
+        
+        .social-links { display: flex; gap: 16px; align-items: center; }
+        .social-links a {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%; background-color: var(--bg-primary);
+            color: var(--text-main); text-decoration: none; transition: var(--transition); font-size: 1.1rem;
+        }
+        .social-links a.contact-phone { width: auto; padding: 0 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; gap: 8px;}
+        .social-links a:hover { background-color: var(--bg-dark); color: var(--text-light); }
+
+        /* Schedule Section */
+        #schedule { background-color: var(--bg-primary); }
+        .schedule-category { margin-bottom: 60px; }
+        .schedule-category:last-child { margin-bottom: 0; }
+        .category-header { font-size: 1.75rem; font-weight: 800; margin-bottom: 24px; color: var(--text-main); border-left: 4px solid var(--text-main); padding-left: 16px; }
+        
+        .table-responsive {
+            width: 100%; overflow-x: auto; background-color: var(--bg-secondary);
+            border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 8px 24px rgba(0,0,0,0.01);
+        }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
+        th {
+            background-color: #fafafa; padding: 20px 24px; font-weight: 700;
+            font-size: 0.9rem; color: var(--text-main); border-bottom: 1px solid var(--border-color);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        td { padding: 20px 24px; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background-color: rgba(0,0,0,0.005); }
+
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; }
+        .status-badge.low { background-color: #ffebeb; color: var(--status-low); }
+        .status-badge.ok { background-color: #eafaf1; color: var(--status-ok); }
+        .fee-tag { font-weight: 700; }
+        .fee-note { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+
+        /* Hall Of Fame Section */
+        #halloffame { background-color: var(--bg-secondary); }
+        .hof-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+}
+
+.hof-cat-card{
+    width: 450px;
+    max-width: 100%;
+}
+        .hof-cat-card {
+            background-color: var(--bg-card); border-radius: 16px; padding: 40px 24px;
+            text-align: center; border: 1px solid var(--border-color);
+            cursor: pointer; transition: var(--transition);
+        }
+        .hof-cat-card:hover { background-color: var(--bg-dark); color: var(--text-light); transform: translateY(-4px); }
+        .hof-cat-card:hover h3, .hof-cat-card:hover p { color: var(--text-light); }
+        .hof-cat-card .icon { font-size: 2.5rem; margin-bottom: 20px; color: #ffb800; }
+        .hof-cat-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; transition: var(--transition); }
+        .hof-cat-card p { font-size: 1rem; color: var(--text-muted); font-weight: 500; transition: var(--transition); }
+
+        /* Modal Styles */
+        .modal {
+            display: none; position: fixed; z-index: 2000; padding-top: 50px;
+            left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            margin: auto; display: block; max-width: 90%; max-height: 80vh;
+            border-radius: 8px; object-fit: contain; animation: zoomIn 0.3s ease;
+        }
+        .gallery-container {
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+            margin: auto; max-width: 800px; padding-bottom: 50px;
+        }
+        .gallery-img { max-width: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .close-modal {
+            position: fixed; top: 20px; right: 35px; color: #f1f1f1;
+            font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; z-index: 2001;
+        }
+        .close-modal:hover, .close-modal:focus { color: #bbb; text-decoration: none; cursor: pointer; }
+        
+        @keyframes zoomIn { from {transform:scale(0.95); opacity:0;} to {transform:scale(1); opacity:1;} }
+
+        /* Contact / Register Section */
+        #register { background-color: var(--bg-dark); color: var(--text-light); }
+        #register .section-title { color: var(--text-light); }
+        .register-box {
+            max-width: 600px; margin: 0 auto; background-color: #1c1c1e;
+            padding: 48px; border-radius: 24px; border: 1px solid #2c2c2e;
+        }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: #aeaeb2; }
+        .form-control {
+            width: 100%; background-color: #2c2c2e; border: 1px solid #3a3a3c;
+            padding: 16px; border-radius: 10px; color: var(--text-light); font-family: inherit;
+            font-size: 0.95rem; transition: var(--transition);
+        }
+        .form-control:focus { outline: none; border-color: #8e8e93; }
+        select.form-control {
+            appearance: none; -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat; background-position: right 16px center;
+        }
+        .submit-btn {
+            width: 100%; background-color: var(--bg-secondary); color: var(--text-main);
+            padding: 16px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: var(--transition);
+        }
+        .submit-btn:hover { background-color: #e5e5ea; }
+
+        /* Footer */
+        footer {
+    width: 100%;
+    background-color: #0f0f10;
+    border-top: 1px solid #2c2c2e;
+    padding: 24px 0;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    color: #8e8e93;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+}
+.album-preview{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+}
+
+.album-preview img{
+    width:33.33%;
+    height:160px;
+    object-fit:cover;
+    border-radius:10px;
+    border:1px solid var(--border-color);
+}
+
+
+        /* Responsive Layout */
+        @media (max-width: 1024px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .hof-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 992px) {
+            .hero-title { font-size: 3.5rem; }
+            .video-grid { grid-template-columns: 1fr; }
+            .lecturer-row, .lecturer-row:nth-child(even) { flex-direction: column; gap: 40px; text-align: center; }
+            .lecturer-images { flex-wrap: wrap; }
+            .social-links { justify-content: center; }
+        }
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.8rem; }
+            .nav-links { display: none; }
+            .section-title { font-size: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .hof-grid { grid-template-columns: 1fr; }
+            .register-box { padding: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">may(be)ielts.</a>
+            <ul class="nav-links">
+                <li><a href="#features">Đặc Quyền</a></li>
+                <li><a href="#recordings">Học Thử</a></li>
+                <li><a href="#lecturers">Giảng Viên</a></li>
+                <li><a href="#schedule">Lớp Đang Mở</a></li>
+                <li><a href="#halloffame">Hall of Fame</a></li>
+            </ul>
+            <a href="#register" class="cta-btn">Đăng Ký Ngay</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container hero-content">
+            <h1 class="hero-title">may(be)ielts.</h1>
+            <p class="hero-slogan">giới hạn duy nhất của bạn chỉ là thời gian mà thôi</p>
+            <div class="hero-buttons">
+                <a href="#schedule" class="cta-btn" style="padding: 16px 32px; font-size: 1rem;">Xem lịch khai giảng</a>
+                <a href="#recordings" class="btn-secondary" style="padding: 16px 32px; font-size: 1rem;">Xem lớp học thử</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">may(be)write. writing cấp tốc</h2>
+            <p class="section-subtitle">Hệ thống hóa toàn bộ kiến thức và kỹ năng viết học thuật chỉ trong vòng 15 buổi học chuyên sâu.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <h3>Lộ trình 15 buổi</h3>
+                    <p>Học full toàn bộ các dạng bài. Cấu trúc chia đều thành 5 cặp dạng, mỗi cặp gồm 3 buổi tối ưu hóa (Task 1 - Task 2 - Luyện tập tổng hợp).</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <h3>Chấm chữa 20 bài</h3>
+                    <p>Thực hành liên tục. Nhận feedback chi tiết cho 15 bài homework theo buổi và 5 bài test toàn diện sau khóa học.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+                    <h3>Linh hoạt lớp học</h3>
+                    <p>Được quyền tham gia học song song tại các lớp cùng thời điểm, chủ động đổi lớp lên/xuống nếu cần điều chỉnh tốc độ.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Đặc quyền bảo hành</h3>
+                    <p>Tham gia nghe giảng lại cùng khóa tiếp theo miễn phí nếu chưa thi. Sẵn sàng file tài liệu mẫu cho mọi bài về nhà.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Recording Section -->
+
+<section id="recordings" class="section-padding">
+
+<div class="container">
+
+<h2 class="section-title">Trải nghiệm lớp học thực tế</h2>
+
+<p class="section-subtitle">
+Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
+</p>
+
+<div class="teacher-grid">
+
+     <div class="teacher-recording-card">
+        <i class="fa-solid fa-crown"></i>
+        <h3>Hồ Bách</h3>
+        <p class="aim">Master 7.5 - 8.0+</p>
+
+        <button onclick="openRecording('bach')">
+            Xem recordings
+        </button>
+    </div>
+
+    <div class="teacher-recording-card">
+        <i class="fa-solid fa-pencil"></i>
+        <h3>Tuệ Nhi</h3>
+        <p class="aim">Writing 6.5 → 7.0+</p>
+
+        <button onclick="openRecording('nhi')">
+            Xem recordings
+        </button>
+    </div>
+
+   
+
+</div>
+
+</div>
+
+</section>
+
+    <!-- Lecturers Section -->
+    <section id="lecturers" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">Đội ngũ giảng viên</h2>
+            <p class="section-subtitle">Những người đồng hành có chuyên môn học thuật cao và sở hữu bảng điểm legit tuyệt đối. <br> Click vào ảnh để xem chi tiết. </br> </p>
+            
+            <div class="lecturer-grid">
+                
+<!-- Hồ Bách -->
+                <div class="lecturer-row">
+                    <div class="lecturer-images">
+                        <img src="https://i.ibb.co/YMDr88y/561338466-2462022220881278-659980113980257469-n.jpg" alt="Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)">
+                        <div class="image-placeholder" onclick="alert('Đang cập nhật bằng cấp thầy Bách')">
+                            <i class="fa-regular fa-file-image"></i>
+                            Bằng IELTS 8.5<br>(Đang cập nhật ảnh)
+                        </div>
+                    </div>
+                    <div class="lecturer-info">
+                        <span class="lecturer-badge">may(be)bach</span>
+                        <h3 class="lecturer-name">Hồ Bách</h3>
+                        <p class="lecturer-score">Overall 8.5 | Writing 8.5 | Speaking 8.5</p>
+                        <p class="lecturer-desc">Founder của may(be)ielts và chuyên gia đứng sau các lớp Master tối ưu điểm số lớn. Phương pháp tư duy đa chiều của thầy Bách giúp học viên giải quyết nhanh gọn những chủ đề hóc búa nhất ở cả hai kỹ năng Writing và Speaking.</p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/maybebach1510" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="https://www.tiktok.com/@ndh.bach?lang=en" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                            <a href="tel:0901234569" class="contact-phone"><i class="fa-solid fa-phone"></i> 076.302.6187</a>
+                        </div>
+                    </div>
+                </div>
+
+        
+
+
+<!-- Tuệ Nhi -->
+                <div class="lecturer-row">
+                    <div class="lecturer-images">
+                        <img src="https://i.ibb.co/bMKmDDLc/457736475-1739145653491500-430238909239537785-n.jpg" alt="Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)">
+                        <div class="image-placeholder" onclick="alert('Đang cập nhật bằng cấp cô Nhi')">
+                            <i class="fa-regular fa-file-image"></i>
+                            Bằng IELTS 8.0<br>(Đang cập nhật ảnh)
+                        </div>
+                    </div>
+                    <div class="lecturer-info">
+                        <span class="lecturer-badge">may(be)nhi</span>
+                        <h3 class="lecturer-name">Tuệ Nhi</h3>
+                        <p class="lecturer-score">Overall 8.0 | Writing 8.0</p>
+                        <p class="lecturer-desc">Nổi tiếng với sự tỉ mỉ và kiên nhẫn, cô Nhi đồng hành cùng học viên từ bước xây dựng nền tảng câu, sửa từng lỗi diễn đạt nhỏ nhất để biến các ý tưởng thô thành các đoạn văn học thuật chuẩn xác.</p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/tnhi.911" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="https://www.tiktok.com/@nt.tuenhi?lang=en" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                            <a href="tel:0901234568" class="contact-phone"><i class="fa-solid fa-phone"></i> 0931.438.640</a>
+                        </div>
+                    </div>
+                </div>
+
+ <!-- Gia Khang -->
+                <div class="lecturer-row">
+                    <div class="lecturer-images">
+                        <img src="https://i.ibb.co/1JspPgdb/IMG-20230513-145018.jpg" alt="Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)">
+                        <img src="https://i.ibb.co/2G3Kbkb/Cam-Scanner-03-30-2026-18-24.jpg" alt="Bằng IELTS Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)">
+                    </div>
+                    <div class="lecturer-info">
+                        <span class="lecturer-badge">may(be)kane</span>
+                        <h3 class="lecturer-name">Gia Khang</h3>
+                        <p class="lecturer-score">Overall 8.5 | Writing 8.0 | Speaking 8.0 </p>
+                        <p class="lecturer-desc">Chuyên phụ trách các lớp học mục tiêu đầu ra 6.5 - 7.0+. Với phong cách bóc tách logic mạch lạc, thầy Khang giúp học viên làm chủ cấu trúc bài viết một cách khoa học mà không bị phụ thuộc vào các bài mẫu rập khuôn.</p>
+                        <div class="social-links">
+                            <a href="https://www.facebook.com/laogiakhanglxag/" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="https://www.tiktok.com/@ieltswithkane?lang=en" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+                            <a href="tel:0901234567" class="contact-phone"><i class="fa-solid fa-phone"></i> 0846.909.330</a>
+                        </div>
+                    </div>
+                </div>
+               
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">Lịch khai giảng & Lớp đang mở</h2>
+            <p class="section-subtitle">Thông tin chi tiết về lịch học, thời gian khai giảng và số lượng vị trí còn trống trong tháng 06/2026.</p>
+            
+           <!-- Writing Foundation -->
+<div class="schedule-category">
+    <h3 class="category-header">
+        Writing 5.0-5.5 → 7.0+ (Gia Khang & Tuệ Nhi)
+    </h3>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Giảng Viên</th>
+                    <th>Mã Lớp</th>
+                    <th>Lịch Học</th>
+                    <th>Khai Giảng</th>
+                    <th>Học Phí</th>
+                    <th>Slot Còn Lại</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td><strong>Gia Khang</strong></td>
+                    <td>MBWrite75</td>
+                    <td>Thứ 2 + 5<br>8:00 PM - 10:00 PM</td>
+                    <td>22.06<br><small>Kết thúc: 24.08</small></td>
+                    <td>
+                        <span class="fee-tag">4.000.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge low">3/5</span></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Gia Khang</strong></td>
+                    <td>MBWrite76</td>
+                    <td>Thứ 3 + 6<br>8:00 PM - 10:00 PM</td>
+                    <td>23.06<br><small>Kết thúc: 25.08</small></td>
+                    <td>
+                        <span class="fee-tag">4.000.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge low">4/5</span></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Gia Khang</strong></td>
+                    <td>MBWrite77</td>
+                    <td>Thứ 4 + 7<br>8:00 PM - 10:00 PM</td>
+                    <td>24.06<br><small>Kết thúc: 26.08</small></td>
+                    <td>
+                        <span class="fee-tag">4.000.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge low">3/5</span></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Tuệ Nhi</strong></td>
+                    <td>MBWrite69</td>
+                    <td>Thứ 4 + 7<br>6:00 PM - 8:00 PM</td>
+                    <td>24.06<br><small>Kết thúc: 24.08</small></td>
+                    <td>
+                        <span class="fee-tag">4.500.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge ok">4/12</span></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Tuệ Nhi</strong></td>
+                    <td>MBWrite71</td>
+                    <td>Thứ 2 + 5<br>2:00 PM - 4:00 PM</td>
+                    <td>22.06<br><small>Kết thúc: 22.08</small></td>
+                    <td>
+                        <span class="fee-tag">4.500.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge ok">5/12</span></td>
+                </tr>
+
+                <tr>
+                    <td><strong>Tuệ Nhi</strong></td>
+                    <td>MBWrite72</td>
+                    <td>Thứ 3 + 6<br>8:00 PM - 10:00 PM</td>
+                    <td>23.06<br><small>Kết thúc: 23.08</small></td>
+                    <td>
+                        <span class="fee-tag">4.500.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge ok">4/12</span></td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Master Writing -->
+<div class="schedule-category">
+    <h3 class="category-header">
+        Master Writing 6.5 → 7.5+ (Hồ Bách)
+    </h3>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Giảng Viên</th>
+                    <th>Mã Lớp</th>
+                    <th>Lịch Học</th>
+                    <th>Khai Giảng</th>
+                    <th>Học Phí</th>
+                    <th>Slot Còn Lại</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><strong>Hồ Bách</strong></td>
+                    <td>MBWrite74+</td>
+                    <td>Thứ 2 + 5<br>6:00 PM - 8:00 PM</td>
+                    <td>22.06<br><small>Kết thúc: 24.08</small></td>
+                    <td>
+                        <span class="fee-tag">5.000.000đ</span>
+                        <span class="fee-note">Gốc: 6tr</span>
+                    </td>
+                    <td><span class="status-badge ok">6/15</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Speaking -->
+<div class="schedule-category">
+    <h3 class="category-header">
+        Speaking 5.5 → 7.0+ (Hồ Bách)
+    </h3>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Giảng Viên</th>
+                    <th>Mã Lớp</th>
+                    <th>Lịch Học</th>
+                    <th>Khai Giảng</th>
+                    <th>Học Phí</th>
+                    <th>Slot Còn Lại</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td><strong>Hồ Bách</strong></td>
+                    <td>MBSpeak07</td>
+                    <td>Thứ 4<br>6:00 PM - 8:00 PM</td>
+                    <td>20.06<br><small>Kết thúc: 24.07</small></td>
+                    <td>
+                        <span class="fee-tag">4.500.000đ</span>
+                        <span class="fee-note">Gốc: 5tr</span>
+                    </td>
+                    <td><span class="status-badge low">5/15</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</section>
+    <!-- Hall of Fame Section -->
+<section id="halloffame" class="section-padding">
+    <div class="container">
+        <h2 class="section-title">hall of fame.</h2>
+        <p class="section-subtitle">
+            Click vào từng album để xem toàn bộ kết quả và feedback thật từ học viên may(be)ielts.
+        </p>
+
+        <div class="hof-grid">
+
+            <!-- Album 8.0 -->
+            <div class="hof-cat-card" onclick="openGallery('gallery80')">
+
+                <div class="album-preview">
+                    <img src="https://i.ibb.co/VY8qtLPX/dl-a8eb1f88c038.jpg">
+                    <img src="https://i.ibb.co/nqB8htt2/708866779-122128951707182023-333854500420467618-n.jpg">
+                    <img src="https://i.ibb.co/r2R7htxM/708892722-122128951749182023-7116127762906786008-n.jpg">
+                </div>
+
+                <h3>13+ Học viên</h3>
+                <p>Đạt 8.0 Writing</p>
+            </div>
+
+            <!-- Album 7.0 - 7.5 -->
+            <div class="hof-cat-card" onclick="openGallery('gallery75')">
+
+                <div class="album-preview">
+                    <img src="https://i.ibb.co/6c1xgcCh/dl-43e6421ea632.jpg">
+                    <img src="https://i.ibb.co/DgRmhTHX/dl-311504fa279e.jpg">
+                    <img src="https://i.ibb.co/W413nC6q/dl-7f68c262b780.jpg">
+                </div>
+
+                <h3>115+ Học viên</h3>
+                <p>Đạt 7.0 - 7.5+</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+   <!-- Modal Layouts -->
+<div id="mediaModal" class="modal">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+
+    <img class="modal-content" id="singleImg">
+
+    <div id="galleryContainer" class="gallery-container" style="display:none;">
+    </div>
+</div>
+
+    <!-- Register Section -->
+    <section id="register" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">chúng mình có duyên với nhau.</h2>
+            <p class="section-subtitle" style="color: #aeaeb2;">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
+            
+            <div class="register-box">
+                <form action="#" method="POST" onsubmit="alert('Cảm ơn em! Hệ thống đã ghi nhận thông tin, tụi anh/chị sẽ liên hệ qua FB sớm nhất nhé ^^'); return false;">
+                    <div class="form-group">
+                        <label for="name">Họ và tên của em</label>
+                        <input type="text" id="name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fb-link">Link Facebook cá nhân</label>
+                        <input type="url" id="fb-link" class="form-control" placeholder="https://facebook.com/..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Lớp học em đang quan tâm</label>
+                        <select id="course" class="form-control" required>
+                            <option value="">-- Chọn lớp học --</option>
+                            <option value="MBWrite75">MBWrite75 (Thầy Gia Khang - T2+5)</option>
+                            <option value="MBWrite76">MBWrite76 (Thầy Gia Khang - T3+6)</option>
+                            <option value="MBWrite77">MBWrite77 (Thầy Gia Khang - T4+7)</option>
+                            <option value="MBWrite69">MBWrite69 (Cô Tuệ Nhi - T4+7)</option>
+                            <option value="MBWrite71">MBWrite71 (Cô Tuệ Nhi - T2+5)</option>
+                            <option value="MBWrite72">MBWrite72 (Cô Tuệ Nhi - T3+6)</option>
+                            <option value="MBWrite74+">MBWrite74+ Master (Thầy Hồ Bách - T2+5)</option>
+                            <option value="MBSpeak07">MBSpeak07 Master (Thầy Hồ Bách - T4)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">Gửi thông tin cho tụi mình</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+    <p>© 2026 may(be)ielts. Designed by Kane Lao.</p>
+</footer>
+
+    <!-- JavaScript for Modals -->
+    <script>
+        const modal = document.getElementById("mediaModal");
+        const singleImg = document.getElementById("singleImg");
+        const galleryContainer = document.getElementById("galleryContainer");
+
+        // Close modal when clicking outside the image
+        window.onclick = function(event) {
+            if (event.target == modal) { closeModal(); }
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+            singleImg.style.display = "none";
+            galleryContainer.style.display = "none";
+            document.body.style.overflow = "auto"; // restore scrolling
+        }
+
+        function openSingleImage(src) {
+            modal.style.display = "block";
+            singleImg.style.display = "block";
+            galleryContainer.style.display = "none";
+            singleImg.src = src;
+            document.body.style.overflow = "hidden"; // prevent background scrolling
+        }
+
+        const galleries = {
+
+    gallery80: [
+        "https://i.ibb.co/VY8qtLPX/dl-a8eb1f88c038.jpg",
+        "https://i.ibb.co/nqB8htt2/708866779-122128951707182023-333854500420467618-n.jpg",
+        "https://i.ibb.co/r2R7htxM/708892722-122128951749182023-7116127762906786008-n.jpg",
+        "https://i.ibb.co/kg5vGY0p/473034430-18313729636207797-6873213775979815166-n.jpg",
+        "https://i.ibb.co/7dZdMNHq/dl-bdfded7fa2b7.jpg",
+        "https://i.ibb.co/FbWtr0hJ/dl-ce746f803abc.jpg"
+    ],
+
+    gallery75: [
+        "https://i.ibb.co/6c1xgcCh/dl-43e6421ea632.jpg",
+        "https://i.ibb.co/DgRmhTHX/dl-311504fa279e.jpg",
+        "https://i.ibb.co/W413nC6q/dl-7f68c262b780.jpg",
+        "https://i.ibb.co/BHGwWC6F/dl-927db8f408bc.jpg",
+        "https://i.ibb.co/BVFLyTJH/dl-f6d6cfe88af1.jpg"
+    ]
+};
+
+function openGallery(galleryName) {
+
+    modal.style.display = "block";
+    singleImg.style.display = "none";
+    galleryContainer.style.display = "flex";
+
+    galleryContainer.innerHTML = "";
+
+    galleries[galleryName].forEach(img => {
+        galleryContainer.innerHTML += `
+            <img src="${img}" class="gallery-img">
+        `;
+    });
+
+    document.body.style.overflow = "hidden";
+}
+    </script>
+
+<div id="recordingModal" class="recording-modal">
+
+    <div class="recording-modal-content">
+
+        <div class="recording-header">
+            <h3 id="recordingTitle"></h3>
+
+            <span class="recording-close"
+                  onclick="closeRecording()">&times;</span>
+        </div>
+
+        <div id="recordingTabs"
+             class="recording-video-tabs">
+        </div>
+
+        <div class="recording-player">
+            <iframe id="recordingFrame"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const recordings = {
+
+bach:{
+title:"Hồ Bách",
+videos:[
+{
+name:"Advanced Task 1",
+url:"https://drive.google.com/file/d/1mRHjc6SL9ItxpX2o4L2WPZjf5MmbyJcn/preview"
+},
+{
+name:"Advanced Task 2",
+url:"https://drive.google.com/file/d/1Jy7T8SGOf3ZRJtaJ32u02GgJJC67GiYN/preview"
+},
+{
+name:"Advanced Speaking",
+url:"https://drive.google.com/file/d/VIDEO_ID_4/preview"
+}
+]
+},
+
+
+
+nhi:{
+title:"Tuệ Nhi",
+videos:[
+{
+name:"Writing Task 1",
+url:"https://drive.google.com/file/d/1Zp7lSKaxiicTXq7KK91mLqLkjIF-ds1o/preview"
+},
+{
+name:"Writing Task 2",
+url:"https://drive.google.com/file/d/1f8Wcjrf2OKqOhuekVy1ajnuLkMF6OzVz/preview"
+}
+]
+},
+
+
+};
+
+function openRecording(teacher){
+
+const modal=document.getElementById("recordingModal");
+
+const title=document.getElementById("recordingTitle");
+
+const tabs=document.getElementById("recordingTabs");
+
+const frame=document.getElementById("recordingFrame");
+
+tabs.innerHTML="";
+
+const data=recordings[teacher];
+
+title.innerText=data.title;
+
+data.videos.forEach((video,index)=>{
+
+const btn=document.createElement("button");
+
+btn.innerText=video.name;
+
+if(index===0){
+btn.classList.add("active");
+frame.src=video.url;
+}
+
+btn.onclick=()=>{
+
+document
+.querySelectorAll("#recordingTabs button")
+.forEach(x=>x.classList.remove("active"));
+
+btn.classList.add("active");
+
+frame.src=video.url;
+
+};
+
+tabs.appendChild(btn);
+
+});
+
+modal.style.display="block";
+
+document.body.style.overflow="hidden";
+
+}
+
+function closeRecording(){
+
+document.getElementById("recordingModal").style.display="none";
+
+document.getElementById("recordingFrame").src="";
+
+document.body.style.overflow="auto";
+
+}
+
+window.addEventListener("click",function(e){
+
+const modal=document.getElementById("recordingModal");
+
+if(e.target===modal){
+
+closeRecording();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
