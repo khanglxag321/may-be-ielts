@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - may(be)ielts.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { --bg-primary: #f4f4f6; --bg-secondary: #ffffff; --bg-dark: #111113; --text-main: #1c1c1e; --text-muted: #636366; --text-light: #f5f5f7; --border-color: #e5e5ea; --status-low: #ff3b30; --status-ok: #34c759; --transition: all 0.3s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-primary); color: var(--text-main); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Login */
+        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, #f4f4f6 0%, #e6e6eb 100%); }
+        .login-box { background: var(--bg-secondary); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
+        .login-box h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; text-align: left; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+        .form-control { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 0.95rem; transition: var(--transition); }
+        .form-control:focus { outline: none; border-color: var(--text-main); }
+        .form-control:disabled { background-color: #f0f0f0; cursor: not-allowed; color: #888; }
+        .btn-primary { width: 100%; background: var(--bg-dark); color: var(--text-light); padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        
+        /* Dashboard */
+        #admin-dashboard { display: none; padding-bottom: 60px; }
+        header { background-color: var(--bg-secondary); padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 40px; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; }
+        .logout-btn { background: transparent; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .dashboard-title { font-size: 1.75rem; font-weight: 800; }
+        
+        .action-bar { display: flex; gap: 12px; }
+        .btn-delete-mass { background: var(--status-low); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: none; }
+        .add-btn { background: var(--status-ok); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; gap: 8px; align-items: center; }
+        
+        /* Table Căn chỉnh chuẩn chống lệch */
+        .table-responsive { width: 100%; overflow-x: auto; background-color: var(--bg-secondary); border-radius: 16px; border: 1px solid var(--border-color); }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 950px; table-layout: fixed; }
+        th, td { padding: 16px; border-bottom: 1px solid var(--border-color); vertical-align: middle; word-wrap: break-word; }
+        th { background-color: #fafafa; font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
+        
+        /* Định rộng từng cột cố định để thẳng hàng tuyệt đối */
+        .col-cb { width: 60px; text-align: center; }
+        .col-gv { width: 150px; }
+        .col-ml { width: 130px; }
+        .col-lh { width: 220px; }
+        .col-kg { width: 140px; }
+        .col-hp { width: 140px; }
+        .col-sl { width: 130px; }
+        .col-tt { width: 80px; text-align: center; }
+
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; }
+        .status-badge.low { background-color: #ffebeb; color: var(--status-low); }
+        .status-badge.ok { background-color: #eafaf1; color: var(--status-ok); }
+        .fee-tag { font-weight: 700; display: block; }
+        .fee-note { font-size: 0.75rem; color: var(--text-muted); }
+        
+        .cb-container { display: flex; align-items: center; justify-content: center; height: 100%; }
+        .cb-container input { width: 18px; height: 18px; cursor: pointer; }
+
+        /* Buttons */
+        .action-btns { display: flex; gap: 8px; justify-content: center; }
+        .action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; }
+        .edit-btn { background-color: #007aff; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; z-index: 2000; inset: 0; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg-secondary); width: 100%; max-width: 650px; border-radius: 16px; padding: 32px; max-height: 90vh; overflow-y: auto; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .close-btn { font-size: 1.5rem; cursor: pointer; border: none; background: none; }
+        .form-row { display: flex; gap: 16px; margin-bottom: 4px; }
+        .form-row .form-group { flex: 1; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+        .btn-cancel, .btn-save { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-cancel { background: transparent; border: 1px solid var(--border-color); }
+        .btn-save { background: var(--bg-dark); color: white; border: none; }
+
+        /* Teacher Checkbox List UI */
+        #teacherList label { display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9f9f9; margin-bottom: 6px; border-radius: 8px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; font-weight: 500;}
+        #teacherList label:hover { background: #f0f0f0; }
+        #teacherList input[type="checkbox"] { width: 16px; height: 16px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>may(be)admin.</h2>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email quản trị</label>
+                    <input type="email" id="loginEmail" class="form-control" value="admin@maybeielts.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu</label>
+                    <input type="password" id="loginPass" class="form-control" value="123456" required>
+                </div>
+                <button type="submit" class="btn-primary">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="admin-dashboard">
+        <header>
+            <div class="container header-content">
+                <div class="logo">may(be)ielts. <span style="color: var(--text-muted); font-size: 1rem;">| Admin Panel</span></div>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Quản lý lớp học</h2>
+                <div class="action-bar">
+                    <button class="btn-delete-mass" id="btnDeleteMass" onclick="deleteSelectedClasses()"><i class="fa-solid fa-trash-can"></i> Xóa các lớp đã chọn</button>
+                    <button class="add-btn" onclick="openModal()"><i class="fa-solid fa-plus"></i> Thêm Lớp Mới</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-cb"><div class="cb-container"><input type="checkbox" id="cbSelectAll" onclick="toggleSelectAll()"></div></th>
+                            <th class="col-gv">Giảng Viên</th>
+                            <th class="col-ml">Mã Lớp</th>
+                            <th class="col-lh">Lịch Học</th>
+                            <th class="col-kg">Khai Giảng</th>
+                            <th class="col-hp">Học Phí</th>
+                            <th class="col-sl">Slot Tình Trạng</th>
+                            <th class="col-tt">Sửa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="classTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="classModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Thêm Lớp Mới</h3>
+                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="classForm" onsubmit="saveClass(event)">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="margin: 0;">Giảng viên</label>
+                            <select id="modeSelect" class="form-control" style="width: auto; padding: 4px; font-size: 0.8rem; height: auto;" onchange="toggleMode()">
+                                <option value="single">Thêm Lớp Đơn</option>
+                                <option value="batch">Thêm Hàng Loạt</option>
+                            </select>
+                        </div>
+                        
+                        <div id="singleTeacher">
+                            <select id="singleTeacherSelect" class="form-control">
+                                <option value="Hồ Bách">Hồ Bách</option>
+                                <option value="Tuệ Nhi">Tuệ Nhi</option>
+                                <option value="Gia Khang">Gia Khang</option>
+                            </select>
+                        </div>
+
+                        <div id="batchTeacher" style="display:none;">
+                            <div id="teacherList">
+                                <label><input type="checkbox" value="Gia Khang"> Gia Khang</label>
+                                <label><input type="checkbox" value="Tuệ Nhi"> Tuệ Nhi</label>
+                                <label><input type="checkbox" value="Hồ Bách"> Hồ Bách</label>
+                            </div>
+                            <div style="margin-top: 8px; display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 0.85rem; font-weight: 600; white-space: nowrap;">Số lớp/người:</span>
+                                <input type="number" id="batchCount" class="form-control" value="3" min="1" style="width: 70px; padding: 6px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mã lớp</label>
+                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                            <select id="inputPrefix" class="form-control" style="width: 130px;" required>
+                                <option value="MBWrite">MBWrite</option>
+                                <option value="MBSpeak">MBSpeak</option>
+                            </select>
+                            <input type="text" id="inputSuffix" class="form-control" placeholder="Số hiệu" required style="flex: 1;">
+                        </div>
+                        <div id="batchStartNumBox" style="display: none; align-items: center; gap: 8px;">
+                            <span style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; color: var(--status-ok);">Số hiệu bắt đầu:</span>
+                            <input type="number" id="inputBatchStartNum" class="form-control" value="100" min="1" style="padding: 6px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ngày học trong tuần</label>
+                        <select id="inputDays" class="form-control" required>
+                            <option value="Thứ 2 + 5">Thứ 2 + 5</option>
+                            <option value="Thứ 3 + 6">Thứ 3 + 6</option>
+                            <option value="Thứ 4 + 7">Thứ 4 + 7</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Khung giờ học</label>
+                        <select id="inputTime" class="form-control" required>
+                            <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+                            <option value="6:00 PM - 8:00 PM">6:00 PM - 8:00 PM</option>
+                            <option value="8:00 PM - 10:00 PM">8:00 PM - 10:00 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ngày khai giảng</label>
+                        <input type="date" id="inputStart" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ngày kết thúc</label>
+                        <input type="date" id="inputEnd" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Học phí ưu đãi</label>
+                        <input type="text" id="inputFeePromo" class="form-control" placeholder="VD: 4.000.000" required oninput="formatCurrency(this)">
+                    </div>
+                    <div class="form-group">
+                        <label>Học phí gốc</label>
+                        <input type="text" id="inputFeeOriginal" class="form-control" placeholder="VD: 5.000.000" oninput="formatCurrency(this)">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Số học viên hiện tại</label>
+                        <input type="number" id="inputCurrentStudents" class="form-control" value="0" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tổng số Slot (Tối đa)</label>
+                        <input type="number" id="inputMaxSlots" class="form-control" value="15" min="1" required>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Hủy bỏ</button>
+                    <button type="submit" class="btn-save">Lưu thông tin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbyBZAXmm893kl4QA4rFwiDcVCMRTz4hXbMVCr-tkIVV6tm1NNWTQOGndH8jrbPgSylh/exec';
+        
+        let allClassData = []; 
+        let currentEditMode = false;
+        let selectedTeacherOrder = []; // Mảng lưu thứ tự chọn chính xác theo thời gian click
+
+        // Ghi nhận thứ tự click Checkbox giáo viên
+        document.querySelectorAll('#teacherList input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', function() {
+                if(this.checked) {
+                    selectedTeacherOrder.push(this.value); // Thêm vào cuối mảng (người chọn sau xếp sau)
+                } else {
+                    selectedTeacherOrder = selectedTeacherOrder.filter(t => t !== this.value); // Xóa khỏi mảng
+                }
+            });
+        });
+
+        // --- LOGIN/LOGOUT SYSTEM ---
+        window.onload = function() {
+            if (localStorage.getItem('isAdminLoggedIn') === 'true') { showDashboard(); }
+        };
+        function handleLogin(e) {
+            e.preventDefault();
+            if(document.getElementById('loginEmail').value === 'admin@maybeielts.com' && document.getElementById('loginPass').value === '123456'){
+                localStorage.setItem('isAdminLoggedIn', 'true');
+                showDashboard();
+            } else { alert("Sai tài khoản hoặc mật khẩu!"); }
+        }
+        function handleLogout() {
+            localStorage.removeItem('isAdminLoggedIn');
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('admin-dashboard').style.display = 'none';
+        }
+        function showDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            loadClasses();
+        }
+
+        // --- FORMAT TIỀN TỆ ---
+        function formatCurrency(input) {
+            let val = input.value.replace(/\D/g, ''); 
+            input.value = val !== "" ? new Intl.NumberFormat('vi-VN').format(val) : "";
+        }
+
+        // --- CHUYỂN ĐỔI CHẾ ĐỘ FORM ---
+        function toggleMode() {
+            const isBatch = document.getElementById('modeSelect').value === 'batch';
+            document.getElementById('singleTeacher').style.display = isBatch ? 'none' : 'block';
+            document.getElementById('batchTeacher').style.display = isBatch ? 'block' : 'none';
+            document.getElementById('batchStartNumBox').style.display = isBatch ? 'flex' : 'none';
+            
+            // Cấu hình ô Số hiệu mã lớp
+            document.getElementById('inputSuffix').disabled = isBatch;
+            document.getElementById('inputSuffix').placeholder = isBatch ? "Tự tăng theo bộ" : "Số hiệu (VD: 78)";
+            document.getElementById('inputSuffix').required = !isBatch;
+        }
+
+        // --- TẢI DỮ LIỆU BAN ĐẦU ---
+        function loadClasses() {
+            const tbody = document.getElementById('classTableBody');
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu từ Google Sheet...</td></tr>';
+            
+            fetch(API_URL).then(res => res.json()).then(result => {
+                if(result.status === "success") {
+                    allClassData = result.data;
+                    renderTable(allClassData);
+                }
+            }).catch(e => { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: red;">Lỗi kết nối API.</td></tr>'; });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('classTableBody');
+            tbody.innerHTML = '';
+            document.getElementById('cbSelectAll').checked = false;
+            toggleDeleteMassBtn();
+
+            if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Chưa có lớp học nào.</td></tr>'; return; }
+
+            data.forEach(row => {
+                let slotsLeft = row.TongSlot - row.HocVien;
+                let slotStatus = slotsLeft <= 5 ? "low" : "ok";
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="col-cb class="cb-container""><div class="cb-container"><input type="checkbox" class="row-checkbox" value="${row.MaLop}" onchange="toggleDeleteMassBtn()"></div></td>
+                        <td class="col-gv"><strong>${row.GiangVien}</strong></td>
+                        <td class="col-ml">${row.MaLop}</td>
+                        <td class="col-lh">${row.LichHoc}</td>
+                        <td class="col-kg">${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
+                        <td class="col-hp"><span class="fee-tag">${row.HocPhiUuDai}</span><span class="fee-note">Gốc: ${row.HocPhiGoc}</span></td>
+                        <td class="col-sl"><span class="status-badge ${slotStatus}">Còn ${slotsLeft}/${row.TongSlot}</span></td>
+                        <td class="col-tt">
+                            <button class="action-btn edit-btn" onclick="editClass('${row.MaLop}')"><i class="fa-solid fa-pen"></i></button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        // --- XỬ LÝ MASS DELETE CHECKBOX ---
+        function toggleSelectAll() {
+            const isChecked = document.getElementById('cbSelectAll').checked;
+            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked);
+            toggleDeleteMassBtn();
+        }
+        function toggleDeleteMassBtn() {
+            const anyChecked = Array.from(document.querySelectorAll('.row-checkbox')).some(cb => cb.checked);
+            document.getElementById('btnDeleteMass').style.display = anyChecked ? 'inline-block' : 'none';
+        }
+
+        // --- OPTIMISTIC MASS DELETE (Xóa lập tức trên giao diện) ---
+        function deleteSelectedClasses() {
+            const selected = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
+            if(selected.length === 0) return;
+            
+            if(confirm(`Xác nhận XÓA ${selected.length} lớp đã chọn?`)) {
+                // 🚀 TĂNG TỐC: Xóa ngay lập tức trên UI trước để không cần chờ đợi load lại
+                allClassData = allClassData.filter(item => !selected.includes(item.MaLop));
+                renderTable(allClassData);
+
+                // Chạy ngầm gửi lệnh lên Server Google Sheet
+                fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "BATCH_DELETE", data: selected })
+                });
+            }
+        }
+
+        // --- THÊM / SỬA MODAL CONTROL ---
+        const modal = document.getElementById('classModal');
+        function openModal() {
+            modal.style.display = 'flex';
+            document.getElementById('modalTitle').innerText = 'Thêm Lớp Mới';
+            document.getElementById('classForm').reset();
+            currentEditMode = false;
+            selectedTeacherOrder = [];
+            document.getElementById('modeSelect').disabled = false;
+            document.getElementById('modeSelect').value = 'single';
+            document.getElementById('inputPrefix').disabled = false;
+            document.querySelectorAll('#teacherList input').forEach(cb => cb.checked = false);
+            toggleMode();
+        }
+
+        function convertDateForInput(shortDate) {
+            if(!shortDate) return "";
+            let parts = shortDate.split('.');
+            return parts.length === 2 ? `${new Date().getFullYear()}-${parts[1]}-${parts[0]}` : "";
+        }
+
+        function editClass(maLop) {
+            const row = allClassData.find(item => item.MaLop === maLop);
+            if(!row) return;
+
+            modal.style.display = 'flex';
+            document.getElementById('modalTitle').innerText = 'Chỉnh sửa Lớp: ' + maLop;
+            currentEditMode = true;
+
+            document.getElementById('modeSelect').value = 'single';
+            document.getElementById('modeSelect').disabled = true;
+            toggleMode();
+
+            document.getElementById('singleTeacherSelect').value = row.GiangVien;
+            document.getElementById('inputPrefix').value = row.MaLop.match(/[a-zA-Z]+/g)[0];
+            document.getElementById('inputSuffix').value = row.MaLop.match(/\d+/g)[0];
+            
+            document.getElementById('inputPrefix').disabled = true; 
+            document.getElementById('inputSuffix').disabled = true;
+
+            let lich = row.LichHoc.split(" (");
+            document.getElementById('inputDays').value = lich[0];
+            document.getElementById('inputTime').value = lich[1].replace(")", "");
+
+            document.getElementById('inputStart').value = convertDateForInput(row.KhaiGiang);
+            document.getElementById('inputEnd').value = convertDateForInput(row.KetThuc);
+            document.getElementById('inputFeePromo').value = row.HocPhiUuDai.replace('đ', '');
+            document.getElementById('inputFeeOriginal').value = row.HocPhiGoc.replace('đ', '');
+            document.getElementById('inputCurrentStudents').value = row.HocVien;
+            document.getElementById('inputMaxSlots').value = row.TongSlot;
+        }
+
+        function closeModal() { modal.style.display = 'none'; }
+
+        // --- OPTIMISTIC SAVE & BATCH ADD (Lưu và cập nhật bảng tức thì) ---
+        function saveClass(e) {
+            e.preventDefault();
+            
+            const formatShortDate = (dateStr) => {
+                if(!dateStr) return "";
+                const parts = dateStr.split('-');
+                return `${parts[2]}.${parts[1]}`;
+            };
+            const formatFeeToSave = (val) => {
+                if(!val) return "";
+                return val.includes("đ") ? val : val + "đ";
+            };
+
+            const baseData = {
+                LichHoc: document.getElementById('inputDays').value + " (" + document.getElementById('inputTime').value + ")",
+                KhaiGiang: formatShortDate(document.getElementById('inputStart').value),
+                KetThuc: formatShortDate(document.getElementById('inputEnd').value),
+                HocPhiUuDai: formatFeeToSave(document.getElementById('inputFeePromo').value),
+                HocPhiGoc: formatFeeToSave(document.getElementById('inputFeeOriginal').value),
+                HocVien: document.getElementById('inputCurrentStudents').value,
+                TongSlot: document.getElementById('inputMaxSlots').value
+            };
+
+            const isBatch = document.getElementById('modeSelect').value === 'batch';
+            const prefix = document.getElementById('inputPrefix').value;
+            
+            let payloadAction = currentEditMode ? "EDIT" : "BATCH_ADD";
+            let localNewClasses = []; // Mảng tạm để cập nhật giao diện ngay lập tức
+
+            if (currentEditMode) {
+                // CHẾ ĐỘ SỬA
+                const updatedClass = {
+                    ...baseData,
+                    GiangVien: document.getElementById('singleTeacherSelect').value,
+                    MaLop: prefix + document.getElementById('inputSuffix').value
+                };
+                
+                // 🚀 TĂNG TỐC: Cập nhật biến dữ liệu cục bộ và vẽ lại bảng ngay tức khắc
+                allClassData = allClassData.map(item => item.MaLop === updatedClass.MaLop ? updatedClass : item);
+                renderTable(allClassData);
+                closeModal();
+
+                // Gửi lệnh ngầm đồng bộ lên Google Sheet
+                fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: payloadAction, data: updatedClass }) });
+            } else {
+                // CHẾ ĐỘ THÊM MỚI
+                if (!isBatch) {
+                    localNewClasses.push({
+                        ...baseData,
+                        GiangVien: document.getElementById('singleTeacherSelect').value,
+                        MaLop: prefix + document.getElementById('inputSuffix').value
+                    });
+                } else {
+                    if (selectedTeacherOrder.length === 0) { alert("Vui lòng tick chọn ít nhất 1 giảng viên!"); return; }
+                    
+                    const batchCount = parseInt(document.getElementById('batchCount').value || 1);
+                    // Lấy số hiệu bắt đầu từ ô nhập liệu do người dùng cấu hình
+                    let runningNumber = parseInt(document.getElementById('inputBatchStartNum').value || 100);
+
+                    // Quét danh sách giáo viên tuân thủ ĐÚNG thứ tự mà bạn đã tick chọn
+                    selectedTeacherOrder.forEach(teacherName => {
+                        for(let i = 0; i < batchCount; i++) {
+                            localNewClasses.push({
+                                ...baseData,
+                                GiangVien: teacherName,
+                                MaLop: prefix + runningNumber
+                            });
+                            runningNumber++;
+                        }
+                    });
+                }
+
+                // 🚀 TĂNG TỐC: Gộp dữ liệu mới vào bảng và hiển thị lập tức lên màn hình
+                allClassData = [...allClassData, ...localNewClasses];
+                renderTable(allClassData);
+                closeModal();
+
+                // Gửi lệnh ngầm đồng bộ lên Google Sheet
+                fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: payloadAction, data: localNewClasses }) });
+            }
+        }
+
+        window.onclick = function(event) { if (event.target == modal) closeModal(); }
+    </script>
+</body>
+</html>
