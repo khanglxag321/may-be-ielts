@@ -230,9 +230,47 @@
         /* Lecturers Section */
         #lecturers { background-color: var(--bg-secondary); }
         .lecturer-grid { display: flex; flex-direction: column; gap: 80px; }
-        .lecturer-row { display: flex; align-items: center; gap: 60px; }
+.lecturer-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:40px;
+}
+.lecturer-video{
+    width:220px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.teacher-preview{
+    position:relative;
+    width:220px;
+}
+
+.teacher-preview video{
+    width:100%;
+    height:390px;
+    object-fit:cover;
+    border-radius:16px;
+    cursor:pointer;
+    border:1px solid var(--border-color);
+}
+.teacher-stats{
+    display:flex;
+    justify-content:center;
+    gap:18px;
+    margin-top:12px;
+    font-weight:700;
+    color:var(--text-muted);
+}
         .lecturer-row:nth-child(even) { flex-direction: row-reverse; }
-        .lecturer-images { flex: 1; display: flex; gap: 20px; justify-content: center; }
+.lecturer-images{
+    width:560px;
+    flex-shrink:0;
+    display:flex;
+    gap:20px;
+}
         
         .zoomable-image {
             width: 260px; height: 340px; object-fit: cover; border-radius: 16px;
@@ -247,7 +285,10 @@
             color: var(--text-muted); font-size: 0.9rem; gap: 12px; cursor: pointer;
         }
 
-        .lecturer-info { flex: 1; }
+.lecturer-info{
+    width:500px;
+    flex-shrink:0;
+}
         .lecturer-badge {
             display: inline-block; padding: 6px 12px; background-color: var(--bg-primary);
             border-radius: 6px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; text-transform: lowercase;
@@ -568,7 +609,25 @@ footer p {
     display:flex;
 }
 
+.floating-note{
+    position:absolute;
+    right:75px;
+    bottom:10px;
+    background:white;
+    padding:8px 12px;
+    border-radius:12px;
+    font-size:.8rem;
+    font-weight:600;
+    white-space:nowrap;
+    border:1px solid var(--border-color);
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
 
+.floating-menu.show ~ .floating-note{
+    opacity:0;
+    visibility:hidden;
+
+}
 
 </style>
 </head>
@@ -678,13 +737,22 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <div class="teacher-recording-card">
         <i class="fa-solid fa-pencil"></i>
         <h3>Tuệ Nhi</h3>
-        <p class="aim">Writing 6.5 → 7.0+</p>
+        <p class="aim">Writing 5.0 → 7.0+</p>
 
         <button onclick="openRecording('nhi')">
             Xem recordings
         </button>
     </div>
 
+ <div class="teacher-recording-card">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h3>Gia Khang</h3>
+        <p class="aim">Writing 5.0 → 7.0+</p>
+
+        <button onclick="alert('Recordings của thầy Gia Khang sẽ được cập nhật trong thời gian sắp tới.')">
+            Xem recordings
+        </button>
+    </div>
    
 
 </div>
@@ -727,7 +795,40 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 </a>
                         </div>
-                    </div>
+                    
+    </div>
+
+ <div class="lecturer-video">
+
+        <a href="https://www.tiktok.com/@ndh.bach/video/7457794434713816336?is_from_webapp=1&sender_device=pc"
+           target="_blank">
+
+            <div class="teacher-preview">
+
+          <video
+    autoplay
+    muted
+    loop
+    playsinline>
+
+                    <source
+                      <source src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/Download.mp4" 
+                      type="video/mp4">
+
+                </video>
+
+            </div>
+
+        </a>
+
+     <div class="teacher-stats">
+    <div>👁 1.2M </div>
+    <div>❤️ 94.1K </div>
+</div>
+
+
+
+</div>
                 </div>
 
         
@@ -742,7 +843,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                             Bằng IELTS 8.0<br>(Đang cập nhật ảnh)
                         </div>
                     </div>
-                    <div class="lecturer-info">
+                    
+<div class="lecturer-info">
                         <span class="lecturer-badge">may(be)nhi</span>
                         <h3 class="lecturer-name">Tuệ Nhi</h3>
                         <p class="lecturer-score">Overall 8.0 | Writing 8.0</p>
@@ -762,7 +864,39 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
                         </div>
                     </div>
-                </div>
+                
+<div class="lecturer-video">
+
+        <a href="https://www.tiktok.com/@nt.tuenhi/video/7592510586341084437?is_from_webapp=1&sender_device=pc?is_from_webapp=1&sender_device=pc"
+           target="_blank">
+
+            <div class="teacher-preview">
+
+          <video
+    autoplay
+    muted
+    loop
+    playsinline>
+
+                    <source
+                      src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/nhivideo.mp4"
+                      type="video/mp4">
+
+                </video>
+
+            </div>
+
+        </a>
+
+     <div class="teacher-stats">
+    <div>👁 122.2K </div>
+    <div>❤️ 14.7K </div>
+</div>
+
+
+
+</div>
+</div>
 
  <!-- Gia Khang -->
                 <div class="lecturer-row">
@@ -790,7 +924,39 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
                         </div>
                     </div>
-                </div>
+                
+<div class="lecturer-video">
+
+        <a href="https://www.tiktok.com/@ieltswithkane/video/7633037434267176213?is_from_webapp=1&sender_device=pc"
+           target="_blank">
+
+            <div class="teacher-preview">
+
+          <video
+    autoplay
+    muted
+    loop
+    playsinline>
+
+                    <source
+                      src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/kanevideo.mp4"
+                      type="video/mp4">
+
+                </video>
+
+            </div>
+
+        </a>
+
+     <div class="teacher-stats">
+    <div>👁 80.1K </div>
+    <div>❤️ 8.8K </div>
+</div>
+
+
+
+</div>
+</div>
                
 
 
@@ -802,178 +968,73 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <section id="schedule" class="section-padding">
         <div class="container">
             <h2 class="section-title">Lịch khai giảng & Lớp đang mở</h2>
-            <p class="section-subtitle">Thông tin chi tiết về lịch học, thời gian khai giảng và số lượng vị trí còn trống trong tháng 06/2026.</p>
+            <p class="section-subtitle">Thông tin chi tiết về lịch học, thời gian khai giảng và số lượng vị trí còn trống.</p>
             
-           <!-- Writing Foundation -->
-<div class="schedule-category">
-    <h3 class="category-header">
-        Writing 5.0-5.5 → 7.0+ (Gia Khang & Tuệ Nhi)
-    </h3>
+            <div class="schedule-category">
+                <h3 class="category-header">Writing 5.0-5.5 → 7.0+ (Gia Khang & Tuệ Nhi)</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Giảng Viên</th>
+                                <th>Mã Lớp</th>
+                                <th>Lịch Học</th>
+                                <th>Khai Giảng</th>
+                                <th>Học Phí</th>
+                                <th>Slot Còn Lại</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-foundation">
+                            <tr><td colspan="6" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu lịch học...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>Giảng Viên</th>
-                    <th>Mã Lớp</th>
-                    <th>Lịch Học</th>
-                    <th>Khai Giảng</th>
-                    <th>Học Phí</th>
-                    <th>Slot Còn Lại</th>
-                </tr>
-            </thead>
+            <div class="schedule-category">
+                <h3 class="category-header">Master Writing 6.5 → 7.5+ (Hồ Bách)</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Giảng Viên</th>
+                                <th>Mã Lớp</th>
+                                <th>Lịch Học</th>
+                                <th>Khai Giảng</th>
+                                <th>Học Phí</th>
+                                <th>Slot Còn Lại</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-master-write">
+                            <tr><td colspan="6" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu lịch học...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-            <tbody>
+            <div class="schedule-category">
+                <h3 class="category-header">Speaking 5.5 → 7.0+ (Hồ Bách)</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Giảng Viên</th>
+                                <th>Mã Lớp</th>
+                                <th>Lịch Học</th>
+                                <th>Khai Giảng</th>
+                                <th>Học Phí</th>
+                                <th>Slot Còn Lại</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-speaking">
+                            <tr><td colspan="6" style="text-align:center;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu lịch học...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <tr>
-                    <td><strong>Gia Khang</strong></td>
-                    <td>MBWrite75</td>
-                    <td>Thứ 2 + 5<br>8:00 PM - 10:00 PM</td>
-                    <td>22.06<br><small>Kết thúc: 24.08</small></td>
-                    <td>
-                        <span class="fee-tag">4.000.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge low">3/5</span></td>
-                </tr>
-
-                <tr>
-                    <td><strong>Gia Khang</strong></td>
-                    <td>MBWrite76</td>
-                    <td>Thứ 3 + 6<br>8:00 PM - 10:00 PM</td>
-                    <td>23.06<br><small>Kết thúc: 25.08</small></td>
-                    <td>
-                        <span class="fee-tag">4.000.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge low">4/5</span></td>
-                </tr>
-
-                <tr>
-                    <td><strong>Gia Khang</strong></td>
-                    <td>MBWrite77</td>
-                    <td>Thứ 4 + 7<br>8:00 PM - 10:00 PM</td>
-                    <td>24.06<br><small>Kết thúc: 26.08</small></td>
-                    <td>
-                        <span class="fee-tag">4.000.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge low">3/5</span></td>
-                </tr>
-
-                <tr>
-                    <td><strong>Tuệ Nhi</strong></td>
-                    <td>MBWrite69</td>
-                    <td>Thứ 4 + 7<br>6:00 PM - 8:00 PM</td>
-                    <td>24.06<br><small>Kết thúc: 24.08</small></td>
-                    <td>
-                        <span class="fee-tag">4.500.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge ok">4/12</span></td>
-                </tr>
-
-                <tr>
-                    <td><strong>Tuệ Nhi</strong></td>
-                    <td>MBWrite71</td>
-                    <td>Thứ 2 + 5<br>2:00 PM - 4:00 PM</td>
-                    <td>22.06<br><small>Kết thúc: 22.08</small></td>
-                    <td>
-                        <span class="fee-tag">4.500.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge ok">5/12</span></td>
-                </tr>
-
-                <tr>
-                    <td><strong>Tuệ Nhi</strong></td>
-                    <td>MBWrite72</td>
-                    <td>Thứ 3 + 6<br>8:00 PM - 10:00 PM</td>
-                    <td>23.06<br><small>Kết thúc: 23.08</small></td>
-                    <td>
-                        <span class="fee-tag">4.500.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge ok">4/12</span></td>
-                </tr>
-
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Master Writing -->
-<div class="schedule-category">
-    <h3 class="category-header">
-        Master Writing 6.5 → 7.5+ (Hồ Bách)
-    </h3>
-
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>Giảng Viên</th>
-                    <th>Mã Lớp</th>
-                    <th>Lịch Học</th>
-                    <th>Khai Giảng</th>
-                    <th>Học Phí</th>
-                    <th>Slot Còn Lại</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td><strong>Hồ Bách</strong></td>
-                    <td>MBWrite74+</td>
-                    <td>Thứ 2 + 5<br>6:00 PM - 8:00 PM</td>
-                    <td>22.06<br><small>Kết thúc: 24.08</small></td>
-                    <td>
-                        <span class="fee-tag">5.000.000đ</span>
-                        <span class="fee-note">Gốc: 6tr</span>
-                    </td>
-                    <td><span class="status-badge ok">6/15</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Speaking -->
-<div class="schedule-category">
-    <h3 class="category-header">
-        Speaking 5.5 → 7.0+ (Hồ Bách)
-    </h3>
-
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th>Giảng Viên</th>
-                    <th>Mã Lớp</th>
-                    <th>Lịch Học</th>
-                    <th>Khai Giảng</th>
-                    <th>Học Phí</th>
-                    <th>Slot Còn Lại</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr>
-                    <td><strong>Hồ Bách</strong></td>
-                    <td>MBSpeak07</td>
-                    <td>Thứ 4<br>6:00 PM - 8:00 PM</td>
-                    <td>20.06<br><small>Kết thúc: 24.07</small></td>
-                    <td>
-                        <span class="fee-tag">4.500.000đ</span>
-                        <span class="fee-note">Gốc: 5tr</span>
-                    </td>
-                    <td><span class="status-badge low">5/15</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-</section>
     <!-- Hall of Fame Section -->
 <section id="halloffame" class="section-padding">
     <div class="container">
@@ -1279,13 +1340,21 @@ function toggleMenu(){
 
 function toggleContact(){
 
-    document
-    .getElementById("floatingMenu")
-    .classList
-    .toggle("show");
+    const menu = document.getElementById("floatingMenu");
+    const note = document.querySelector(".floating-note");
+
+    menu.classList.toggle("show");
+
+    if(menu.classList.contains("show")){
+        note.style.display = "none";
+    }else{
+        note.style.display = "block";
+    }
 
 }
 
+
+    
 
 </script>
 
@@ -1293,7 +1362,10 @@ function toggleContact(){
 <!-- Floating Contact -->
 
 <div class="floating-contact">
-
+   
+<div class="floating-note" id="floatingNote">
+    💬 Cần tư vấn?
+</div>
     <button class="floating-main" onclick="toggleContact()">
         <i class="fa-solid fa-comments"></i>
     </button>
@@ -1316,7 +1388,79 @@ function toggleContact(){
 
 </div>
 
+<script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyBZAXmm893kl4QA4rFwiDcVCMRTz4hXbMVCr-tkIVV6tm1NNWTQOGndH8jrbPgSylh/exec'; // Điền link thật của bạn vào đây
 
+    async function loadPublicSchedule() {
+        try {
+            const response = await fetch(API_URL);
+            const result = await response.json();
+            
+            if (result.status === "success") {
+                renderPublicTables(result.data);
+            }
+        } catch (error) {
+            console.error("Lỗi tải dữ liệu:", error);
+            document.querySelectorAll('#schedule tbody').forEach(tb => {
+                tb.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Tạm thời không thể tải lịch học. Xin vui lòng liên hệ Fanpage.</td></tr>';
+            });
+        }
+    }
+
+    function renderPublicTables(data) {
+        const tbFoundation = document.getElementById('tbody-foundation');
+        const tbMasterWrite = document.getElementById('tbody-master-write');
+        const tbSpeaking = document.getElementById('tbody-speaking');
+        
+        // Làm trống các bảng trước khi bơm dữ liệu mới
+        tbFoundation.innerHTML = '';
+        tbMasterWrite.innerHTML = '';
+        tbSpeaking.innerHTML = '';
+
+        data.forEach(row => {
+            let slotsLeft = row.TongSlot - row.HocVien;
+            let slotStatus = slotsLeft <= 5 ? "low" : "ok";
+            
+            // Format lại cột Lịch học: "Thứ 2 + 5 (8:00 PM - 10:00 PM)" thành 2 dòng cho đẹp
+            let lichHocFormat = row.LichHoc.replace(" (", "<br><small>").replace(")", "</small>");
+
+            const trHTML = `
+                <tr>
+                    <td><strong>${row.GiangVien}</strong></td>
+                    <td>${row.MaLop}</td>
+                    <td>${lichHocFormat}</td>
+                    <td>${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
+                    <td>
+                        <span class="fee-tag">${row.HocPhiUuDai}</span>
+                        <span class="fee-note">Gốc: ${row.HocPhiGoc}</span>
+                    </td>
+                    <td><span class="status-badge ${slotStatus}">${slotsLeft}/${row.TongSlot}</span></td>
+                </tr>
+            `;
+
+            // Phân loại đổ vào đúng bảng
+            if (row.MaLop.startsWith('MBWrite')) {
+                // Nếu là lớp Writing
+                if (row.GiangVien.includes('Bách')) {
+                    tbMasterWrite.innerHTML += trHTML;
+                } else {
+                    tbFoundation.innerHTML += trHTML; // Lớp của Khang & Nhi
+                }
+            } else if (row.MaLop.startsWith('MBSpeak')) {
+                // Nếu là lớp Speaking
+                tbSpeaking.innerHTML += trHTML;
+            }
+        });
+
+        // Xử lý hiển thị nếu có bảng nào không có lớp mở
+        if (tbFoundation.innerHTML === '') tbFoundation.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
+        if (tbMasterWrite.innerHTML === '') tbMasterWrite.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
+        if (tbSpeaking.innerHTML === '') tbSpeaking.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
+    }
+
+    // Tự động chạy khi website vừa load xong
+    document.addEventListener("DOMContentLoaded", loadPublicSchedule);
+</script>
 
 </body>
 </html>
