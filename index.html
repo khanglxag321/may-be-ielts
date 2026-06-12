@@ -13,6 +13,10 @@
     
     <style>
         :root {
+
+html, body {
+    overflow-x: hidden;
+}
             --bg-primary: #f4f4f6;
             --bg-secondary: #ffffff;
             --bg-dark: #111113;
@@ -362,21 +366,46 @@
             display: none; position: fixed; z-index: 2000; padding-top: 50px;
             left: 0; top: 0; width: 100%; height: 100%; overflow: auto;
             background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+overscroll-behavior: contain;
+
         }
         .modal-content {
-            margin: auto; display: block; max-width: 90%; max-height: 80vh;
-            border-radius: 8px; object-fit: contain; animation: zoomIn 0.3s ease;
-        }
-        .gallery-container {
-            display: flex; flex-direction: column; align-items: center; gap: 20px;
-            margin: auto; max-width: 800px; padding-bottom: 50px;
-        }
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 8px;
+    object-fit: contain;
+    animation: zoomIn 0.3s ease;
+}
+       .gallery-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    max-width: 800px;
+    margin: auto;
+
+    max-height: 85vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom: 50px;
+}
         .gallery-img { max-width: 100%; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         
-        .close-modal {
-            position: fixed; top: 20px; right: 35px; color: #f1f1f1;
-            font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; z-index: 2001;
-        }
+    .close-modal {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 999999;
+    font-size: 42px;
+    color: white;
+    cursor: pointer;
+    line-height: 1;
+    user-select: none;
+}
         .close-modal:hover, .close-modal:focus { color: #bbb; text-decoration: none; cursor: pointer; }
         
         @keyframes zoomIn { from {transform:scale(0.95); opacity:0;} to {transform:scale(1); opacity:1;} }
@@ -484,6 +513,42 @@ footer p {
 }
 
 @media (max-width: 768px) {
+
+.container {
+    padding: 0 12px;
+}
+
+
+.lecturer-row {
+    flex-direction: column !important;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.lecturer-images,
+.lecturer-info,
+.lecturer-video {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+.lecturer-info {
+    text-align: center;
+    padding: 0 10px;
+}
+
+
+.lecturer-desc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.lecturer-name {
+    font-size: 1.8rem;
+}
+
+
 
     .hero-title{
         font-size:2.5rem;
@@ -1093,7 +1158,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <p class="section-subtitle" style="color: #aeaeb2;">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
             
             <div class="register-box">
-                <form action="#" method="POST" onsubmit="alert('Cảm ơn em! Hệ thống đã ghi nhận thông tin, tụi anh/chị sẽ liên hệ qua FB sớm nhất nhé ^^'); return false;">
+                <form onsubmit="submitRegister(event); return false;">
                     <div class="form-group">
                         <label for="name">Họ và tên của em</label>
                         <input type="text" id="name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
@@ -1151,13 +1216,22 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         const galleries = {
 
     gallery80: [
-        "https://i.ibb.co/VY8qtLPX/dl-a8eb1f88c038.jpg",
-        "https://i.ibb.co/nqB8htt2/708866779-122128951707182023-333854500420467618-n.jpg",
-        "https://i.ibb.co/r2R7htxM/708892722-122128951749182023-7116127762906786008-n.jpg",
-        "https://i.ibb.co/kg5vGY0p/473034430-18313729636207797-6873213775979815166-n.jpg",
-        "https://i.ibb.co/7dZdMNHq/dl-bdfded7fa2b7.jpg",
-        "https://i.ibb.co/FbWtr0hJ/dl-ce746f803abc.jpg"
-    ],
+    "https://i.ibb.co/KxXH7bqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259296.jpg",
+    "https://i.ibb.co/fVmR6NXQ/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259292.jpg",
+    "https://i.ibb.co/zHTsCZ15/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259288.jpg",
+    "https://i.ibb.co/8nCzNH2R/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259284.jpg",
+    "https://i.ibb.co/tMJbfy8F/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259279.jpg",
+    "https://i.ibb.co/XkFRT04k/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259274.jpg",
+    "https://i.ibb.co/YT0ntY8z/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259270.jpg",
+    "https://i.ibb.co/QFPbgNqg/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259261.jpg",
+    "https://i.ibb.co/cWnHqsc/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259256.jpg",
+    "https://i.ibb.co/mVHs9vDR/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259244.jpg",
+    "https://i.ibb.co/zHQSLk4k/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259240.jpg",
+    "https://i.ibb.co/gMcT1LDk/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259234.jpg",
+    "https://i.ibb.co/3yd38YqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259228.jpg",
+    "https://i.ibb.co/60ZPjkbt/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259304.jpg",
+    "https://i.ibb.co/BKfVdJtx/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259300.jpg"
+],
 
     gallery75: [
         "https://i.ibb.co/6c1xgcCh/dl-43e6421ea632.jpg",
@@ -1171,6 +1245,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 function openGallery(galleryName) {
 
     modal.style.display = "block";
+document.body.style.overflow = "hidden";
     singleImg.style.display = "none";
     galleryContainer.style.display = "flex";
 
@@ -1468,19 +1543,22 @@ async function submitRegister(e){
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
-        facebook: document.getElementById("fb").value
+        facebook: document.getElementById("fb-link").value
     };
 
     try{
         const res = await fetch(REGISTER_API, {
-            method: "POST",
-            body: JSON.stringify(data)
-        });
+    method: "POST",
+    headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+    },
+    body: JSON.stringify(data)
+});a
 
         const result = await res.json();
 
         if(result.status === "success"){
-            alert("Đăng ký thành công! Team sẽ liên hệ sớm.");
+            alert("Cảm ơn em! Team đã nhận được thông tin và sẽ liên hệ sớm nhất ^^");
         } else {
             alert("Có lỗi xảy ra, thử lại sau.");
         }
@@ -1490,7 +1568,7 @@ async function submitRegister(e){
         console.error(err);
     }
 }
-<script>
+</script>
 
 </body>
 </html>
