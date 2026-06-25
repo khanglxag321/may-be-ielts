@@ -1572,7 +1572,7 @@ async function submitRegister(e){
         email: document.getElementById("email").value,
         phone: document.getElementById("phone").value,
         facebook: document.getElementById("fb-link").value,
-           course: document.getElementById("course").value
+           className: document.getElementById("course").value
     };
 
     try{
@@ -1582,7 +1582,7 @@ async function submitRegister(e){
         "Content-Type": "text/plain;charset=utf-8",
     },
     body: JSON.stringify(data)
-});a
+});
 
         const result = await res.json();
 
