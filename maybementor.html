@@ -25,7 +25,7 @@
             --status-low: #ff3b30;
             --status-ok: #34c759;
             --status-student: #007aff;
-            --transition: all 0.2s ease-in-out;
+            --transition: color .12s ease, background-color .12s ease, border-color .12s ease, transform .12s ease;
         }
 
         * {
@@ -375,7 +375,7 @@
         }
 
         .slot-card:hover {
-            transform: scale(1.02);
+            transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
@@ -481,7 +481,7 @@
             z-index: 2000;
             inset: 0;
             background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            backdrop-filter: none;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -686,21 +686,15 @@
                 <div id="loginError" class="hidden">Sai email hoặc mật khẩu!</div>
 
                 <label style="text-align: left;">Email</label>
-                <input type="email" id="loginEmail" value="mentor1@maybeielts.com" required>
+                <input type="email" id="loginEmail" autocomplete="email" required>
 
                 <label style="text-align: left;">Mật khẩu</label>
-                <input type="password" id="loginPass" value="123456" required>
+                <input type="password" id="loginPass" autocomplete="current-password" required>
 
                 <button type="submit" class="cta-btn" style="width: 100%; margin-top: 8px;">
                     ĐĂNG NHẬP
                 </button>
             </form>
-
-            <div style="margin-top:20px; font-size:0.8rem; color:var(--text-muted); text-align:left;">
-                <strong>Mock Accounts:</strong><br>
-                1. mentor1@maybeielts.com / 123456<br>
-                2. mentor2@maybeielts.com / 123456
-            </div>
         </div>
     </div>
 
@@ -947,287 +941,215 @@
         <i class="fa-solid fa-circle-check"></i>
         <span id="toastMsg">Cập nhật thành công!</span>
     </div>
-
     <script>
-        const DAYS = [
-            "Thứ 2",
-            "Thứ 3",
-            "Thứ 4",
-            "Thứ 5",
-            "Thứ 6",
-            "Thứ 7",
-            "Chủ nhật"
-        ];
+        const API_URL = "https://script.google.com/macros/s/AKfycbyV2EXMoRm0WUXYHvkCBzZbjBkbFQ0swVYNBf70Ae6SsNt_CXnv7nCqHaPYFNm-n1oZ/exec";
 
-        const MOCK_ACCOUNTS = [
-            {
-                email: "mentor1@maybeielts.com",
-                password: "123456",
-                mentorId: "m1"
-            },
-            {
-                email: "mentor2@maybeielts.com",
-                password: "123456",
-                mentorId: "m2"
-            }
-        ];
-
-        const INITIAL_DB = {
-            "m1": {
-                id: "m1",
-                name: "Lao Gia Khang",
-                role: "Writing",
-                overall: "8.0",
-                skillScore: "Writing 8.0",
-                intro: "Xin chào! Mình là Gia Khang, sẵn sàng đồng hành cùng các bạn để chinh phục band điểm IELTS mong muốn.",
-                experience: "3 năm giảng dạy IELTS",
-                education: "Cử nhân Ngôn ngữ Anh",
-                certs: "IELTS 8.0, TESOL",
-                facebook: "facebook.com/lgk",
-                tiktok: "@khang.ielts",
-                zalo: "0901234567",
-                avatar: "https://i.pravatar.cc/150?img=11",
-                maxStudents: 10,
-                updatedAt: new Date().toISOString(),
-
-                timeSlots: [
-                    {
-                        id: "ts_1",
-                        startTime: "08:00",
-                        endTime: "09:30"
-                    },
-                    {
-                        id: "ts_2",
-                        startTime: "13:30",
-                        endTime: "15:00"
-                    },
-                    {
-                        id: "ts_3",
-                        startTime: "18:15",
-                        endTime: "19:45"
-                    }
-                ],
-
-                availability: {
-                    0: {
-                        "ts_1": {
-                            status: "available"
-                        },
-                        "ts_2": {
-                            status: "student",
-                            studentName: "Hoàng Oanh",
-                            note: "Task 1"
-                        }
-                    },
-                    1: {
-                        "ts_3": {
-                            status: "blocked"
-                        }
-                    },
-                    2: {},
-                    3: {},
-                    4: {},
-                    5: {},
-                    6: {}
-                }
-            },
-
-            "m2": {
-                id: "m2",
-                name: "Hoàng Yến",
-                role: "Speaking",
-                overall: "7.5",
-                skillScore: "Speaking 8.0",
-                intro: "Let's speak English naturally!",
-                experience: "2 năm giảng dạy",
-                education: "Đại học Ngoại Thương",
-                certs: "IELTS 7.5",
-                facebook: "facebook.com/yen",
-                tiktok: "@yen.speaking",
-                zalo: "0909999999",
-                avatar: "https://i.pravatar.cc/150?img=5",
-                maxStudents: 5,
-
-                updatedAt: new Date(
-                    new Date().setDate(new Date().getDate() - 10)
-                ).toISOString(),
-
-                timeSlots: [
-                    {
-                        id: "ts_a",
-                        startTime: "09:00",
-                        endTime: "10:30"
-                    },
-                    {
-                        id: "ts_b",
-                        startTime: "19:30",
-                        endTime: "21:00"
-                    }
-                ],
-
-                availability: {
-                    0: {},
-                    1: {},
-                    2: {
-                        "ts_b": {
-                            status: "student",
-                            studentName: "Minh Tuấn",
-                            note: ""
-                        }
-                    },
-                    3: {},
-                    4: {},
-                    5: {},
-                    6: {}
-                }
-            }
-        };
-
-        if (!localStorage.getItem("maybe_mentor_db")) {
-            localStorage.setItem(
-                "maybe_mentor_db",
-                JSON.stringify(INITIAL_DB)
-            );
-        }
-
-        const authService = {
-            login: (email, pass) => {
-                const user = MOCK_ACCOUNTS.find(
-                    u => u.email === email && u.password === pass
-                );
-
-                if (user) {
-                    localStorage.setItem(
-                        "currentUser",
-                        user.mentorId
-                    );
-
-                    return true;
-                }
-
-                return false;
-            },
-
-            logout: () => {
-                localStorage.removeItem("currentUser");
-            },
-
-            getCurrentId: () => {
-                return localStorage.getItem("currentUser");
-            }
-        };
-
-        const dataService = {
-            loadMentor: (id) => {
-                const db = JSON.parse(
-                    localStorage.getItem("maybe_mentor_db")
-                );
-
-                return db[id];
-            },
-
-            saveMentor: (data) => {
-                const db = JSON.parse(
-                    localStorage.getItem("maybe_mentor_db")
-                );
-
-                db[data.id] = data;
-
-                localStorage.setItem(
-                    "maybe_mentor_db",
-                    JSON.stringify(db)
-                );
-            }
-        };
-
+        const DAYS = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"];
         let mentorData = null;
         let activeMobileDay = 0;
-
-        let editingCell = {
-            day: null,
-            slotId: null
-        };
-
+        let editingCell = { day: null, slotId: null };
         let tempStatus = null;
         let editingTsId = null;
+        const pendingTimeSlotIds = new Set();
+        let toastTimeout;
 
-        function handleLogin(e) {
-            e.preventDefault();
-
-            const email =
-                document.getElementById("loginEmail").value;
-
-            const pass =
-                document.getElementById("loginPass").value;
-
-            if (authService.login(email, pass)) {
-                document
-                    .getElementById("loginError")
-                    .classList.add("hidden");
-
-                document
-                    .getElementById("login-screen")
-                    .classList.add("hidden");
-
-                document
-                    .getElementById("portal-screen")
-                    .classList.remove("hidden");
-
-                initPortal();
-            } else {
-                document
-                    .getElementById("loginError")
-                    .classList.remove("hidden");
-            }
-        }
-
-        function handleLogout() {
-            authService.logout();
-
-            document
-                .getElementById("portal-screen")
-                .classList.add("hidden");
-
-            document
-                .getElementById("login-screen")
-                .classList.remove("hidden");
-        }
-
-        window.onload = () => {
-            if (authService.getCurrentId()) {
-                document
-                    .getElementById("login-screen")
-                    .classList.add("hidden");
-
-                document
-                    .getElementById("portal-screen")
-                    .classList.remove("hidden");
-
-                initPortal();
-            }
+        const authService = {
+            async login(email, password) {
+                const result = await apiPost({ action: "login", email, password }, false);
+                if (!result.success) return result;
+                localStorage.setItem("currentUser", result.mentorId);
+                localStorage.setItem("sessionToken", result.sessionToken);
+                return result;
+            },
+            async logout() {
+                const token = this.getToken();
+                if (token) {
+                    try { await apiPost({ action: "logout", sessionToken: token }, false); } catch (_) {}
+                }
+                this.clear();
+            },
+            clear() {
+                localStorage.removeItem("currentUser");
+                localStorage.removeItem("sessionToken");
+            },
+            getCurrentId() { return localStorage.getItem("currentUser"); },
+            getToken() { return localStorage.getItem("sessionToken"); }
         };
 
-        function initPortal() {
-            const currentId = authService.getCurrentId();
+        async function parseApiResponse(response) {
+            const text = await response.text();
+            let result;
+            try { result = JSON.parse(text); }
+            catch (_) { throw new Error("API không trả về JSON. Hãy kiểm tra lại Web app URL và deployment."); }
+            if (result.code === "UNAUTHORIZED") {
+                authService.clear();
+                showLoginScreen();
+            }
+            return result;
+        }
 
-            mentorData = dataService.loadMentor(currentId);
+        async function apiGet(action) {
+            const token = authService.getToken();
+            const url = `${API_URL}?action=${encodeURIComponent(action)}&sessionToken=${encodeURIComponent(token || "")}`;
+            const response = await fetch(url, { method: "GET", redirect: "follow" });
+            return parseApiResponse(response);
+        }
 
-            document.getElementById("headerName").innerText =
-                `Xin chào, ${mentorData.name}`;
+        async function apiPost(payload, includeSession = true) {
+            const body = { ...payload };
+            if (includeSession) body.sessionToken = authService.getToken();
+            const response = await fetch(API_URL, {
+                method: "POST",
+                redirect: "follow",
+                body: JSON.stringify(body)
+            });
+            return parseApiResponse(response);
+        }
 
-            document.getElementById("headerRole").innerText =
-                `${mentorData.role} Mentor`;
 
-            document.getElementById("headerAvatar").src =
-                mentorData.avatar;
+        function normalizeTime(value) {
+            if (typeof value === "number") {
+                const total = Math.round((value % 1) * 1440);
+                return `${String(Math.floor(total / 60) % 24).padStart(2,"0")}:${String(total % 60).padStart(2,"0")}`;
+            }
+            const text = String(value || "").trim();
+            const match = text.match(/^(\d{1,2}):(\d{2})/);
+            if (match) return `${String(Number(match[1])).padStart(2,"0")}:${match[2]}`;
+            const parsed = new Date(text);
+            if (!Number.isNaN(parsed.getTime())) {
+                return `${String(parsed.getHours()).padStart(2,"0")}:${String(parsed.getMinutes()).padStart(2,"0")}`;
+            }
+            return text;
+        }
 
-            document.getElementById("inputMaxStudents").value =
-                mentorData.maxStudents;
+        const dataService = {
+            async loadMentor() {
+                const [mentorResult, slotsResult, scheduleResult] = await Promise.all([
+                    apiGet("getMentor"),
+                    apiGet("getTimeSlots"),
+                    apiGet("getSchedule")
+                ]);
+                [mentorResult, slotsResult, scheduleResult].forEach(result => {
+                    if (!result.success) throw new Error(result.message || "Không thể tải dữ liệu");
+                });
+                const mentor = mentorResult.mentor;
+                mentor.id = mentor.mentorId;
+                mentor.timeSlots = slotsResult.timeSlots.map(slot => ({
+                    id: slot.timeSlotId,
+                    startTime: normalizeTime(slot.startTime),
+                    endTime: normalizeTime(slot.endTime)
+                }));
+                mentor.availability = { 0:{}, 1:{}, 2:{}, 3:{}, 4:{}, 5:{}, 6:{} };
+                scheduleResult.schedule.forEach(row => {
+                    const day = Number(row.dayOfWeek);
+                    if (day >= 0 && day <= 6) {
+                        mentor.availability[day][row.timeSlotId] = {
+                            status: row.status,
+                            studentName: row.studentName || "",
+                            note: row.note || ""
+                        };
+                    }
+                });
+                mentor.updatedAt = mentor.scheduleConfirmedAt || mentor.createdAt || new Date().toISOString();
+                return mentor;
+            },
+            updateCapacity(maxStudents) { return apiPost({ action: "updateCapacity", maxStudents }); },
+            confirmSchedule() { return apiPost({ action: "confirmSchedule" }); },
+            createTimeSlot(startTime) { return apiPost({ action: "createTimeSlot", startTime }); },
+            updateTimeSlot(timeSlotId, startTime) { return apiPost({ action: "updateTimeSlot", timeSlotId, startTime }); },
+            deleteTimeSlot(timeSlotId) { return apiPost({ action: "deleteTimeSlot", timeSlotId }); },
+            updateSchedule(data) { return apiPost({ action: "updateSchedule", ...data }); }
+        };
 
+        function setLoginLoading(loading) {
+            const button = document.querySelector('#login-screen button[type="submit"]');
+            button.disabled = loading;
+            button.innerHTML = loading ? '<i class="fa-solid fa-spinner fa-spin"></i> ĐANG ĐĂNG NHẬP' : 'ĐĂNG NHẬP';
+        }
+
+        function showLoginScreen() {
+            document.getElementById("portal-screen").classList.add("hidden");
+            document.getElementById("login-screen").classList.remove("hidden");
+        }
+
+        function showPortalScreen() {
+            document.getElementById("login-screen").classList.add("hidden");
+            document.getElementById("portal-screen").classList.remove("hidden");
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const errorEl = document.getElementById("loginError");
+            errorEl.classList.add("hidden");
+            setLoginLoading(true);
+            try {
+                const result = await authService.login(
+                    document.getElementById("loginEmail").value.trim(),
+                    document.getElementById("loginPass").value
+                );
+                if (!result.success) {
+                    errorEl.innerText = result.message || "Sai email hoặc mật khẩu!";
+                    errorEl.classList.remove("hidden");
+                    return;
+                }
+                showPortalScreen();
+                await initPortal();
+            } catch (error) {
+                errorEl.innerText = error.message;
+                errorEl.classList.remove("hidden");
+            } finally { setLoginLoading(false); }
+        }
+
+        async function handleLogout() {
+            await authService.logout();
+            mentorData = null;
+            showLoginScreen();
+        }
+
+        window.addEventListener("load", async () => {
+            if (!authService.getToken()) return;
+            showPortalScreen();
+            try { await initPortal(); }
+            catch (error) {
+                authService.clear();
+                showLoginScreen();
+                document.getElementById("loginError").innerText = error.message;
+                document.getElementById("loginError").classList.remove("hidden");
+            }
+        });
+
+        function createLetterAvatar(name) {
+            const initials = String(name || "M")
+                .trim()
+                .split(/\s+/)
+                .slice(-2)
+                .map(part => part.charAt(0).toUpperCase())
+                .join("") || "M";
+
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="96" height="96">
+                    <rect width="100%" height="100%" rx="48" fill="#e5e5ea"/>
+                    <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
+                          font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#2c2c2e">
+                        ${initials}
+                    </text>
+                </svg>
+            `;
+
+            return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+        }
+
+        async function initPortal() {
+            mentorData = await dataService.loadMentor();
+            document.getElementById("headerName").innerText = `Xin chào, ${mentorData.name || "Mentor"}`;
+            document.getElementById("headerRole").innerText = `${mentorData.role || ""} Mentor`;
+            document.getElementById("headerAvatar").src = mentorData.avatar || createLetterAvatar(mentorData.name || "Mentor");
+            document.getElementById("inputMaxStudents").value = Number(mentorData.maxStudents) || 10;
             refreshUI();
         }
 
         function refreshUI() {
+            sortTimeSlots();
             renderOverview();
             renderDesktopGrid();
             renderMobileTabs();
@@ -1235,732 +1157,387 @@
         }
 
         function renderOverview() {
-            let uniqueStudents = new Set();
+            const uniqueStudents = new Set();
             let emptySlots = 0;
-
-            for (let d = 0; d < 7; d++) {
-                mentorData.timeSlots.forEach(ts => {
-                    const cell =
-                        mentorData.availability[d]?.[ts.id] ||
-                        { status: "available" };
-
-                    if (cell.status === "available") {
-                        emptySlots++;
-                    }
-
-                    if (
-                        cell.status === "student" &&
-                        cell.studentName &&
-                        cell.studentName.trim() !== ""
-                    ) {
-                        uniqueStudents.add(
-                            cell.studentName
-                                .trim()
-                                .toLowerCase()
-                        );
+            for (let day = 0; day < 7; day++) {
+                mentorData.timeSlots.forEach(slot => {
+                    const cell = mentorData.availability[day]?.[slot.id] || { status: "available" };
+                    if (cell.status === "available") emptySlots++;
+                    if (cell.status === "student" && String(cell.studentName || "").trim()) {
+                        uniqueStudents.add(cell.studentName.trim().toLowerCase());
                     }
                 });
             }
-
             const currentStudents = uniqueStudents.size;
-
-            document.getElementById("statStudents").innerText =
-                currentStudents;
-
-            document.getElementById("statCapacity").innerHTML =
-                `${currentStudents} <span>/ ${mentorData.maxStudents}</span>`;
-
-            document.getElementById("statEmpty").innerHTML =
-                `${emptySlots} <span>slots</span>`;
-
-            const indicator =
-                document.getElementById("statCapacityIndicator");
-
-            if (currentStudents >= mentorData.maxStudents) {
+            const maxStudents = Number(mentorData.maxStudents) || 10;
+            document.getElementById("statStudents").innerText = currentStudents;
+            document.getElementById("statCapacity").innerHTML = `${currentStudents} <span>/ ${maxStudents}</span>`;
+            document.getElementById("statEmpty").innerHTML = `${emptySlots} <span>slots</span>`;
+            const indicator = document.getElementById("statCapacityIndicator");
+            if (currentStudents >= maxStudents) {
                 indicator.className = "stat-indicator full";
-                indicator.innerText =
-                    "HIỆN ĐÃ ĐỦ HỌC VIÊN";
+                indicator.innerText = "HIỆN ĐÃ ĐỦ HỌC VIÊN";
             } else {
-                indicator.className =
-                    "stat-indicator accepting";
-
-                indicator.innerText =
-                    "ĐANG NHẬN HỌC VIÊN";
+                indicator.className = "stat-indicator accepting";
+                indicator.innerText = "ĐANG NHẬN HỌC VIÊN";
             }
-
             const dateObj = new Date(mentorData.updatedAt);
-
-            const dateStr =
-                `${dateObj.getDate().toString().padStart(2, "0")}/` +
-                `${(dateObj.getMonth() + 1).toString().padStart(2, "0")} · ` +
-                `${dateObj.getHours().toString().padStart(2, "0")}:` +
-                `${dateObj.getMinutes().toString().padStart(2, "0")}`;
-
-            document.getElementById("statLastUpdate").innerText =
-                dateStr;
-
-            const diffTime =
-                Math.abs(new Date() - dateObj);
-
-            const diffDays =
-                Math.ceil(
-                    diffTime /
-                    (1000 * 60 * 60 * 24)
-                );
-
-            if (diffDays > 7) {
-                document
-                    .getElementById("warningBanner")
-                    .classList.remove("hidden");
-            } else {
-                document
-                    .getElementById("warningBanner")
-                    .classList.add("hidden");
-            }
+            const validDate = !isNaN(dateObj.getTime());
+            document.getElementById("statLastUpdate").innerText = validDate
+                ? `${String(dateObj.getDate()).padStart(2,"0")}/${String(dateObj.getMonth()+1).padStart(2,"0")} · ${String(dateObj.getHours()).padStart(2,"0")}:${String(dateObj.getMinutes()).padStart(2,"0")}`
+                : "Chưa xác nhận";
+            const warning = document.getElementById("warningBanner");
+            const diffDays = validDate ? Math.floor((Date.now() - dateObj.getTime()) / 86400000) : 999;
+            warning.classList.toggle("hidden", diffDays <= 7);
         }
 
-        function saveCapacity() {
-            const newVal = parseInt(
-                document.getElementById("inputMaxStudents").value
-            );
-
-            const currentStudents = parseInt(
-                document.getElementById("statStudents").innerText
-            );
-
+        async function saveCapacity() {
+            const input = document.getElementById("inputMaxStudents");
+            const newVal = Number(input.value);
+            const currentStudents = Number(document.getElementById("statStudents").innerText);
+            if (!Number.isInteger(newVal) || newVal < 1) return alert("Capacity không hợp lệ!");
             if (newVal < currentStudents) {
-                alert(
-                    `Lỗi: Sức chứa tối đa (${newVal}) không thể nhỏ hơn số học viên hiện tại (${currentStudents})!`
-                );
-
-                document.getElementById(
-                    "inputMaxStudents"
-                ).value = mentorData.maxStudents;
-
-                return;
+                input.value = mentorData.maxStudents;
+                return alert(`Capacity (${newVal}) không thể nhỏ hơn số học viên hiện tại (${currentStudents}).`);
             }
-
+            const oldVal = mentorData.maxStudents;
             mentorData.maxStudents = newVal;
-
-            dataService.saveMentor(mentorData);
-
             renderOverview();
-
-            showToast(
-                "Đã cập nhật sức chứa học viên!"
-            );
+            showToast("Đang lưu capacity...");
+            try {
+                const result = await dataService.updateCapacity(newVal);
+                if (!result.success) throw new Error(result.message);
+                showToast("Đã cập nhật sức chứa học viên!");
+            } catch (error) {
+                mentorData.maxStudents = oldVal;
+                input.value = oldVal;
+                renderOverview();
+                alert(error.message || "Không thể lưu capacity");
+            }
         }
 
-        function confirmScheduleAccurate() {
-            mentorData.updatedAt =
-                new Date().toISOString();
-
-            dataService.saveMentor(mentorData);
-
+        async function confirmScheduleAccurate() {
+            const result = await dataService.confirmSchedule();
+            if (!result.success) return alert(result.message);
+            mentorData.updatedAt = result.confirmedAt;
+            mentorData.scheduleConfirmedAt = result.confirmedAt;
             renderOverview();
-
-            showToast(
-                "Đã xác nhận lịch chính xác!"
-            );
+            showToast("Đã xác nhận lịch chính xác!");
         }
 
         function calculateEndTime(startTime) {
-            let [h, m] =
-                startTime.split(":").map(Number);
-
-            let d = new Date();
-
-            d.setHours(h, m + 90);
-
-            return (
-                `${d.getHours().toString().padStart(2, "0")}:` +
-                `${d.getMinutes().toString().padStart(2, "0")}`
-            );
+            const [hours, minutes] = startTime.split(":").map(Number);
+            const total = (hours * 60 + minutes + 90) % 1440;
+            return `${String(Math.floor(total / 60)).padStart(2,"0")}:${String(total % 60).padStart(2,"0")}`;
         }
 
-        function sortTimeSlots() {
-            mentorData.timeSlots.sort(
-                (a, b) =>
-                    a.startTime.localeCompare(b.startTime)
-            );
-        }
+        function sortTimeSlots() { mentorData.timeSlots.sort((a,b) => a.startTime.localeCompare(b.startTime)); }
 
-        function countStudentsInTimeSlot(tsId) {
+        function countStudentsInTimeSlot(slotId) {
             let count = 0;
-
-            for (let d = 0; d < 7; d++) {
-                const cell =
-                    mentorData.availability[d]?.[tsId];
-
-                if (
-                    cell &&
-                    cell.status === "student"
-                ) {
-                    count++;
-                }
+            for (let day = 0; day < 7; day++) {
+                if (mentorData.availability[day]?.[slotId]?.status === "student") count++;
             }
-
             return count;
         }
 
         function openTimeSlotManagerModal() {
-            document.getElementById(
-                "tsManagerModal"
-            ).style.display = "flex";
-
+            document.getElementById("tsManagerModal").style.display = "flex";
             toggleTsEditor(false);
-
             renderTsManagerList();
         }
 
         function renderTsManagerList() {
-            const list =
-                document.getElementById("tsManagerList");
-
+            const list = document.getElementById("tsManagerList");
             list.innerHTML = "";
-
-            mentorData.timeSlots.forEach(ts => {
-                const usage =
-                    countStudentsInTimeSlot(ts.id);
-
-                const usageBadge =
-                    usage > 0
-                        ? `<span style="font-size:0.7rem; color:var(--status-student); margin-left:8px; background:#e8f0fe; padding:2px 6px; border-radius:4px;">${usage} học viên</span>`
+            if (!mentorData.timeSlots.length) {
+                list.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:12px">Chưa có khung giờ nào.</div>';
+                return;
+            }
+            mentorData.timeSlots.forEach(slot => {
+                const usage = countStudentsInTimeSlot(slot.id);
+                const badge = pendingTimeSlotIds.has(slot.id)
+                    ? `<span style="font-size:.7rem;color:var(--text-muted);margin-left:8px;background:#e5e5ea;padding:2px 6px;border-radius:4px">đang lưu</span>`
+                    : usage
+                        ? `<span style="font-size:.7rem;color:var(--status-student);margin-left:8px;background:#e8f0fe;padding:2px 6px;border-radius:4px">${usage} lịch học</span>`
                         : "";
+                const actions = pendingTimeSlotIds.has(slot.id)
+                    ? `<div class="ts-item-actions" style="opacity:.35"><i class="fa-solid fa-spinner fa-spin"></i></div>`
+                    : `<div class="ts-item-actions"><button onclick="editCustomTimeSlot('${slot.id}')" title="Sửa"><i class="fa-solid fa-pen"></i></button><button onclick="deleteCustomTimeSlot('${slot.id}')" title="Xóa"><i class="fa-solid fa-trash"></i></button></div>`;
 
-                list.innerHTML += `
-                    <div class="ts-item">
-                        <div class="ts-item-time">
-                            ${ts.startTime} - ${ts.endTime}
-                            ${usageBadge}
-                        </div>
-
-                        <div class="ts-item-actions">
-                            <button
-                                onclick="editCustomTimeSlot('${ts.id}')"
-                                title="Sửa"
-                            >
-                                <i class="fa-solid fa-pen"></i>
-                            </button>
-
-                            <button
-                                onclick="deleteCustomTimeSlot('${ts.id}')"
-                                title="Xóa"
-                            >
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                list.innerHTML += `<div class="ts-item"><div class="ts-item-time">${slot.startTime} - ${slot.endTime}${badge}</div>${actions}</div>`;
             });
         }
 
         function toggleTsEditor(show, isEdit = false) {
-            const editor =
-                document.getElementById("tsEditorContainer");
-
-            if (show) {
-                editor.classList.remove("hidden");
-
-                if (!isEdit) {
-                    editingTsId = null;
-
-                    document.getElementById(
-                        "tsEditorTitle"
-                    ).innerText =
-                        "Thêm Khung Giờ Mới";
-
-                    document.getElementById(
-                        "tsInputStart"
-                    ).value = "";
-
-                    document.getElementById(
-                        "tsPreview"
-                    ).innerText =
-                        "--:-- - --:--";
-                }
-            } else {
-                editor.classList.add("hidden");
-
+            const editor = document.getElementById("tsEditorContainer");
+            editor.classList.toggle("hidden", !show);
+            if (!show) { editingTsId = null; return; }
+            if (!isEdit) {
                 editingTsId = null;
+                document.getElementById("tsEditorTitle").innerText = "Thêm Khung Giờ Mới";
+                document.getElementById("tsInputStart").value = "";
+                document.getElementById("tsPreview").innerText = "--:-- - --:--";
             }
         }
 
         function previewTsEnd() {
-            const start =
-                document.getElementById(
-                    "tsInputStart"
-                ).value;
-
-            if (start) {
-                const end =
-                    calculateEndTime(start);
-
-                document.getElementById(
-                    "tsPreview"
-                ).innerText =
-                    `${start} - ${end}`;
-            }
+            const start = document.getElementById("tsInputStart").value;
+            document.getElementById("tsPreview").innerText = start ? `${start} - ${calculateEndTime(start)}` : "--:-- - --:--";
         }
 
-        function saveCustomTimeSlot() {
-            const start =
-                document.getElementById(
-                    "tsInputStart"
-                ).value;
+        async function saveCustomTimeSlot() {
+            const startInput = document.getElementById("tsInputStart");
+            const start = startInput.value;
 
             if (!start) {
-                return alert(
-                    "Vui lòng chọn giờ bắt đầu!"
-                );
+                return alert("Vui lòng chọn giờ bắt đầu!");
             }
 
-            const end =
-                calculateEndTime(start);
+            const end = calculateEndTime(start);
+            const originalEditingId = editingTsId;
 
-            if (editingTsId) {
-                const usage =
-                    countStudentsInTimeSlot(editingTsId);
+            if (originalEditingId) {
+                const usage = countStudentsInTimeSlot(originalEditingId);
 
-                if (usage > 0) {
-                    if (
-                        !confirm(
-                            `Khung giờ này hiện đang được sử dụng cho lịch học của ${usage} học viên. Thay đổi giờ sẽ cập nhật các lịch học liên quan. Bạn có chắc chắn?`
-                        )
-                    ) {
-                        return;
-                    }
+                if (
+                    usage &&
+                    !confirm(`Khung giờ này đang được sử dụng cho ${usage} lịch học. Bạn vẫn muốn đổi giờ?`)
+                ) {
+                    return;
                 }
 
-                const slot =
-                    mentorData.timeSlots.find(
-                        t => t.id === editingTsId
-                    );
+                const slot = mentorData.timeSlots.find(item => item.id === originalEditingId);
+
+                if (!slot) {
+                    return alert("Không tìm thấy khung giờ.");
+                }
+
+                const previous = {
+                    startTime: slot.startTime,
+                    endTime: slot.endTime
+                };
 
                 slot.startTime = start;
                 slot.endTime = end;
-            } else {
-                const newId =
-                    "ts_" + Date.now();
 
-                mentorData.timeSlots.push({
-                    id: newId,
-                    startTime: start,
-                    endTime: end
-                });
+                toggleTsEditor(false);
+                refreshUI();
+                renderTsManagerList();
+                showToast("Đang lưu khung giờ...");
 
-                for (let d = 0; d < 7; d++) {
-                    if (!mentorData.availability[d]) {
-                        mentorData.availability[d] = {};
+                try {
+                    const result = await dataService.updateTimeSlot(
+                        originalEditingId,
+                        start
+                    );
+
+                    if (!result.success) {
+                        throw new Error(result.message || "Không thể lưu khung giờ");
                     }
 
-                    mentorData.availability[d][newId] = {
-                        status: "available"
-                    };
+                    slot.startTime = result.startTime || start;
+                    slot.endTime = result.endTime || end;
+
+                    refreshUI();
+                    renderTsManagerList();
+                    showToast("Đã lưu khung giờ!");
+                } catch (error) {
+                    slot.startTime = previous.startTime;
+                    slot.endTime = previous.endTime;
+
+                    refreshUI();
+                    renderTsManagerList();
+
+                    alert(error.message || "Không thể lưu khung giờ");
                 }
+
+                return;
             }
 
-            sortTimeSlots();
+            const duplicate = mentorData.timeSlots.some(
+                slot => slot.startTime === start
+            );
 
-            dataService.saveMentor(mentorData);
+            if (duplicate) {
+                return alert("Khung giờ này đã tồn tại!");
+            }
 
-            refreshUI();
+            const temporaryId = `pending_${Date.now()}`;
+            const temporarySlot = {
+                id: temporaryId,
+                startTime: start,
+                endTime: end
+            };
+
+            pendingTimeSlotIds.add(temporaryId);
+            mentorData.timeSlots.push(temporarySlot);
 
             toggleTsEditor(false);
-
+            refreshUI();
             renderTsManagerList();
+            showToast("Đang tạo khung giờ...");
 
-            showToast("Đã lưu khung giờ!");
-        }
+            try {
+                const result = await dataService.createTimeSlot(start);
 
-        function editCustomTimeSlot(tsId) {
-            const slot =
-                mentorData.timeSlots.find(
-                    t => t.id === tsId
+                if (!result.success) {
+                    throw new Error(result.message || "Không thể tạo khung giờ");
+                }
+
+                temporarySlot.id = result.timeSlotId;
+                temporarySlot.startTime = result.startTime || start;
+                temporarySlot.endTime = result.endTime || end;
+
+                pendingTimeSlotIds.delete(temporaryId);
+
+                refreshUI();
+                renderTsManagerList();
+                showToast("Đã tạo khung giờ!");
+            } catch (error) {
+                pendingTimeSlotIds.delete(temporaryId);
+
+                mentorData.timeSlots = mentorData.timeSlots.filter(
+                    slot => slot !== temporarySlot
                 );
 
-            editingTsId = tsId;
+                refreshUI();
+                renderTsManagerList();
 
-            document.getElementById(
-                "tsEditorTitle"
-            ).innerText =
-                "Sửa Khung Giờ";
+                alert(error.message || "Không thể tạo khung giờ");
+            }
+        }
 
-            document.getElementById(
-                "tsInputStart"
-            ).value =
-                slot.startTime;
-
+        function editCustomTimeSlot(slotId) {
+            if (pendingTimeSlotIds.has(slotId)) return;
+            const slot = mentorData.timeSlots.find(item => item.id === slotId);
+            if (!slot) return;
+            editingTsId = slotId;
+            document.getElementById("tsEditorTitle").innerText = "Sửa Khung Giờ";
+            document.getElementById("tsInputStart").value = slot.startTime;
             previewTsEnd();
-
             toggleTsEditor(true, true);
         }
 
-        function deleteCustomTimeSlot(tsId) {
-            const usage =
-                countStudentsInTimeSlot(tsId);
-
-            if (usage > 0) {
-                return alert(
-                    "CẢNH BÁO: Khung giờ này đang có học viên. Vui lòng chuyển hoặc xóa lịch học của học viên trước khi xóa khung giờ."
-                );
-            }
-
-            if (
-                confirm(
-                    "Bạn có chắc chắn muốn xóa khung giờ này?"
-                )
-            ) {
-                mentorData.timeSlots =
-                    mentorData.timeSlots.filter(
-                        t => t.id !== tsId
-                    );
-
-                for (let d = 0; d < 7; d++) {
-                    if (
-                        mentorData.availability[d] &&
-                        mentorData.availability[d][tsId]
-                    ) {
-                        delete mentorData
-                            .availability[d][tsId];
-                    }
-                }
-
-                dataService.saveMentor(mentorData);
-
-                refreshUI();
-
-                renderTsManagerList();
-
-                showToast(
-                    "Đã xóa khung giờ!"
-                );
+        async function deleteCustomTimeSlot(slotId) {
+            const usage = countStudentsInTimeSlot(slotId);
+            if (usage) return alert("Khung giờ này đang có học viên. Vui lòng chuyển hoặc xóa lịch học trước.");
+            if (!confirm("Bạn có chắc chắn muốn xóa khung giờ này?")) return;
+            const oldSlots = [...mentorData.timeSlots];
+            const oldAvailability = JSON.parse(JSON.stringify(mentorData.availability));
+            mentorData.timeSlots = mentorData.timeSlots.filter(item => item.id !== slotId);
+            for (let day = 0; day < 7; day++) delete mentorData.availability[day]?.[slotId];
+            refreshUI(); renderTsManagerList(); showToast("Đang xóa khung giờ...");
+            try {
+                const result = await dataService.deleteTimeSlot(slotId);
+                if (!result.success) throw new Error(result.message);
+                showToast("Đã xóa khung giờ!");
+            } catch (error) {
+                mentorData.timeSlots = oldSlots;
+                mentorData.availability = oldAvailability;
+                refreshUI(); renderTsManagerList();
+                alert(error.message || "Không thể xóa khung giờ");
             }
         }
 
-        function getSlotDOM(d, tsId) {
-            const data =
-                mentorData.availability[d]?.[tsId] ||
-                { status: "available" };
+        function escapeHtml(value) {
+            return String(value || "").replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+        }
 
-            let content = "";
-            let cssClass = "";
-
-            if (data.status === "available") {
-                cssClass = "status-available";
-                content = "TRỐNG";
-            } else if (data.status === "student") {
-                cssClass = "status-student";
-
-                content = `
-                    <span class="student-name">
-                        ${data.studentName}
-                    </span>
-
-                    ${
-                        data.note
-                            ? `<span class="student-sub">${data.note}</span>`
-                            : ""
-                    }
-                `;
-            } else {
-                cssClass = "status-blocked";
-                content = "BẬN";
+        function getSlotDOM(day, slotId) {
+            const data = mentorData.availability[day]?.[slotId] || { status: "available" };
+            if (data.status === "student") {
+                return { cssClass: "status-student", content: `<span class="student-name">${escapeHtml(data.studentName)}</span>${data.note ? `<span class="student-sub">${escapeHtml(data.note)}</span>` : ""}` };
             }
-
-            return {
-                cssClass,
-                content
-            };
+            if (data.status === "blocked") return { cssClass: "status-blocked", content: "BẬN" };
+            return { cssClass: "status-available", content: "TRỐNG" };
         }
 
         function renderDesktopGrid() {
-            const grid =
-                document.getElementById("desktopGrid");
-
-            grid.innerHTML = `
-                <div
-                    class="col-header"
-                    style="border-right:1px solid var(--border-color)"
-                >
-                    Giờ / Ngày
-                </div>
-            `;
-
-            DAYS.forEach(day => {
-                grid.innerHTML += `
-                    <div class="col-header">
-                        ${day}
-                    </div>
-                `;
-            });
-
-            mentorData.timeSlots.forEach(ts => {
-                grid.innerHTML += `
-                    <div class="row-header">
-                        ${ts.startTime} -<br>
-                        ${ts.endTime}
-                    </div>
-                `;
-
-                for (let d = 0; d < 7; d++) {
-                    const ui =
-                        getSlotDOM(d, ts.id);
-
-                    grid.innerHTML += `
-                        <div class="slot-cell">
-                            <div
-                                class="slot-card ${ui.cssClass}"
-                                onclick="openEditCalendarModal(${d}, '${ts.id}')"
-                            >
-                                ${ui.content}
-                            </div>
-                        </div>
-                    `;
+            const parts = ['<div class="col-header" style="border-right:1px solid var(--border-color)">Giờ / Ngày</div>'];
+            DAYS.forEach(day => parts.push(`<div class="col-header">${day}</div>`));
+            mentorData.timeSlots.forEach(slot => {
+                parts.push(`<div class="row-header">${slot.startTime} -<br>${slot.endTime}</div>`);
+                for (let day = 0; day < 7; day++) {
+                    const ui = getSlotDOM(day, slot.id);
+                    parts.push(`<div class="slot-cell"><div class="slot-card ${ui.cssClass}" onclick="openEditCalendarModal(${day}, '${slot.id}')">${ui.content}</div></div>`);
                 }
             });
+            document.getElementById("desktopGrid").innerHTML = parts.join("");
         }
 
         function renderMobileTabs() {
-            const tabsContainer =
-                document.getElementById(
-                    "mobileDayTabs"
-                );
-
-            tabsContainer.innerHTML = "";
-
-            DAYS.forEach((day, index) => {
-                tabsContainer.innerHTML += `
-                    <button
-                        class="tab-btn ${
-                            index === activeMobileDay
-                                ? "active"
-                                : ""
-                        }"
-                        onclick="switchMobileDay(${index})"
-                    >
-                        ${day}
-                    </button>
-                `;
-            });
+            document.getElementById("mobileDayTabs").innerHTML = DAYS.map((day,index) => `<button class="tab-btn ${index === activeMobileDay ? "active" : ""}" onclick="switchMobileDay(${index})">${day}</button>`).join("");
         }
 
-        function switchMobileDay(dayIndex) {
-            activeMobileDay = dayIndex;
-
-            renderMobileTabs();
-
-            renderMobileList();
-        }
+        function switchMobileDay(dayIndex) { activeMobileDay = dayIndex; renderMobileTabs(); renderMobileList(); }
 
         function renderMobileList() {
-            const list =
-                document.getElementById(
-                    "mobileSlotList"
-                );
-
-            list.innerHTML = "";
-
-            mentorData.timeSlots.forEach(ts => {
-                const ui =
-                    getSlotDOM(
-                        activeMobileDay,
-                        ts.id
-                    );
-
-                list.innerHTML += `
-                    <div
-                        class="mobile-slot-item"
-                        onclick="openEditCalendarModal(${activeMobileDay}, '${ts.id}')"
-                    >
-                        <div class="mobile-slot-time">
-                            ${ts.startTime}<br>
-
-                            <span
-                                style="font-size:0.7rem; font-weight:500; color:var(--text-muted)"
-                            >
-                                đến ${ts.endTime}
-                            </span>
-                        </div>
-
-                        <div
-                            class="mobile-slot-status ${ui.cssClass}"
-                        >
-                            ${ui.content}
-                        </div>
-                    </div>
-                `;
-            });
+            document.getElementById("mobileSlotList").innerHTML = mentorData.timeSlots.map(slot => {
+                const ui = getSlotDOM(activeMobileDay, slot.id);
+                return `<div class="mobile-slot-item" onclick="openEditCalendarModal(${activeMobileDay}, '${slot.id}')"><div class="mobile-slot-time">${slot.startTime}<br><span style="font-size:.7rem;font-weight:500;color:var(--text-muted)">đến ${slot.endTime}</span></div><div class="mobile-slot-status ${ui.cssClass}">${ui.content}</div></div>`;
+            }).join("");
         }
 
-        function openEditCalendarModal(d, tsId) {
-            editingCell = {
-                day: d,
-                slotId: tsId
-            };
-
-            const data =
-                mentorData.availability[d]?.[tsId] ||
-                { status: "available" };
-
-            const tsObj =
-                mentorData.timeSlots.find(
-                    t => t.id === tsId
-                );
-
-            document.getElementById(
-                "modalTitle"
-            ).innerText =
-                `${DAYS[d]} · ${tsObj.startTime}-${tsObj.endTime}`;
-
-            selectStatus(data.status);
-
-            document.getElementById(
-                "inputStudentName"
-            ).value =
-                data.studentName || "";
-
-            document.getElementById(
-                "inputStudentNote"
-            ).value =
-                data.note || "";
-
-            document.getElementById(
-                "editModal"
-            ).style.display =
-                "flex";
+        function openEditCalendarModal(day, slotId) {
+            editingCell = { day, slotId };
+            const data = mentorData.availability[day]?.[slotId] || { status: "available" };
+            const slot = mentorData.timeSlots.find(item => item.id === slotId);
+            document.getElementById("modalTitle").innerText = `${DAYS[day]} · ${slot.startTime}-${slot.endTime}`;
+            selectStatus(data.status || "available");
+            document.getElementById("inputStudentName").value = data.studentName || "";
+            document.getElementById("inputStudentNote").value = data.note || "";
+            document.getElementById("editModal").style.display = "flex";
         }
 
         function selectStatus(status) {
             tempStatus = status;
-
-            document
-                .querySelectorAll(".status-btn")
-                .forEach(btn =>
-                    btn.classList.remove("active")
-                );
-
-            document
-                .querySelector(
-                    `.status-btn[data-status="${status}"]`
-                )
-                .classList.add("active");
-
-            if (status === "student") {
-                document
-                    .getElementById("studentFields")
-                    .classList.remove("hidden");
-
-                document
-                    .getElementById("inputStudentName")
-                    .focus();
-            } else {
-                document
-                    .getElementById("studentFields")
-                    .classList.add("hidden");
-            }
+            document.querySelectorAll(".status-btn").forEach(button => button.classList.remove("active"));
+            document.querySelector(`.status-btn[data-status="${status}"]`)?.classList.add("active");
+            document.getElementById("studentFields").classList.toggle("hidden", status !== "student");
         }
 
-        function saveSlotChanges() {
-            const d =
-                editingCell.day;
+        async function saveSlotChanges() {
+            const day = editingCell.day;
+            const slotId = editingCell.slotId;
+            const studentName = document.getElementById("inputStudentName").value.trim();
+            const note = document.getElementById("inputStudentNote").value;
+            if (tempStatus === "student" && !studentName) return alert("Vui lòng nhập tên học viên!");
 
-            const tsId =
-                editingCell.slotId;
-
-            if (!mentorData.availability[d]) {
-                mentorData.availability[d] = {};
-            }
-
-            if (!mentorData.availability[d][tsId]) {
-                mentorData.availability[d][tsId] = {};
-            }
-
-            mentorData.availability[d][tsId].status =
-                tempStatus;
-
-            if (tempStatus === "student") {
-                const stuName =
-                    document
-                        .getElementById("inputStudentName")
-                        .value
-                        .trim();
-
-                if (!stuName) {
-                    return alert(
-                        "Vui lòng nhập tên học viên!"
-                    );
-                }
-
-                mentorData
-                    .availability[d][tsId]
-                    .studentName =
-                        stuName;
-
-                mentorData
-                    .availability[d][tsId]
-                    .note =
-                        document.getElementById(
-                            "inputStudentNote"
-                        ).value;
-            } else {
-                delete mentorData
-                    .availability[d][tsId]
-                    .studentName;
-
-                delete mentorData
-                    .availability[d][tsId]
-                    .note;
-            }
-
-            mentorData.updatedAt =
-                new Date().toISOString();
-
-            dataService.saveMentor(mentorData);
-
+            const oldValue = { ...(mentorData.availability[day]?.[slotId] || { status: "available" }) };
+            const newValue = {
+                status: tempStatus,
+                studentName: tempStatus === "student" ? studentName : "",
+                note: tempStatus === "student" ? note : ""
+            };
+            mentorData.availability[day][slotId] = newValue;
             refreshUI();
-
             closeModal("editModal");
+            showToast("Đang lưu lịch...");
 
-            showToast(
-                "Đã cập nhật lịch!"
-            );
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(
-                modalId
-            ).style.display =
-                "none";
-        }
-
-        window.onclick = function(event) {
-            if (
-                event.target.classList.contains("modal")
-            ) {
-                event.target.style.display =
-                    "none";
+            try {
+                const result = await dataService.updateSchedule({
+                    dayOfWeek: day, timeSlotId: slotId, status: tempStatus,
+                    studentName: newValue.studentName, note: newValue.note
+                });
+                if (!result.success) throw new Error(result.message);
+                showToast("Đã cập nhật lịch!");
+            } catch (error) {
+                mentorData.availability[day][slotId] = oldValue;
+                refreshUI();
+                alert(error.message || "Không thể lưu lịch");
             }
-        };
+        }
 
-        let toastTimeout;
+        function closeModal(modalId) { document.getElementById(modalId).style.display = "none"; }
+        window.addEventListener("click", event => { if (event.target.classList.contains("modal")) event.target.style.display = "none"; });
 
-        function showToast(msg) {
-            const toast =
-                document.getElementById("toast");
-
-            document.getElementById(
-                "toastMsg"
-            ).innerText =
-                msg;
-
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            document.getElementById("toastMsg").innerText = message;
             toast.classList.add("show");
-
             clearTimeout(toastTimeout);
-
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
+            toastTimeout = setTimeout(() => toast.classList.remove("show"), 3000);
         }
     </script>
 
