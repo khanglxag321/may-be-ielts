@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>may(be)1on1. - IELTS 1-1 Theo Cách Của Bạn</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #f4f4f6;
+            --bg-secondary: #ffffff;
+            --bg-dark: #111113;
+            --bg-card: #f9f9fa;
+            --text-main: #1c1c1e;
+            --text-muted: #636366;
+            --text-light: #f5f5f7;
+            --accent: #2c2c2e;
+            --border-color: #e5e5ea;
+            --status-low: #ff3b30;
+            --status-ok: #34c759;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility Classes */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-padding { padding: 100px 0; }
+        .section-title {
+            font-size: 2.5rem; font-weight: 800; text-align: center;
+            margin-bottom: 16px; letter-spacing: -1px;
+        }
+        .section-subtitle {
+            font-size: 1.1rem; color: var(--text-muted); text-align: center;
+            margin-bottom: 60px; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+
+        /* Navbar */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(244, 244, 246, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none; letter-spacing: -0.5px; }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--text-muted); }
+        .cta-btn {
+            background-color: var(--bg-dark); color: var(--text-light);
+            padding: 12px 24px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem; transition: var(--transition);
+            border: 1px solid var(--bg-dark); display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+        }
+        .cta-btn:hover { background-color: transparent; color: var(--text-main); }
+        .cta-btn:disabled, .cta-btn.disabled { 
+            background-color: #d1d1d6; border-color: #d1d1d6; color: #8e8e93; cursor: not-allowed; 
+        }
+
+        .btn-return {
+            font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-decoration: none;
+            display: flex; align-items: center; gap: 6px; transition: var(--transition);
+        }
+        .btn-return:hover { color: var(--text-main); }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding-top: 80px; background: linear-gradient(180deg, rgba(244,244,246,1) 0%, rgba(230,230,235,1) 100%);
+            position: relative;
+        }
+        .hero-content { text-align: center; max-width: 900px; margin: 0 auto; }
+        .badge-new { 
+            display: inline-block; padding: 6px 12px; background-color: var(--bg-dark); color: white;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 24px; letter-spacing: 0.5px;
+        }
+        .hero-title { font-size: 4.5rem; font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 24px; color: var(--text-main); }
+        .hero-slogan { font-size: 1.2rem; font-weight: 500; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto;}
+        
+        /* Features Section */
+        #features { background-color: var(--bg-secondary); }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+        .feature-card {
+            background-color: var(--bg-card); padding: 40px 24px; border-radius: 16px;
+            border: 1px solid var(--border-color); transition: var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.02); }
+        .feature-icon { font-size: 2rem; color: var(--bg-dark); margin-bottom: 24px; }
+        .feature-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; flex-grow: 1; }
+
+        /* Mentor Section */
+        #mentors { background-color: var(--bg-primary); }
+        .tabs { display: flex; justify-content: center; gap: 16px; margin-bottom: 40px; }
+        .tab-btn {
+            padding: 12px 32px; border: 1px solid var(--border-color); border-radius: 30px;
+            background: transparent; font-size: 1rem; font-weight: 700; color: var(--text-muted);
+            cursor: pointer; transition: var(--transition); font-family: inherit;
+        }
+        .tab-btn.active { background: var(--bg-dark); color: white; border-color: var(--bg-dark); }
+        
+        .mentor-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+            transition: opacity 0.3s ease;
+        }
+        .mentor-card {
+            background: var(--bg-secondary); border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .mentor-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.04); }
+        .mentor-img { width: 100%; height: 280px; object-fit: cover; }
+        .mentor-info { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .mentor-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .mentor-name { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+        .mentor-role { 
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 4px 10px; border-radius: 6px; background: var(--bg-primary); color: var(--text-muted);
+        }
+        
+        .mentor-scores { display: flex; gap: 12px; margin-bottom: 16px; }
+        .score-item { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
+        .score-item span { color: var(--text-muted); font-weight: 500; }
+        
+        .mentor-bio { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; flex-grow: 1; }
+        
+        .capacity-wrap { margin-bottom: 24px; }
+        .capacity-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+        .capacity-bar { width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
+        .capacity-fill { height: 100%; background: var(--bg-dark); border-radius: 3px; transition: width 1s ease; }
+        .capacity-fill.full { background: var(--status-low); }
+        .status-text { font-size: 0.8rem; font-weight: 700; }
+        .status-text.ok { color: var(--status-ok); }
+        .status-text.full { color: var(--status-low); }
+
+        .mentor-card .cta-btn { width: 100%; }
+
+        /* How it works */
+        #how-it-works { background-color: var(--bg-secondary); }
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+        .step-card { text-align: left; }
+        .step-num { 
+            font-size: 4rem; font-weight: 800; color: var(--bg-primary); 
+            line-height: 1; margin-bottom: 16px; font-family: inherit; letter-spacing: -2px;
+        }
+        .step-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+        .step-desc { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* FAQ Section */
+        #faq { background-color: var(--bg-primary); }
+        .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+        .faq-item {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 12px; overflow: hidden; transition: var(--transition);
+        }
+        .faq-question {
+            padding: 20px 24px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; font-size: 1.05rem; user-select: none;
+        }
+        .faq-question i { transition: transform 0.3s; color: var(--text-muted); }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-answer {
+            padding: 0 24px; max-height: 0; overflow: hidden;
+            transition: all 0.3s ease; color: var(--text-muted); font-size: 0.95rem;
+        }
+        .faq-item.active .faq-answer { padding: 0 24px 20px 24px; max-height: 500px; }
+
+        /* Footer */
+        footer {
+            width: 100%; background-color: #0f0f10; border-top: 1px solid #2c2c2e;
+            padding: 40px 0; text-align: center; color: #8e8e93;
+        }
+        .footer-logo { font-size: 1.25rem; font-weight: 800; color: white; text-decoration: none; margin-bottom: 16px; display: inline-block; }
+        footer p { margin-bottom: 16px; font-size: 0.9rem; letter-spacing: 0.3px; }
+        .footer-links a { color: #8e8e93; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: var(--transition); }
+        .footer-links a:hover { color: white; }
+
+        /* Modal / Timetable */
+        .modal {
+            display: none; position: fixed; z-index: 2000; inset: 0;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            overflow-y: auto; padding: 40px 20px;
+        }
+        .modal-content {
+            background: var(--bg-secondary); max-width: 1000px; margin: 0 auto;
+            border-radius: 20px; padding: 32px; position: relative;
+            animation: slideUp 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-close {
+            position: absolute; top: 24px; right: 24px; font-size: 1.5rem;
+            cursor: pointer; width: 40px; height: 40px; border-radius: 50%;
+            background: var(--bg-primary); display: flex; align-items: center; justify-content: center;
+            transition: var(--transition); border: none;
+        }
+        .modal-close:hover { background: var(--border-color); }
+        
+        .modal-header { margin-bottom: 32px; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; }
+        .modal-title { font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; }
+        .modal-meta { font-size: 0.9rem; color: var(--text-muted); display: flex; gap: 16px; }
+        
+        .timetable-container { overflow-x: auto; margin-bottom: 32px; padding-bottom: 16px; }
+        .timetable { display: flex; gap: 12px; min-width: 800px; }
+        .day-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .day-header { 
+            text-align: center; font-weight: 700; padding: 12px 0; 
+            background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem;
+        }
+        .time-slot {
+            padding: 12px 8px; text-align: center; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+            border: 1px solid var(--border-color); transition: var(--transition);
+        }
+        .time-slot.available { background: #eafaf1; border-color: #34c759; color: #1e8e3e; }
+        .time-slot.unavailable { background: var(--bg-card); color: #aeaeb2; text-decoration: line-through; }
+        
+        .modal-footer { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .modal-note { font-size: 0.85rem; color: var(--text-muted); text-align: center; font-style: italic; }
+
+        /* Responsive Layout */
+        @media (max-width: 992px) {
+            .mentor-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-title { font-size: 3rem; }
+            .mentor-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; gap: 24px; }
+            .modal-content { padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">may(be)1on1.</a>
+            <ul class="nav-links">
+                <li><a href="#features">Hình thức</a></li>
+                <li><a href="#mentors">Mentor</a></li>
+                <li><a href="#how-it-works">Quy trình</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <a href="https://khanglxag321.github.io/may-be-ielts/" class="btn-return"><i class="fa-solid fa-arrow-left"></i> Về may(be)ielts</a>
+                <a href="#mentors" class="cta-btn">TÌM MENTOR</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container hero-content">
+            <span class="badge-new">PRIVATE COACHING MODEL</span>
+            <h1 class="hero-title">học 1-1.<br>theo cách của bạn.</h1>
+            <p class="hero-slogan">Linh hoạt lịch trình. Tùy biến tốc độ. Đồng hành sát sao cùng đội ngũ Mentor học thuật cốt cán từ hệ thống may(be)ielts.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+                <a href="#mentors" class="cta-btn" style="padding: 16px 32px; font-size: 1rem;"><i class="fa-solid fa-user-graduate"></i> TÌM MENTOR PHÙ HỢP</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">đặc quyền lớp 1-1.</h2>
+            <p class="section-subtitle">Chương trình được thiết kế đặc biệt dành cho các bạn cần sự tập trung cao độ, bứt phá nhanh hoặc có lịch trình cá nhân bận rộn.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-user-check"></i></div>
+                    <h3>1 Mentor - 1 Học viên</h3>
+                    <p>Sự tập trung tuyệt đối. Mentor nắm rõ từng điểm mạnh/yếu của bạn để đưa ra chiến lược tối ưu điểm số hiệu quả nhất.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <h3>1h30 phút / Buổi</h3>
+                    <p>Thời lượng tiêu chuẩn cho một buổi học chuyên sâu, đủ để giảng dạy kiến thức mới và thực hành sửa lỗi trực tiếp.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                    <h3>Lịch học linh hoạt</h3>
+                    <p>Chủ động thống nhất lịch với Mentor hàng tuần. Dễ dàng xin phép dời lịch khi có công việc đột xuất mà không sợ mất bài.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <h3>Giáo trình chuẩn</h3>
+                    <p>Kế thừa toàn bộ tinh hoa từ giáo trình gốc của may(be)ielts, nhưng được tinh chỉnh tốc độ phù hợp với cá nhân bạn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentor Section -->
+    <section id="mentors" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">chọn mentor của bạn.</h2>
+            <p class="section-subtitle">Gặp gỡ đội ngũ Writing & Speaking Mentor. Kiểm tra lịch trống và liên hệ trực tiếp để bắt đầu lộ trình của riêng bạn.</p>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('writing')">WRITING MENTOR</button>
+                <button class="tab-btn" onclick="switchTab('speaking')">SPEAKING MENTOR</button>
+            </div>
+
+            <div class="mentor-grid" id="mentorGrid">
+                <!-- Mentor cards injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works Section -->
+    <section id="how-it-works" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">quy trình đăng ký.</h2>
+            <p class="section-subtitle">Chỉ 3 bước đơn giản để bắt đầu lớp học 1-1.</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <h3 class="step-title">Chọn Mentor</h3>
+                    <p class="step-desc">Xem hồ sơ các Writing & Speaking Mentor tại may(be). Lựa chọn người phù hợp nhất với phong cách học và mục tiêu điểm số của bạn.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <h3 class="step-title">Xem Lịch Trống</h3>
+                    <p class="step-desc">Kiểm tra trực tiếp các khung giờ còn trống (available) trong tuần của Mentor để xem có khớp với thời gian rảnh của bạn hay không.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <h3 class="step-title">Nhắn Mentor</h3>
+                    <p class="step-desc">Sử dụng nút liên hệ để nhắn tin trực tiếp qua Facebook của Mentor, thống nhất lịch học chính thức và nhận hướng dẫn chuyển khoản.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">câu hỏi thường gặp.</h2>
+            <p class="section-subtitle">Giải đáp một số thắc mắc phổ biến về hình thức học 1-1.</p>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Một buổi học kéo dài bao lâu? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Mỗi buổi học 1-1 tại may(be)1on1 kéo dài chuẩn 1 tiếng 30 phút. Đây là thời gian lý tưởng để vừa đảm bảo nạp đủ kiến thức lý thuyết, vừa có thời gian luyện tập và sửa lỗi trực tiếp cùng Mentor.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Lịch học có cố định không? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Lịch học không hoàn toàn cố định. Điểm mạnh của lớp 1-1 là sự linh hoạt. Bạn có thể chốt một lịch cố định hàng tuần, hoặc linh động điều chỉnh qua từng tuần tùy vào lịch trình cá nhân bằng cách trao đổi trực tiếp với Mentor.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Tôi có thể đổi lịch học không? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Có. Nếu có việc đột xuất, bạn chỉ cần báo trước cho Mentor tối thiểu 24h để sắp xếp dời buổi học sang một khung giờ trống khác trong tuần mà không bị mất học phí cho buổi đó.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Lộ trình học có giống các lớp may(be)ielts không? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Hoàn toàn giống về nền tảng giáo trình, phương pháp bóc tách tư duy và chất lượng đầu ra. Điểm khác biệt lớn nhất là tốc độ học sẽ được tùy biến (nhanh/chậm) dựa trên khả năng tiếp thu và deadline thi của riêng bạn.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">may(be)1on1.</a>
+            <p>Hệ thống Private Coaching thuộc thương hiệu may(be)ielts.</p>
+            <div class="footer-links">
+                <a href="https://khanglxag321.github.io/may-be-ielts/">Trang chủ may(be)ielts</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Schedule -->
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalMentorName">Lịch trống của ...</h3>
+                <div class="modal-meta">
+                    <span id="modalMetaRole"><i class="fa-solid fa-graduation-cap"></i> Writing Mentor</span>
+                    <span id="modalMetaUpdate"><i class="fa-solid fa-clock-rotate-left"></i> Cập nhật lần cuối: 15/07/2026</span>
+                </div>
+            </div>
+            
+            <div class="timetable-container">
+                <div class="timetable" id="timetableGrid">
+                    <!-- Grid injected via JS -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <p class="modal-note">* Lịch trên đây là các slot rảnh hiện tại của Mentor. Lịch học chính thức sẽ được chốt trực tiếp giữa bạn và Mentor.</p>
+                <a href="#" target="_blank" id="modalContactBtn" class="cta-btn" style="padding: 14px 32px; font-size: 1rem;">
+                    <i class="fa-brands fa-facebook-messenger"></i> NHẮN MENTOR ĐỂ TRAO ĐỔI
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        const MOCK_TIME_SLOTS = [
+            "08:00 - 09:30", "09:30 - 11:00", "13:30 - 15:00", 
+            "15:00 - 16:30", "17:30 - 19:00", "19:00 - 20:30", "20:30 - 22:00"
+        ];
+        
+        const DAYS = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"];
+
+        const MOCK_MENTORS = [
+            {
+                id: "kane",
+                name: "Gia Khang",
+                role: "writing",
+                overallScore: "8.5",
+                skillScore: "8.0",
+                image: "https://i.ibb.co/1JspPgdb/IMG-20230513-145018.jpg",
+                bio: "Chuyên bóc tách logic mạch lạc và tự tay chuẩn bị hệ thống tài liệu, sample answers chi tiết cho từng học viên. Giúp bạn làm chủ cấu trúc bài viết khoa học nhất.",
+                currentStudents: 8,
+                maxStudents: 10,
+                facebook: "https://www.facebook.com/laogiakhanglxag/",
+                updatedAt: "Hôm nay, 10:30 AM",
+                availability: {
+                    0: [2, 4, 5], // T2: 13:30, 17:30, 19:00
+                    1: [1, 3],    // T3
+                    2: [2, 4, 5], // T4
+                    3: [1, 3],    // T5
+                    4: [2, 4, 5], // T6
+                    5: [0, 1],    // T7
+                    6: []         // CN
+                }
+            },
+            {
+                id: "nhi",
+                name: "Tuệ Nhi",
+                role: "writing",
+                overallScore: "8.0",
+                skillScore: "8.0",
+                image: "https://i.ibb.co/bMKmDDLc/457736475-1739145653491500-430238909239537785-n.jpg",
+                bio: "Nổi tiếng với sự tỉ mỉ, kiên nhẫn. Cô Nhi đồng hành cùng học viên xây dựng nền tảng câu, sửa từng lỗi diễn đạt nhỏ nhất để biến ý tưởng thô thành câu chữ học thuật.",
+                currentStudents: 12,
+                maxStudents: 12, // Đủ học viên
+                facebook: "https://www.facebook.com/tnhi.911",
+                updatedAt: "Hôm qua, 20:00 PM",
+                availability: { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[] }
+            },
+            {
+                id: "minhanh",
+                name: "Minh Anh",
+                role: "writing",
+                overallScore: "8.0",
+                skillScore: "7.5",
+                image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80",
+                bio: "Phong cách dạy trẻ trung, gen Z. Hướng dẫn tư duy brainstorm idea siêu tốc và xây dựng vốn từ vựng (Lexical Resource) ăn điểm cao một cách tự nhiên.",
+                currentStudents: 3,
+                maxStudents: 8,
+                facebook: "#",
+                updatedAt: "Hôm nay, 08:15 AM",
+                availability: {
+                    0: [5, 6], 1: [5, 6], 2: [5, 6], 3: [5, 6], 4: [5, 6], 5: [2, 3], 6: [2, 3]
+                }
+            },
+            {
+                id: "bach",
+                name: "Hồ Bách",
+                role: "speaking",
+                overallScore: "8.5",
+                skillScore: "8.5",
+                image: "https://i.ibb.co/YMDr88y/561338466-2462022220881278-659980113980257469-n.jpg",
+                bio: "Founder của may(be)ielts. Phương pháp tư duy đa chiều giúp giải quyết nhanh gọn những chủ đề Speaking hóc búa nhất. Tối ưu phản xạ và sự tự nhiên.",
+                currentStudents: 5,
+                maxStudents: 5, // Đủ học viên
+                facebook: "https://www.facebook.com/maybebach1510",
+                updatedAt: "3 ngày trước",
+                availability: { 0:[], 1:[], 2:[], 3:[], 4:[], 5:[], 6:[] }
+            },
+            {
+                id: "huong",
+                name: "Quỳnh Hương",
+                role: "speaking",
+                overallScore: "8.0",
+                skillScore: "8.0",
+                image: "https://images.unsplash.com/photo-1580894732444-8ecded790047?w=500&q=80",
+                bio: "Tập trung sửa phát âm chuẩn bản xứ (Pronunciation) và ngữ điệu tự nhiên. Giúp học viên vượt qua rào cản tâm lý, tự tin giao tiếp trong phòng thi.",
+                currentStudents: 6,
+                maxStudents: 10,
+                facebook: "#",
+                updatedAt: "Hôm nay, 14:00 PM",
+                availability: {
+                    0: [0, 1], 1: [2, 3], 2: [0, 1], 3: [2, 3], 4: [0, 1], 5: [4, 5, 6], 6: [4, 5, 6]
+                }
+            },
+            {
+                id: "nhatminh",
+                name: "Nhật Minh",
+                role: "speaking",
+                overallScore: "8.0",
+                skillScore: "8.0",
+                image: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&q=80",
+                bio: "Chuyên gia về Part 2 & Part 3. Cung cấp bộ khung framework trả lời mạch lạc, giúp kéo dài câu trả lời và ghi điểm tiêu chí Fluency & Coherence dễ dàng.",
+                currentStudents: 2,
+                maxStudents: 8,
+                facebook: "#",
+                updatedAt: "Hôm qua, 09:00 AM",
+                availability: {
+                    0: [4, 5], 1: [4, 5], 2: [4, 5], 3: [4, 5], 4: [4, 5], 5: [], 6: []
+                }
+            }
+        ];
+
+        let currentTab = 'writing';
+
+        function renderMentors() {
+            const grid = document.getElementById("mentorGrid");
+            grid.style.opacity = 0;
+            
+            setTimeout(() => {
+                grid.innerHTML = '';
+                const filtered = MOCK_MENTORS.filter(m => m.role === currentTab);
+                
+                filtered.forEach(mentor => {
+                    const isFull = mentor.currentStudents >= mentor.maxStudents;
+                    const pct = Math.min((mentor.currentStudents / mentor.maxStudents) * 100, 100);
+                    
+                    const cardHTML = `
+                        <div class="mentor-card">
+                            <img src="${mentor.image}" alt="${mentor.name}" class="mentor-img">
+                            <div class="mentor-info">
+                                <div class="mentor-header">
+                                    <div class="mentor-name">${mentor.name}</div>
+                                    <div class="mentor-role">${mentor.role} Mentor</div>
+                                </div>
+                                <div class="mentor-scores">
+                                    <div class="score-item">Overall <span>${mentor.overallScore}</span></div>
+                                    <div class="score-item">|</div>
+                                    <div class="score-item">${mentor.role === 'writing' ? 'Writing' : 'Speaking'} <span>${mentor.skillScore}</span></div>
+                                </div>
+                                <p class="mentor-bio">${mentor.bio}</p>
+                                
+                                <div class="capacity-wrap">
+                                    <div class="capacity-header">
+                                        <span>Capacity: ${mentor.currentStudents} / ${mentor.maxStudents}</span>
+                                        <span class="status-text ${isFull ? 'full' : 'ok'}">${isFull ? 'HIỆN ĐÃ ĐỦ LỊCH' : 'ĐANG NHẬN HỌC VIÊN'}</span>
+                                    </div>
+                                    <div class="capacity-bar">
+                                        <div class="capacity-fill ${isFull ? 'full' : ''}" style="width: ${pct}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <button class="cta-btn ${isFull ? 'disabled' : ''}" 
+                                        ${isFull ? 'disabled' : `onclick="openModal('${mentor.id}')"`}>
+                                    ${isFull ? 'ĐÃ ĐỦ HỌC VIÊN' : '<i class="fa-regular fa-calendar"></i> XEM LỊCH TRỐNG'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    grid.innerHTML += cardHTML;
+                });
+                grid.style.opacity = 1;
+            }, 200);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            renderMentors();
+        }
+
+        // Modal Logic
+        const modal = document.getElementById("scheduleModal");
+        
+        function openModal(mentorId) {
+            const mentor = MOCK_MENTORS.find(m => m.id === mentorId);
+            if (!mentor) return;
+            
+            document.getElementById("modalMentorName").innerText = `Lịch trống của ${mentor.name}`;
+            document.getElementById("modalMetaRole").innerHTML = `<i class="fa-solid fa-graduation-cap"></i> ${mentor.role.charAt(0).toUpperCase() + mentor.role.slice(1)} Mentor`;
+            document.getElementById("modalMetaUpdate").innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Cập nhật lần cuối: ${mentor.updatedAt}`;
+            document.getElementById("modalContactBtn").href = mentor.facebook;
+
+            const grid = document.getElementById("timetableGrid");
+            grid.innerHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                let colHTML = `<div class="day-col"><div class="day-header">${DAYS[i]}</div>`;
+                const availSlots = mentor.availability[i] || [];
+                
+                for (let j = 0; j < MOCK_TIME_SLOTS.length; j++) {
+                    const isAvailable = availSlots.includes(j);
+                    colHTML += `<div class="time-slot ${isAvailable ? 'available' : 'unavailable'}">
+                                    ${MOCK_TIME_SLOTS[j]}
+                                </div>`;
+                }
+                colHTML += `</div>`;
+                grid.innerHTML += colHTML;
+            }
+
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMentors();
+        });
+    </script>
+</body>
+</html>
