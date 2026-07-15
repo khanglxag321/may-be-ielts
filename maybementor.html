@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>may(be)mentor - Quản lý lịch trình cá nhân</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-primary: #f4f4f6;
+            --bg-secondary: #ffffff;
+            --bg-dark: #111113;
+            --bg-card: #f9f9fa;
+            --text-main: #1c1c1e;
+            --text-muted: #636366;
+            --text-light: #f5f5f7;
+            --accent: #2c2c2e;
+            --border-color: #e5e5ea;
+            --status-low: #ff3b30;
+            --status-ok: #34c759;
+            --status-student: #007aff;
+            --transition: all 0.2s ease-in-out;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .cta-btn {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            border: 1px solid var(--bg-dark);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .cta-btn:hover {
+            background-color: transparent;
+            color: var(--text-main);
+        }
+
+        .cta-btn.outline {
+            background-color: transparent;
+            color: var(--text-main);
+        }
+
+        .cta-btn.outline:hover {
+            background-color: var(--border-color);
+            border-color: var(--border-color);
+        }
+
+        .cta-btn.danger {
+            background-color: #fff0f0;
+            color: var(--status-low);
+            border-color: transparent;
+        }
+
+        .cta-btn.danger:hover {
+            background-color: var(--status-low);
+            color: white;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--bg-dark);
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                180deg,
+                rgba(244, 244, 246, 1) 0%,
+                rgba(230, 230, 235, 1) 100%
+            );
+        }
+
+        .login-card {
+            background: var(--bg-secondary);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-card h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .login-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 32px;
+        }
+
+        #loginError {
+            color: var(--status-low);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        header {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-meta {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--border-color);
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-value span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .stat-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 8px;
+            width: fit-content;
+        }
+
+        .stat-indicator.accepting {
+            background: #eafaf1;
+            color: #1e8e3e;
+        }
+
+        .stat-indicator.full {
+            background: #fff0f0;
+            color: var(--status-low);
+        }
+
+        .action-card {
+            background: var(--bg-dark);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .action-card .stat-title {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .warning-banner {
+            background: #fff3cd;
+            color: #856404;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .timetable-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: 90px repeat(7, 1fr);
+        }
+
+        .col-header,
+        .row-header {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .row-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .slot-cell {
+            padding: 8px;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            height: 90px;
+        }
+
+        .slot-card {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            border: 2px solid transparent;
+        }
+
+        .slot-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .status-available {
+            background: #eafaf1;
+            border-color: #34c759;
+            color: #1e8e3e;
+        }
+
+        .status-student {
+            background: #e8f0fe;
+            border-color: var(--status-student);
+            color: #1967d2;
+        }
+
+        .status-blocked {
+            background: #f2f2f7;
+            border-color: #c7c7cc;
+            color: var(--text-muted);
+        }
+
+        .student-name {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #111;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .student-sub {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .mobile-tabs {
+            display: none;
+            overflow-x: auto;
+            gap: 8px;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+            scrollbar-width: none;
+        }
+
+        .mobile-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            white-space: nowrap;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: var(--bg-dark);
+            color: white;
+            border-color: var(--bg-dark);
+        }
+
+        .mobile-slot-list {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-slot-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+        }
+
+        .mobile-slot-time {
+            font-weight: 800;
+            font-size: 0.95rem;
+            width: 100px;
+        }
+
+        .mobile-slot-status {
+            flex-grow: 1;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 2px solid transparent;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 20px;
+            padding: 32px;
+            position: relative;
+            animation: slideUp 0.2s ease;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .status-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .status-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: 2px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .status-btn.active[data-status="available"] {
+            background: #eafaf1;
+            border-color: #34c759;
+            color: #1e8e3e;
+        }
+
+        .status-btn.active[data-status="student"] {
+            background: #e8f0fe;
+            border-color: var(--status-student);
+            color: #1967d2;
+        }
+
+        .status-btn.active[data-status="blocked"] {
+            background: #f2f2f7;
+            border-color: var(--text-muted);
+            color: var(--text-main);
+        }
+
+        .ts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .ts-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+        }
+
+        .ts-item-time {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .ts-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ts-item-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+            padding: 4px;
+        }
+
+        .ts-item-actions button:hover {
+            color: var(--text-main);
+        }
+
+        .ts-editor {
+            background: #f2f2f7;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .ts-editor-preview {
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 12px 0;
+            color: var(--bg-dark);
+        }
+
+        #toast {
+            position: fixed;
+            bottom: -100px;
+            right: 24px;
+            background: var(--bg-dark);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #toast.show {
+            bottom: 24px;
+        }
+
+        @media (max-width: 992px) {
+            .overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .timetable-grid {
+                display: none;
+            }
+
+            .mobile-tabs,
+            .mobile-slot-list {
+                display: flex;
+            }
+
+            .timetable-container {
+                background: transparent;
+                border: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-role {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <h1>may(be)mentor.</h1>
+            <p>Cổng quản lý dành cho Mentor của may(be)ielts.</p>
+
+            <form onsubmit="handleLogin(event)">
+                <div id="loginError" class="hidden">Sai email hoặc mật khẩu!</div>
+
+                <label style="text-align: left;">Email</label>
+                <input type="email" id="loginEmail" value="mentor1@maybeielts.com" required>
+
+                <label style="text-align: left;">Mật khẩu</label>
+                <input type="password" id="loginPass" value="123456" required>
+
+                <button type="submit" class="cta-btn" style="width: 100%; margin-top: 8px;">
+                    ĐĂNG NHẬP
+                </button>
+            </form>
+
+            <div style="margin-top:20px; font-size:0.8rem; color:var(--text-muted); text-align:left;">
+                <strong>Mock Accounts:</strong><br>
+                1. mentor1@maybeielts.com / 123456<br>
+                2. mentor2@maybeielts.com / 123456
+            </div>
+        </div>
+    </div>
+
+    <div id="portal-screen" class="hidden">
+        <header>
+            <div class="container header-inner">
+                <a href="#" class="logo">may(be)mentor.</a>
+
+                <div class="user-info">
+                    <div class="user-meta">
+                        <div class="user-name" id="headerName">Xin chào, ...</div>
+                        <div class="user-role" id="headerRole">... Mentor</div>
+                    </div>
+
+                    <img src="" alt="Avatar" class="avatar" id="headerAvatar">
+
+                    <button
+                        class="cta-btn outline"
+                        style="padding: 8px 12px; margin-left: 8px;"
+                        onclick="handleLogout()"
+                        title="Đăng xuất"
+                    >
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+
+            <div id="warningBanner" class="warning-banner hidden">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                Bạn chưa kiểm tra lịch trong 7 ngày. Hãy xác nhận để đảm bảo học viên đang xem lịch chính xác trên may(be)1on1.
+            </div>
+
+            <div class="overview-grid">
+
+                <div class="stat-card">
+                    <div class="stat-title">Học viên hiện tại</div>
+                    <div class="stat-value" id="statStudents">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Khả năng tiếp nhận (Capacity)</div>
+
+                    <div class="stat-value" id="statCapacity">
+                        0 <span>/ 10</span>
+                    </div>
+
+                    <div id="statCapacityIndicator" class="stat-indicator accepting">
+                        ĐANG NHẬN HỌC VIÊN
+                    </div>
+
+                    <div style="margin-top: 12px; display: flex; gap: 8px; align-items: center;">
+                        <input
+                            type="number"
+                            id="inputMaxStudents"
+                            style="margin: 0; padding: 6px; width: 60px;"
+                            min="1"
+                        >
+
+                        <button
+                            class="cta-btn outline"
+                            style="padding: 6px 12px; font-size: 0.8rem;"
+                            onclick="saveCapacity()"
+                        >
+                            LƯU
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-title">Lịch trống</div>
+                    <div class="stat-value" id="statEmpty">
+                        0 <span>slots</span>
+                    </div>
+                </div>
+
+                <div class="stat-card action-card" onclick="confirmScheduleAccurate()">
+                    <div class="stat-title">Cập nhật lần cuối</div>
+
+                    <div
+                        class="stat-value"
+                        style="font-size: 1.5rem; margin: 8px 0;"
+                        id="statLastUpdate"
+                    >
+                        ...
+                    </div>
+
+                    <div style="font-size: 0.85rem; font-weight: 700; margin-top: 12px;">
+                        <i class="fa-solid fa-check-double"></i>
+                        LỊCH CỦA TÔI VẪN CHÍNH XÁC
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="section-header">
+                <h2>Lịch biểu hàng tuần</h2>
+
+                <button class="cta-btn outline" onclick="openTimeSlotManagerModal()">
+                    <i class="fa-solid fa-gear"></i>
+                    QUẢN LÝ KHUNG GIỜ
+                </button>
+            </div>
+
+            <div class="mobile-tabs" id="mobileDayTabs"></div>
+
+            <div class="timetable-container">
+                <div class="timetable-grid" id="desktopGrid"></div>
+                <div class="mobile-slot-list" id="mobileSlotList"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+
+            <button class="modal-close" onclick="closeModal('editModal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="modal-title" id="modalTitle">Chỉnh sửa lịch</h3>
+
+            <label>Trạng thái Slot</label>
+
+            <div class="status-selector">
+                <button
+                    class="status-btn"
+                    data-status="available"
+                    onclick="selectStatus('available')"
+                >
+                    TRỐNG
+                </button>
+
+                <button
+                    class="status-btn"
+                    data-status="student"
+                    onclick="selectStatus('student')"
+                >
+                    CÓ HỌC VIÊN
+                </button>
+
+                <button
+                    class="status-btn"
+                    data-status="blocked"
+                    onclick="selectStatus('blocked')"
+                >
+                    BẬN
+                </button>
+            </div>
+
+            <div id="studentFields" class="hidden">
+                <label>Tên học viên</label>
+                <input
+                    type="text"
+                    id="inputStudentName"
+                    placeholder="Ví dụ: Nguyễn Minh"
+                >
+
+                <label>Ghi chú nội bộ (Optional)</label>
+                <input
+                    type="text"
+                    id="inputStudentNote"
+                    placeholder="Ví dụ: Chữa bài Task 2"
+                >
+            </div>
+
+            <button
+                class="cta-btn"
+                style="width: 100%; margin-top: 16px;"
+                onclick="saveSlotChanges()"
+            >
+                LƯU THAY ĐỔI
+            </button>
+
+        </div>
+    </div>
+
+    <div id="tsManagerModal" class="modal">
+        <div class="modal-content">
+
+            <button class="modal-close" onclick="closeModal('tsManagerModal')">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="modal-title">Quản lý Khung Giờ</h3>
+
+            <div class="ts-list" id="tsManagerList"></div>
+
+            <button
+                class="cta-btn outline"
+                style="width: 100%; margin-bottom: 16px;"
+                onclick="toggleTsEditor(true)"
+            >
+                + THÊM KHUNG GIỜ
+            </button>
+
+            <div id="tsEditorContainer" class="ts-editor hidden">
+
+                <h4
+                    style="margin-bottom: 12px; font-size: 0.95rem;"
+                    id="tsEditorTitle"
+                >
+                    Thêm Khung Giờ Mới
+                </h4>
+
+                <label>Giờ bắt đầu</label>
+
+                <input
+                    type="time"
+                    id="tsInputStart"
+                    onchange="previewTsEnd()"
+                >
+
+                <div class="ts-editor-preview" id="tsPreview">
+                    --:-- - --:--
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <button
+                        class="cta-btn outline"
+                        style="flex: 1;"
+                        onclick="toggleTsEditor(false)"
+                    >
+                        HỦY
+                    </button>
+
+                    <button
+                        class="cta-btn"
+                        style="flex: 1;"
+                        onclick="saveCustomTimeSlot()"
+                    >
+                        LƯU
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMsg">Cập nhật thành công!</span>
+    </div>
+
+    <script>
+        const DAYS = [
+            "Thứ 2",
+            "Thứ 3",
+            "Thứ 4",
+            "Thứ 5",
+            "Thứ 6",
+            "Thứ 7",
+            "Chủ nhật"
+        ];
+
+        const MOCK_ACCOUNTS = [
+            {
+                email: "mentor1@maybeielts.com",
+                password: "123456",
+                mentorId: "m1"
+            },
+            {
+                email: "mentor2@maybeielts.com",
+                password: "123456",
+                mentorId: "m2"
+            }
+        ];
+
+        const INITIAL_DB = {
+            "m1": {
+                id: "m1",
+                name: "Lao Gia Khang",
+                role: "Writing",
+                overall: "8.0",
+                skillScore: "Writing 8.0",
+                intro: "Xin chào! Mình là Gia Khang, sẵn sàng đồng hành cùng các bạn để chinh phục band điểm IELTS mong muốn.",
+                experience: "3 năm giảng dạy IELTS",
+                education: "Cử nhân Ngôn ngữ Anh",
+                certs: "IELTS 8.0, TESOL",
+                facebook: "facebook.com/lgk",
+                tiktok: "@khang.ielts",
+                zalo: "0901234567",
+                avatar: "https://i.pravatar.cc/150?img=11",
+                maxStudents: 10,
+                updatedAt: new Date().toISOString(),
+
+                timeSlots: [
+                    {
+                        id: "ts_1",
+                        startTime: "08:00",
+                        endTime: "09:30"
+                    },
+                    {
+                        id: "ts_2",
+                        startTime: "13:30",
+                        endTime: "15:00"
+                    },
+                    {
+                        id: "ts_3",
+                        startTime: "18:15",
+                        endTime: "19:45"
+                    }
+                ],
+
+                availability: {
+                    0: {
+                        "ts_1": {
+                            status: "available"
+                        },
+                        "ts_2": {
+                            status: "student",
+                            studentName: "Hoàng Oanh",
+                            note: "Task 1"
+                        }
+                    },
+                    1: {
+                        "ts_3": {
+                            status: "blocked"
+                        }
+                    },
+                    2: {},
+                    3: {},
+                    4: {},
+                    5: {},
+                    6: {}
+                }
+            },
+
+            "m2": {
+                id: "m2",
+                name: "Hoàng Yến",
+                role: "Speaking",
+                overall: "7.5",
+                skillScore: "Speaking 8.0",
+                intro: "Let's speak English naturally!",
+                experience: "2 năm giảng dạy",
+                education: "Đại học Ngoại Thương",
+                certs: "IELTS 7.5",
+                facebook: "facebook.com/yen",
+                tiktok: "@yen.speaking",
+                zalo: "0909999999",
+                avatar: "https://i.pravatar.cc/150?img=5",
+                maxStudents: 5,
+
+                updatedAt: new Date(
+                    new Date().setDate(new Date().getDate() - 10)
+                ).toISOString(),
+
+                timeSlots: [
+                    {
+                        id: "ts_a",
+                        startTime: "09:00",
+                        endTime: "10:30"
+                    },
+                    {
+                        id: "ts_b",
+                        startTime: "19:30",
+                        endTime: "21:00"
+                    }
+                ],
+
+                availability: {
+                    0: {},
+                    1: {},
+                    2: {
+                        "ts_b": {
+                            status: "student",
+                            studentName: "Minh Tuấn",
+                            note: ""
+                        }
+                    },
+                    3: {},
+                    4: {},
+                    5: {},
+                    6: {}
+                }
+            }
+        };
+
+        if (!localStorage.getItem("maybe_mentor_db")) {
+            localStorage.setItem(
+                "maybe_mentor_db",
+                JSON.stringify(INITIAL_DB)
+            );
+        }
+
+        const authService = {
+            login: (email, pass) => {
+                const user = MOCK_ACCOUNTS.find(
+                    u => u.email === email && u.password === pass
+                );
+
+                if (user) {
+                    localStorage.setItem(
+                        "currentUser",
+                        user.mentorId
+                    );
+
+                    return true;
+                }
+
+                return false;
+            },
+
+            logout: () => {
+                localStorage.removeItem("currentUser");
+            },
+
+            getCurrentId: () => {
+                return localStorage.getItem("currentUser");
+            }
+        };
+
+        const dataService = {
+            loadMentor: (id) => {
+                const db = JSON.parse(
+                    localStorage.getItem("maybe_mentor_db")
+                );
+
+                return db[id];
+            },
+
+            saveMentor: (data) => {
+                const db = JSON.parse(
+                    localStorage.getItem("maybe_mentor_db")
+                );
+
+                db[data.id] = data;
+
+                localStorage.setItem(
+                    "maybe_mentor_db",
+                    JSON.stringify(db)
+                );
+            }
+        };
+
+        let mentorData = null;
+        let activeMobileDay = 0;
+
+        let editingCell = {
+            day: null,
+            slotId: null
+        };
+
+        let tempStatus = null;
+        let editingTsId = null;
+
+        function handleLogin(e) {
+            e.preventDefault();
+
+            const email =
+                document.getElementById("loginEmail").value;
+
+            const pass =
+                document.getElementById("loginPass").value;
+
+            if (authService.login(email, pass)) {
+                document
+                    .getElementById("loginError")
+                    .classList.add("hidden");
+
+                document
+                    .getElementById("login-screen")
+                    .classList.add("hidden");
+
+                document
+                    .getElementById("portal-screen")
+                    .classList.remove("hidden");
+
+                initPortal();
+            } else {
+                document
+                    .getElementById("loginError")
+                    .classList.remove("hidden");
+            }
+        }
+
+        function handleLogout() {
+            authService.logout();
+
+            document
+                .getElementById("portal-screen")
+                .classList.add("hidden");
+
+            document
+                .getElementById("login-screen")
+                .classList.remove("hidden");
+        }
+
+        window.onload = () => {
+            if (authService.getCurrentId()) {
+                document
+                    .getElementById("login-screen")
+                    .classList.add("hidden");
+
+                document
+                    .getElementById("portal-screen")
+                    .classList.remove("hidden");
+
+                initPortal();
+            }
+        };
+
+        function initPortal() {
+            const currentId = authService.getCurrentId();
+
+            mentorData = dataService.loadMentor(currentId);
+
+            document.getElementById("headerName").innerText =
+                `Xin chào, ${mentorData.name}`;
+
+            document.getElementById("headerRole").innerText =
+                `${mentorData.role} Mentor`;
+
+            document.getElementById("headerAvatar").src =
+                mentorData.avatar;
+
+            document.getElementById("inputMaxStudents").value =
+                mentorData.maxStudents;
+
+            refreshUI();
+        }
+
+        function refreshUI() {
+            renderOverview();
+            renderDesktopGrid();
+            renderMobileTabs();
+            renderMobileList();
+        }
+
+        function renderOverview() {
+            let uniqueStudents = new Set();
+            let emptySlots = 0;
+
+            for (let d = 0; d < 7; d++) {
+                mentorData.timeSlots.forEach(ts => {
+                    const cell =
+                        mentorData.availability[d]?.[ts.id] ||
+                        { status: "available" };
+
+                    if (cell.status === "available") {
+                        emptySlots++;
+                    }
+
+                    if (
+                        cell.status === "student" &&
+                        cell.studentName &&
+                        cell.studentName.trim() !== ""
+                    ) {
+                        uniqueStudents.add(
+                            cell.studentName
+                                .trim()
+                                .toLowerCase()
+                        );
+                    }
+                });
+            }
+
+            const currentStudents = uniqueStudents.size;
+
+            document.getElementById("statStudents").innerText =
+                currentStudents;
+
+            document.getElementById("statCapacity").innerHTML =
+                `${currentStudents} <span>/ ${mentorData.maxStudents}</span>`;
+
+            document.getElementById("statEmpty").innerHTML =
+                `${emptySlots} <span>slots</span>`;
+
+            const indicator =
+                document.getElementById("statCapacityIndicator");
+
+            if (currentStudents >= mentorData.maxStudents) {
+                indicator.className = "stat-indicator full";
+                indicator.innerText =
+                    "HIỆN ĐÃ ĐỦ HỌC VIÊN";
+            } else {
+                indicator.className =
+                    "stat-indicator accepting";
+
+                indicator.innerText =
+                    "ĐANG NHẬN HỌC VIÊN";
+            }
+
+            const dateObj = new Date(mentorData.updatedAt);
+
+            const dateStr =
+                `${dateObj.getDate().toString().padStart(2, "0")}/` +
+                `${(dateObj.getMonth() + 1).toString().padStart(2, "0")} · ` +
+                `${dateObj.getHours().toString().padStart(2, "0")}:` +
+                `${dateObj.getMinutes().toString().padStart(2, "0")}`;
+
+            document.getElementById("statLastUpdate").innerText =
+                dateStr;
+
+            const diffTime =
+                Math.abs(new Date() - dateObj);
+
+            const diffDays =
+                Math.ceil(
+                    diffTime /
+                    (1000 * 60 * 60 * 24)
+                );
+
+            if (diffDays > 7) {
+                document
+                    .getElementById("warningBanner")
+                    .classList.remove("hidden");
+            } else {
+                document
+                    .getElementById("warningBanner")
+                    .classList.add("hidden");
+            }
+        }
+
+        function saveCapacity() {
+            const newVal = parseInt(
+                document.getElementById("inputMaxStudents").value
+            );
+
+            const currentStudents = parseInt(
+                document.getElementById("statStudents").innerText
+            );
+
+            if (newVal < currentStudents) {
+                alert(
+                    `Lỗi: Sức chứa tối đa (${newVal}) không thể nhỏ hơn số học viên hiện tại (${currentStudents})!`
+                );
+
+                document.getElementById(
+                    "inputMaxStudents"
+                ).value = mentorData.maxStudents;
+
+                return;
+            }
+
+            mentorData.maxStudents = newVal;
+
+            dataService.saveMentor(mentorData);
+
+            renderOverview();
+
+            showToast(
+                "Đã cập nhật sức chứa học viên!"
+            );
+        }
+
+        function confirmScheduleAccurate() {
+            mentorData.updatedAt =
+                new Date().toISOString();
+
+            dataService.saveMentor(mentorData);
+
+            renderOverview();
+
+            showToast(
+                "Đã xác nhận lịch chính xác!"
+            );
+        }
+
+        function calculateEndTime(startTime) {
+            let [h, m] =
+                startTime.split(":").map(Number);
+
+            let d = new Date();
+
+            d.setHours(h, m + 90);
+
+            return (
+                `${d.getHours().toString().padStart(2, "0")}:` +
+                `${d.getMinutes().toString().padStart(2, "0")}`
+            );
+        }
+
+        function sortTimeSlots() {
+            mentorData.timeSlots.sort(
+                (a, b) =>
+                    a.startTime.localeCompare(b.startTime)
+            );
+        }
+
+        function countStudentsInTimeSlot(tsId) {
+            let count = 0;
+
+            for (let d = 0; d < 7; d++) {
+                const cell =
+                    mentorData.availability[d]?.[tsId];
+
+                if (
+                    cell &&
+                    cell.status === "student"
+                ) {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        function openTimeSlotManagerModal() {
+            document.getElementById(
+                "tsManagerModal"
+            ).style.display = "flex";
+
+            toggleTsEditor(false);
+
+            renderTsManagerList();
+        }
+
+        function renderTsManagerList() {
+            const list =
+                document.getElementById("tsManagerList");
+
+            list.innerHTML = "";
+
+            mentorData.timeSlots.forEach(ts => {
+                const usage =
+                    countStudentsInTimeSlot(ts.id);
+
+                const usageBadge =
+                    usage > 0
+                        ? `<span style="font-size:0.7rem; color:var(--status-student); margin-left:8px; background:#e8f0fe; padding:2px 6px; border-radius:4px;">${usage} học viên</span>`
+                        : "";
+
+                list.innerHTML += `
+                    <div class="ts-item">
+                        <div class="ts-item-time">
+                            ${ts.startTime} - ${ts.endTime}
+                            ${usageBadge}
+                        </div>
+
+                        <div class="ts-item-actions">
+                            <button
+                                onclick="editCustomTimeSlot('${ts.id}')"
+                                title="Sửa"
+                            >
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+
+                            <button
+                                onclick="deleteCustomTimeSlot('${ts.id}')"
+                                title="Xóa"
+                            >
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleTsEditor(show, isEdit = false) {
+            const editor =
+                document.getElementById("tsEditorContainer");
+
+            if (show) {
+                editor.classList.remove("hidden");
+
+                if (!isEdit) {
+                    editingTsId = null;
+
+                    document.getElementById(
+                        "tsEditorTitle"
+                    ).innerText =
+                        "Thêm Khung Giờ Mới";
+
+                    document.getElementById(
+                        "tsInputStart"
+                    ).value = "";
+
+                    document.getElementById(
+                        "tsPreview"
+                    ).innerText =
+                        "--:-- - --:--";
+                }
+            } else {
+                editor.classList.add("hidden");
+
+                editingTsId = null;
+            }
+        }
+
+        function previewTsEnd() {
+            const start =
+                document.getElementById(
+                    "tsInputStart"
+                ).value;
+
+            if (start) {
+                const end =
+                    calculateEndTime(start);
+
+                document.getElementById(
+                    "tsPreview"
+                ).innerText =
+                    `${start} - ${end}`;
+            }
+        }
+
+        function saveCustomTimeSlot() {
+            const start =
+                document.getElementById(
+                    "tsInputStart"
+                ).value;
+
+            if (!start) {
+                return alert(
+                    "Vui lòng chọn giờ bắt đầu!"
+                );
+            }
+
+            const end =
+                calculateEndTime(start);
+
+            if (editingTsId) {
+                const usage =
+                    countStudentsInTimeSlot(editingTsId);
+
+                if (usage > 0) {
+                    if (
+                        !confirm(
+                            `Khung giờ này hiện đang được sử dụng cho lịch học của ${usage} học viên. Thay đổi giờ sẽ cập nhật các lịch học liên quan. Bạn có chắc chắn?`
+                        )
+                    ) {
+                        return;
+                    }
+                }
+
+                const slot =
+                    mentorData.timeSlots.find(
+                        t => t.id === editingTsId
+                    );
+
+                slot.startTime = start;
+                slot.endTime = end;
+            } else {
+                const newId =
+                    "ts_" + Date.now();
+
+                mentorData.timeSlots.push({
+                    id: newId,
+                    startTime: start,
+                    endTime: end
+                });
+
+                for (let d = 0; d < 7; d++) {
+                    if (!mentorData.availability[d]) {
+                        mentorData.availability[d] = {};
+                    }
+
+                    mentorData.availability[d][newId] = {
+                        status: "available"
+                    };
+                }
+            }
+
+            sortTimeSlots();
+
+            dataService.saveMentor(mentorData);
+
+            refreshUI();
+
+            toggleTsEditor(false);
+
+            renderTsManagerList();
+
+            showToast("Đã lưu khung giờ!");
+        }
+
+        function editCustomTimeSlot(tsId) {
+            const slot =
+                mentorData.timeSlots.find(
+                    t => t.id === tsId
+                );
+
+            editingTsId = tsId;
+
+            document.getElementById(
+                "tsEditorTitle"
+            ).innerText =
+                "Sửa Khung Giờ";
+
+            document.getElementById(
+                "tsInputStart"
+            ).value =
+                slot.startTime;
+
+            previewTsEnd();
+
+            toggleTsEditor(true, true);
+        }
+
+        function deleteCustomTimeSlot(tsId) {
+            const usage =
+                countStudentsInTimeSlot(tsId);
+
+            if (usage > 0) {
+                return alert(
+                    "CẢNH BÁO: Khung giờ này đang có học viên. Vui lòng chuyển hoặc xóa lịch học của học viên trước khi xóa khung giờ."
+                );
+            }
+
+            if (
+                confirm(
+                    "Bạn có chắc chắn muốn xóa khung giờ này?"
+                )
+            ) {
+                mentorData.timeSlots =
+                    mentorData.timeSlots.filter(
+                        t => t.id !== tsId
+                    );
+
+                for (let d = 0; d < 7; d++) {
+                    if (
+                        mentorData.availability[d] &&
+                        mentorData.availability[d][tsId]
+                    ) {
+                        delete mentorData
+                            .availability[d][tsId];
+                    }
+                }
+
+                dataService.saveMentor(mentorData);
+
+                refreshUI();
+
+                renderTsManagerList();
+
+                showToast(
+                    "Đã xóa khung giờ!"
+                );
+            }
+        }
+
+        function getSlotDOM(d, tsId) {
+            const data =
+                mentorData.availability[d]?.[tsId] ||
+                { status: "available" };
+
+            let content = "";
+            let cssClass = "";
+
+            if (data.status === "available") {
+                cssClass = "status-available";
+                content = "TRỐNG";
+            } else if (data.status === "student") {
+                cssClass = "status-student";
+
+                content = `
+                    <span class="student-name">
+                        ${data.studentName}
+                    </span>
+
+                    ${
+                        data.note
+                            ? `<span class="student-sub">${data.note}</span>`
+                            : ""
+                    }
+                `;
+            } else {
+                cssClass = "status-blocked";
+                content = "BẬN";
+            }
+
+            return {
+                cssClass,
+                content
+            };
+        }
+
+        function renderDesktopGrid() {
+            const grid =
+                document.getElementById("desktopGrid");
+
+            grid.innerHTML = `
+                <div
+                    class="col-header"
+                    style="border-right:1px solid var(--border-color)"
+                >
+                    Giờ / Ngày
+                </div>
+            `;
+
+            DAYS.forEach(day => {
+                grid.innerHTML += `
+                    <div class="col-header">
+                        ${day}
+                    </div>
+                `;
+            });
+
+            mentorData.timeSlots.forEach(ts => {
+                grid.innerHTML += `
+                    <div class="row-header">
+                        ${ts.startTime} -<br>
+                        ${ts.endTime}
+                    </div>
+                `;
+
+                for (let d = 0; d < 7; d++) {
+                    const ui =
+                        getSlotDOM(d, ts.id);
+
+                    grid.innerHTML += `
+                        <div class="slot-cell">
+                            <div
+                                class="slot-card ${ui.cssClass}"
+                                onclick="openEditCalendarModal(${d}, '${ts.id}')"
+                            >
+                                ${ui.content}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function renderMobileTabs() {
+            const tabsContainer =
+                document.getElementById(
+                    "mobileDayTabs"
+                );
+
+            tabsContainer.innerHTML = "";
+
+            DAYS.forEach((day, index) => {
+                tabsContainer.innerHTML += `
+                    <button
+                        class="tab-btn ${
+                            index === activeMobileDay
+                                ? "active"
+                                : ""
+                        }"
+                        onclick="switchMobileDay(${index})"
+                    >
+                        ${day}
+                    </button>
+                `;
+            });
+        }
+
+        function switchMobileDay(dayIndex) {
+            activeMobileDay = dayIndex;
+
+            renderMobileTabs();
+
+            renderMobileList();
+        }
+
+        function renderMobileList() {
+            const list =
+                document.getElementById(
+                    "mobileSlotList"
+                );
+
+            list.innerHTML = "";
+
+            mentorData.timeSlots.forEach(ts => {
+                const ui =
+                    getSlotDOM(
+                        activeMobileDay,
+                        ts.id
+                    );
+
+                list.innerHTML += `
+                    <div
+                        class="mobile-slot-item"
+                        onclick="openEditCalendarModal(${activeMobileDay}, '${ts.id}')"
+                    >
+                        <div class="mobile-slot-time">
+                            ${ts.startTime}<br>
+
+                            <span
+                                style="font-size:0.7rem; font-weight:500; color:var(--text-muted)"
+                            >
+                                đến ${ts.endTime}
+                            </span>
+                        </div>
+
+                        <div
+                            class="mobile-slot-status ${ui.cssClass}"
+                        >
+                            ${ui.content}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openEditCalendarModal(d, tsId) {
+            editingCell = {
+                day: d,
+                slotId: tsId
+            };
+
+            const data =
+                mentorData.availability[d]?.[tsId] ||
+                { status: "available" };
+
+            const tsObj =
+                mentorData.timeSlots.find(
+                    t => t.id === tsId
+                );
+
+            document.getElementById(
+                "modalTitle"
+            ).innerText =
+                `${DAYS[d]} · ${tsObj.startTime}-${tsObj.endTime}`;
+
+            selectStatus(data.status);
+
+            document.getElementById(
+                "inputStudentName"
+            ).value =
+                data.studentName || "";
+
+            document.getElementById(
+                "inputStudentNote"
+            ).value =
+                data.note || "";
+
+            document.getElementById(
+                "editModal"
+            ).style.display =
+                "flex";
+        }
+
+        function selectStatus(status) {
+            tempStatus = status;
+
+            document
+                .querySelectorAll(".status-btn")
+                .forEach(btn =>
+                    btn.classList.remove("active")
+                );
+
+            document
+                .querySelector(
+                    `.status-btn[data-status="${status}"]`
+                )
+                .classList.add("active");
+
+            if (status === "student") {
+                document
+                    .getElementById("studentFields")
+                    .classList.remove("hidden");
+
+                document
+                    .getElementById("inputStudentName")
+                    .focus();
+            } else {
+                document
+                    .getElementById("studentFields")
+                    .classList.add("hidden");
+            }
+        }
+
+        function saveSlotChanges() {
+            const d =
+                editingCell.day;
+
+            const tsId =
+                editingCell.slotId;
+
+            if (!mentorData.availability[d]) {
+                mentorData.availability[d] = {};
+            }
+
+            if (!mentorData.availability[d][tsId]) {
+                mentorData.availability[d][tsId] = {};
+            }
+
+            mentorData.availability[d][tsId].status =
+                tempStatus;
+
+            if (tempStatus === "student") {
+                const stuName =
+                    document
+                        .getElementById("inputStudentName")
+                        .value
+                        .trim();
+
+                if (!stuName) {
+                    return alert(
+                        "Vui lòng nhập tên học viên!"
+                    );
+                }
+
+                mentorData
+                    .availability[d][tsId]
+                    .studentName =
+                        stuName;
+
+                mentorData
+                    .availability[d][tsId]
+                    .note =
+                        document.getElementById(
+                            "inputStudentNote"
+                        ).value;
+            } else {
+                delete mentorData
+                    .availability[d][tsId]
+                    .studentName;
+
+                delete mentorData
+                    .availability[d][tsId]
+                    .note;
+            }
+
+            mentorData.updatedAt =
+                new Date().toISOString();
+
+            dataService.saveMentor(mentorData);
+
+            refreshUI();
+
+            closeModal("editModal");
+
+            showToast(
+                "Đã cập nhật lịch!"
+            );
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(
+                modalId
+            ).style.display =
+                "none";
+        }
+
+        window.onclick = function(event) {
+            if (
+                event.target.classList.contains("modal")
+            ) {
+                event.target.style.display =
+                    "none";
+            }
+        };
+
+        let toastTimeout;
+
+        function showToast(msg) {
+            const toast =
+                document.getElementById("toast");
+
+            document.getElementById(
+                "toastMsg"
+            ).innerText =
+                msg;
+
+            toast.classList.add("show");
+
+            clearTimeout(toastTimeout);
+
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+
+</body>
+</html>
