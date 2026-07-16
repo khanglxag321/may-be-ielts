@@ -63,9 +63,31 @@ html, body {
         }
         .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
         .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none; letter-spacing: -0.5px; }
-        .nav-links { display: flex; gap: 32px; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+        .nav-links > li { display: flex; align-items: center; }
+        .nav-links a {
+            display: inline-flex; align-items: center; min-height: 40px;
+            text-decoration: none; color: var(--text-main); font-weight: 500;
+            font-size: 0.95rem; line-height: 1; transition: var(--transition);
+        }
         .nav-links a:hover { color: var(--text-muted); }
+        .nav-links a.nav-one-on-one {
+            gap: 9px; min-height: 40px; padding: 0 14px;
+            border: 1px solid #d1d1d6; border-radius: 999px;
+            background: linear-gradient(180deg, #ffffff 0%, #f2f2f5 100%);
+            box-shadow: 0 5px 14px rgba(0, 0, 0, .055);
+            font-weight: 800; letter-spacing: -.25px; white-space: nowrap;
+        }
+        .nav-links a.nav-one-on-one::before {
+            content: ""; width: 7px; height: 7px; flex: 0 0 7px;
+            border-radius: 50%; background: var(--bg-dark);
+            box-shadow: 0 0 0 4px rgba(17, 17, 19, .08);
+        }
+        .nav-links a.nav-one-on-one:hover {
+            color: var(--text-main); border-color: #b8b8be;
+            background: #fff; box-shadow: 0 7px 18px rgba(0, 0, 0, .085);
+            transform: translateY(-1px);
+        }
         .cta-btn {
             background-color: var(--bg-dark); color: var(--text-light);
             padding: 12px 24px; border-radius: 8px; text-decoration: none;
@@ -410,6 +432,35 @@ overscroll-behavior: contain;
         
         @keyframes zoomIn { from {transform:scale(0.95); opacity:0;} to {transform:scale(1); opacity:1;} }
 
+        /* FAQ Section */
+        #faq { background-color: var(--bg-primary); }
+        .faq-list { max-width: 920px; margin: 0 auto; }
+        .faq-item {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 16px; margin-bottom: 14px; overflow: hidden;
+            transition: var(--transition);
+        }
+        .faq-item:last-child { margin-bottom: 0; }
+        .faq-item:hover, .faq-item.active { border-color: #c7c7cc; box-shadow: 0 10px 28px rgba(0,0,0,.035); }
+        .faq-question {
+            width: 100%; display: flex; align-items: center; justify-content: space-between;
+            gap: 24px; padding: 24px 28px; border: 0; background: transparent;
+            color: var(--text-main); font: inherit; font-size: 1.05rem; font-weight: 750;
+            text-align: left; cursor: pointer;
+        }
+        .faq-question:focus-visible { outline: 2px solid var(--text-main); outline-offset: -4px; }
+        .faq-icon {
+            width: 34px; height: 34px; flex: 0 0 34px; display: inline-flex;
+            align-items: center; justify-content: center; border-radius: 50%;
+            background: var(--bg-primary); transition: var(--transition);
+        }
+        .faq-answer { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .38s ease, opacity .25s ease; }
+        .faq-answer-inner { padding: 0 28px 28px; color: var(--text-muted); font-size: .98rem; line-height: 1.75; }
+        .faq-answer-inner p + p { margin-top: 12px; }
+        .faq-answer-inner strong { color: var(--text-main); }
+        .faq-item.active .faq-answer { max-height: 700px; opacity: 1; }
+        .faq-item.active .faq-icon { background: var(--bg-dark); color: var(--text-light); transform: rotate(45deg); }
+
         /* Contact / Register Section */
         #register { background-color: var(--bg-dark); color: var(--text-light); }
         #register .section-title { color: var(--text-light); }
@@ -468,6 +519,12 @@ footer p {
 
 
         /* Responsive Layout */
+        @media (max-width: 1100px) and (min-width: 769px) {
+            .nav-links { gap: 14px; }
+            .nav-links a { font-size: .82rem; }
+            .nav-links a.nav-one-on-one { min-height: 36px; padding: 0 10px; }
+            .nav-container > .cta-btn { padding: 10px 16px; }
+        }
         @media (max-width: 1024px) {
             .features-grid { grid-template-columns: repeat(2, 1fr); }
             .hof-grid { grid-template-columns: repeat(2, 1fr); }
@@ -506,6 +563,27 @@ footer p {
     text-decoration:none;
     color:var(--text-main);
     font-weight:600;
+}
+
+.mobile-menu a.nav-one-on-one{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    width:fit-content;
+    padding:10px 14px;
+    border-radius:999px;
+    background:var(--bg-dark);
+    color:var(--text-light);
+    font-weight:800;
+}
+
+.mobile-menu a.nav-one-on-one::before{
+    content:"";
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(255,255,255,.14);
 }
 
 .mobile-menu.show{
@@ -627,6 +705,17 @@ footer p {
         padding:28px 20px;
     }
 
+    .faq-question {
+        padding: 20px;
+        gap: 14px;
+        font-size: 1rem;
+    }
+
+    .faq-answer-inner {
+        padding: 0 20px 22px;
+        font-size: .93rem;
+    }
+
     .container{
         padding:0 16px;
     }
@@ -708,6 +797,7 @@ footer p {
                 <li><a href="#lecturers">Giáo viên</a></li>
                 <li><a href="#schedule">Lớp Đang Mở</a></li>
                 <li><a href="#halloffame">Hall of Fame</a></li>
+                <li><a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1.</a></li>
             </ul>
             
 <div class="hamburger" onclick="toggleMenu()">
@@ -718,6 +808,8 @@ footer p {
     <li><a href="#lecturers">Giáo viên</a></li>
     <li><a href="#schedule">Lớp Đang Mở</a></li>
     <li><a href="#halloffame">Hall of Fame</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1.</a></li>
     <li><a href="#register">Đăng Ký Ngay</a></li>
 </ul>
 
@@ -1137,6 +1229,67 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     </div>
 </section>
 
+    <!-- FAQ Section -->
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">câu hỏi thường gặp.</h2>
+            <p class="section-subtitle">Một vài điều em nên biết trước khi chọn lớp và bắt đầu lộ trình cùng may(be)ielts.</p>
+
+            <div class="faq-list">
+                <article class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1" onclick="toggleFaq(this)">
+                        <span>Em nên chọn lớp và giáo viên như thế nào?</span>
+                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-1" role="region" aria-hidden="true">
+                        <div class="faq-answer-inner">
+                            <p>Em hãy bắt đầu tại phần <strong>Học Thử</strong> và xem các video ghi hình Test 1, Test 2 của thầy Hồ Bách, cô Tuệ Nhi và thầy Gia Khang. Qua đó, em sẽ cảm nhận rõ hơn cách giảng, nhịp độ lớp và phong cách tương tác của từng giáo viên.</p>
+                            <p>Khi tìm được người phù hợp với cách học của mình, em có thể nhắn tin trực tiếp cho giáo viên đó để được tư vấn kỹ hơn về khóa học và lớp nên đăng ký.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2" onclick="toggleFaq(this)">
+                        <span>Lộ trình học kéo dài bao lâu và bao gồm những gì?</span>
+                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-2" role="region" aria-hidden="true">
+                        <div class="faq-answer-inner">
+                            <p>Lộ trình tiêu chuẩn gồm <strong>15 buổi</strong>, thường kéo dài khoảng <strong>1,5 đến 2 tháng</strong>. Trong khóa học, giáo viên sẽ lần lượt hướng dẫn các dạng bài trọng tâm và quy trình xử lý cụ thể cho từng dạng.</p>
+                            <p>Sau mỗi buổi, em sẽ có một bài Writing về nhà. Bên cạnh 15 bài theo chương trình, em còn được chọn thêm <strong>5 bài Writing tự do</strong>, tương đương khoảng <strong>20 bài được luyện tập và chấm chữa</strong> trong toàn bộ lộ trình.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3" onclick="toggleFaq(this)">
+                        <span>Nếu cần thi sớm, em có thể nộp 5 bài tự chọn trước khi kết thúc khóa không?</span>
+                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-3" role="region" aria-hidden="true">
+                        <div class="faq-answer-inner">
+                            <p>Hoàn toàn được. Năm bài Writing tự chọn không bắt buộc phải đợi đến sau khóa mới nộp. Nếu có kế hoạch thi sớm hoặc muốn tăng cường luyện tập, em có thể chủ động làm và gửi giáo viên chấm ngay trong quá trình học.</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4" onclick="toggleFaq(this)">
+                        <span>Nếu vắng một buổi học thì em cần làm gì?</span>
+                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-4" role="region" aria-hidden="true">
+                        <div class="faq-answer-inner">
+                            <p>Em hãy báo với giáo viên sớm nhất có thể. Nhờ hệ thống các lớp học song song, giáo viên có thể hỗ trợ sắp xếp để em học bù nội dung tương ứng ở một lớp khác, tùy lịch học và chỗ trống tại thời điểm đó.</p>
+                            <p>Ví dụ, nếu em đang học lớp 75 vào tối thứ Hai và thứ Năm, từ 20:00 đến 22:00, nhưng bận một buổi, em có thể được sắp xếp học cùng lớp 76 hoặc 77 có nội dung tương đương. Nhờ vậy, em vẫn theo kịp lộ trình và được học trực tiếp trên lớp.</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
    <!-- Modal Layouts -->
 <div id="mediaModal" class="modal">
     <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -1501,6 +1654,25 @@ function toggleMenu(){
         .getElementById("mobileMenu")
         .classList
         .toggle("show");
+}
+
+function toggleFaq(button) {
+    const currentItem = button.closest(".faq-item");
+    const willOpen = !currentItem.classList.contains("active");
+
+    document.querySelectorAll(".faq-item.active").forEach(item => {
+        item.classList.remove("active");
+        const itemButton = item.querySelector(".faq-question");
+        const itemAnswer = item.querySelector(".faq-answer");
+        itemButton.setAttribute("aria-expanded", "false");
+        itemAnswer.setAttribute("aria-hidden", "true");
+    });
+
+    if (willOpen) {
+        currentItem.classList.add("active");
+        button.setAttribute("aria-expanded", "true");
+        currentItem.querySelector(".faq-answer").setAttribute("aria-hidden", "false");
+    }
 }
 
 function toggleContact(){
