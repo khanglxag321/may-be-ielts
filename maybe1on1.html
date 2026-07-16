@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>may(be)1on1. - IELTS 1-1 Theo Cách Của Bạn</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-primary: #f4f4f6;
+            --bg-secondary: #ffffff;
+            --bg-dark: #111113;
+            --bg-card: #f9f9fa;
+            --text-main: #1c1c1e;
+            --text-muted: #636366;
+            --text-light: #f5f5f7;
+            --accent: #2c2c2e;
+            --border-color: #e5e5ea;
+            --status-low: #ff3b30;
+            --status-ok: #34c759;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; overflow-x: hidden; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility Classes */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-padding { padding: 100px 0; }
+        .section-title {
+            font-size: 2.5rem; font-weight: 800; text-align: center;
+            margin-bottom: 16px; letter-spacing: -1px;
+        }
+        .section-subtitle {
+            font-size: 1.1rem; color: var(--text-muted); text-align: center;
+            margin-bottom: 60px; max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+
+        /* Navbar */
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background-color: rgba(244, 244, 246, 0.8);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            z-index: 1000; border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; height: 80px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--text-main); text-decoration: none; letter-spacing: -0.5px; }
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--text-muted); }
+        .cta-btn {
+            background-color: var(--bg-dark); color: var(--text-light);
+            padding: 12px 24px; border-radius: 8px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem; transition: var(--transition);
+            border: 1px solid var(--bg-dark); display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+        }
+        .cta-btn:hover { background-color: transparent; color: var(--text-main); }
+        .cta-btn:disabled, .cta-btn.disabled { 
+            background-color: #d1d1d6; border-color: #d1d1d6; color: #8e8e93; cursor: not-allowed; 
+        }
+
+        .btn-return {
+            font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-decoration: none;
+            display: flex; align-items: center; gap: 6px; transition: var(--transition);
+        }
+        .btn-return:hover { color: var(--text-main); }
+
+        /* Hero Section */
+        #hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding-top: 80px; background: linear-gradient(180deg, rgba(244,244,246,1) 0%, rgba(230,230,235,1) 100%);
+            position: relative;
+        }
+        .hero-content { text-align: center; max-width: 900px; margin: 0 auto; }
+        .badge-new { 
+            display: inline-block; padding: 6px 12px; background-color: var(--bg-dark); color: white;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 24px; letter-spacing: 0.5px;
+        }
+        .hero-title { font-size: 4.5rem; font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 24px; color: var(--text-main); }
+        .hero-slogan { font-size: 1.2rem; font-weight: 500; color: var(--text-muted); margin-bottom: 40px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto;}
+        
+        /* Features Section */
+        #features { background-color: var(--bg-secondary); }
+        .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+        .feature-card {
+            background-color: var(--bg-card); padding: 40px 24px; border-radius: 16px;
+            border: 1px solid var(--border-color); transition: var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.02); }
+        .feature-icon { font-size: 2rem; color: var(--bg-dark); margin-bottom: 24px; }
+        .feature-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; flex-grow: 1; }
+
+        /* Mentor Section */
+        #mentors { background-color: var(--bg-primary); }
+        .tabs { display: flex; justify-content: center; gap: 16px; margin-bottom: 40px; }
+        .tab-btn {
+            padding: 12px 32px; border: 1px solid var(--border-color); border-radius: 30px;
+            background: transparent; font-size: 1rem; font-weight: 700; color: var(--text-muted);
+            cursor: pointer; transition: var(--transition); font-family: inherit;
+        }
+        .tab-btn.active { background: var(--bg-dark); color: white; border-color: var(--bg-dark); }
+        
+        .mentor-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+            transition: none;
+        }
+        .mentor-card {
+            background: var(--bg-secondary); border-radius: 20px; overflow: hidden;
+            border: 1px solid var(--border-color); transition: var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .mentor-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.04); }
+        .mentor-img { width: 100%; height: 280px; object-fit: cover; }
+        .mentor-info { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .mentor-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .mentor-name { font-size:1.32rem; font-weight:800; letter-spacing:-0.45px; line-height:1.25; min-height:3.15em; display:flex; align-items:flex-start; max-width:72%; text-wrap:balance; }
+        .mentor-role { 
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 4px 10px; border-radius: 6px; background: var(--bg-primary); color: var(--text-muted);
+        }
+        
+        .mentor-scores { display: flex; gap: 12px; margin-bottom: 16px; }
+        .score-item { font-size: 0.85rem; font-weight: 600; color: var(--text-main); }
+        .score-item span { color: var(--text-muted); font-weight: 500; }
+        
+        .mentor-bio { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6; flex-grow: 1; }
+        
+        .capacity-wrap { margin-bottom: 24px; }
+        .capacity-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+        .capacity-bar { width: 100%; height: 6px; background: var(--border-color); border-radius: 3px; overflow: hidden; }
+        .capacity-fill { height: 100%; background: var(--bg-dark); border-radius: 3px; transition: width 1s ease; }
+        .capacity-fill.full { background: var(--status-low); }
+        .status-text { font-size: 0.8rem; font-weight: 700; }
+        .status-text.ok { color: var(--status-ok); }
+        .status-text.full { color: var(--status-low); }
+
+        .mentor-card .cta-btn { width: 100%; }
+
+
+        .mentor-img { loading: lazy; }
+        .mentor-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:auto; }
+        .mentor-actions .cta-btn, .mentor-actions .profile-link { width:100%; min-height:44px; }
+        .profile-link { padding:10px 12px; border:1px solid var(--border-color); border-radius:8px; color:var(--text-main); text-decoration:none; font-size:.82rem; font-weight:700; text-align:center; display:flex; align-items:center; justify-content:center; gap:7px; transition:var(--transition); }
+        .profile-link:hover { background:var(--bg-primary); }
+        .profile-link.disabled { color:#aeaeb2; cursor:not-allowed; background:#f7f7f8; }
+        .credential-btn { margin-bottom:14px; width:100%; background:#f2f2f7; color:var(--text-main); border-color:var(--border-color); }
+        .credential-btn:hover { background:#e5e5ea; }
+        .schedule-btn { grid-column:1/-1; }
+        .certificate-modal .modal-content { max-width:820px; }
+        .certificate-image { width:100%; max-height:72vh; object-fit:contain; background:#f4f4f6; border-radius:12px; }
+        .schedule-placeholder { padding:40px 20px; text-align:center; background:var(--bg-primary); border-radius:12px; color:var(--text-muted); }
+        .schedule-placeholder i { font-size:2rem; color:var(--text-main); margin-bottom:14px; }
+        @media(max-width:520px){ .mentor-actions{grid-template-columns:1fr;} .schedule-btn{grid-column:auto;} }
+
+        /* How it works */
+        #how-it-works { background-color: var(--bg-secondary); }
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+        .step-card { text-align: left; }
+        .step-num { 
+            font-size: 4rem; font-weight: 800; color: var(--bg-primary); 
+            line-height: 1; margin-bottom: 16px; font-family: inherit; letter-spacing: -2px;
+        }
+        .step-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; }
+        .step-desc { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* FAQ Section */
+        #faq { background-color: var(--bg-primary); }
+        .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+        .faq-item {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 12px; overflow: hidden; transition: var(--transition);
+        }
+        .faq-question {
+            padding: 20px 24px; cursor: pointer; display: flex; justify-content: space-between;
+            align-items: center; font-weight: 600; font-size: 1.05rem; user-select: none;
+        }
+        .faq-question i { transition: transform 0.3s; color: var(--text-muted); }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-answer {
+            padding: 0 24px; max-height: 0; overflow: hidden;
+            transition: all 0.3s ease; color: var(--text-muted); font-size: 0.95rem;
+        }
+        .faq-item.active .faq-answer { padding: 0 24px 20px 24px; max-height: 500px; }
+
+        /* Footer */
+        footer {
+            width: 100%; background-color: #0f0f10; border-top: 1px solid #2c2c2e;
+            padding: 40px 0; text-align: center; color: #8e8e93;
+        }
+        .footer-logo { font-size: 1.25rem; font-weight: 800; color: white; text-decoration: none; margin-bottom: 16px; display: inline-block; }
+        footer p { margin-bottom: 16px; font-size: 0.9rem; letter-spacing: 0.3px; }
+        .footer-links a { color: #8e8e93; text-decoration: none; font-size: 0.85rem; font-weight: 600; transition: var(--transition); }
+        .footer-links a:hover { color: white; }
+
+        /* Modal / Timetable */
+        .modal {
+            display: none; position: fixed; z-index: 2000; inset: 0;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            overflow-y: auto; padding: 40px 20px;
+        }
+        .modal-content {
+            background: var(--bg-secondary); max-width: 1000px; margin: 0 auto;
+            border-radius: 20px; padding: 32px; position: relative;
+            animation: slideUp 0.3s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-close {
+            position: absolute; top: 24px; right: 24px; font-size: 1.5rem;
+            cursor: pointer; width: 40px; height: 40px; border-radius: 50%;
+            background: var(--bg-primary); display: flex; align-items: center; justify-content: center;
+            transition: var(--transition); border: none;
+        }
+        .modal-close:hover { background: var(--border-color); }
+        
+        .modal-header { margin-bottom: 32px; border-bottom: 1px solid var(--border-color); padding-bottom: 24px; }
+        .modal-title { font-size: 1.75rem; font-weight: 800; margin-bottom: 8px; }
+        .modal-meta { font-size: 0.9rem; color: var(--text-muted); display: flex; gap: 16px; }
+        
+        .timetable-container { overflow-x: auto; margin-bottom: 32px; padding-bottom: 16px; }
+        .timetable { display: flex; gap: 12px; min-width: 800px; }
+        .day-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .day-header { 
+            text-align: center; font-weight: 700; padding: 12px 0; 
+            background: var(--bg-primary); border-radius: 8px; font-size: 0.9rem;
+        }
+        .time-slot {
+            padding: 12px 8px; text-align: center; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+            border: 1px solid var(--border-color); transition: var(--transition);
+        }
+        .time-slot.available { background: #eafaf1; border-color: #34c759; color: #1e8e3e; }
+        .time-slot.unavailable { background: var(--bg-card); color: #aeaeb2; text-decoration: line-through; }
+        
+        .modal-footer { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+        .modal-note { font-size: 0.85rem; color: var(--text-muted); text-align: center; font-style: italic; }
+
+        /* Responsive Layout */
+        @media (max-width: 992px) {
+            .mentor-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-title { font-size: 3rem; }
+            .mentor-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; gap: 24px; }
+            .modal-content { padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">may(be)1on1.</a>
+            <ul class="nav-links">
+                <li><a href="#features">Hình thức</a></li>
+                <li><a href="#mentors">Mentor</a></li>
+                <li><a href="#how-it-works">Quy trình</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <a href="https://khanglxag321.github.io/may-be-ielts/" class="btn-return"><i class="fa-solid fa-arrow-left"></i> Về may(be)ielts</a>
+                <a href="#mentors" class="cta-btn">TÌM MENTOR</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container hero-content">
+            <span class="badge-new">PRIVATE COACHING MODEL</span>
+            <h1 class="hero-title">học 1-1.<br>theo cách của bạn.</h1>
+            <p class="hero-slogan">Linh hoạt lịch trình. Tùy biến tốc độ. Đồng hành sát sao cùng đội ngũ Mentor học thuật cốt cán từ hệ thống may(be)ielts.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+                <a href="#mentors" class="cta-btn" style="padding: 16px 32px; font-size: 1rem;"><i class="fa-solid fa-user-graduate"></i> TÌM MENTOR PHÙ HỢP</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">đặc quyền lớp 1-1.</h2>
+            <p class="section-subtitle">Chương trình được thiết kế đặc biệt dành cho các bạn cần sự tập trung cao độ, bứt phá nhanh hoặc có lịch trình cá nhân bận rộn.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-user-check"></i></div>
+                    <h3>1 Mentor - 1 Học viên</h3>
+                    <p>Sự tập trung tuyệt đối. Mentor nắm rõ từng điểm mạnh/yếu của bạn để đưa ra chiến lược tối ưu điểm số hiệu quả nhất.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+                    <h3>1h30 phút / Buổi</h3>
+                    <p>Thời lượng tiêu chuẩn cho một buổi học chuyên sâu, đủ để giảng dạy kiến thức mới và thực hành sửa lỗi trực tiếp.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-regular fa-calendar-check"></i></div>
+                    <h3>Lịch học linh hoạt</h3>
+                    <p>Chủ động thống nhất lịch với Mentor hàng tuần. Dễ dàng xin phép dời lịch khi có công việc đột xuất mà không sợ mất bài.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-book-open"></i></div>
+                    <h3>Giáo trình chuẩn</h3>
+                    <p>Kế thừa toàn bộ tinh hoa từ giáo trình gốc của may(be)ielts, nhưng được tinh chỉnh tốc độ phù hợp với cá nhân bạn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentor Section -->
+    <section id="mentors" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">chọn mentor của bạn.</h2>
+            <p class="section-subtitle">Gặp gỡ đội ngũ Writing & Speaking Mentor. Kiểm tra lịch trống và liên hệ trực tiếp để bắt đầu lộ trình của riêng bạn.</p>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('writing', this)">WRITING MENTOR</button>
+                <button class="tab-btn" onclick="switchTab('speaking', this)">SPEAKING MENTOR</button>
+            </div>
+
+            <div class="mentor-grid" id="mentorGrid">
+                <!-- Mentor cards injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works Section -->
+    <section id="how-it-works" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">quy trình đăng ký.</h2>
+            <p class="section-subtitle">Chỉ 3 bước đơn giản để bắt đầu lớp học 1-1.</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <h3 class="step-title">Chọn Mentor</h3>
+                    <p class="step-desc">Xem hồ sơ các Writing & Speaking Mentor tại may(be). Lựa chọn người phù hợp nhất với phong cách học và mục tiêu điểm số của bạn.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <h3 class="step-title">Xem Lịch Trống</h3>
+                    <p class="step-desc">Kiểm tra trực tiếp các khung giờ còn trống (available) trong tuần của Mentor để xem có khớp với thời gian rảnh của bạn hay không.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <h3 class="step-title">Nhắn Mentor</h3>
+                    <p class="step-desc">Sử dụng nút liên hệ để nhắn tin trực tiếp qua Facebook của Mentor, thống nhất lịch học chính thức và nhận hướng dẫn chuyển khoản.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section-padding">
+        <div class="container">
+            <h2 class="section-title">câu hỏi thường gặp.</h2>
+            <p class="section-subtitle">Giải đáp một số thắc mắc phổ biến về hình thức học 1-1.</p>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Một buổi học kéo dài bao lâu? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Mỗi buổi học 1-1 tại may(be)1on1 kéo dài chuẩn 1 tiếng 30 phút. Đây là thời gian lý tưởng để vừa đảm bảo nạp đủ kiến thức lý thuyết, vừa có thời gian luyện tập và sửa lỗi trực tiếp cùng Mentor.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Lịch học có cố định không? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Lịch học không hoàn toàn cố định. Điểm mạnh của lớp 1-1 là sự linh hoạt. Bạn có thể chốt một lịch cố định hàng tuần, hoặc linh động điều chỉnh qua từng tuần tùy vào lịch trình cá nhân bằng cách trao đổi trực tiếp với Mentor.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Tôi có thể đổi lịch học không? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Có. Nếu có việc đột xuất, bạn chỉ cần báo trước cho Mentor tối thiểu 24h để sắp xếp dời buổi học sang một khung giờ trống khác trong tuần mà không bị mất học phí cho buổi đó.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Lộ trình học có giống các lớp may(be)ielts không? <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="faq-answer"><br>Hoàn toàn giống về nền tảng giáo trình, phương pháp bóc tách tư duy và chất lượng đầu ra. Điểm khác biệt lớn nhất là tốc độ học sẽ được tùy biến (nhanh/chậm) dựa trên khả năng tiếp thu và deadline thi của riêng bạn.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <a href="#" class="footer-logo">may(be)1on1.</a>
+            <p>Hệ thống Private Coaching thuộc thương hiệu may(be)ielts.</p>
+            <div class="footer-links">
+                <a href="https://khanglxag321.github.io/may-be-ielts/">Trang chủ may(be)ielts</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Schedule Modal -->
+    <div id="scheduleModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeScheduleModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-header">
+          <h3 class="modal-title" id="scheduleTitle">Lịch trống</h3>
+          <div class="modal-meta"><span id="scheduleUpdatedAt">Đang tải dữ liệu...</span></div>
+        </div>
+        <div class="timetable-container">
+          <div class="timetable" id="liveScheduleGrid">
+            <div style="padding:28px;text-align:center;color:var(--text-muted)">Đang tải lịch...</div>
+          </div>
+        </div>
+        <div class="modal-footer" style="margin-top:20px"><a id="scheduleContact" class="cta-btn" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> NHẮN MENTOR ĐỂ HỎI LỊCH</a></div>
+      </div>
+    </div>
+
+    <!-- IELTS Certificate Modal -->
+    <div id="certificateModal" class="modal certificate-modal">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeCertificateModal()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-header">
+          <h3 class="modal-title" id="certificateTitle">Chứng chỉ IELTS</h3>
+          <div class="modal-meta"><span><i class="fa-solid fa-shield-halved"></i> Bằng IELTS do mentor cung cấp</span></div>
+        </div>
+        <img id="certificateImage" class="certificate-image" alt="Chứng chỉ IELTS">
+      </div>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyV2EXMoRm0WUXYHvkCBzZbjBkbFQ0swVYNBf70Ae6SsNt_CXnv7nCqHaPYFNm-n1oZ/exec";
+        const DAYS = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
+        const MENTORS = [{"id":"thien-ngoc","name":"Huỳnh Nguyễn Thiên Ngọc","role":"writing","overallScore":"8.0","skillScore":"7.5","bio":"Tập trung giúp học viên hiểu bản chất của IELTS Writing thông qua tư duy, logic và cách triển khai ý rõ ràng. Mỗi bài viết đều được chấm chữa chi tiết để bạn nhận ra chính xác điểm yếu, biết cách cải thiện và từng bước tiến gần hơn đến band điểm mục tiêu.","zalo":"https://zalo.me/0702939069","facebook":"https://www.facebook.com/share/1DG2tQ9XA3/","image":"assets/maybe1on1/profile-8c12ebe1c563.webp","certificate":"assets/maybe1on1/certificate-7a9d310e77a5.webp","currentStudents":0,"maxStudents":10},{"id":"tuan-minh","name":"Nguyễn Tuấn Minh","role":"writing","overallScore":"8.0","skillScore":"7.5","bio":"Đồng hành cùng học viên xây dựng tư duy viết mạch lạc, triển khai luận điểm chặt chẽ và sử dụng ngôn ngữ phù hợp với từng dạng bài. Các buổi học ưu tiên thực hành, chữa lỗi cụ thể và giúp bạn hình thành một quy trình viết có thể áp dụng ổn định trong phòng thi.","zalo":"https://zalo.me/0973897128","facebook":"https://www.facebook.com/profile.php?id=100051223023470&locale=vi_VN","image":"assets/maybe1on1/profile-2b3d2b0d715a.webp","certificate":"assets/maybe1on1/certificate-6bb716a810ac.webp","currentStudents":0,"maxStudents":10},{"id":"khoi-nguyen","name":"Lý Võ Khôi Nguyên","role":"writing","overallScore":"8.0","skillScore":"7.5","bio":"Chú trọng bóc tách logic, chỉnh sửa bài viết tận tâm và chuẩn bị tài liệu cùng sample answers phù hợp với từng học viên. Mục tiêu là giúp bạn làm chủ cấu trúc bài, diễn đạt ý tưởng rõ ràng và xây dựng nền tảng Writing vững chắc thay vì học theo công thức máy móc.","zalo":"https://zalo.me/0789517804","facebook":"https://www.facebook.com/share/18Zk2rF8WF/","image":"assets/maybe1on1/profile-6e006ed97b21.webp","certificate":"assets/maybe1on1/certificate-dc70ca49f588.webp","currentStudents":0,"maxStudents":10},{"id":"hai-nam","name":"Nguyễn Hải Nam","role":"speaking","overallScore":"8.0","skillScore":"7.5","bio":"Hỗ trợ học viên phát triển ý tưởng nhanh, sắp xếp câu trả lời logic và diễn đạt mạch lạc trong IELTS Speaking. Các buổi học tập trung vào phản xạ, cách mở rộng câu trả lời và sửa những lỗi đang cản trở sự tự nhiên khi nói.","zalo":"https://zalo.me/0378294000","facebook":"https://www.facebook.com/nguyen.hai.nam.712425","image":"assets/maybe1on1/profile-7d8d677db390.webp","certificate":"assets/maybe1on1/certificate-fb0a1c4756e9.webp","currentStudents":0,"maxStudents":10},{"id":"bao-chau","name":"Trương Ngọc Bảo Châu","role":"speaking","overallScore":"8.0","skillScore":"7.0","bio":"Đồng hành cùng học viên luyện phản xạ, phát triển ý tưởng và hoàn thiện cách diễn đạt qua từng buổi học. Bảo Châu tập trung sửa lỗi cụ thể, giúp câu trả lời tự nhiên hơn và xây dựng sự tự tin cần thiết để hướng tới band điểm mục tiêu.","zalo":"https://zalo.me/0901752512","facebook":"https://www.facebook.com/BaoChau16102007","image":"assets/maybe1on1/profile-214d6bb83f8e.webp","certificate":"assets/maybe1on1/certificate-9b6c770b0a6f.webp","currentStudents":0,"maxStudents":10},{"id":"nhu-quynh","name":"Trần Như Quỳnh","role":"speaking","overallScore":"7.5","skillScore":"7.0","bio":"Từng xem Speaking là một nỗi sợ, Như Quỳnh hiểu rõ cảm giác thiếu tự tin khi phải nói tiếng Anh. Vì vậy, các buổi học hướng đến một không gian thoải mái để bạn luyện phản xạ, cải thiện cách diễn đạt và biến việc nói tiếng Anh thành một trải nghiệm dễ chịu hơn.","zalo":"https://zalo.me/0522576192","facebook":"https://www.facebook.com/quynh.kem.80311","image":"assets/maybe1on1/profile-56550d42a60d.webp","certificate":"assets/maybe1on1/certificate-67e640967552.webp","currentStudents":0,"maxStudents":10},{"id":"le-thanh-binh","name":"Lê Thanh Bình","role":"writing","overallScore":"8.0","skillScore":"7.5","bio":"Giáo viên tiếng Anh với 5 năm kinh nghiệm, nổi bật ở việc hỗ trợ học viên cải thiện kỹ năng Writing và đạt mục tiêu riêng. Các buổi học có phong cách rõ ràng, thực tế, vui vẻ và được cá nhân hóa theo năng lực của từng học viên.","zalo":"https://zalo.me/0765123005","facebook":"https://www.facebook.com/binh.le.613984/","image":"assets/maybe1on1/profile-a4e624735dc9.webp","certificate":"assets/maybe1on1/certificate-5290fa61ad94.webp","currentStudents":0,"maxStudents":10},{"id":"tran-nguyen-khanh-chi-writing","name":"Trần Nguyễn Khánh Chi","role":"writing","overallScore":"8.0","skillScore":"8.0","bio":"Nếu bạn từng nhìn vào đề Writing và không biết bắt đầu từ đâu, Khánh Chi sẽ ngồi lại với từng bài viết, chỉ ra lỗi sai, giải thích nguyên nhân và hướng dẫn cách sửa thật kỹ. Mỗi buổi học đều chú trọng sự tận tâm đến từng câu chữ và kiên nhẫn qua từng lần viết.","zalo":"https://zalo.me/0379580758","facebook":"","image":"assets/maybe1on1/profile-61d56a3da242.webp","certificate":"assets/maybe1on1/certificate-00b2a8dc10c1.webp","currentStudents":0,"maxStudents":10},{"id":"le-hoang-anh","name":"Lê Hoàng Anh","role":"speaking","overallScore":"8.0","skillScore":"7.0","bio":"Xem IELTS như một trò chơi, Hoàng Anh sẽ giúp học viên hiểu những “luật ngầm” cần thiết để luyện Speaking hiệu quả hơn, tự tin xử lý từng phần thi và tiến gần đến band điểm mục tiêu.","zalo":"https://zalo.me/0908763692","facebook":"https://www.facebook.com/hoang.anh.176013/","image":"assets/maybe1on1/profile-03188fccc893.webp","certificate":"assets/maybe1on1/certificate-275395357fb4.webp","currentStudents":0,"maxStudents":10},{"id":"nguyen-truc-anh","name":"Nguyễn Trúc Anh","role":"speaking","overallScore":"8.0","skillScore":"7.5","bio":"Với nền tảng tranh biện và niềm yêu thích tiếng Anh, Trúc Anh hướng học viên đến việc hiểu để nói thay vì học thuộc câu trả lời mẫu. Các buổi học giúp bạn phát triển ý tưởng, cải thiện cách diễn đạt và tự tin xử lý cả những chủ đề khó.","zalo":"https://zalo.me/0382167314","facebook":"https://www.facebook.com/truc.anh.nguyen.907979/","image":"assets/maybe1on1/profile-1c03d3a7f812.webp","certificate":"assets/maybe1on1/certificate-f7adee067b33.webp","currentStudents":0,"maxStudents":10},{"id":"tran-nguyen-khanh-chi-speaking","name":"Trần Nguyễn Khánh Chi","role":"speaking","overallScore":"8.0","skillScore":"7.5","bio":"Khánh Chi hiểu cảm giác đầu óc trống rỗng khi đứng trước giám khảo dù đã ôn rất nhiều. Các buổi học giúp bạn xây dựng sự tự tin từ những câu nói đơn giản, sửa lỗi nhẹ nhàng và học cách bật ý tưởng tự nhiên ngay trong phòng thi.","zalo":"https://zalo.me/0379580758","facebook":"","image":"assets/maybe1on1/profile-61d56a3da242.webp","certificate":"assets/maybe1on1/certificate-00b2a8dc10c1.webp","currentStudents":0,"maxStudents":10},{"id":"dao-ba-kiet","name":"Đào Bá Kiệt","role":"speaking","overallScore":"8.0","skillScore":"7.0","bio":"Tập trung hỗ trợ học viên nói tiếng Anh lưu loát, logic và tự nhiên hơn. Các buổi học giúp bạn sắp xếp ý rõ ràng, cải thiện phản xạ và diễn đạt câu trả lời tự tin trong bài thi IELTS Speaking.","zalo":"https://zalo.me/0945910706","facebook":"https://www.facebook.com/aobakiet.2024","image":"assets/maybe1on1/profile-2925a54310a9.webp","certificate":"assets/maybe1on1/certificate-645b48a47f6e.webp","currentStudents":0,"maxStudents":10}];
+        let currentTab = 'writing';
+
+        function normalizeName(value) {
+          return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        }
+
+        function formatUpdatedAt(value) {
+          const date = new Date(value);
+          if (Number.isNaN(date.getTime())) return "Chưa xác nhận";
+          return `${String(date.getDate()).padStart(2,"0")}/${String(date.getMonth()+1).padStart(2,"0")}/${date.getFullYear()} · ${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+        }
+
+        async function loadLiveScheduleData() {
+          try {
+            const response = await fetch(`${API_URL}?action=getPublicMentors&_=${Date.now()}`, { redirect: "follow", cache: "no-store" });
+            const result = await response.json();
+            if (!result.success) throw new Error(result.message || "Không thể tải lịch");
+            const byName = new Map(result.mentors.map(item => [normalizeName(item.name), item]));
+            MENTORS.forEach(mentor => {
+              const live = byName.get(normalizeName(mentor.name));
+              if (!live) { mentor.syncMissing = true; return; }
+              mentor.mentorId = live.mentorId;
+              mentor.currentStudents = Number(live.currentStudents) || 0;
+              mentor.maxStudents = Number(live.maxStudents) || 10;
+              mentor.updatedAt = live.scheduleConfirmedAt || "";
+              mentor.timeSlots = live.timeSlots || [];
+              mentor.availability = live.availability || {0:[],1:[],2:[],3:[],4:[],5:[],6:[]};
+            });
+          } catch (error) {
+            console.warn("Không thể đồng bộ lịch mentor:", error);
+            MENTORS.forEach(mentor => {
+              mentor.syncError = error.message || "Không thể tải lịch";
+              mentor.timeSlots = [];
+            });
+          }
+        }
+
+        function renderMentors() {
+          const grid=document.getElementById('mentorGrid');
+          grid.innerHTML='';
+          MENTORS.filter(m=>m.role===currentTab).forEach(mentor=>{
+            const fb=mentor.facebook
+              ? `<a class="profile-link" href="${mentor.facebook}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>`
+              : `<span class="profile-link disabled"><i class="fa-brands fa-facebook-f"></i> Chưa cập nhật</span>`;
+            grid.insertAdjacentHTML('beforeend', `
+              <article class="mentor-card">
+                <img src="${mentor.image}" alt="${mentor.name}" class="mentor-img" loading="lazy" decoding="async">
+                <div class="mentor-info">
+                  <div class="mentor-header"><div class="mentor-name">${mentor.name}</div><div class="mentor-role">${mentor.role} Mentor</div></div>
+                  <div class="mentor-scores"><div class="score-item">Overall <span>${mentor.overallScore}</span></div><div class="score-item">|</div><div class="score-item">${mentor.role==='writing'?'Writing':'Speaking'} <span>${mentor.skillScore}</span></div></div>
+                  <button class="cta-btn credential-btn" onclick="openCertificate('${mentor.id}')"><i class="fa-solid fa-file-shield"></i> XEM BẰNG IELTS</button>
+                  <p class="mentor-bio">${mentor.bio}</p>
+                  <div class="capacity-wrap">
+                    <div class="capacity-header"><span>Capacity: ${mentor.currentStudents || 0} / ${mentor.maxStudents || 10}</span><span class="status-text ${(mentor.currentStudents || 0) >= (mentor.maxStudents || 10) ? 'full' : 'ok'}">${(mentor.currentStudents || 0) >= (mentor.maxStudents || 10) ? 'HIỆN ĐÃ ĐỦ LỊCH' : 'ĐANG NHẬN HỌC VIÊN'}</span></div>
+                    <div class="capacity-bar"><div class="capacity-fill ${(mentor.currentStudents || 0) >= (mentor.maxStudents || 10) ? 'full' : ''}" style="width:${Math.min(((mentor.currentStudents || 0)/(mentor.maxStudents || 10))*100,100)}%"></div></div>
+                  </div>
+                  <div class="mentor-actions">
+                    <a class="profile-link" href="${mentor.zalo}" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> Zalo</a>
+                    ${fb}
+                    <button class="cta-btn schedule-btn" onclick="openSchedule('${mentor.id}')"><i class="fa-regular fa-calendar"></i> XEM LỊCH TRỐNG</button>
+                  </div>
+                </div>
+              </article>`);
+          });
+        }
+        function switchTab(tab,button){ currentTab=tab; document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); button.classList.add('active'); renderMentors(); }
+        function openCertificate(id){ const m=MENTORS.find(x=>x.id===id); if(!m)return; document.getElementById('certificateTitle').textContent=`Chứng chỉ IELTS của ${m.name}`; document.getElementById('certificateImage').src=m.certificate; document.getElementById('certificateModal').style.display='block'; document.body.style.overflow='hidden'; }
+        function closeCertificateModal(){ document.getElementById('certificateModal').style.display='none'; document.getElementById('certificateImage').src=''; document.body.style.overflow='auto'; }
+        function openSchedule(id){
+          const m=MENTORS.find(x=>x.id===id); if(!m)return;
+          document.getElementById('scheduleTitle').textContent=`Lịch trống của ${m.name}`;
+          document.getElementById('scheduleContact').href=m.zalo;
+          const meta=document.getElementById('scheduleUpdatedAt');
+          if(meta) meta.textContent=`Cập nhật lần cuối: ${formatUpdatedAt(m.updatedAt)}`;
+          const grid=document.getElementById('liveScheduleGrid');
+          if(grid){
+            if(m.syncError){
+              grid.innerHTML=`<div style="padding:28px;text-align:center;color:var(--status-low)">${m.syncError}</div>`;
+            } else if(m.syncMissing){
+              grid.innerHTML='<div style="padding:28px;text-align:center;color:var(--status-low)">Không tìm thấy mentor tương ứng trong Google Sheet. Hãy kiểm tra tên mentor.</div>';
+            } else if(!m.timeSlots || !m.timeSlots.length){
+              grid.innerHTML='<div style="padding:28px;text-align:center;color:var(--text-muted)">Mentor chưa có khung giờ công khai.</div>';
+            } else {
+              grid.innerHTML=DAYS.map((day,dayIndex)=>{
+                const available=new Set((m.availability && m.availability[dayIndex]) || []);
+                return `<div class="day-col"><div class="day-header">${day}</div>${m.timeSlots.map(slot=>`<div class="time-slot ${available.has(slot.timeSlotId)?'available':'unavailable'}">${slot.startTime} - ${slot.endTime}</div>`).join('')}</div>`;
+              }).join('');
+            }
+          }
+          document.getElementById('scheduleModal').style.display='block'; document.body.style.overflow='hidden';
+        }
+        function closeScheduleModal(){ document.getElementById('scheduleModal').style.display='none'; document.body.style.overflow='auto'; }
+        window.addEventListener('click',e=>{ if(e.target.id==='certificateModal')closeCertificateModal(); if(e.target.id==='scheduleModal')closeScheduleModal(); });
+
+        // FAQ Toggle
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadLiveScheduleData();
+            renderMentors();
+        });
+    </script>
+</body>
+</html>
