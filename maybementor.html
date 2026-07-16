@@ -911,6 +911,16 @@
                     onchange="previewTsEnd()"
                 >
 
+                <label for="tsInputDuration">Thời lượng</label>
+
+                <select
+                    id="tsInputDuration"
+                    onchange="previewTsEnd()"
+                >
+                    <option value="60">1 tiếng</option>
+                    <option value="90" selected>1 tiếng 30 phút</option>
+                </select>
+
                 <div class="ts-editor-preview" id="tsPreview">
                     --:-- - --:--
                 </div>
@@ -1055,8 +1065,12 @@
             },
             updateCapacity(maxStudents) { return apiPost({ action: "updateCapacity", maxStudents }); },
             confirmSchedule() { return apiPost({ action: "confirmSchedule" }); },
-            createTimeSlot(startTime) { return apiPost({ action: "createTimeSlot", startTime }); },
-            updateTimeSlot(timeSlotId, startTime) { return apiPost({ action: "updateTimeSlot", timeSlotId, startTime }); },
+            createTimeSlot(startTime, durationMinutes, endTime) {
+                return apiPost({ action: "createTimeSlot", startTime, durationMinutes, endTime });
+            },
+            updateTimeSlot(timeSlotId, startTime, durationMinutes, endTime) {
+                return apiPost({ action: "updateTimeSlot", timeSlotId, startTime, durationMinutes, endTime });
+            },
             deleteTimeSlot(timeSlotId) { return apiPost({ action: "deleteTimeSlot", timeSlotId }); },
             updateSchedule(data) { return apiPost({ action: "updateSchedule", ...data }); }
         };
@@ -1225,10 +1239,17 @@
             showToast("Đã xác nhận lịch chính xác!");
         }
 
-        function calculateEndTime(startTime) {
+        function calculateEndTime(startTime, durationMinutes = 90) {
             const [hours, minutes] = startTime.split(":").map(Number);
-            const total = (hours * 60 + minutes + 90) % 1440;
+            const total = (hours * 60 + minutes + durationMinutes) % 1440;
             return `${String(Math.floor(total / 60)).padStart(2,"0")}:${String(total % 60).padStart(2,"0")}`;
+        }
+
+        function getSlotDuration(slot) {
+            const [startHours, startMinutes] = slot.startTime.split(":").map(Number);
+            const [endHours, endMinutes] = slot.endTime.split(":").map(Number);
+            const duration = ((endHours * 60 + endMinutes) - (startHours * 60 + startMinutes) + 1440) % 1440;
+            return duration === 60 ? 60 : 90;
         }
 
         function sortTimeSlots() { mentorData.timeSlots.sort((a,b) => a.startTime.localeCompare(b.startTime)); }
@@ -1277,24 +1298,31 @@
                 editingTsId = null;
                 document.getElementById("tsEditorTitle").innerText = "Thêm Khung Giờ Mới";
                 document.getElementById("tsInputStart").value = "";
+                document.getElementById("tsInputDuration").value = "90";
                 document.getElementById("tsPreview").innerText = "--:-- - --:--";
             }
         }
 
         function previewTsEnd() {
             const start = document.getElementById("tsInputStart").value;
-            document.getElementById("tsPreview").innerText = start ? `${start} - ${calculateEndTime(start)}` : "--:-- - --:--";
+            const durationMinutes = Number(document.getElementById("tsInputDuration").value) || 90;
+            document.getElementById("tsPreview").innerText = start ? `${start} - ${calculateEndTime(start, durationMinutes)}` : "--:-- - --:--";
         }
 
         async function saveCustomTimeSlot() {
             const startInput = document.getElementById("tsInputStart");
             const start = startInput.value;
+            const durationMinutes = Number(document.getElementById("tsInputDuration").value);
 
             if (!start) {
                 return alert("Vui lòng chọn giờ bắt đầu!");
             }
 
-            const end = calculateEndTime(start);
+            if (![60, 90].includes(durationMinutes)) {
+                return alert("Thời lượng không hợp lệ!");
+            }
+
+            const end = calculateEndTime(start, durationMinutes);
             const originalEditingId = editingTsId;
 
             if (originalEditingId) {
@@ -1329,7 +1357,9 @@
                 try {
                     const result = await dataService.updateTimeSlot(
                         originalEditingId,
-                        start
+                        start,
+                        durationMinutes,
+                        end
                     );
 
                     if (!result.success) {
@@ -1379,7 +1409,7 @@
             showToast("Đang tạo khung giờ...");
 
             try {
-                const result = await dataService.createTimeSlot(start);
+                const result = await dataService.createTimeSlot(start, durationMinutes, end);
 
                 if (!result.success) {
                     throw new Error(result.message || "Không thể tạo khung giờ");
@@ -1415,6 +1445,7 @@
             editingTsId = slotId;
             document.getElementById("tsEditorTitle").innerText = "Sửa Khung Giờ";
             document.getElementById("tsInputStart").value = slot.startTime;
+            document.getElementById("tsInputDuration").value = String(getSlotDuration(slot));
             previewTsEnd();
             toggleTsEditor(true, true);
         }
