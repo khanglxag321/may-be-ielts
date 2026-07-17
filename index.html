@@ -355,8 +355,30 @@ html, body {
         .status-badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; }
         .status-badge.low { background-color: #ffebeb; color: var(--status-low); }
         .status-badge.ok { background-color: #eafaf1; color: var(--status-ok); }
-        .fee-tag { font-weight: 700; }
-        .fee-note { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+        .fee-offer-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .fee-tag { font-weight: 800; white-space: nowrap; }
+        .fee-deadline {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border: 1px solid rgba(214, 31, 31, .2);
+            border-radius: 999px;
+            background: linear-gradient(135deg, #fff4f4, #ffe9e9);
+            color: #c91f1f;
+            font-size: .68rem;
+            font-weight: 800;
+            line-height: 1.25;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(201, 31, 31, .08);
+        }
+        .fee-deadline i { font-size: .66rem; }
+        .fee-note { display: block; font-size: 0.75rem; color: var(--text-muted); font-weight: 400; margin-top: 5px; }
 
         /* Hall Of Fame Section */
         #halloffame { background-color: var(--bg-secondary); }
@@ -438,10 +460,11 @@ overscroll-behavior: contain;
         .faq-item {
             background: var(--bg-secondary); border: 1px solid var(--border-color);
             border-radius: 16px; margin-bottom: 14px; overflow: hidden;
-            transition: var(--transition);
+            transition: border-color .32s ease, box-shadow .32s ease, transform .32s ease;
         }
         .faq-item:last-child { margin-bottom: 0; }
-        .faq-item:hover, .faq-item.active { border-color: #c7c7cc; box-shadow: 0 10px 28px rgba(0,0,0,.035); }
+        .faq-item:hover, .faq-item.active { border-color: #c7c7cc; box-shadow: 0 12px 30px rgba(0,0,0,.045); }
+        .faq-item.active { transform: translateY(-1px); }
         .faq-question {
             width: 100%; display: flex; align-items: center; justify-content: space-between;
             gap: 24px; padding: 24px 28px; border: 0; background: transparent;
@@ -452,14 +475,34 @@ overscroll-behavior: contain;
         .faq-icon {
             width: 34px; height: 34px; flex: 0 0 34px; display: inline-flex;
             align-items: center; justify-content: center; border-radius: 50%;
-            background: var(--bg-primary); transition: var(--transition);
+            background: var(--bg-primary);
+            transition: background-color .32s ease, color .32s ease, transform .42s cubic-bezier(.22, 1, .36, 1);
         }
-        .faq-answer { max-height: 0; opacity: 0; overflow: hidden; transition: max-height .38s ease, opacity .25s ease; }
-        .faq-answer-inner { padding: 0 28px 28px; color: var(--text-muted); font-size: .98rem; line-height: 1.75; }
+        .faq-answer {
+            display: grid;
+            grid-template-rows: 0fr;
+            opacity: 0;
+            transition: grid-template-rows .48s cubic-bezier(.22, 1, .36, 1), opacity .3s ease;
+        }
+        .faq-answer-inner {
+            min-height: 0;
+            overflow: hidden;
+            padding: 0 28px;
+            color: var(--text-muted);
+            font-size: .98rem;
+            line-height: 1.75;
+            transform: translateY(-8px);
+            transition: padding-bottom .48s cubic-bezier(.22, 1, .36, 1), transform .42s cubic-bezier(.22, 1, .36, 1);
+        }
         .faq-answer-inner p + p { margin-top: 12px; }
         .faq-answer-inner strong { color: var(--text-main); }
-        .faq-item.active .faq-answer { max-height: 700px; opacity: 1; }
+        .faq-item.active .faq-answer { grid-template-rows: 1fr; opacity: 1; }
+        .faq-item.active .faq-answer-inner { padding-bottom: 28px; transform: translateY(0); }
         .faq-item.active .faq-icon { background: var(--bg-dark); color: var(--text-light); transform: rotate(45deg); }
+
+        @media (prefers-reduced-motion: reduce) {
+            .faq-item, .faq-icon, .faq-answer, .faq-answer-inner { transition: none; }
+        }
 
         /* Contact / Register Section */
         #register { background-color: var(--bg-dark); color: var(--text-light); }
@@ -712,8 +755,13 @@ footer p {
     }
 
     .faq-answer-inner {
-        padding: 0 20px 22px;
+        padding-right: 20px;
+        padding-left: 20px;
         font-size: .93rem;
+    }
+
+    .faq-item.active .faq-answer-inner {
+        padding-bottom: 22px;
     }
 
     .container{
@@ -1243,7 +1291,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                     </button>
                     <div class="faq-answer" id="faq-answer-1" role="region" aria-hidden="true">
                         <div class="faq-answer-inner">
-                            <p>Em hãy bắt đầu tại phần <strong>Học Thử</strong> và xem các video ghi hình Test 1, Test 2 của thầy Hồ Bách, cô Tuệ Nhi và thầy Gia Khang. Qua đó, em sẽ cảm nhận rõ hơn cách giảng, nhịp độ lớp và phong cách tương tác của từng giáo viên.</p>
+                            <p>Em hãy bắt đầu tại phần <strong>Học Thử</strong> và xem các video ghi hình bài dạy <strong>Writing Task 1</strong> và <strong>Writing Task 2</strong> của thầy Hồ Bách, cô Tuệ Nhi và thầy Gia Khang. Qua đó, em sẽ cảm nhận rõ hơn cách giảng, nhịp độ lớp và phong cách tương tác của từng giáo viên.</p>
                             <p>Khi tìm được người phù hợp với cách học của mình, em có thể nhắn tin trực tiếp cho giáo viên đó để được tư vấn kỹ hơn về khóa học và lớp nên đăng ký.</p>
                         </div>
                     </div>
@@ -1744,6 +1792,83 @@ function toggleContact(){
         }
     }
 
+    function parseScheduleDate(value) {
+        const text = String(value || "").trim();
+        if (!text) return null;
+
+        // Dữ liệu lịch học hiện dùng dạng ngày.tháng (ví dụ 11.08),
+        // đồng thời vẫn hỗ trợ ngày/tháng/năm nếu bổ sung năm sau này.
+        let match = text.match(/^(\d{1,2})[\/.-](\d{1,2})(?:[\/.-](\d{2,4}))?$/);
+        if (match) {
+            const year = match[3]
+                ? Number(match[3].length === 2 ? `20${match[3]}` : match[3])
+                : 2000;
+            const month = Number(match[2]);
+            const day = Number(match[1]);
+            const date = new Date(Date.UTC(year, month - 1, day));
+            if (
+                date.getUTCFullYear() === year &&
+                date.getUTCMonth() === month - 1 &&
+                date.getUTCDate() === day
+            ) return date;
+        }
+
+        // Hỗ trợ thêm dữ liệu dạng năm-tháng-ngày nếu nguồn lịch thay đổi sau này.
+        match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+        if (match) {
+            const year = Number(match[1]);
+            const month = Number(match[2]);
+            const day = Number(match[3]);
+            const date = new Date(Date.UTC(year, month - 1, day));
+            if (
+                date.getUTCFullYear() === year &&
+                date.getUTCMonth() === month - 1 &&
+                date.getUTCDate() === day
+            ) return date;
+        }
+
+        return null;
+    }
+
+    function calculatePromotionDeadline(startDateValue) {
+        const startDate = parseScheduleDate(startDateValue);
+        if (!startDate) return "";
+
+        // Lấy mốc khoảng 10 ngày trước khai giảng, sau đó làm tròn về
+        // các ngày dễ nhớ: 01, 05, 10, 15, 20 hoặc 25 trong tháng.
+        const rawDeadline = new Date(startDate.getTime());
+        rawDeadline.setUTCDate(rawDeadline.getUTCDate() - 10);
+
+        const rawDay = rawDeadline.getUTCDate();
+        let deadline;
+
+        if (rawDay >= 28) {
+            const firstOfNextMonth = new Date(Date.UTC(
+                rawDeadline.getUTCFullYear(),
+                rawDeadline.getUTCMonth() + 1,
+                1
+            ));
+            const daysBeforeOpening = Math.round((startDate - firstOfNextMonth) / 86400000);
+
+            // Chỉ chuyển sang ngày 01 nếu vẫn còn ít nhất 7 ngày trước khai giảng.
+            deadline = daysBeforeOpening >= 7
+                ? firstOfNextMonth
+                : new Date(Date.UTC(rawDeadline.getUTCFullYear(), rawDeadline.getUTCMonth(), 25));
+        } else {
+            const milestones = [25, 20, 15, 10, 5, 1];
+            const roundedDay = milestones.find(day => day <= rawDay) || 1;
+            deadline = new Date(Date.UTC(
+                rawDeadline.getUTCFullYear(),
+                rawDeadline.getUTCMonth(),
+                roundedDay
+            ));
+        }
+
+        const day = String(deadline.getUTCDate()).padStart(2, "0");
+        const month = String(deadline.getUTCMonth() + 1).padStart(2, "0");
+        return `${day}/${month}`;
+    }
+
     function renderPublicTables(data) { 
 
         const courseSelect = document.getElementById("course");
@@ -1776,6 +1901,10 @@ if(courseSelect){
     courseSelect.appendChild(option);
 }
             let slotStatus = slotsLeft <= 5 ? "low" : "ok";
+            const promotionDeadline = calculatePromotionDeadline(row.KhaiGiang);
+            const promotionMessage = promotionDeadline
+                ? `Hạn học phí ưu đãi: ${promotionDeadline}`
+                : "Đăng ký sớm để nhận ưu đãi";
             
             // Format lại cột Lịch học: "Thứ 2 + 5 (8:00 PM - 10:00 PM)" thành 2 dòng cho đẹp
             let lichHocFormat = row.LichHoc
@@ -1792,8 +1921,11 @@ if(courseSelect){
                     <td>${lichHocFormat}</td>
                     <td>${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
                     <td>
-                        <span class="fee-tag">${row.HocPhiUuDai}</span>
-                        <span class="fee-note">Gốc: ${row.HocPhiGoc}</span>
+                        <div class="fee-offer-row">
+                            <span class="fee-tag">${row.HocPhiUuDai}</span>
+                            <span class="fee-deadline"><i class="fa-solid fa-clock"></i> ${promotionMessage}</span>
+                        </div>
+                        <span class="fee-note">Giá gốc sau thời hạn: ${row.HocPhiGoc}</span>
                     </td>
                     <td><span class="status-badge ${slotStatus}">${slotsLeft}/${row.TongSlot}</span></td>
                 </tr>
