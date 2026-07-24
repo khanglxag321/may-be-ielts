@@ -262,6 +262,7 @@
         
         let allClassData = []; 
         let currentEditMode = false;
+        let currentEditClassId = "";
         let selectedTeacherOrder = []; // Mảng lưu thứ tự chọn chính xác theo thời gian click
 
         // Ghi nhận thứ tự click Checkbox giáo viên
@@ -392,6 +393,7 @@
             document.getElementById('modalTitle').innerText = 'Thêm Lớp Mới';
             document.getElementById('classForm').reset();
             currentEditMode = false;
+            currentEditClassId = "";
             selectedTeacherOrder = [];
             document.getElementById('modeSelect').disabled = false;
             document.getElementById('modeSelect').value = 'single';
@@ -413,14 +415,16 @@
             modal.style.display = 'flex';
             document.getElementById('modalTitle').innerText = 'Chỉnh sửa Lớp: ' + maLop;
             currentEditMode = true;
+            currentEditClassId = row.MaLop;
 
             document.getElementById('modeSelect').value = 'single';
             document.getElementById('modeSelect').disabled = true;
             toggleMode();
 
             document.getElementById('singleTeacherSelect').value = row.GiangVien;
-            document.getElementById('inputPrefix').value = row.MaLop.match(/[a-zA-Z]+/g)[0];
-            document.getElementById('inputSuffix').value = row.MaLop.match(/\d+/g)[0];
+            const classCodeParts = String(row.MaLop).match(/^([a-zA-Z]+)(.*)$/);
+            document.getElementById('inputPrefix').value = classCodeParts ? classCodeParts[1] : '';
+            document.getElementById('inputSuffix').value = classCodeParts ? classCodeParts[2] : row.MaLop;
             
             document.getElementById('inputPrefix').disabled = true; 
             document.getElementById('inputSuffix').disabled = true;
@@ -474,7 +478,8 @@
                 const updatedClass = {
                     ...baseData,
                     GiangVien: document.getElementById('singleTeacherSelect').value,
-                    MaLop: prefix + document.getElementById('inputSuffix').value
+                    // Khi chỉnh sửa phải giữ nguyên toàn bộ mã gốc, kể cả ký tự đặc biệt như dấu "+".
+                    MaLop: currentEditClassId
                 };
                 
                 // 🚀 TĂNG TỐC: Cập nhật biến dữ liệu cục bộ và vẽ lại bảng ngay tức khắc
@@ -482,8 +487,25 @@
                 renderTable(allClassData);
                 closeModal();
 
-                // Gửi lệnh ngầm đồng bộ lên Google Sheet
-                fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: payloadAction, data: updatedClass }) });
+                // Gửi lệnh đồng bộ và kiểm tra phản hồi để không còn tình trạng lưu lỗi nhưng không báo.
+                fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: payloadAction, data: updatedClass })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
+                })
+                .then(result => {
+                    const saved = result && (result.status === "success" || result.success === true);
+                    if (!saved) throw new Error((result && result.message) || "Google Apps Script không xác nhận lưu thành công");
+                    loadClasses();
+                })
+                .catch(error => {
+                    console.error("Lỗi cập nhật lớp:", error);
+                    alert("Không thể lưu thay đổi lên Google Sheet. Dữ liệu sẽ được tải lại để tránh hiển thị sai.");
+                    loadClasses();
+                });
             } else {
                 // CHẾ ĐỘ THÊM MỚI
                 if (!isBatch) {
