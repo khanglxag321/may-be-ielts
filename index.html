@@ -1989,7 +1989,7 @@ function toggleContact(){
             const result = await response.json();
             
             if (result.status === "success") {
-                renderPublicTables(result.data);
+                renderPublicTables(filterClassesForCurrentMonth(result.data));
             } else {
                 throw new Error(result.message || "Apps Script không trả về dữ liệu hợp lệ");
             }
@@ -2048,6 +2048,30 @@ function toggleContact(){
         }
 
         return null;
+    }
+
+    function currentMonthInVietnam() {
+        const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone: "Asia/Ho_Chi_Minh",
+            year: "numeric",
+            month: "numeric"
+        }).formatToParts(new Date());
+
+        return {
+            year: Number(parts.find(part => part.type === "year")?.value),
+            month: Number(parts.find(part => part.type === "month")?.value)
+        };
+    }
+
+    function filterClassesForCurrentMonth(data) {
+        const current = currentMonthInVietnam();
+
+        return (Array.isArray(data) ? data : []).filter(row => {
+            const openingDate = parseScheduleDate(row.KhaiGiang);
+            return openingDate &&
+                openingDate.getUTCFullYear() === current.year &&
+                openingDate.getUTCMonth() + 1 === current.month;
+        });
     }
 
     function roundToFriendlyDeadline(rawDeadline, referenceDate) {
