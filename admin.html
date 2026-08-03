@@ -1,550 +1,207 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - may(be)ielts.</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root { --bg-primary: #f4f4f6; --bg-secondary: #ffffff; --bg-dark: #111113; --text-main: #1c1c1e; --text-muted: #636366; --text-light: #f5f5f7; --border-color: #e5e5ea; --status-low: #ff3b30; --status-ok: #34c759; --transition: all 0.3s ease; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-primary); color: var(--text-main); line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        
-        /* Login */
-        #login-screen { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, #f4f4f6 0%, #e6e6eb 100%); }
-        .login-box { background: var(--bg-secondary); padding: 40px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 400px; text-align: center; border: 1px solid var(--border-color); }
-        .login-box h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 24px; }
-        .form-group { margin-bottom: 16px; text-align: left; }
-        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
-        .form-control { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-family: inherit; font-size: 0.95rem; transition: var(--transition); }
-        .form-control:focus { outline: none; border-color: var(--text-main); }
-        .form-control:disabled { background-color: #f0f0f0; cursor: not-allowed; color: #888; }
-        .btn-primary { width: 100%; background: var(--bg-dark); color: var(--text-light); padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-        
-        /* Dashboard */
-        #admin-dashboard { display: none; padding-bottom: 60px; }
-        header { background-color: var(--bg-secondary); padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 40px; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: 800; }
-        .logout-btn { background: transparent; border: 1px solid var(--border-color); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .dashboard-title { font-size: 1.75rem; font-weight: 800; }
-        
-        .action-bar { display: flex; gap: 12px; }
-        .btn-delete-mass { background: var(--status-low); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: none; }
-        .add-btn { background: var(--status-ok); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; gap: 8px; align-items: center; }
-        
-        /* Table Căn chỉnh chuẩn chống lệch */
-        .table-responsive { width: 100%; overflow-x: auto; background-color: var(--bg-secondary); border-radius: 16px; border: 1px solid var(--border-color); }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 950px; table-layout: fixed; }
-        th, td { padding: 16px; border-bottom: 1px solid var(--border-color); vertical-align: middle; word-wrap: break-word; }
-        th { background-color: #fafafa; font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
-        
-        /* Định rộng từng cột cố định để thẳng hàng tuyệt đối */
-        .col-cb { width: 60px; text-align: center; }
-        .col-gv { width: 150px; }
-        .col-ml { width: 130px; }
-        .col-lh { width: 220px; }
-        .col-kg { width: 140px; }
-        .col-hp { width: 140px; }
-        .col-sl { width: 130px; }
-        .col-tt { width: 80px; text-align: center; }
-
-        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 700; }
-        .status-badge.low { background-color: #ffebeb; color: var(--status-low); }
-        .status-badge.ok { background-color: #eafaf1; color: var(--status-ok); }
-        .fee-tag { font-weight: 700; display: block; }
-        .fee-note { font-size: 0.75rem; color: var(--text-muted); }
-        
-        .cb-container { display: flex; align-items: center; justify-content: center; height: 100%; }
-        .cb-container input { width: 18px; height: 18px; cursor: pointer; }
-
-        /* Buttons */
-        .action-btns { display: flex; gap: 8px; justify-content: center; }
-        .action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; }
-        .edit-btn { background-color: #007aff; }
-        
-        /* Modal */
-        .modal { display: none; position: fixed; z-index: 2000; inset: 0; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
-        .modal-content { background: var(--bg-secondary); width: 100%; max-width: 650px; border-radius: 16px; padding: 32px; max-height: 90vh; overflow-y: auto; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .close-btn { font-size: 1.5rem; cursor: pointer; border: none; background: none; }
-        .form-row { display: flex; gap: 16px; margin-bottom: 4px; }
-        .form-row .form-group { flex: 1; }
-        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
-        .btn-cancel, .btn-save { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-cancel { background: transparent; border: 1px solid var(--border-color); }
-        .btn-save { background: var(--bg-dark); color: white; border: none; }
-
-        /* Teacher Checkbox List UI */
-        #teacherList label { display: flex; align-items: center; gap: 8px; padding: 10px; background: #f9f9f9; margin-bottom: 6px; border-radius: 8px; cursor: pointer; border: 1px solid #eee; transition: 0.2s; font-weight: 500;}
-        #teacherList label:hover { background: #f0f0f0; }
-        #teacherList input[type="checkbox"] { width: 16px; height: 16px; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>may(be)admin. — Quản lý lịch khai giảng</title>
+  <style>
+    :root {
+      --bg:#f3f3f5; --paper:#fff; --ink:#202024; --muted:#6c6c73; --line:#dedee3;
+      --soft:#f8f8fa; --green:#23784a; --green-soft:#eaf6ef; --blue:#2e5f9c;
+      --blue-soft:#edf4fc; --amber:#986019; --amber-soft:#fff5e7; --red:#bd3f3f;
+      --red-soft:#fff0f0; --shadow:0 12px 34px rgba(0,0,0,.05); --radius:14px;
+      --notes-font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue","Segoe UI",Arial,sans-serif;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--notes-font);font-size:17px;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    button,input,select{font:inherit} button{color:inherit}
+    .topbar{height:70px;padding:0 max(24px,calc((100vw - 1320px)/2));display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.95);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(14px)}
+    .brand{font-size:24px;font-weight:800;letter-spacing:-.9px}.saved{color:var(--green);font-size:13px;font-weight:700}.saved::before{content:"";display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#35a568}
+    main{width:min(1320px,calc(100% - 40px));margin:0 auto;padding:26px 0 70px}
+    .teacher-tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:14px}
+    .teacher-tab{height:46px;padding:0 20px;border:1px solid var(--line);border-radius:9px;background:white;font-weight:750;cursor:pointer;white-space:nowrap}
+    .teacher-tab.active{background:var(--ink);border-color:var(--ink);color:white}
+    .teacher-tab.add{border-style:dashed;background:transparent;color:var(--muted)}
+    .teacher-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:25px 27px;background:white;border:1px solid var(--line);border-radius:var(--radius)}
+    .teacher-brand{margin:0 0 5px;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.08em}
+    .teacher-header h1{margin:0;font-size:31px;letter-spacing:-.6px}.teacher-score{margin:7px 0 0;color:var(--muted);font-size:15px}.teacher-load{margin:10px 0 0;font-size:14px;font-weight:700;color:#4d4d53}
+    .header-buttons{display:flex;gap:10px;flex-wrap:wrap}.btn{min-height:45px;padding:0 17px;border:1px solid var(--line);border-radius:9px;background:white;font-weight:750;cursor:pointer}.btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.06)}.btn-dark{background:var(--ink);border-color:var(--ink);color:white}.btn-green{background:var(--green);border-color:var(--green);color:white}
+    .card{margin-top:17px;background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .card-head{min-height:78px;padding:17px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}.card-head h2{margin:0;font-size:23px}.card-head p{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .list-tabs{display:flex;gap:7px}.list-tab{height:41px;padding:0 15px;border:1px solid var(--line);border-radius:8px;background:white;font-size:14px;font-weight:750;cursor:pointer}.list-tab.active{background:var(--ink);border-color:var(--ink);color:white}.count{display:inline-flex;align-items:center;justify-content:center;min-width:23px;height:23px;margin-left:6px;padding:0 6px;border-radius:999px;background:rgba(128,128,128,.15);font-size:12px}
+    .table-wrap{overflow-x:auto}table{width:100%;min-width:1060px;border-collapse:collapse}th{padding:14px 17px;background:#fafafa;color:#5c5c63;font-size:13px;text-align:left;border-bottom:1px solid var(--line)}td{padding:17px;font-size:16px;border-bottom:1px solid #ececf0;vertical-align:middle}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#fcfcfd}
+    .class-code{font-size:17px;font-weight:750;letter-spacing:-.1px}.sub{display:block;margin-top:4px;color:var(--muted);font-size:13px}.date-strong{font-weight:650;white-space:nowrap}.availability{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:650;white-space:nowrap}.availability i{width:8px;height:8px;border-radius:50%;background:#2f9460}.availability.full{color:#6e6e75}.availability.full i{background:#aaaab0}.status-text{display:block;margin-top:8px;font-size:13px;font-weight:600}.status-text.running{color:#4f6f96}.status-text.upcoming{color:#9a6a2a}.actions{display:flex;flex-wrap:wrap;gap:7px}.row-action{padding:8px 11px;border:1px solid var(--line);border-radius:7px;background:white;font-size:13px;font-weight:650;cursor:pointer}.row-action.danger{color:var(--red);border-color:#ecd0d0;background:#fffafa}.row-action.danger:hover{background:#fff1f1;border-color:#ddb7b7}.empty{padding:54px;text-align:center;color:var(--muted)}
+    .export-card{display:grid;grid-template-columns:310px 1fr;gap:26px;padding:25px}.export-info h2{margin:0;font-size:24px}.export-info p{margin:7px 0 18px;color:var(--muted);font-size:14px;line-height:1.55}.export-info label{margin-top:18px}.export-buttons{display:flex;gap:8px;margin-top:17px;flex-wrap:wrap}.schedule-stage{padding:16px;background:#ededf0;border-radius:10px;overflow-x:auto}.schedule-paper{min-width:760px;padding:38px 46px;background:#fff;color:#454548;font-family:var(--notes-font);font-weight:400;letter-spacing:-.2px;box-shadow:0 5px 20px rgba(0,0,0,.07);-webkit-font-smoothing:antialiased}.schedule-month{margin:0 0 14px;font-size:24px;font-weight:700;letter-spacing:-.4px}.schedule-paper h3{margin:0;font-size:22px;font-weight:650;line-height:1.42}.teacher-line{margin:9px 0 0;font-size:21px;line-height:1.4}.paper-list{margin-top:29px}.paper-class{margin:0 0 31px;padding-left:27px}.paper-class p{margin:8px 0;font-size:21px;line-height:1.42}.paper-class p strong{font-weight:650}.paper-class p:not(:first-child){padding-left:36px}.paper-fee{margin:5px 0 0;font-size:21px;line-height:1.4}.paper-fee strong{font-weight:650}.bach-program{margin:25px 0 7px;font-size:22px;font-weight:650}.bach-course{margin:0 0 12px;font-size:22px;font-weight:650}
+    .modal{display:none;position:fixed;inset:0;z-index:50;padding:24px;align-items:center;justify-content:center;background:rgba(0,0,0,.52);backdrop-filter:blur(5px)}.modal.open{display:flex}.modal-box{width:min(980px,100%);max-height:calc(100vh - 48px);overflow-y:auto;background:white;border-radius:16px;box-shadow:0 30px 90px rgba(0,0,0,.24)}.modal-top{min-height:74px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.modal-top h2{margin:0;font-size:24px}.close{width:39px;height:39px;border:0;border-radius:50%;background:#f0f0f2;font-size:24px;cursor:pointer}.form-body{padding:21px 22px 8px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px}.field.full{grid-column:1/-1}label{display:block;margin-bottom:7px;color:#515158;font-size:14px;font-weight:750}.control{width:100%;min-height:45px;padding:9px 12px;border:1px solid #d5d5da;border-radius:8px;background:white;color:var(--ink);outline:none}.control:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,0,0,.06)}.control[readonly]{background:#f3f3f5;color:#55555b}.planning-box{padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}.planning-box .form-grid{gap:14px}.hidden{display:none!important}.field-note{margin:7px 0 0;color:var(--muted);font-size:12px;line-height:1.45}.result-box{margin-top:18px;padding:14px 15px;border-radius:9px;background:var(--green-soft);color:var(--green);font-size:14px;font-weight:750}.result-box.error{background:var(--red-soft);color:var(--red)}.modal-actions{padding:16px 22px 22px;display:flex;justify-content:flex-end;gap:10px}.batch-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}.batch-table{min-width:900px;border:1px solid var(--line)}.batch-table input{min-width:128px}.batch-table td{padding:11px}.batch-table th{padding:11px}.toast{position:fixed;right:24px;bottom:24px;z-index:80;max-width:380px;padding:14px 18px;border-radius:9px;background:var(--ink);color:white;font-size:14px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.22s}.toast.show{opacity:1;transform:translateY(0)}
+    .tuition-plan{grid-column:1/-1;padding:15px;border:1px solid var(--line);border-radius:10px;background:#fbfbfc}.tuition-plan-title{margin:0 0 11px;font-size:14px;font-weight:750}.tuition-stages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.tuition-stage{padding:11px 12px;border:1px solid #e2e2e6;border-radius:8px;background:white}.tuition-stage span{display:block;color:var(--muted);font-size:12px}.tuition-stage strong{display:block;margin-top:5px;font-size:15px}.tuition-stage.current{border-color:#9fcab2;background:var(--green-soft)}.buffer-policy{display:inline-flex;align-items:center;gap:7px;margin:9px 0 0;padding:6px 9px;border-radius:7px;background:#f1f6f3;color:#466553;font-size:12px;font-weight:650}.buffer-policy::before{content:"✓";font-weight:800}.conflict-alert{margin:16px 22px 0;padding:14px 16px;border:1px solid #edcfc4;border-radius:10px;background:#fff7f3;color:#7c3926}.conflict-alert strong{display:block;margin-bottom:7px;font-size:14px}.conflict-alert ul{margin:0;padding-left:19px}.conflict-alert li{margin:4px 0;font-size:13px;line-height:1.45}
+    @media(max-width:900px){.teacher-header{align-items:flex-start;flex-direction:column}.export-card{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full,.tuition-plan{grid-column:auto}.tuition-stages{grid-template-columns:1fr}.batch-toolbar{grid-template-columns:1fr}.card-head{align-items:flex-start;flex-direction:column}.list-tabs{width:100%;overflow-x:auto}}
+    @media(max-width:600px){body{font-size:15px}.topbar{padding:0 16px}.saved{display:none}main{width:min(100% - 24px,1320px);padding-top:16px}.teacher-header{padding:20px 17px}.teacher-header h1{font-size:27px}.header-buttons{width:100%}.header-buttons .btn{flex:1}.export-card{padding:17px}.modal{padding:9px}.schedule-paper{min-width:700px}}
+  </style>
 </head>
 <body>
+  <header class="topbar"><div class="brand">may(be)admin.</div><div class="saved">Tự động lưu trên trình duyệt</div></header>
+  <main>
+    <nav class="teacher-tabs" id="teacherTabs" aria-label="Chọn giáo viên"></nav>
+    <section class="teacher-header">
+      <div><p class="teacher-brand" id="teacherBrand"></p><h1 id="teacherName"></h1><p class="teacher-score" id="teacherScore"></p><p class="teacher-load" id="teacherLoad"></p></div>
+      <div class="header-buttons"><button class="btn" id="addSingleBtn">＋ Thêm một lớp</button><button class="btn btn-dark" id="addBatchBtn">＋ Tạo 3 lớp mới</button></div>
+    </section>
+    <section class="card">
+      <div class="card-head"><div><h2 id="listTitle">Lịch của giáo viên</h2><p>Ngày kết thúc của lịch mới luôn chừa sẵn 2 buổi dự phòng.</p><span class="buffer-policy">Có thể dời thêm 1 buổi, tối đa 3 buổi dự phòng</span></div><div class="list-tabs"><button class="list-tab active" data-view="running">Đang chạy <span class="count" id="runningCount">0</span></button><button class="list-tab" data-view="upcoming">Sắp khai giảng <span class="count" id="upcomingCount">0</span></button></div></div>
+      <div class="conflict-alert hidden" id="scheduleConflictAlert" role="alert"></div>
+      <div class="table-wrap"><table><thead><tr><th>Mã lớp</th><th>Lịch học</th><th>Khai giảng</th><th>Kết thúc</th><th>Học phí</th><th>Tình trạng chỗ</th><th></th></tr></thead><tbody id="classTable"></tbody></table></div>
+    </section>
+    <section class="card export-card" id="imageSection">
+      <div class="export-info"><h2>Ảnh lịch khai giảng</h2><p>Chọn tháng rồi sao chép hoặc tải ảnh đúng kiểu trình bày của team.</p><label for="exportMonth">Tháng cần xuất ảnh</label><select class="control" id="exportMonth"></select><div class="export-buttons"><button class="btn" id="copyImageBtn">Sao chép ảnh</button><button class="btn btn-dark" id="downloadImageBtn">Tải PNG</button></div></div>
+      <div class="schedule-stage"><div class="schedule-paper" id="schedulePaper"></div></div>
+    </section>
+  </main>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2>may(be)admin.</h2>
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <label>Email quản trị</label>
-                    <input type="email" id="loginEmail" class="form-control" value="admin@maybeielts.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <input type="password" id="loginPass" class="form-control" value="123456" required>
-                </div>
-                <button type="submit" class="btn-primary">Đăng nhập</button>
-            </form>
-        </div>
-    </div>
+  <div class="modal" id="classModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-box">
+    <div class="modal-top"><h2 id="modalTitle">Thêm một lớp</h2><button class="close" id="closeModal" aria-label="Đóng">×</button></div>
+    <form id="singleForm"><div class="form-body"><div class="form-grid">
+      <div class="field"><label for="singleCode">Mã lớp</label><input class="control" id="singleCode" required placeholder="MBWrite102"></div>
+      <div class="field"><label for="singleTeacher">Giáo viên</label><input class="control" id="singleTeacher" readonly></div>
+      <div class="field"><label for="singleProgram">Loại lớp</label><select class="control" id="singleProgram"><option value="write">Writing</option><option value="speak">Speaking</option></select></div>
+      <div class="field"><label for="singleSessions">Số buổi</label><input type="number" min="1" max="40" class="control" id="singleSessions" value="15"></div>
+      <div class="field"><label for="singleDays">Ngày học</label><select class="control" id="singleDays"><option value="1,4">Thứ 2 + 5</option><option value="2,5">Thứ 3 + 6</option><option value="3,6">Thứ 4 + 7</option><option value="3">Thứ 4</option></select></div>
+      <div class="field"><label for="singleTime">Khung giờ</label><select class="control" id="singleTime"><option>2–4PM</option><option>4–6PM</option><option>6–8PM</option><option>8–10PM</option></select></div>
+      <div class="field full"><label for="singlePlanMode">Cách chọn ngày khai giảng</label><select class="control" id="singlePlanMode"><option value="manual">Tôi tự chọn ngày</option><option value="after">Gợi ý từ lớp đang chạy cùng lịch</option></select></div>
+      <div class="field full planning-box hidden" id="continuationFields"><div class="form-grid">
+        <div class="field full"><label for="singleSource">Lớp đang chạy cùng thứ và khung giờ</label><select class="control" id="singleSource"></select></div>
+      </div><p class="field-note" id="sourceHint">Lớp mới bắt đầu vào buổi học kế tiếp sau ngày kết thúc đã gồm dự phòng; hệ thống không cộng thêm thời gian nghỉ.</p></div>
+      <div class="field"><label for="singleStart">Ngày khai giảng</label><input type="date" class="control" id="singleStart" required></div>
+      <div class="field"><label for="singleBuffer">Buổi dự phòng</label><select class="control" id="singleBuffer"><option value="2" selected>2 buổi — mặc định</option><option value="3">3 buổi — dời thêm 1 buổi</option></select><p class="field-note">Không thể chọn quá 3 buổi dự phòng.</p></div>
+      <div class="field"><label for="singleEnd">Ngày kết thúc đã gồm dự phòng</label><input type="date" class="control" id="singleEnd" readonly></div>
+      <div class="field"><label for="singleFullFee">Giá gốc</label><input class="control" id="singleFullFee"></div>
+      <div class="field"><label for="singlePromoFee">Giá sớm nhất</label><input class="control" id="singlePromoFee"></div>
+      <div class="field"><label for="singleDeadline">Hạn giá sớm nhất — tự tính</label><input type="date" class="control" id="singleDeadline" readonly></div>
+      <div class="field"><label for="singleCapacity">Tổng số chỗ</label><input type="number" min="1" class="control" id="singleCapacity"></div>
+      <div class="field"><label for="singleStudents">Số học viên đã đăng ký</label><input type="number" min="0" class="control" id="singleStudents" value="0"></div>
+      <div class="tuition-plan" id="tuitionPlan"><p class="tuition-plan-title">Chọn ngày khai giảng để xem ba mức học phí.</p></div>
+    </div><div class="result-box" id="singleResult">Chọn ngày khai giảng để tính ngày kết thúc.</div></div><div class="modal-actions"><button type="button" class="btn cancelModal">Hủy</button><button class="btn btn-green" id="singleSaveBtn">Lưu lớp</button></div></form>
+    <form id="batchForm" class="hidden"><div class="form-body"><div class="batch-toolbar"><div class="field"><label for="batchBuffer">Buổi dự phòng cho cả 3 lớp</label><select class="control" id="batchBuffer"><option value="2" selected>2 buổi — mặc định</option><option value="3">3 buổi — dời thêm 1 buổi</option></select><p class="field-note">Ngày khai giảng mới là buổi học kế tiếp sau ngày kết thúc đã có dự phòng; không cộng thêm khoảng nghỉ.</p></div></div><div class="table-wrap"><table class="batch-table"><thead><tr><th>Lớp kết thúc trước</th><th>Mã lớp mới</th><th>Lịch giữ nguyên</th><th>Khai giảng mới</th><th>Kết thúc đã gồm dự phòng</th></tr></thead><tbody id="batchRows"></tbody></table></div><div class="result-box" id="batchResult">Không phát hiện lịch trùng giờ.</div></div><div class="modal-actions"><button type="button" class="btn cancelModal">Hủy</button><button class="btn btn-green">Lưu 3 lớp</button></div></form>
+  </div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <div id="admin-dashboard">
-        <header>
-            <div class="container header-content">
-                <div class="logo">may(be)ielts. <span style="color: var(--text-muted); font-size: 1rem;">| Admin Panel</span></div>
-                <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</button>
-            </div>
-        </header>
+  <script>
+    const teachers={
+      khang:{id:"khang",name:"Gia Khang",brand:"MAY(BE)KHANG",score:"Overall 8.5 · Writing 8.0",scoreExport:"Overall 8.5 - Writing 8.0",course:"Đầu vào 5.0-5.5 - Đầu ra 6.5-7.0",fee:"6.000.000",promoFee:"5.000.000",capacity:8,minNext:102},
+      nhi:{id:"nhi",name:"Tuệ Nhi",brand:"MAY(BE)NHI",score:"Overall 8.0 · Writing 8.0",scoreExport:"8.0Ox8.0W",course:"Đầu vào 5.0-5.5 - Đầu ra 6.5-7.0",fee:"6.000.000",promoFee:"5.000.000",capacity:15,minNext:94},
+      bach:{id:"bach",name:"Hồ Bách",brand:"MAY(BE)BÁCH",score:"Overall 8.5 · Writing 8.5 · Speaking 8.5",scoreExport:"8.5Ox8.5Wx8.5S",course:"Đầu vào 6.5 - Đầu ra 7.5-8.0+",speakCourse:"Đầu vào 5.5 - Đầu ra 6.5-7.0+",fee:"6.000.000",promoFee:"5.000.000",capacity:15,minNext:94}
+    };
+    const initialClasses=[
+      {teacher:"khang",program:"write",code:"MBWrite75",days:[1,4],dayLabel:"Thứ 2+5",time:"8–10PM",sessions:15,start:"2026-06-22",end:"2026-08-10",fullFee:"5.000.000",promoFee:"4.000.000",deadline:"2026-06-10",students:5,capacity:5},
+      {teacher:"khang",program:"write",code:"MBWrite76",days:[2,5],dayLabel:"Thứ 3+6",time:"8–10PM",sessions:15,start:"2026-06-23",end:"2026-08-11",fullFee:"5.000.000",promoFee:"4.000.000",deadline:"2026-06-10",students:5,capacity:5},
+      {teacher:"khang",program:"write",code:"MBWrite77",days:[3,6],dayLabel:"Thứ 4+7",time:"8–10PM",sessions:15,start:"2026-06-24",end:"2026-08-12",fullFee:"5.000.000",promoFee:"4.000.000",deadline:"2026-06-10",students:5,capacity:5},
+      {teacher:"khang",program:"write",code:"MBWrite81",days:[1,4],dayLabel:"Thứ 2+5",time:"2–4PM",sessions:15,start:"2026-07-16",end:"2026-09-03",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-07-10",students:8,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite82",days:[2,5],dayLabel:"Thứ 3+6",time:"2–4PM",sessions:15,start:"2026-07-17",end:"2026-09-04",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-07-10",students:8,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite83",days:[3,6],dayLabel:"Thứ 4+7",time:"2–4PM",sessions:15,start:"2026-07-18",end:"2026-09-05",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-07-10",students:8,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite90",days:[1,4],dayLabel:"Thứ 2+5",time:"8–10PM",sessions:15,start:"2026-08-17",end:"2026-10-05",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-01",students:8,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite91",days:[2,5],dayLabel:"Thứ 3+6",time:"8–10PM",sessions:15,start:"2026-08-18",end:"2026-10-06",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-01",students:8,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite92",days:[3,6],dayLabel:"Thứ 4+7",time:"6–8PM",sessions:15,start:"2026-08-19",end:"2026-10-07",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-01",students:3,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite98",days:[1,4],dayLabel:"Thứ 2+5",time:"2–4PM",sessions:15,bufferSessions:2,start:"2026-09-10",end:"2026-11-05",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-20",students:0,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite99",days:[2,5],dayLabel:"Thứ 3+6",time:"2–4PM",sessions:15,bufferSessions:2,start:"2026-09-11",end:"2026-11-06",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-20",students:0,capacity:8},
+      {teacher:"khang",program:"write",code:"MBWrite101",days:[3,6],dayLabel:"Thứ 4+7",time:"2–4PM",sessions:15,bufferSessions:2,start:"2026-09-12",end:"2026-11-07",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-20",students:0,capacity:8},
 
-        <div class="container">
-            <div class="dashboard-header">
-                <h2 class="dashboard-title">Quản lý lớp học</h2>
-                <div class="action-bar">
-                    <button class="btn-delete-mass" id="btnDeleteMass" onclick="deleteSelectedClasses()"><i class="fa-solid fa-trash-can"></i> Xóa các lớp đã chọn</button>
-                    <button class="add-btn" onclick="openModal()"><i class="fa-solid fa-plus"></i> Thêm Lớp Mới</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="col-cb"><div class="cb-container"><input type="checkbox" id="cbSelectAll" onclick="toggleSelectAll()"></div></th>
-                            <th class="col-gv">Giảng Viên</th>
-                            <th class="col-ml">Mã Lớp</th>
-                            <th class="col-lh">Lịch Học</th>
-                            <th class="col-kg">Khai Giảng</th>
-                            <th class="col-hp">Học Phí</th>
-                            <th class="col-sl">Slot Tình Trạng</th>
-                            <th class="col-tt">Sửa</th>
-                        </tr>
-                    </thead>
-                    <tbody id="classTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+      {teacher:"nhi",program:"write",code:"MBWrite69",days:[3,6],dayLabel:"Thứ 4+7",time:"6–8PM",sessions:15,start:"2026-06-24",end:"2026-08-12",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-06-09",students:12,capacity:12},
+      {teacher:"nhi",program:"write",code:"MBWrite71",days:[1,4],dayLabel:"Thứ 2+5",time:"2–4PM",sessions:15,start:"2026-06-22",end:"2026-08-10",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-06-09",students:12,capacity:12},
+      {teacher:"nhi",program:"write",code:"MBWrite72",days:[2,5],dayLabel:"Thứ 3+6",time:"8–10PM",sessions:15,start:"2026-06-23",end:"2026-08-11",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-06-09",students:12,capacity:12},
+      {teacher:"nhi",program:"write",code:"MBWrite78",days:[1,4],dayLabel:"Thứ 2+5",time:"8–10PM",sessions:15,start:"2026-07-09",end:"2026-08-27",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-07-10",students:12,capacity:12},
+      {teacher:"nhi",program:"write",code:"MBWrite79",days:[2,5],dayLabel:"Thứ 3+6",time:"4–6PM",sessions:15,start:"2026-07-10",end:"2026-08-28",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-07-10",students:12,capacity:12},
+      {teacher:"nhi",program:"write",code:"MBWrite80",days:[3,6],dayLabel:"Thứ 4+7",time:"4–6PM",sessions:15,start:"2026-07-15",end:"2026-09-02",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-07-10",students:12,capacity:12},
+      {teacher:"nhi",program:"write",code:"MBWrite87",days:[1,4],dayLabel:"Thứ 2+5",time:"6–8PM",sessions:15,start:"2026-08-10",end:"2026-09-28",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-05",students:15,capacity:15},
+      {teacher:"nhi",program:"write",code:"MBWrite86",days:[2,5],dayLabel:"Thứ 3+6",time:"6–8PM",sessions:15,start:"2026-08-11",end:"2026-09-29",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-05",students:15,capacity:15},
+      {teacher:"nhi",program:"write",code:"MBWrite89",days:[3,6],dayLabel:"Thứ 4+7",time:"6–8PM",sessions:15,start:"2026-08-26",end:"2026-10-14",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-05",students:12,capacity:15},
+      {teacher:"nhi",program:"write",code:"MBWrite94",days:[3,6],dayLabel:"Thứ 4+7",time:"6–8PM",sessions:15,bufferSessions:2,start:"2026-08-26",end:"2026-10-24",fullFee:"6.000.000",promoFee:"5.500.000",deadline:"2026-08-20",students:5,capacity:15},
+      {teacher:"nhi",program:"write",code:"MBWrite95",days:[1,4],dayLabel:"Thứ 2+5",time:"2–4PM",sessions:15,bufferSessions:2,start:"2026-08-26",end:"2026-10-26",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-20",students:2,capacity:15},
+      {teacher:"nhi",program:"write",code:"MBWrite96",days:[3,6],dayLabel:"Thứ 4+7",time:"6–8PM",sessions:15,bufferSessions:2,start:"2026-08-26",end:"2026-10-26",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-20",students:4,capacity:15},
+      {teacher:"nhi",program:"write",code:"MBWrite97",days:[2,5],dayLabel:"Thứ 3+6",time:"4–6PM",sessions:15,bufferSessions:2,start:"2026-08-26",end:"2026-10-26",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-20",students:3,capacity:15},
 
-    <div id="classModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Thêm Lớp Mới</h3>
-                <button class="close-btn" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form id="classForm" onsubmit="saveClass(event)">
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <label style="margin: 0;">Giảng viên</label>
-                            <select id="modeSelect" class="form-control" style="width: auto; padding: 4px; font-size: 0.8rem; height: auto;" onchange="toggleMode()">
-                                <option value="single">Thêm Lớp Đơn</option>
-                                <option value="batch">Thêm Hàng Loạt</option>
-                            </select>
-                        </div>
-                        
-                        <div id="singleTeacher">
-                            <select id="singleTeacherSelect" class="form-control">
-                                <option value="Hồ Bách">Hồ Bách</option>
-                                <option value="Tuệ Nhi">Tuệ Nhi</option>
-                                <option value="Gia Khang">Gia Khang</option>
-                            </select>
-                        </div>
+      {teacher:"bach",program:"write",code:"MBWrite85+",days:[2,5],dayLabel:"Thứ 3+6",time:"8–10PM",sessions:15,start:"2026-07-21",end:"2026-09-08",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-07-10",students:15,capacity:15},
+      {teacher:"bach",program:"speak",code:"MBSpeak08",days:[3],dayLabel:"Thứ 4",time:"8–10PM",sessions:6,start:"2026-07-22",end:"2026-08-26",fullFee:"5.000.000",promoFee:"4.500.000",deadline:"2026-07-10",students:15,capacity:15},
+      {teacher:"bach",program:"speak",code:"MBSpeak09",days:[3],dayLabel:"Thứ 4",time:"6–8PM",sessions:6,start:"2026-08-19",end:"2026-09-23",fullFee:"3.500.000",promoFee:"3.500.000",deadline:"2026-08-01",students:10,capacity:10},
+      {teacher:"bach",program:"write",code:"MBWrite93+",days:[1,4],dayLabel:"Thứ 2+5",time:"8–10PM",sessions:15,bufferSessions:2,start:"2026-08-24",end:"2026-10-24",fullFee:"6.000.000",promoFee:"5.000.000",deadline:"2026-08-01",students:14,capacity:20}
+    ];
+    const STORE_KEY="maybe-admin-v7-classes";
+    const timeRanges={"2–4PM":[840,960],"4–6PM":[960,1080],"6–8PM":[1080,1200],"8–10PM":[1200,1320]};
+    const dayLabels={"1,4":"Thứ 2+5","2,5":"Thứ 3+6","3,6":"Thứ 4+7","3":"Thứ 4"};
+    let classes=loadClasses(),currentTeacher="khang",viewMode="running",exportMonth="",editingKey="",modalMode="single",batchSources=[];
 
-                        <div id="batchTeacher" style="display:none;">
-                            <div id="teacherList">
-                                <label><input type="checkbox" value="Gia Khang"> Gia Khang</label>
-                                <label><input type="checkbox" value="Tuệ Nhi"> Tuệ Nhi</label>
-                                <label><input type="checkbox" value="Hồ Bách"> Hồ Bách</label>
-                            </div>
-                            <div style="margin-top: 8px; display: flex; align-items: center; gap: 12px;">
-                                <span style="font-size: 0.85rem; font-weight: 600; white-space: nowrap;">Số lớp/người:</span>
-                                <input type="number" id="batchCount" class="form-control" value="3" min="1" style="width: 70px; padding: 6px;">
-                            </div>
-                        </div>
-                    </div>
+    function loadClasses(){try{const saved=localStorage.getItem(STORE_KEY);return saved?JSON.parse(saved):structuredClone(initialClasses)}catch{return structuredClone(initialClasses)}}
+    function saveClasses(){localStorage.setItem(STORE_KEY,JSON.stringify(classes))}
+    function toDate(iso){return new Date(iso+"T00:00:00")}
+    function toIso(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+    function todayIso(){return toIso(new Date())}
+    function formatDate(iso){if(!iso)return"—";const d=toDate(iso);return `${String(d.getDate()).padStart(2,"0")}.${String(d.getMonth()+1).padStart(2,"0")}`}
+    function toUtcDate(iso){if(!iso)return null;const [y,m,d]=iso.split("-").map(Number);return new Date(Date.UTC(y,m-1,d))}
+    function toUtcIso(date){return `${date.getUTCFullYear()}-${String(date.getUTCMonth()+1).padStart(2,"0")}-${String(date.getUTCDate()).padStart(2,"0")}`}
+    function addUtcDays(date,days){const result=new Date(date.getTime());result.setUTCDate(result.getUTCDate()+days);return result}
+    function roundFriendlyDeadline(rawDeadline,referenceDate){const rawDay=rawDeadline.getUTCDate();if(rawDay>=28){const firstOfNextMonth=new Date(Date.UTC(rawDeadline.getUTCFullYear(),rawDeadline.getUTCMonth()+1,1));const daysBeforeReference=Math.round((referenceDate-firstOfNextMonth)/86400000);if(daysBeforeReference>=7)return firstOfNextMonth}const milestones=[25,20,15,10,5,1],roundedDay=milestones.find(day=>day<=rawDay)||1;return new Date(Date.UTC(rawDeadline.getUTCFullYear(),rawDeadline.getUTCMonth(),roundedDay))}
+    function parseVnd(value){const amount=Number(String(value||"").replace(/\D/g,""));return Number.isFinite(amount)&&amount>0?amount:0}
+    function formatVnd(amount){return String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g,".")}
+    function calculateTuitionPlan(startIso,lowestValue,originalValue){const start=toUtcDate(startIso),lowest=parseVnd(lowestValue),original=parseVnd(originalValue);if(!start||!lowest||!original)return null;const rawPromotion=addUtcDays(start,-10),promotion=roundFriendlyDeadline(rawPromotion,start),rawEarly=addUtcDays(promotion,-10),early=roundFriendlyDeadline(rawEarly,promotion),middle=Math.round(((lowest+original)/2)/100000)*100000,middleStart=addUtcDays(early,1),fullStart=addUtcDays(promotion,1),today=toUtcDate(todayIso()),active=today<=early?0:(today<=promotion?1:2);return{earlyIso:toUtcIso(early),promotionIso:toUtcIso(promotion),middleStartIso:toUtcIso(middleStart),fullStartIso:toUtcIso(fullStart),lowest,middle,original,active}}
+    function tuitionPlanForItem(item){return calculateTuitionPlan(item.start,item.promoFee,item.fullFee)}
+    function earlyDeadline(item){const plan=tuitionPlanForItem(item);return plan?plan.earlyIso:(item.deadline||"")}
+    function monthLabel(key){const [y,m]=key.split("-").map(Number);return `Tháng ${m}/${y}`}
+    function monthEnglish(key){const [y,m]=key.split("-").map(Number);return `${new Date(y,m-1,1).toLocaleString("en-US",{month:"short"}).toUpperCase()} ${y}`}
+    function calculateEnd(start,days,count){if(!start)return"";const d=toDate(start);let sessions=days.includes(d.getDay())?1:0;while(sessions<count){d.setDate(d.getDate()+1);if(days.includes(d.getDay()))sessions++}return toIso(d)}
+    function suggestedStart(end,days,gap){const d=toDate(end);d.setDate(d.getDate()+Math.max(1,gap));while(!days.includes(d.getDay()))d.setDate(d.getDate()+1);return toIso(d)}
+    function statusOf(item){const today=todayIso();if(today<item.start)return"upcoming";if(today<=item.end)return"running";return"ended"}
+    function remaining(item){return Math.max(0,item.capacity-item.students)}
+    function rangesOverlap(a,b){return a[0]<b[1]&&b[0]<a[1]}
+    function itemKey(item){return `${item.teacher}|${item.code}`}
+    function classNumber(code){const matches=String(code||"").match(/\d+/g);return matches?Number(matches.at(-1)):Number.MAX_SAFE_INTEGER}
+    function compareClassCodes(a,b){return classNumber(a.code)-classNumber(b.code)||a.code.localeCompare(b.code,"vi",{numeric:true})}
+    function conflictsWith(a,b){return a.teacher===b.teacher&&a.start<=b.end&&a.end>=b.start&&a.days.some(day=>b.days.includes(day))&&rangesOverlap(timeRanges[a.time],timeRanges[b.time])}
+    function findConflict(candidate,ignore=""){return classes.find(item=>itemKey(item)!==ignore&&conflictsWith(candidate,item))||null}
+    function hasConflict(candidate,ignore=""){return Boolean(findConflict(candidate,ignore))}
+    function conflictText(a,b){const from=a.start>b.start?a.start:b.start,to=a.end<b.end?a.end:b.end;return `${a.code} (${a.dayLabel}, ${a.time}) trùng ${b.code} (${b.dayLabel}, ${b.time}) · ${formatDate(from)}–${formatDate(to)}`}
+    function teacherConflicts(){const items=classes.filter(item=>item.teacher===currentTeacher&&statusOf(item)!=="ended").sort(compareClassCodes),result=[];for(let i=0;i<items.length;i++){for(let j=i+1;j<items.length;j++){if(conflictsWith(items[i],items[j]))result.push([items[i],items[j]])}}return result}
+    function renderConflictAlert(){const alert=document.getElementById("scheduleConflictAlert"),conflicts=teacherConflicts();alert.classList.toggle("hidden",conflicts.length===0);alert.innerHTML=conflicts.length?`<strong>Cảnh báo: ${conflicts.length} lịch đang bị trùng</strong><ul>${conflicts.map(pair=>`<li>${conflictText(pair[0],pair[1])}</li>`).join("")}</ul>`:""}
+    function showToast(message){const toast=document.getElementById("toast");toast.textContent=message;toast.classList.add("show");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.remove("show"),2600)}
 
-                    <div class="form-group">
-                        <label>Mã lớp</label>
-                        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-                            <select id="inputPrefix" class="form-control" style="width: 130px;" required>
-                                <option value="MBWrite">MBWrite</option>
-                                <option value="MBSpeak">MBSpeak</option>
-                            </select>
-                            <input type="text" id="inputSuffix" class="form-control" placeholder="Số hiệu" required style="flex: 1;">
-                        </div>
-                        <div id="batchStartNumBox" style="display: none; align-items: center; gap: 8px;">
-                            <span style="font-size: 0.85rem; font-weight: 600; white-space: nowrap; color: var(--status-ok);">Số hiệu bắt đầu:</span>
-                            <input type="number" id="inputBatchStartNum" class="form-control" value="100" min="1" style="padding: 6px;">
-                        </div>
-                    </div>
-                </div>
+    function renderTabs(){const el=document.getElementById("teacherTabs");el.innerHTML=Object.values(teachers).map(t=>`<button class="teacher-tab ${t.id===currentTeacher?"active":""}" data-teacher="${t.id}">${t.name}</button>`).join("")+`<button class="teacher-tab add" id="addTeacher">＋ Thêm giáo viên</button>`;el.querySelectorAll("[data-teacher]").forEach(btn=>btn.onclick=()=>{currentTeacher=btn.dataset.teacher;viewMode="running";exportMonth="";render()});document.getElementById("addTeacher").onclick=()=>showToast("Tính năng thêm giáo viên sẽ dùng khi kết nối dữ liệu thật.")}
+    function visibleItems(){return classes.filter(i=>i.teacher===currentTeacher&&statusOf(i)===viewMode).sort(compareClassCodes)}
+    function render(){const t=teachers[currentTeacher],all=classes.filter(i=>i.teacher===currentTeacher),running=all.filter(i=>statusOf(i)==="running"),upcoming=all.filter(i=>statusOf(i)==="upcoming");renderTabs();document.getElementById("teacherBrand").textContent=t.brand;document.getElementById("teacherName").textContent=t.name;document.getElementById("teacherScore").textContent=t.score;document.getElementById("teacherLoad").textContent=`${running.length} lớp đang chạy · ${upcoming.length} lớp sắp khai giảng`;document.getElementById("listTitle").textContent=`Lịch của ${t.name}`;document.getElementById("runningCount").textContent=running.length;document.getElementById("upcomingCount").textContent=upcoming.length;document.querySelectorAll(".list-tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.view===viewMode));renderConflictAlert();renderTable();renderExportMonths()}
+    function renderTable(){const items=visibleItems(),tbody=document.getElementById("classTable");tbody.innerHTML=items.length?items.map(item=>{const left=remaining(item),status=statusOf(item);return `<tr><td><span class="class-code">${item.code}</span><span class="sub">${item.program==="speak"?"Speaking":"Writing"} · ${item.sessions} buổi</span></td><td><strong>${item.dayLabel}</strong><span class="sub">${item.time}</span></td><td class="date-strong">${formatDate(item.start)}</td><td class="date-strong">${formatDate(item.end)}</td><td><strong>${item.promoFee}</strong><span class="sub">Gốc ${item.fullFee}</span></td><td><span class="availability ${left===0?"full":"open"}"><i aria-hidden="true"></i>${left===0?"Đã đủ học viên":`Còn ${left}/${item.capacity} vị trí`}</span><span class="status-text ${status}">${status==="running"?"Đang chạy":"Sắp khai giảng"}</span></td><td><div class="actions"><button class="row-action" data-image="${item.start.slice(0,7)}">Xem ảnh</button><button class="row-action" data-edit="${itemKey(item)}">Sửa</button><button class="row-action danger" data-delete="${itemKey(item)}">Xóa</button></div></td></tr>`}).join(""):`<tr><td colspan="7" class="empty">Không có lớp nào trong mục này.</td></tr>`;tbody.querySelectorAll("[data-edit]").forEach(btn=>btn.onclick=()=>openEdit(btn.dataset.edit));tbody.querySelectorAll("[data-delete]").forEach(btn=>btn.onclick=()=>deleteClass(btn.dataset.delete));tbody.querySelectorAll("[data-image]").forEach(btn=>btn.onclick=()=>{exportMonth=btn.dataset.image;renderExportMonths();document.getElementById("imageSection").scrollIntoView({behavior:"smooth"})})}
+    function deleteClass(key){const item=classes.find(i=>itemKey(i)===key);if(!item)return;if(!window.confirm(`Xóa lớp ${item.code} của ${teachers[item.teacher].name}?\n\nThao tác này không thể hoàn tác.`))return;classes=classes.filter(i=>itemKey(i)!==key);saveClasses();render();showToast(`Đã xóa lớp ${item.code}.`)}
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Ngày học trong tuần</label>
-                        <select id="inputDays" class="form-control" required>
-                            <option value="Thứ 2 + 5">Thứ 2 + 5</option>
-                            <option value="Thứ 3 + 6">Thứ 3 + 6</option>
-                            <option value="Thứ 4 + 7">Thứ 4 + 7</option>
-                            <option value="Thứ 4">Thứ 4</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Khung giờ học</label>
-                        <select id="inputTime" class="form-control" required>
-                            <option value="2 - 4 PM">2 - 4 PM</option>
-<option value="4 - 6 PM">4 - 6 PM</option>
-<option value="6 - 8 PM">6 - 8 PM</option>
-<option value="8 - 10 PM">8 - 10 PM</option>
-                        </select>
-                    </div>
-                </div>
+    function renderExportMonths(){const select=document.getElementById("exportMonth"),months=[...new Set(classes.filter(i=>i.teacher===currentTeacher).map(i=>i.start.slice(0,7)))].sort();if(!exportMonth||!months.includes(exportMonth)){const future=months.filter(m=>m>=todayIso().slice(0,7));exportMonth=(future.at(-1)||months.at(-1)||"")}select.innerHTML=months.map(m=>`<option value="${m}" ${m===exportMonth?"selected":""}>${monthLabel(m)}</option>`).join("");renderSchedule()}
+    function exportItems(){return classes.filter(i=>i.teacher===currentTeacher&&i.start.startsWith(exportMonth)).map(i=>({...i,deadline:earlyDeadline(i)})).sort(compareClassCodes)}
+    function classMarkup(items){return `<div class="paper-list">${items.map(item=>`<div class="paper-class"><p><strong>• &nbsp;${item.code} (${item.dayLabel}) ${item.time}</strong></p><p>◦ &nbsp;Còn lại ${remaining(item)}/${item.capacity} vị trí</p><p>◦ &nbsp;Khai giảng ${formatDate(item.start)} - Kết thúc ${formatDate(item.end)}</p></div>`).join("")}</div>`}
+    function feeMarkup(items){if(!items.length)return"";const item=items[0],early=earlyDeadline(item),deadline=early?` khi đăng ký trước <strong>${formatDate(early)}</strong>`:" khi đăng ký sớm";return `<p class="paper-fee"><strong>Học phí:</strong> ${item.fullFee} - Còn <strong>${item.promoFee}</strong>${deadline}</p>`}
+    function renderSchedule(){const t=teachers[currentTeacher],items=exportItems(),paper=document.getElementById("schedulePaper");if(!items.length){paper.innerHTML="<p>Chưa có lớp để xuất ảnh.</p>";return}let html=`<p class="schedule-month">may(be)write. ${monthEnglish(exportMonth)}</p>`;if(currentTeacher!=="bach"){html+=`<h3>${t.brand}. ${t.course}</h3><p class="teacher-line"><strong>GV đứng lớp:</strong> ${t.name} (${t.scoreExport})</p>${classMarkup(items)}${feeMarkup(items)}`}else{html+=`<p class="teacher-line"><strong>GV đứng lớp:</strong> ${t.name} (${t.scoreExport})</p>`;["write","speak"].forEach(program=>{const group=items.filter(i=>i.program===program);if(!group.length)return;html+=program==="write"?`<p class="bach-program">may(be)write.</p><p class="bach-course">${t.course}</p>`:`<p class="bach-course">${t.speakCourse}</p>`;html+=classMarkup(group)+feeMarkup(group)});}paper.innerHTML=html}
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Ngày khai giảng</label>
-                        <input type="date" id="inputStart" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Ngày kết thúc</label>
-                        <input type="date" id="inputEnd" class="form-control" required>
-                    </div>
-                </div>
+    function nextCodes(count=3){const t=teachers[currentTeacher],used=new Set(classes.filter(i=>i.teacher===currentTeacher).map(i=>i.code));let n=t.minNext,result=[];while(result.length<count){if(currentTeacher==="khang"&&n===100){n++;continue}const code=`MBWrite${n}${currentTeacher==="bach"?"+":""}`;if(!used.has(code))result.push(code);n++}return result}
+    function openModal(mode){modalMode=mode;editingKey="";document.getElementById("singleForm").classList.toggle("hidden",mode!=="single");document.getElementById("batchForm").classList.toggle("hidden",mode!=="batch");document.getElementById("modalTitle").textContent=mode==="single"?"Thêm một lớp":"Tạo 3 lớp mới";if(mode==="single")resetSingle();else prepareBatch();document.getElementById("classModal").classList.add("open")}
+    function closeModal(){document.getElementById("classModal").classList.remove("open")}
+    function resetSingle(){const t=teachers[currentTeacher];document.getElementById("singleSaveBtn").textContent="Lưu lớp";document.getElementById("singleCode").value=nextCodes(1)[0];document.getElementById("singleCode").readOnly=false;document.getElementById("singleTeacher").value=t.name;document.getElementById("singleProgram").value="write";document.getElementById("singleSessions").value=15;document.getElementById("singleBuffer").value="2";document.getElementById("singleDays").value="1,4";document.getElementById("singleTime").value="2–4PM";document.getElementById("singlePlanMode").value="manual";document.getElementById("continuationFields").classList.add("hidden");document.getElementById("singleStart").value="";document.getElementById("singleEnd").value="";document.getElementById("singleFullFee").value=t.fee;document.getElementById("singlePromoFee").value=t.promoFee;document.getElementById("singleDeadline").value="";document.getElementById("singleCapacity").value=t.capacity;document.getElementById("singleStudents").value=0;populateSources();updateSingleResult()}
+    function populateSources(){const select=document.getElementById("singleSource"),hint=document.getElementById("sourceHint"),days=document.getElementById("singleDays").value,time=document.getElementById("singleTime").value,candidate=classes.filter(i=>i.teacher===currentTeacher&&statusOf(i)==="running"&&i.time===time&&i.days.join(",")===days).sort((a,b)=>a.end.localeCompare(b.end))[0];if(candidate){select.disabled=false;select.innerHTML=`<option value="${itemKey(candidate)}">${candidate.code} · ${candidate.dayLabel} ${candidate.time} · kết thúc ${formatDate(candidate.end)}</option>`;hint.textContent="Lớp mới sẽ bắt đầu vào buổi học kế tiếp ngay sau ngày kết thúc đã gồm dự phòng; không cộng thêm khoảng nghỉ."}else{select.disabled=true;select.innerHTML='<option value="">Không có lớp đang chạy cùng lịch</option>';hint.textContent="Chưa có lớp đang chạy trùng cả thứ và khung giờ này. Bạn có thể tự chọn ngày khai giảng."}}
+    function updatePlanning(){const after=document.getElementById("singlePlanMode").value==="after";document.getElementById("continuationFields").classList.toggle("hidden",!after);if(after){populateSources();const source=classes.find(i=>itemKey(i)===document.getElementById("singleSource").value),days=document.getElementById("singleDays").value.split(",").map(Number);if(source)document.getElementById("singleStart").value=suggestedStart(source.end,days,1)}updateSingleResult()}
+    function readSingle(){const days=document.getElementById("singleDays").value.split(",").map(Number),start=document.getElementById("singleStart").value,sessions=Number(document.getElementById("singleSessions").value||15),bufferSessions=Math.min(3,Math.max(2,Number(document.getElementById("singleBuffer").value||2))),fullFee=document.getElementById("singleFullFee").value.trim(),promoFee=document.getElementById("singlePromoFee").value.trim(),plan=calculateTuitionPlan(start,promoFee,fullFee);return{teacher:currentTeacher,program:document.getElementById("singleProgram").value,code:document.getElementById("singleCode").value.trim(),days,dayLabel:dayLabels[days.join(",")],time:document.getElementById("singleTime").value,sessions,bufferSessions,start,end:calculateEnd(start,days,sessions+bufferSessions),fullFee,promoFee,deadline:plan?plan.earlyIso:"",students:Number(document.getElementById("singleStudents").value||0),capacity:Number(document.getElementById("singleCapacity").value||1)}}
+    function singleError(item){if(!item.code||!item.start)return"Hãy nhập mã lớp và ngày khai giảng.";if(!item.days.includes(toDate(item.start).getDay()))return"Ngày khai giảng không trùng với thứ học đã chọn.";if(item.students>item.capacity)return"Số học viên không thể lớn hơn tổng số chỗ.";if(classes.some(i=>i.teacher===item.teacher&&i.code===item.code&&itemKey(i)!==editingKey))return"Mã lớp này đã tồn tại trong lịch của giáo viên.";const conflict=findConflict(item,editingKey);if(conflict)return`Trùng lịch với ${conflict.code}: ${conflict.dayLabel}, ${conflict.time}, từ ${formatDate(conflict.start)} đến ${formatDate(conflict.end)}.`;return""}
+    function renderTuitionPlan(item){const container=document.getElementById("tuitionPlan"),plan=calculateTuitionPlan(item.start,item.promoFee,item.fullFee);if(!plan){container.innerHTML='<p class="tuition-plan-title">Chọn ngày khai giảng và nhập học phí để xem ba mức giá.</p>';return}const stages=[{title:"Giá sớm nhất",date:`Đến hết ${formatDate(plan.earlyIso)}`,price:plan.lowest},{title:"Giá cận khai giảng",date:`${formatDate(plan.middleStartIso)} – ${formatDate(plan.promotionIso)}`,price:plan.middle},{title:"Giá gốc",date:`Từ ${formatDate(plan.fullStartIso)}`,price:plan.original}];container.innerHTML=`<p class="tuition-plan-title">Lộ trình học phí — đồng bộ công thức với website chính</p><div class="tuition-stages">${stages.map((stage,index)=>`<div class="tuition-stage ${index===plan.active?"current":""}"><span>${stage.title} · ${stage.date}</span><strong>${formatVnd(stage.price)}</strong></div>`).join("")}</div>`}
+    function updateSingleResult(){const item=readSingle();document.getElementById("singleEnd").value=item.end;document.getElementById("singleDeadline").value=item.deadline;renderTuitionPlan(item);const box=document.getElementById("singleResult"),error=singleError(item);box.className="result-box"+(error?" error":"");box.textContent=error||`Hợp lệ · ${item.sessions} buổi học + ${item.bufferSessions} buổi dự phòng · Kết thúc ${formatDate(item.end)}.`}
+    function openEdit(key){const item=classes.find(i=>itemKey(i)===key);if(!item)return;openModal("single");editingKey=key;document.getElementById("modalTitle").textContent=`Sửa lớp ${item.code}`;document.getElementById("singleCode").value=item.code;document.getElementById("singleCode").readOnly=true;document.getElementById("singleProgram").value=item.program;document.getElementById("singleSessions").value=item.sessions;document.getElementById("singleBuffer").value=String(item.bufferSessions||2);document.getElementById("singleDays").value=item.days.join(",");document.getElementById("singleTime").value=item.time;document.getElementById("singlePlanMode").value="manual";document.getElementById("continuationFields").classList.add("hidden");document.getElementById("singleStart").value=item.start;document.getElementById("singleFullFee").value=item.fullFee;document.getElementById("singlePromoFee").value=item.promoFee;document.getElementById("singleDeadline").value=item.deadline||"";document.getElementById("singleStudents").value=item.students;document.getElementById("singleCapacity").value=item.capacity;document.getElementById("singleSaveBtn").textContent="Lưu thay đổi";updateSingleResult()}
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Học phí ưu đãi</label>
-                        <input type="text" id="inputFeePromo" class="form-control" placeholder="VD: 4.000.000" required oninput="formatCurrency(this)">
-                    </div>
-                    <div class="form-group">
-                        <label>Học phí gốc</label>
-                        <input type="text" id="inputFeeOriginal" class="form-control" placeholder="VD: 5.000.000" oninput="formatCurrency(this)">
-                    </div>
-                </div>
+    function prepareBatch(){batchSources=classes.filter(i=>i.teacher===currentTeacher&&statusOf(i)==="running").sort((a,b)=>a.end.localeCompare(b.end)).slice(0,3);document.getElementById("batchBuffer").value="2";renderBatchRows()}
+    function renderBatchRows(){const codes=nextCodes(3),bufferSessions=Math.min(3,Math.max(2,Number(document.getElementById("batchBuffer").value||2))),tbody=document.getElementById("batchRows");tbody.innerHTML=batchSources.map((source,index)=>{const start=suggestedStart(source.end,source.days,1),end=calculateEnd(start,source.days,source.sessions+bufferSessions);return`<tr data-source="${itemKey(source)}"><td><strong>${source.code}</strong><span class="sub">Kết thúc ${formatDate(source.end)}</span></td><td><input class="control batch-code" value="${codes[index]||""}"></td><td><strong>${source.dayLabel}</strong><span class="sub">${source.time}</span></td><td><input type="date" class="control batch-start" value="${start}"></td><td class="batch-end date-strong">${formatDate(end)}</td></tr>`}).join("");updateBatchResult()}
+    function readBatch(){const bufferSessions=Math.min(3,Math.max(2,Number(document.getElementById("batchBuffer").value||2)));return[...document.querySelectorAll("#batchRows tr")].map(row=>{const source=classes.find(i=>itemKey(i)===row.dataset.source),start=row.querySelector(".batch-start").value,plan=calculateTuitionPlan(start,source.promoFee,source.fullFee);return{...source,code:row.querySelector(".batch-code").value.trim(),bufferSessions,start,end:calculateEnd(start,source.days,source.sessions+bufferSessions),deadline:plan?plan.earlyIso:"",students:0}})}
+    function batchError(plan){if(plan.length<3)return"Chưa có đủ ba lớp để tạo lịch nối tiếp.";if(plan.some((item,index)=>!item.code||plan.findIndex(other=>other.code===item.code)!==index||classes.some(i=>i.teacher===item.teacher&&i.code===item.code)))return"Có mã lớp bị trống, trùng hoặc đã tồn tại.";if(plan.some(item=>!item.days.includes(toDate(item.start).getDay())))return"Có ngày khai giảng không đúng với thứ học.";for(let i=0;i<plan.length;i++){const existing=findConflict(plan[i]);if(existing)return`${plan[i].code} trùng ${existing.code}: ${existing.dayLabel}, ${existing.time}, từ ${formatDate(existing.start)} đến ${formatDate(existing.end)}.`;for(let j=i+1;j<plan.length;j++){if(conflictsWith(plan[i],plan[j]))return`${plan[i].code} trùng ${plan[j].code}: ${plan[i].dayLabel}, ${plan[i].time}.`}}return""}
+    function updateBatchResult(){const plan=readBatch();[...document.querySelectorAll("#batchRows tr")].forEach((row,index)=>{const item=plan[index];if(item)row.querySelector(".batch-end").textContent=formatDate(item.end)});const box=document.getElementById("batchResult"),error=batchError(plan);box.className="result-box"+(error?" error":"");box.textContent=error||`Hợp lệ · Cả ba lớp đã gồm ${plan[0]?.bufferSessions||2} buổi dự phòng.`}
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Số học viên hiện tại</label>
-                        <input type="number" id="inputCurrentStudents" class="form-control" value="0" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Tổng số Slot (Tối đa)</label>
-                        <input type="number" id="inputMaxSlots" class="form-control" value="15" min="1" required>
-                    </div>
-                </div>
+    function drawCanvas(){const t=teachers[currentTeacher],items=exportItems(),bach=currentTeacher==="bach",groups=bach?[items.filter(i=>i.program==="write"),items.filter(i=>i.program==="speak")].filter(g=>g.length):[items],height=Math.max(930,260+items.length*215+(bach?groups.length*145:150));const canvas=document.createElement("canvas");canvas.width=1500;canvas.height=height;const ctx=canvas.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle="#454548";ctx.textBaseline="top";const font='-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Arial, sans-serif';const draw=(text,x,y,size,weight=400)=>{ctx.font=`${weight} ${size}px ${font}`;ctx.fillText(text,x,y)};draw(`may(be)write. ${monthEnglish(exportMonth)}`,68,55,39,650);let y=116;if(!bach){draw(`${t.brand}. ${t.course}`,68,y,32,650);y+=54;draw(`GV đứng lớp: ${t.name} (${t.scoreExport})`,68,y,31,400);y+=90;groups.forEach(group=>{group.forEach(item=>{draw("•",88,y,33,650);draw(`${item.code} (${item.dayLabel}) ${item.time}`,130,y,33,650);draw(`◦   Còn lại ${remaining(item)}/${item.capacity} vị trí`,146,y+59,30);draw(`◦   Khai giảng ${formatDate(item.start)} - Kết thúc ${formatDate(item.end)}`,146,y+108,30);y+=205});const i=group[0];draw(`Học phí: ${i.fullFee} - Còn ${i.promoFee}${i.deadline?` khi đăng ký trước ${formatDate(i.deadline)}`:" khi đăng ký sớm"}`,68,y,30,600);y+=75})}else{draw(`GV đứng lớp: ${t.name} (${t.scoreExport})`,68,y,31);y+=75;groups.forEach(group=>{const write=group[0].program==="write";if(write){draw("may(be)write.",68,y,32,650);y+=48}draw(write?t.course:t.speakCourse,68,y,32,650);y+=65;group.forEach(item=>{draw("•",88,y,33,650);draw(`${item.code} (${item.dayLabel}) ${item.time}`,130,y,33,650);draw(`◦   Còn lại ${remaining(item)}/${item.capacity} vị trí`,146,y+58,30);draw(`◦   Khai giảng ${formatDate(item.start)} - Kết thúc ${formatDate(item.end)}`,146,y+107,30);y+=203});const i=group[0];draw(`Học phí: ${i.fullFee} - Còn ${i.promoFee}${i.deadline?` khi đăng ký trước ${formatDate(i.deadline)}`:""}`,68,y,30,600);y+=86})}return canvas}
+    function downloadImage(){const canvas=drawCanvas(),a=document.createElement("a");a.download=`lich-${currentTeacher}-${exportMonth}.png`;a.href=canvas.toDataURL("image/png");a.click();showToast("Đã tải ảnh PNG.")}
+    async function copyImage(){try{const canvas=drawCanvas(),blob=await new Promise(resolve=>canvas.toBlob(resolve,"image/png"));if(!navigator.clipboard||typeof ClipboardItem==="undefined")throw new Error();await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);showToast("Đã sao chép ảnh.")}catch{downloadImage();showToast("Trình duyệt chưa cho sao chép; ảnh đã được tải xuống.")}}
 
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeModal()">Hủy bỏ</button>
-                    <button type="submit" class="btn-save">Lưu thông tin</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyBZAXmm893kl4QA4rFwiDcVCMRTz4hXbMVCr-tkIVV6tm1NNWTQOGndH8jrbPgSylh/exec';
-        
-        let allClassData = []; 
-        let currentEditMode = false;
-        let currentEditClassId = "";
-        let selectedTeacherOrder = []; // Mảng lưu thứ tự chọn chính xác theo thời gian click
-
-        // Ghi nhận thứ tự click Checkbox giáo viên
-        document.querySelectorAll('#teacherList input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener('change', function() {
-                if(this.checked) {
-                    selectedTeacherOrder.push(this.value); // Thêm vào cuối mảng (người chọn sau xếp sau)
-                } else {
-                    selectedTeacherOrder = selectedTeacherOrder.filter(t => t !== this.value); // Xóa khỏi mảng
-                }
-            });
-        });
-
-        // --- LOGIN/LOGOUT SYSTEM ---
-        window.onload = function() {
-            if (localStorage.getItem('isAdminLoggedIn') === 'true') { showDashboard(); }
-        };
-        function handleLogin(e) {
-            e.preventDefault();
-            if(document.getElementById('loginEmail').value === 'admin@maybeielts.com' && document.getElementById('loginPass').value === '123456'){
-                localStorage.setItem('isAdminLoggedIn', 'true');
-                showDashboard();
-            } else { alert("Sai tài khoản hoặc mật khẩu!"); }
-        }
-        function handleLogout() {
-            localStorage.removeItem('isAdminLoggedIn');
-            document.getElementById('login-screen').style.display = 'flex';
-            document.getElementById('admin-dashboard').style.display = 'none';
-        }
-        function showDashboard() {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('admin-dashboard').style.display = 'block';
-            loadClasses();
-        }
-
-        // --- FORMAT TIỀN TỆ ---
-        function formatCurrency(input) {
-            let val = input.value.replace(/\D/g, ''); 
-            input.value = val !== "" ? new Intl.NumberFormat('vi-VN').format(val) : "";
-        }
-
-        // --- CHUYỂN ĐỔI CHẾ ĐỘ FORM ---
-        function toggleMode() {
-            const isBatch = document.getElementById('modeSelect').value === 'batch';
-            document.getElementById('singleTeacher').style.display = isBatch ? 'none' : 'block';
-            document.getElementById('batchTeacher').style.display = isBatch ? 'block' : 'none';
-            document.getElementById('batchStartNumBox').style.display = isBatch ? 'flex' : 'none';
-            
-            // Cấu hình ô Số hiệu mã lớp
-            document.getElementById('inputSuffix').disabled = isBatch;
-            document.getElementById('inputSuffix').placeholder = isBatch ? "Tự tăng theo bộ" : "Số hiệu (VD: 78)";
-            document.getElementById('inputSuffix').required = !isBatch;
-        }
-
-        // --- TẢI DỮ LIỆU BAN ĐẦU ---
-        function loadClasses() {
-            const tbody = document.getElementById('classTableBody');
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px;"><i class="fa-solid fa-spinner fa-spin"></i> Đang tải dữ liệu từ Google Sheet...</td></tr>';
-            
-            fetch(API_URL).then(res => res.json()).then(result => {
-                if(result.status === "success") {
-                    allClassData = result.data;
-                    renderTable(allClassData);
-                }
-            }).catch(e => { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color: red;">Lỗi kết nối API.</td></tr>'; });
-        }
-
-        function renderTable(data) {
-            const tbody = document.getElementById('classTableBody');
-            tbody.innerHTML = '';
-            document.getElementById('cbSelectAll').checked = false;
-            toggleDeleteMassBtn();
-
-            if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">Chưa có lớp học nào.</td></tr>'; return; }
-
-            data.forEach(row => {
-                let slotsLeft = row.TongSlot - row.HocVien;
-                let slotStatus = slotsLeft <= 5 ? "low" : "ok";
-                tbody.innerHTML += `
-                    <tr>
-                        <td class="col-cb class="cb-container""><div class="cb-container"><input type="checkbox" class="row-checkbox" value="${row.MaLop}" onchange="toggleDeleteMassBtn()"></div></td>
-                        <td class="col-gv"><strong>${row.GiangVien}</strong></td>
-                        <td class="col-ml">${row.MaLop}</td>
-                        <td class="col-lh">${row.LichHoc}</td>
-                        <td class="col-kg">${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
-                        <td class="col-hp"><span class="fee-tag">${row.HocPhiUuDai}</span><span class="fee-note">Gốc: ${row.HocPhiGoc}</span></td>
-                        <td class="col-sl"><span class="status-badge ${slotStatus}">Còn ${slotsLeft}/${row.TongSlot}</span></td>
-                        <td class="col-tt">
-                            <button class="action-btn edit-btn" onclick="editClass('${row.MaLop}')"><i class="fa-solid fa-pen"></i></button>
-                        </td>
-                    </tr>`;
-            });
-        }
-
-        // --- XỬ LÝ MASS DELETE CHECKBOX ---
-        function toggleSelectAll() {
-            const isChecked = document.getElementById('cbSelectAll').checked;
-            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = isChecked);
-            toggleDeleteMassBtn();
-        }
-        function toggleDeleteMassBtn() {
-            const anyChecked = Array.from(document.querySelectorAll('.row-checkbox')).some(cb => cb.checked);
-            document.getElementById('btnDeleteMass').style.display = anyChecked ? 'inline-block' : 'none';
-        }
-
-        // --- OPTIMISTIC MASS DELETE (Xóa lập tức trên giao diện) ---
-        function deleteSelectedClasses() {
-            const selected = Array.from(document.querySelectorAll('.row-checkbox:checked')).map(cb => cb.value);
-            if(selected.length === 0) return;
-            
-            if(confirm(`Xác nhận XÓA ${selected.length} lớp đã chọn?`)) {
-                // 🚀 TĂNG TỐC: Xóa ngay lập tức trên UI trước để không cần chờ đợi load lại
-                allClassData = allClassData.filter(item => !selected.includes(item.MaLop));
-                renderTable(allClassData);
-
-                // Chạy ngầm gửi lệnh lên Server Google Sheet
-                fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "BATCH_DELETE", data: selected })
-                });
-            }
-        }
-
-        // --- THÊM / SỬA MODAL CONTROL ---
-        const modal = document.getElementById('classModal');
-        function openModal() {
-            modal.style.display = 'flex';
-            document.getElementById('modalTitle').innerText = 'Thêm Lớp Mới';
-            document.getElementById('classForm').reset();
-            currentEditMode = false;
-            currentEditClassId = "";
-            selectedTeacherOrder = [];
-            document.getElementById('modeSelect').disabled = false;
-            document.getElementById('modeSelect').value = 'single';
-            document.getElementById('inputPrefix').disabled = false;
-            document.querySelectorAll('#teacherList input').forEach(cb => cb.checked = false);
-            toggleMode();
-        }
-
-        function convertDateForInput(shortDate) {
-            if(!shortDate) return "";
-            let parts = shortDate.split('.');
-            return parts.length === 2 ? `${new Date().getFullYear()}-${parts[1]}-${parts[0]}` : "";
-        }
-
-        function editClass(maLop) {
-            const row = allClassData.find(item => item.MaLop === maLop);
-            if(!row) return;
-
-            modal.style.display = 'flex';
-            document.getElementById('modalTitle').innerText = 'Chỉnh sửa Lớp: ' + maLop;
-            currentEditMode = true;
-            currentEditClassId = row.MaLop;
-
-            document.getElementById('modeSelect').value = 'single';
-            document.getElementById('modeSelect').disabled = true;
-            toggleMode();
-
-            document.getElementById('singleTeacherSelect').value = row.GiangVien;
-            const classCodeParts = String(row.MaLop).match(/^([a-zA-Z]+)(.*)$/);
-            document.getElementById('inputPrefix').value = classCodeParts ? classCodeParts[1] : '';
-            document.getElementById('inputSuffix').value = classCodeParts ? classCodeParts[2] : row.MaLop;
-            
-            document.getElementById('inputPrefix').disabled = true; 
-            document.getElementById('inputSuffix').disabled = true;
-
-            let lich = row.LichHoc.split(" (");
-            document.getElementById('inputDays').value = lich[0];
-            document.getElementById('inputTime').value = lich[1].replace(")", "");
-
-            document.getElementById('inputStart').value = convertDateForInput(row.KhaiGiang);
-            document.getElementById('inputEnd').value = convertDateForInput(row.KetThuc);
-            document.getElementById('inputFeePromo').value = row.HocPhiUuDai.replace('đ', '');
-            document.getElementById('inputFeeOriginal').value = row.HocPhiGoc.replace('đ', '');
-            document.getElementById('inputCurrentStudents').value = row.HocVien;
-            document.getElementById('inputMaxSlots').value = row.TongSlot;
-        }
-
-        function closeModal() { modal.style.display = 'none'; }
-
-        // --- OPTIMISTIC SAVE & BATCH ADD (Lưu và cập nhật bảng tức thì) ---
-        function saveClass(e) {
-            e.preventDefault();
-            
-            const formatShortDate = (dateStr) => {
-                if(!dateStr) return "";
-                const parts = dateStr.split('-');
-                return `${parts[2]}.${parts[1]}`;
-            };
-            const formatFeeToSave = (val) => {
-                if(!val) return "";
-                return val.includes("đ") ? val : val + "đ";
-            };
-
-            const baseData = {
-                LichHoc: document.getElementById('inputDays').value + " (" + document.getElementById('inputTime').value + ")",
-                KhaiGiang: formatShortDate(document.getElementById('inputStart').value),
-                KetThuc: formatShortDate(document.getElementById('inputEnd').value),
-                HocPhiUuDai: formatFeeToSave(document.getElementById('inputFeePromo').value),
-                HocPhiGoc: formatFeeToSave(document.getElementById('inputFeeOriginal').value),
-                HocVien: document.getElementById('inputCurrentStudents').value,
-                TongSlot: document.getElementById('inputMaxSlots').value
-            };
-
-            const isBatch = document.getElementById('modeSelect').value === 'batch';
-            const prefix = document.getElementById('inputPrefix').value;
-            
-            let payloadAction = currentEditMode ? "EDIT" : "BATCH_ADD";
-            let localNewClasses = []; // Mảng tạm để cập nhật giao diện ngay lập tức
-
-            if (currentEditMode) {
-                // CHẾ ĐỘ SỬA
-                const updatedClass = {
-                    ...baseData,
-                    GiangVien: document.getElementById('singleTeacherSelect').value,
-                    // Khi chỉnh sửa phải giữ nguyên toàn bộ mã gốc, kể cả ký tự đặc biệt như dấu "+".
-                    MaLop: currentEditClassId
-                };
-                
-                // 🚀 TĂNG TỐC: Cập nhật biến dữ liệu cục bộ và vẽ lại bảng ngay tức khắc
-                allClassData = allClassData.map(item => item.MaLop === updatedClass.MaLop ? updatedClass : item);
-                renderTable(allClassData);
-                closeModal();
-
-                // Gửi lệnh đồng bộ và kiểm tra phản hồi để không còn tình trạng lưu lỗi nhưng không báo.
-                fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: payloadAction, data: updatedClass })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    return response.json();
-                })
-                .then(result => {
-                    const saved = result && (result.status === "success" || result.success === true);
-                    if (!saved) throw new Error((result && result.message) || "Google Apps Script không xác nhận lưu thành công");
-                    loadClasses();
-                })
-                .catch(error => {
-                    console.error("Lỗi cập nhật lớp:", error);
-                    alert("Không thể lưu thay đổi lên Google Sheet. Dữ liệu sẽ được tải lại để tránh hiển thị sai.");
-                    loadClasses();
-                });
-            } else {
-                // CHẾ ĐỘ THÊM MỚI
-                if (!isBatch) {
-                    localNewClasses.push({
-                        ...baseData,
-                        GiangVien: document.getElementById('singleTeacherSelect').value,
-                        MaLop: prefix + document.getElementById('inputSuffix').value
-                    });
-                } else {
-                    if (selectedTeacherOrder.length === 0) { alert("Vui lòng tick chọn ít nhất 1 giảng viên!"); return; }
-                    
-                    const batchCount = parseInt(document.getElementById('batchCount').value || 1);
-                    // Lấy số hiệu bắt đầu từ ô nhập liệu do người dùng cấu hình
-                    let runningNumber = parseInt(document.getElementById('inputBatchStartNum').value || 100);
-
-                    // Quét danh sách giáo viên tuân thủ ĐÚNG thứ tự mà bạn đã tick chọn
-                    selectedTeacherOrder.forEach(teacherName => {
-                        for(let i = 0; i < batchCount; i++) {
-                            localNewClasses.push({
-                                ...baseData,
-                                GiangVien: teacherName,
-                                MaLop: prefix + runningNumber
-                            });
-                            runningNumber++;
-                        }
-                    });
-                }
-
-                // 🚀 TĂNG TỐC: Gộp dữ liệu mới vào bảng và hiển thị lập tức lên màn hình
-                allClassData = [...allClassData, ...localNewClasses];
-                renderTable(allClassData);
-                closeModal();
-
-                // Gửi lệnh ngầm đồng bộ lên Google Sheet
-                fetch(API_URL, { method: 'POST', body: JSON.stringify({ action: payloadAction, data: localNewClasses }) });
-            }
-        }
-
-        window.onclick = function(event) { if (event.target == modal) closeModal(); }
-    </script>
+    document.querySelectorAll(".list-tab").forEach(btn=>btn.onclick=()=>{viewMode=btn.dataset.view;render()});
+    document.getElementById("addSingleBtn").onclick=()=>openModal("single");document.getElementById("addBatchBtn").onclick=()=>openModal("batch");document.getElementById("closeModal").onclick=closeModal;document.querySelectorAll(".cancelModal").forEach(btn=>btn.onclick=closeModal);document.getElementById("classModal").onclick=e=>{if(e.target.id==="classModal")closeModal()};
+    document.getElementById("singlePlanMode").onchange=updatePlanning;document.getElementById("singleSource").onchange=updatePlanning;document.getElementById("singleProgram").onchange=()=>{document.getElementById("singleSessions").value=document.getElementById("singleProgram").value==="speak"?6:15;updateSingleResult()};
+    ["singleCode","singleSessions","singleBuffer","singleDays","singleTime","singleStart","singleFullFee","singlePromoFee","singleDeadline","singleStudents","singleCapacity"].forEach(id=>document.getElementById(id).addEventListener("input",()=>{if(["singleDays","singleTime"].includes(id)&&document.getElementById("singlePlanMode").value==="after")updatePlanning();else updateSingleResult()}));
+    document.getElementById("singleForm").onsubmit=e=>{e.preventDefault();const item=readSingle(),error=singleError(item);if(error){updateSingleResult();return}if(editingKey)classes=classes.map(i=>itemKey(i)===editingKey?item:i);else classes.push(item);saveClasses();exportMonth=item.start.slice(0,7);closeModal();render();showToast(editingKey?"Đã lưu thay đổi.":"Đã thêm lớp mới.")};
+    document.getElementById("batchBuffer").onchange=renderBatchRows;document.getElementById("batchRows").addEventListener("input",updateBatchResult);document.getElementById("batchForm").onsubmit=e=>{e.preventDefault();const plan=readBatch(),error=batchError(plan);if(error){updateBatchResult();return}classes.push(...plan);saveClasses();exportMonth=plan[0].start.slice(0,7);viewMode="upcoming";closeModal();render();document.getElementById("imageSection").scrollIntoView({behavior:"smooth"});showToast("Đã tạo ba lớp mới.")};
+    document.getElementById("exportMonth").onchange=e=>{exportMonth=e.target.value;renderSchedule()};document.getElementById("downloadImageBtn").onclick=downloadImage;document.getElementById("copyImageBtn").onclick=copyImage;document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});render();
+  </script>
 </body>
 </html>
