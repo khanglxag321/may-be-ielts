@@ -334,6 +334,55 @@ html, body {
 
         /* Schedule Section */
         #schedule { background-color: var(--bg-primary); }
+        .schedule-filter-shell {
+            margin: 0 0 38px;
+            padding: 18px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.025);
+        }
+        .schedule-filter-label {
+            display: block;
+            margin-bottom: 11px;
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .schedule-filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+        .schedule-filter-button {
+            min-height: 44px;
+            padding: 0 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--text-main);
+            font: inherit;
+            font-size: .92rem;
+            font-weight: 750;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+        }
+        .schedule-filter-button:hover { border-color: #a8a8ad; transform: translateY(-1px); }
+        .schedule-filter-button:focus-visible { outline: 3px solid rgba(201,31,31,.2); outline-offset: 2px; }
+        .schedule-filter-button.active {
+            background: var(--bg-dark);
+            border-color: var(--bg-dark);
+            color: #fff;
+        }
+        .schedule-filter-result {
+            margin: 12px 2px 0;
+            color: var(--text-muted);
+            font-size: .86rem;
+            font-weight: 600;
+        }
         .schedule-category { margin-bottom: 60px; }
         .schedule-category:last-child { margin-bottom: 0; }
         .category-header { font-size: 1.75rem; font-weight: 800; margin-bottom: 24px; color: var(--text-main); border-left: 4px solid var(--text-main); padding-left: 16px; }
@@ -825,6 +874,27 @@ footer p {
 .container {
     padding: 0 12px;
 }
+
+    .schedule-filter-shell {
+        margin-right: -12px;
+        margin-left: -12px;
+        padding: 15px 12px;
+        border-right: 0;
+        border-left: 0;
+        border-radius: 0;
+    }
+
+    .schedule-filter-buttons {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 2px 1px 8px;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .schedule-filter-buttons::-webkit-scrollbar { display: none; }
+    .schedule-filter-button { flex: 0 0 auto; scroll-snap-align: start; }
 
 
 .lecturer-row {
@@ -1357,8 +1427,19 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <div class="container">
             <h2 class="section-title">Lịch khai giảng & Lớp đang mở</h2>
             <p class="section-subtitle">Thông tin chi tiết về lịch học, thời gian khai giảng và số lượng vị trí còn trống.</p>
+
+            <div class="schedule-filter-shell" aria-label="Bộ lọc lịch khai giảng theo giáo viên">
+                <span class="schedule-filter-label">Chọn giáo viên</span>
+                <div class="schedule-filter-buttons" id="scheduleTeacherFilter" role="group" aria-label="Chọn giáo viên muốn xem">
+                    <button class="schedule-filter-button active" type="button" data-teacher-filter="all" aria-pressed="true">Tất cả giáo viên</button>
+                    <button class="schedule-filter-button" type="button" data-teacher-filter="khang" aria-pressed="false">Gia Khang</button>
+                    <button class="schedule-filter-button" type="button" data-teacher-filter="nhi" aria-pressed="false">Tuệ Nhi</button>
+                    <button class="schedule-filter-button" type="button" data-teacher-filter="bach" aria-pressed="false">Hồ Bách</button>
+                </div>
+                <p class="schedule-filter-result" id="scheduleFilterResult" aria-live="polite">Đang tải lịch khai giảng…</p>
+            </div>
             
-            <div class="schedule-category">
+            <div class="schedule-category" data-schedule-category="foundation">
                 <h3 class="category-header">Writing 5.0-5.5 → 7.0+ (Gia Khang & Tuệ Nhi)</h3>
                 <div class="table-responsive">
                     <table>
@@ -1379,7 +1460,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 </div>
             </div>
 
-            <div class="schedule-category">
+            <div class="schedule-category" data-schedule-category="master-write">
                 <h3 class="category-header">Master Writing 6.5 → 7.5+ (Hồ Bách)</h3>
                 <div class="table-responsive">
                     <table>
@@ -1400,7 +1481,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 </div>
             </div>
 
-            <div class="schedule-category">
+            <div class="schedule-category" data-schedule-category="speaking">
                 <h3 class="category-header">Speaking 5.5 → 7.0+ (Hồ Bách)</h3>
                 <div class="table-responsive">
                     <table>
@@ -1979,6 +2060,8 @@ function toggleContact(){
 
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyBZAXmm893kl4QA4rFwiDcVCMRTz4hXbMVCr-tkIVV6tm1NNWTQOGndH8jrbPgSylh/exec'; // Điền link thật của bạn vào đây
+    let publicScheduleRows = [];
+    let activeScheduleTeacher = "all";
 
     async function loadPublicSchedule() {
         try {
@@ -1989,7 +2072,8 @@ function toggleContact(){
             const result = await response.json();
             
             if (result.status === "success") {
-                renderPublicTables(filterClassesForCurrentMonth(result.data));
+                publicScheduleRows = filterClassesForCurrentMonth(result.data);
+                renderFilteredPublicSchedule();
             } else {
                 throw new Error(result.message || "Apps Script không trả về dữ liệu hợp lệ");
             }
@@ -2071,6 +2155,67 @@ function toggleContact(){
             return openingDate &&
                 openingDate.getUTCFullYear() === current.year &&
                 openingDate.getUTCMonth() + 1 === current.month;
+        });
+    }
+
+    function teacherFilterKey(value) {
+        const name = String(value || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+
+        if (name.includes("khang")) return "khang";
+        if (name.includes("nhi")) return "nhi";
+        if (name.includes("bach")) return "bach";
+        return "other";
+    }
+
+    function publicClassNumber(value) {
+        const matches = String(value || "").match(/\d+/g);
+        return matches ? Number(matches[matches.length - 1]) : Number.MAX_SAFE_INTEGER;
+    }
+
+    function comparePublicClasses(a, b) {
+        const dateA = parseScheduleDate(a.KhaiGiang)?.getTime() || Number.MAX_SAFE_INTEGER;
+        const dateB = parseScheduleDate(b.KhaiGiang)?.getTime() || Number.MAX_SAFE_INTEGER;
+        return dateA - dateB ||
+            String(a.GiangVien || "").localeCompare(String(b.GiangVien || ""), "vi") ||
+            String(a.LichHoc || "").localeCompare(String(b.LichHoc || ""), "vi", { numeric: true }) ||
+            publicClassNumber(a.MaLop) - publicClassNumber(b.MaLop);
+    }
+
+    function teacherFilterLabel(key) {
+        return ({ all: "Tất cả giáo viên", khang: "Gia Khang", nhi: "Tuệ Nhi", bach: "Hồ Bách" })[key] || "Giáo viên";
+    }
+
+    function renderFilteredPublicSchedule() {
+        const filtered = publicScheduleRows
+            .filter(row => activeScheduleTeacher === "all" || teacherFilterKey(row.GiangVien) === activeScheduleTeacher)
+            .sort(comparePublicClasses);
+
+        renderPublicTables(filtered);
+
+        document.querySelectorAll("[data-teacher-filter]").forEach(button => {
+            const active = button.dataset.teacherFilter === activeScheduleTeacher;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
+
+        const current = currentMonthInVietnam();
+        const result = document.getElementById("scheduleFilterResult");
+        if (result) {
+            result.textContent = filtered.length
+                ? `Đang hiển thị ${filtered.length} lớp khai giảng tháng ${current.month} · ${teacherFilterLabel(activeScheduleTeacher)}`
+                : `Chưa có lớp khai giảng tháng ${current.month} của ${teacherFilterLabel(activeScheduleTeacher)}.`;
+        }
+    }
+
+    function initScheduleTeacherFilter() {
+        document.querySelectorAll("[data-teacher-filter]").forEach(button => {
+            button.addEventListener("click", () => {
+                activeScheduleTeacher = button.dataset.teacherFilter || "all";
+                renderFilteredPublicSchedule();
+            });
         });
     }
 
@@ -2310,6 +2455,7 @@ if(courseSelect){
         const tbFoundation = document.getElementById('tbody-foundation');
         const tbMasterWrite = document.getElementById('tbody-master-write');
         const tbSpeaking = document.getElementById('tbody-speaking');
+        const categoryCounts = { foundation: 0, "master-write": 0, speaking: 0 };
         
         // Làm trống các bảng trước khi bơm dữ liệu mới
         tbFoundation.innerHTML = '';
@@ -2357,12 +2503,15 @@ if(courseSelect){
                 // Nếu là lớp Writing
                 if (row.GiangVien.includes('Bách')) {
                     tbMasterWrite.innerHTML += trHTML;
+                    categoryCounts["master-write"]++;
                 } else {
                     tbFoundation.innerHTML += trHTML; // Lớp của Khang & Nhi
+                    categoryCounts.foundation++;
                 }
             } else if (row.MaLop.startsWith('MBSpeak')) {
                 // Nếu là lớp Speaking
                 tbSpeaking.innerHTML += trHTML;
+                categoryCounts.speaking++;
             }
         });
 
@@ -2370,10 +2519,17 @@ if(courseSelect){
         if (tbFoundation.innerHTML === '') tbFoundation.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
         if (tbMasterWrite.innerHTML === '') tbMasterWrite.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
         if (tbSpeaking.innerHTML === '') tbSpeaking.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
+
+        document.querySelectorAll('[data-schedule-category]').forEach(section => {
+            section.hidden = categoryCounts[section.dataset.scheduleCategory] === 0;
+        });
     }
 
     // Tự động chạy khi website vừa load xong
-    document.addEventListener("DOMContentLoaded", loadPublicSchedule);
+    document.addEventListener("DOMContentLoaded", () => {
+        initScheduleTeacherFilter();
+        loadPublicSchedule();
+    });
 </script>
 
 <script>
