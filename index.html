@@ -1982,11 +1982,16 @@ function toggleContact(){
 
     async function loadPublicSchedule() {
         try {
-            const response = await fetch(API_URL);
+            const response = await fetch(`${API_URL}?t=${Date.now()}`, {
+                cache: "no-store"
+            });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const result = await response.json();
             
             if (result.status === "success") {
                 renderPublicTables(result.data);
+            } else {
+                throw new Error(result.message || "Apps Script không trả về dữ liệu hợp lệ");
             }
         } catch (error) {
             console.error("Lỗi tải dữ liệu:", error);
