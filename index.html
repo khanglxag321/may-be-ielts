@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/audio/bee-01-hero.mp3" as="audio" type="audio/mpeg">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -1218,16 +1219,16 @@ header {
 .logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     color: var(--navy-900);
-    font-size: 1.35rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 
 .logo-mark {
-    width: 32px;
-    height: 32px;
-    flex: 0 0 32px;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
     filter: drop-shadow(0 6px 10px rgba(44, 107, 255, .16));
 }
 
@@ -1334,15 +1335,22 @@ header {
 
 .brand-hero-mascot {
     position: absolute;
-    right: max(3vw, 24px);
-    bottom: 7%;
+    right: max(2vw, 18px);
+    bottom: 5%;
     z-index: 1;
-    width: min(31vw, 390px);
+    display: block;
+    width: min(34vw, 520px);
     height: auto;
-    opacity: .88;
+    opacity: .92;
     pointer-events: none;
     filter: drop-shadow(0 36px 70px rgba(74, 139, 255, .38));
     animation: maybeFloat 6s ease-in-out infinite;
+}
+
+.logo-mark-handdrawn,
+.brand-hero-mascot-handdrawn {
+    object-fit: contain;
+    object-position: center;
 }
 
 .section-padding { position: relative; }
@@ -2095,7 +2103,7 @@ footer p { color: rgba(255,255,255,.48); }
 #register .submit-btn:hover { background: var(--white); border-color: var(--white); }
 
 @media (max-width: 1100px) {
-    .brand-hero-mascot { opacity: .34; right: -7%; width: min(43vw, 390px); }
+    .brand-hero-mascot { opacity: .38; right: -7%; width: min(46vw, 470px); }
     #lecturers .section-subtitle { margin-bottom: 20px; }
     .lecturer-mascot-stage {
         position: relative;
@@ -2134,10 +2142,10 @@ footer p { color: rgba(255,255,255,.48); }
 }
 
 @media (max-width: 768px) {
-    .logo { gap: 7px; font-size: 1.13rem; }
-    .logo-mark { width: 28px; height: 28px; flex-basis: 28px; }
+    .logo { gap: 7px; font-size: 1.2rem; }
+    .logo-mark { width: 40px; height: 40px; flex-basis: 40px; }
     .hero-title { font-size: clamp(3.1rem, 15vw, 4.7rem); }
-    .brand-hero-mascot { width: 68vw; right: -27%; bottom: 12%; opacity: .25; }
+    .brand-hero-mascot { width: 76vw; right: -28%; bottom: 10%; opacity: .24; }
     .section-title { font-size: clamp(2.25rem, 11vw, 3.4rem); }
     .section-padding { padding: 78px 0; }
     .feature-card, .teacher-recording-card, .hof-cat-card, .faq-item { border-radius: 18px; }
@@ -2383,10 +2391,12 @@ footer p { color: rgba(255,255,255,.48); }
     filter: blur(34px);
 }
 
-.register-brand-mascot svg {
+.register-brand-mascot svg,
+.register-brand-mascot img {
     position: relative;
     width: 100%;
     height: 100%;
+    object-fit: contain;
     filter: drop-shadow(0 30px 60px rgba(74,139,255,.4));
 }
 
@@ -2437,6 +2447,13 @@ footer.brand-footer {
 }
 
 .footer-brand-lockup svg { width: 52px; height: 52px; flex: 0 0 52px; }
+.footer-handdrawn-textmark {
+    width: 154px;
+    height: 56px;
+    object-fit: contain;
+    object-position: left center;
+}
+.footer-brand-lockup .footer-handdrawn-textmark + h4 { color: var(--white); font-size: 3rem; }
 .brand-footer .footer-brand h4 {
     margin: 0;
     font-family: 'Space Grotesk', sans-serif;
@@ -2501,6 +2518,795 @@ footer.brand-footer {
     .register-brand-mascot { animation: none; }
 }
 
+/* ================================================================
+   CONVERSION JOURNEY · contextual CTAs + Bee Study Buddy
+   ================================================================ */
+.cta-btn,
+.conversion-cta,
+.lecturer-conversion-link,
+.recording-conversion a,
+.bee-guide-cta,
+.submit-btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.cta-btn::after,
+.conversion-cta::after,
+.lecturer-conversion-link::after,
+.recording-conversion a::after,
+.bee-guide-cta::after,
+.submit-btn::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: -45%;
+    left: -28%;
+    width: 28%;
+    height: 190%;
+    background: rgba(255,255,255,.42);
+    transform: rotate(22deg) translateX(-180%);
+    transition: transform .62s cubic-bezier(.2,.75,.2,1);
+}
+
+.cta-btn:hover::after,
+.conversion-cta:hover::after,
+.lecturer-conversion-link:hover::after,
+.recording-conversion a:hover::after,
+.bee-guide-cta:hover::after,
+.submit-btn:hover::after {
+    transform: rotate(22deg) translateX(620%);
+}
+
+.conversion-band {
+    position: relative;
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr) auto;
+    gap: 26px;
+    align-items: center;
+    margin-top: 42px;
+    padding: 26px 28px;
+    border: 1px solid rgba(127,167,255,.26);
+    border-radius: 28px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 10% 30%, rgba(44,107,255,.34), transparent 30%),
+        rgba(255,255,255,.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 22px 52px rgba(3,8,28,.2);
+    backdrop-filter: blur(14px);
+}
+
+.conversion-band::after {
+    content: '';
+    position: absolute;
+    right: -55px;
+    bottom: -78px;
+    width: 180px;
+    height: 180px;
+    border: 1px solid rgba(255,216,77,.18);
+    border-radius: 50%;
+    box-shadow: 0 0 0 32px rgba(255,216,77,.025), 0 0 0 64px rgba(255,216,77,.018);
+    pointer-events: none;
+}
+
+.conversion-bee {
+    position: relative;
+    width: 82px;
+    height: 82px;
+    filter: drop-shadow(0 15px 24px rgba(44,107,255,.28));
+    animation: conversionBeeFloat 4.8s ease-in-out infinite;
+}
+
+.conversion-bee svg,
+.conversion-bee img { width: 100%; height: 100%; object-fit: contain; }
+.conversion-bee-mouth {
+    position: absolute;
+    left: 47%;
+    top: 59%;
+    width: 12%;
+    height: 8%;
+    border-bottom: 3px solid var(--navy-900);
+    border-radius: 0 0 999px 999px;
+}
+
+.conversion-kicker {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--yellow);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .66rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+}
+
+.conversion-copy h3 {
+    max-width: 690px;
+    margin: 0 0 8px;
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.35rem, 2vw, 1.9rem);
+    line-height: 1.16;
+    letter-spacing: -.035em;
+}
+
+.conversion-copy p {
+    max-width: 710px;
+    margin: 0;
+    color: #BAC9EE;
+    font-size: .9rem;
+    line-height: 1.65;
+}
+
+.conversion-cta {
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 52px;
+    padding: 13px 21px;
+    border-radius: 999px;
+    background: var(--yellow);
+    color: var(--navy-900);
+    box-shadow: 0 12px 28px rgba(255,216,77,.22);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .025em;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+
+.conversion-cta:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 18px 34px rgba(255,216,77,.28); }
+.conversion-cta i, .lecturer-conversion-link i, .bee-guide-cta i, .recording-conversion a i { transition: transform .25s ease; }
+.conversion-cta:hover i, .lecturer-conversion-link:hover i, .bee-guide-cta:hover i, .recording-conversion a:hover i { transform: translateX(4px); }
+
+@keyframes conversionBeeFloat {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+.lecturer-conversion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(15,27,76,.09);
+}
+
+.lecturer-row:nth-child(1) { --mentor-accent: var(--blue-500); }
+.lecturer-row:nth-child(2) { --mentor-accent: var(--coral); }
+.lecturer-row:nth-child(3) { --mentor-accent: #179174; }
+
+.lecturer-slot-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border: 1px solid rgba(255,216,77,.42);
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,216,77,.24), rgba(255,216,77,.08));
+    color: var(--navy-900);
+    font-size: .71rem;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.lecturer-slot-note::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: var(--mentor-accent, var(--blue-500));
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--mentor-accent, var(--blue-500)) 13%, transparent);
+    animation: conversionStatusPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes conversionStatusPulse {
+    0%, 100% { transform: scale(.9); opacity: .72; }
+    50% { transform: scale(1.14); opacity: 1; }
+}
+
+.lecturer-conversion-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 17px;
+    border: 1px solid color-mix(in srgb, var(--mentor-accent, var(--blue-500)) 28%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--mentor-accent, var(--blue-500)) 10%, #fff);
+    color: var(--mentor-accent, var(--blue-500));
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .67rem;
+    font-weight: 800;
+    line-height: 1.35;
+    text-align: center;
+    text-decoration: none;
+    transition: transform .24s ease, color .24s ease, background .24s ease, box-shadow .24s ease;
+}
+
+.lecturer-conversion-link:hover {
+    background: var(--mentor-accent, var(--blue-500));
+    color: #fff;
+    box-shadow: 0 13px 28px color-mix(in srgb, var(--mentor-accent, var(--blue-500)) 22%, transparent);
+    transform: translateY(-2px);
+}
+
+.recording-conversion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    margin-top: 20px;
+    padding: 17px 18px;
+    border: 1px solid rgba(44,107,255,.15);
+    border-radius: 17px;
+    background: var(--blue-50);
+}
+
+.recording-conversion > div { display: flex; flex-direction: column; gap: 3px; }
+.recording-conversion strong { color: var(--navy-900); font-family: 'Space Grotesk', sans-serif; font-size: 1rem; }
+.recording-conversion span { color: #69738B; font-size: .78rem; }
+.recording-conversion a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 0 0 auto;
+    padding: 11px 16px;
+    border-radius: 999px;
+    background: var(--blue-500);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .68rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+/* Bee Study Buddy */
+.bee-guide {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    right: auto;
+    bottom: auto;
+    width: 360px;
+    --bee-guide-x: calc(100vw - 382px);
+    --bee-guide-y: calc(100vh - 122px);
+    transform: translate3d(var(--bee-guide-x), var(--bee-guide-y), 0);
+    transition: transform .5s cubic-bezier(.2,.78,.2,1);
+    will-change: transform;
+    pointer-events: none;
+}
+
+.bee-guide-avatar,
+.bee-guide-panel,
+.bee-guide-prompt,
+.bee-guide-voice-toggle { pointer-events: auto; }
+
+.bee-guide-avatar:focus-visible,
+.bee-guide-voice-toggle:focus-visible,
+.bee-guide-close:focus-visible,
+.bee-guide-secondary:focus-visible,
+.bee-guide-cta:focus-visible,
+.conversion-cta:focus-visible,
+.lecturer-conversion-link:focus-visible,
+.recording-conversion a:focus-visible {
+    outline: 3px solid var(--yellow);
+    outline-offset: 3px;
+}
+
+.bee-guide-avatar {
+    position: relative;
+    display: block;
+    width: 92px;
+    height: 92px;
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    filter: drop-shadow(0 18px 28px rgba(15,27,76,.28));
+    animation: beeGuideFloat 4.4s ease-in-out infinite;
+    transform-origin: 50% 75%;
+}
+
+.bee-guide-avatar svg,
+.bee-guide-avatar img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    overflow: visible;
+}
+.bee-guide-avatar::before {
+    display: none;
+}
+
+.bee-guide-avatar::after {
+    content: '';
+    position: absolute;
+    z-index: -2;
+    inset: 4px;
+    border-radius: 31px;
+    background: rgba(44,107,255,.18);
+    animation: beeGuideAura 2.6s ease-out infinite;
+}
+
+.bee-guide-face { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
+.bee-guide-cloud {
+    position: absolute;
+    z-index: 0;
+    right: 2px;
+    bottom: -8px;
+    left: 2px;
+    height: 29px;
+    border: 1px solid rgba(44,107,255,.15);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fff, #EAF1FF);
+    box-shadow: 0 13px 24px rgba(15,27,76,.2);
+}
+.bee-guide-cloud::before,
+.bee-guide-cloud::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    border-radius: 50%;
+    background: inherit;
+}
+.bee-guide-cloud::before { left: 15px; width: 34px; height: 34px; }
+.bee-guide-cloud::after { right: 13px; width: 27px; height: 27px; }
+.bee-guide-lid {
+    position: absolute;
+    top: 43%;
+    width: 7%;
+    height: 17%;
+    border-radius: 999px;
+    background: #86ACFF;
+    transform: scaleY(0);
+    transform-origin: top;
+    animation: beeGuideBlink 5.2s ease-in-out infinite;
+}
+.bee-guide-lid-left { left: 41%; }
+.bee-guide-lid-right { left: 53%; }
+.bee-guide-cheek {
+    position: absolute;
+    top: 58%;
+    width: 9%;
+    height: 5%;
+    border-radius: 999px;
+    background: rgba(255,107,91,.62);
+    opacity: .95;
+}
+.bee-guide-cheek-left { left: 31%; transform: rotate(-8deg); }
+.bee-guide-cheek-right { right: 31%; transform: rotate(8deg); }
+.bee-guide-mouth {
+    position: absolute;
+    left: 45%;
+    top: 59%;
+    width: 12%;
+    height: 8%;
+    border-bottom: 3px solid var(--navy-900);
+    border-radius: 0 0 999px 999px;
+    transform-origin: center;
+    transition: all .26s ease;
+}
+
+.bee-guide[data-expression="curious"] .bee-guide-mouth {
+    left: 47%; width: 8%; height: 8%; border: 2px solid var(--navy-900); border-radius: 50%;
+}
+.bee-guide[data-expression="excited"] .bee-guide-mouth,
+.bee-guide[data-expression="celebrate"] .bee-guide-mouth {
+    left: 44%; top: 59%; width: 14%; height: 11%; border: 0; border-radius: 35% 35% 60% 60%; background: var(--navy-900);
+}
+.bee-guide[data-expression="excited"] .bee-guide-mouth::after,
+.bee-guide[data-expression="celebrate"] .bee-guide-mouth::after {
+    content: '';
+    position: absolute;
+    right: 18%;
+    bottom: 9%;
+    left: 18%;
+    height: 35%;
+    border-radius: 999px;
+    background: var(--coral);
+}
+.bee-guide[data-expression="focused"] .bee-guide-mouth {
+    top: 63%; height: 0; border-radius: 999px; border-bottom-width: 2px;
+}
+.bee-guide.is-talking .bee-guide-mouth { animation: beeGuideTalk .22s ease-in-out 4 alternate; }
+.bee-guide.is-speaking .bee-guide-mouth { animation: beeGuideVoiceTalk .28s ease-in-out infinite alternate; }
+
+.bee-guide-voice-toggle {
+    position: absolute;
+    z-index: 7;
+    top: -4px;
+    right: 72px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 9px 24px rgba(15,27,76,.22);
+    color: var(--navy-900);
+    cursor: pointer;
+    transition: transform .2s ease, background .2s ease, color .2s ease;
+}
+.bee-guide-voice-toggle:hover { transform: scale(1.08); }
+.bee-guide-voice-glyph { font-size: 16px; line-height: 1; }
+.bee-guide-voice-status {
+    position: absolute;
+    top: 0;
+    right: 40px;
+    display: none;
+    width: max-content;
+    padding: 7px 10px;
+    border: 1px solid rgba(15,27,76,.1);
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(15,27,76,.16);
+    color: var(--navy-900);
+    font-size: .62rem;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+    pointer-events: none;
+}
+.bee-guide[data-voice="blocked"] .bee-guide-voice-status { display: block; }
+.bee-guide[data-dock="left"] .bee-guide-voice-status { right: auto; left: 40px; }
+.bee-guide[data-dock="left"] .bee-guide-voice-toggle { right: auto; left: 72px; }
+.bee-guide[data-voice="muted"] .bee-guide-voice-toggle {
+    background: #fff;
+    color: #6F7898;
+}
+.bee-guide[data-voice="blocked"] .bee-guide-voice-toggle {
+    background: var(--coral);
+    color: #fff;
+    animation: beeVoiceNudge 1.8s ease-in-out infinite;
+}
+.bee-guide.is-speaking .bee-guide-voice-toggle {
+    background: var(--blue-500);
+    color: #fff;
+}
+
+.bee-guide-hand {
+    position: absolute;
+    z-index: 3;
+    right: -1px;
+    top: 47%;
+    width: 25px;
+    height: 15px;
+    border-radius: 5px 12px 12px 5px;
+    background: linear-gradient(90deg, #7FA7FF, #AFC7FF);
+    transform-origin: 3px 50%;
+    animation: beeGuideWave 3.8s ease-in-out infinite;
+}
+.bee-guide-spark {
+    position: absolute;
+    z-index: 4;
+    top: 3px;
+    right: 2px;
+    color: var(--yellow);
+    font-size: 20px;
+    text-shadow: 0 4px 14px rgba(255,216,77,.5);
+    animation: beeGuideSpark 2s ease-in-out infinite;
+}
+
+.bee-guide-panel {
+    position: absolute;
+    right: 0;
+    bottom: 103px;
+    width: 348px;
+    padding: 22px;
+    border: 1px solid rgba(127,167,255,.3);
+    border-radius: 24px 24px 7px 24px;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(44,107,255,.22), transparent 36%),
+        linear-gradient(150deg, rgba(15,27,76,.98), rgba(8,14,43,.98));
+    box-shadow: 0 24px 64px rgba(4,8,28,.32);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px) scale(.96);
+    transform-origin: 92% 100%;
+    transition: opacity .26s ease, visibility .26s ease, transform .32s cubic-bezier(.2,.75,.2,1);
+}
+
+.bee-guide.is-open .bee-guide-panel { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+.bee-guide[data-dock="left"] .bee-guide-avatar { margin-right: auto; margin-left: 0; }
+.bee-guide[data-dock="left"] .bee-guide-panel {
+    right: auto;
+    left: 0;
+    border-radius: 24px 24px 24px 7px;
+    transform-origin: 8% 100%;
+}
+.bee-guide[data-dock="left"] .bee-guide-prompt {
+    right: auto;
+    left: 83px;
+    border-radius: 15px 15px 15px 4px;
+}
+.bee-guide.is-targeting .bee-guide-prompt {
+    bottom: 98px;
+    max-width: 190px;
+}
+.bee-guide.is-targeting[data-dock="right"] .bee-guide-prompt { right: 0; }
+.bee-guide.is-targeting[data-dock="left"] .bee-guide-prompt { right: auto; left: 0; }
+.bee-guide.is-moving .bee-guide-avatar { animation: beeGuideGlide .9s cubic-bezier(.2,.8,.2,1), beeGuideFloat 4.4s .9s ease-in-out infinite; }
+.bee-guide.is-targeting .bee-guide-avatar {
+    filter: drop-shadow(0 18px 30px rgba(44,107,255,.4));
+}
+.bee-guide[data-panel="below"] .bee-guide-panel {
+    top: 103px;
+    bottom: auto;
+    transform: translateY(-14px) scale(.96);
+}
+.bee-guide[data-panel="below"].is-open .bee-guide-panel { transform: translateY(0) scale(1); }
+.bee-guide-pointer {
+    position: absolute;
+    z-index: 4;
+    top: 47%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--yellow);
+    box-shadow: 0 8px 22px rgba(255,216,77,.38);
+    color: var(--navy-900);
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 1;
+    animation: beeGuidePoint 1.1s ease-in-out infinite;
+}
+.bee-guide.is-targeting .bee-guide-pointer { display: flex; }
+.bee-guide[data-point="right"] .bee-guide-pointer { right: -25px; }
+.bee-guide[data-point="left"] .bee-guide-pointer { left: -25px; transform: scaleX(-1); }
+.bee-guide[data-point="down"] .bee-guide-pointer {
+    top: auto;
+    right: auto;
+    bottom: -23px;
+    left: 50%;
+    transform: translateX(-50%) rotate(90deg);
+}
+.bee-guide[data-point="up"] .bee-guide-pointer {
+    top: -23px;
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%) rotate(-90deg);
+}
+.bee-guide.is-targeting .bee-guide-hand { display: none; }
+.bee-focus-target {
+    outline: 2px solid rgba(44,107,255,.38);
+    outline-offset: 7px;
+    box-shadow: 0 20px 52px rgba(44,107,255,.13) !important;
+    transition: outline-color .3s ease, box-shadow .3s ease;
+}
+.bee-guide-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 31px;
+    height: 31px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+    color: #B8C6EC;
+    cursor: pointer;
+}
+.bee-guide-close:hover { background: rgba(255,255,255,.14); color: #fff; }
+.bee-guide-kicker {
+    display: block;
+    padding-right: 32px;
+    color: var(--yellow);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .14em;
+}
+.bee-guide-message {
+    min-height: 72px;
+    margin: 12px 0 17px;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.42;
+    letter-spacing: -.018em;
+}
+.bee-guide-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 999px;
+    background: var(--yellow);
+    color: var(--navy-900);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    font-weight: 800;
+    text-decoration: none;
+}
+.bee-guide-cta:hover { background: #fff; }
+.bee-guide-secondary {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    color: #AFC0EC;
+    font-size: .74rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+.bee-guide-secondary:hover { color: #fff; }
+.bee-guide-contacts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 7px;
+    margin-top: 9px;
+}
+.bee-guide-contacts[hidden] { display: none; }
+.bee-guide-contacts a {
+    padding: 8px 5px;
+    border: 1px solid rgba(127,167,255,.2);
+    border-radius: 999px;
+    background: rgba(255,255,255,.055);
+    color: #D8E2FF;
+    font-size: .66rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+.bee-guide-contacts a:hover { border-color: var(--yellow); color: var(--yellow); }
+
+.bee-guide-prompt {
+    position: absolute;
+    right: 83px;
+    bottom: 25px;
+    max-width: 235px;
+    padding: 10px 14px;
+    border: 1px solid rgba(44,107,255,.15);
+    border-radius: 15px 15px 4px 15px;
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 12px 32px rgba(15,27,76,.14);
+    color: var(--navy-900);
+    font-size: .75rem;
+    font-weight: 750;
+    line-height: 1.4;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity .22s ease, transform .22s ease, visibility .22s ease;
+}
+.bee-guide.is-typing .bee-guide-prompt::after {
+    content: '▍';
+    display: inline-block;
+    margin-left: 2px;
+    color: var(--blue-500);
+    animation: beeGuideCaret .72s steps(1) infinite;
+}
+.bee-guide.is-open .bee-guide-prompt { opacity: 0; visibility: hidden; transform: translateX(8px); }
+
+@keyframes beeGuideFloat {
+    0%, 100% { transform: translate3d(0,0,0) rotate(-3deg); }
+    28% { transform: translate3d(-8px,-5px,0) rotate(1deg); }
+    55% { transform: translate3d(7px,-10px,0) rotate(3deg); }
+    78% { transform: translate3d(3px,-3px,0) rotate(-1deg); }
+}
+@keyframes beeGuideGlide {
+    0% { transform: scale(.92) rotate(-8deg); }
+    45% { transform: scale(1.06) rotate(7deg); }
+    100% { transform: scale(1) rotate(-3deg); }
+}
+@keyframes beeGuidePoint {
+    0%, 100% { margin-inline: 0; }
+    50% { margin-inline: 7px; }
+}
+@keyframes beeGuideCaret {
+    0%, 48% { opacity: 1; }
+    49%, 100% { opacity: 0; }
+}
+@keyframes beeGuideAura {
+    0% { transform: scale(.9); opacity: .55; }
+    75%, 100% { transform: scale(1.2); opacity: 0; }
+}
+@keyframes beeGuideBlink {
+    0%, 43%, 47%, 100% { transform: scaleY(0); }
+    44%, 46% { transform: scaleY(1); }
+}
+@keyframes beeGuideWave {
+    0%, 72%, 100% { transform: rotate(4deg); }
+    78% { transform: rotate(-28deg); }
+    84% { transform: rotate(22deg); }
+    90% { transform: rotate(-18deg); }
+}
+@keyframes beeGuideSpark {
+    0%, 100% { transform: scale(.7) rotate(0); opacity: .45; }
+    50% { transform: scale(1.18) rotate(18deg); opacity: 1; }
+}
+@keyframes beeGuideTalk {
+    from { transform: scaleY(.55) scaleX(1.05); }
+    to { transform: scaleY(1.35) scaleX(.86); }
+}
+@keyframes beeGuideVoiceTalk {
+    from { transform: scaleY(.58) scaleX(1.08); }
+    to { transform: scaleY(1.42) scaleX(.82); }
+}
+@keyframes beeVoiceNudge {
+    0%, 100% { transform: scale(1); }
+    45% { transform: scale(1.12); }
+    60% { transform: scale(1.04); }
+}
+
+@media (max-width: 900px) {
+    .conversion-band { grid-template-columns: 78px 1fr; }
+    .conversion-bee { width: 70px; height: 70px; }
+    .conversion-cta { grid-column: 2; justify-self: start; }
+}
+
+@media (max-width: 680px) {
+    .hero-buttons .cta-btn { display: inline-flex; }
+    .conversion-band { grid-template-columns: 58px 1fr; gap: 16px; padding: 22px 18px; border-radius: 22px; }
+    .conversion-bee { width: 56px; height: 56px; }
+    .conversion-copy h3 { font-size: 1.25rem; }
+    .conversion-copy p { font-size: .84rem; }
+    .conversion-cta { grid-column: 1 / -1; width: 100%; }
+    .recording-conversion { align-items: stretch; flex-direction: column; }
+    .recording-conversion a { width: 100%; }
+    .lecturer-conversion { align-items: stretch; }
+    .bee-guide {
+        right: auto;
+        bottom: auto;
+        width: 78px;
+        --bee-guide-x: calc(100vw - 90px);
+        --bee-guide-y: calc(100vh - 90px);
+    }
+    .bee-guide-avatar { width: 78px; height: 78px; }
+    .bee-guide-voice-toggle { top: -2px; right: 58px; width: 32px; height: 32px; }
+    .bee-guide[data-dock="left"] .bee-guide-voice-toggle { right: auto; left: 58px; }
+    .bee-guide-panel { right: 0; bottom: 87px; width: min(348px, calc(100vw - 24px)); padding: 20px; }
+    .bee-guide[data-panel="below"] .bee-guide-panel { top: 87px; bottom: auto; }
+    .bee-guide-prompt { right: 70px; bottom: 18px; max-width: min(215px, calc(100vw - 112px)); }
+    .bee-guide[data-dock="left"] .bee-guide-prompt { left: 70px; right: auto; }
+    .bee-guide.is-targeting .bee-guide-prompt { bottom: 86px; max-width: min(175px, calc(100vw - 108px)); }
+    .bee-guide.is-targeting[data-dock="right"] .bee-guide-prompt { right: 0; left: auto; }
+    .bee-guide.is-targeting[data-dock="left"] .bee-guide-prompt { right: auto; left: 0; }
+    .bee-guide-message { min-height: 64px; font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bee-guide { transition: none !important; }
+    .conversion-bee,
+    .lecturer-slot-note::before,
+    .bee-guide-avatar,
+    .bee-guide-avatar::after,
+    .bee-guide-pointer,
+    .bee-guide.is-typing .bee-guide-prompt::after,
+    .bee-guide-lid,
+    .bee-guide-hand,
+    .bee-guide-spark,
+    .bee-guide.is-talking .bee-guide-mouth,
+    .bee-guide.is-speaking .bee-guide-mouth,
+    .bee-guide[data-voice="blocked"] .bee-guide-voice-toggle { animation: none !important; }
+}
+
 </style>
 </head>
 <body>
@@ -2539,7 +3345,7 @@ footer.brand-footer {
     <header>
         <div class="container nav-container">
             <a href="#" class="logo" aria-label="may(be)ielts. — Trang chủ">
-                <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg>
+                <img class="logo-mark logo-mark-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true">
                 <span><span class="logo-may">may</span><span class="logo-be">(be)ielts.</span></span>
             </a>
             <ul class="nav-links">
@@ -2561,14 +3367,14 @@ footer.brand-footer {
     <li><a href="#halloffame">Hall of Fame</a></li>
     <li><a href="#faq">FAQ</a></li>
     <li><a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1.</a></li>
-    <li><a href="#register">Đăng Ký Ngay</a></li>
+    <li><a href="#register">Nhận lộ trình 7.0+</a></li>
 </ul>
 
     <i class="fa-solid fa-bars"></i>
 </div>
 
 
-<a href="#register" class="cta-btn">Đăng Ký Ngay</a>
+<a href="#register" class="cta-btn">Nhận lộ trình 7.0+</a>
         </div>
     </header>
 
@@ -2582,7 +3388,7 @@ footer.brand-footer {
                 <a href="#recordings" class="btn-secondary" style="padding: 16px 32px; font-size: 1rem;">Xem lớp học thử</a>
             </div>
         </div>
-        <svg class="brand-hero-mascot" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#maybe-mark"/></svg>
+        <img class="brand-hero-mascot brand-hero-mascot-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true">
     </section>
 
     <!-- Features Section -->
@@ -2645,7 +3451,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 <div class="teacher-grid">
 
-     <div class="teacher-recording-card">
+     <div class="teacher-recording-card" data-bee-recording="bach" data-bee-guide-side="right">
         <div class="recording-mascot" aria-hidden="true">
             <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
         </div>
@@ -2653,11 +3459,11 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <p class="aim">Master 7.5 - 8.0+</p>
 
         <button onclick="openRecording('bach')">
-            Xem recordings
+            Xem lớp học thực tế
         </button>
     </div>
 
-    <div class="teacher-recording-card">
+    <div class="teacher-recording-card" data-bee-recording="nhi" data-bee-guide-side="left">
         <div class="recording-mascot" aria-hidden="true">
             <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
         </div>
@@ -2665,11 +3471,11 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <p class="aim">Writing 5.0 → 7.0+</p>
 
         <button onclick="openRecording('nhi')">
-            Xem recordings
+            Xem lớp học thực tế
         </button>
     </div>
 
- <div class="teacher-recording-card">
+ <div class="teacher-recording-card" data-bee-recording="kane" data-bee-guide-side="left">
         <div class="recording-mascot" aria-hidden="true">
             <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
         </div>
@@ -2677,7 +3483,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <p class="aim">Writing 5.0 → 7.0+</p>
 
         <button onclick="openRecording('kane')">
-            Xem recordings
+            Xem lớp học thực tế
         </button>
     </div>
    
@@ -2710,7 +3516,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="lecturer-grid">
                 
 <!-- Hồ Bách -->
-                <div class="lecturer-row">
+                <div class="lecturer-row" data-bee-teacher="bach" data-bee-guide-side="right">
                     <div class="lecturer-images">
                         <img src="https://i.ibb.co/YMDr88y/561338466-2462022220881278-659980113980257469-n.jpg" alt="Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)">
                         
@@ -2733,7 +3539,11 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 </a>
                         </div>
-                    
+                        <div class="lecturer-conversion">
+                            <span class="lecturer-slot-note" data-slot-teacher="bach" aria-live="polite">Đang kiểm tra slot lớp mới của Hồ Bách…</span>
+                            <a href="#schedule" class="lecturer-conversion-link" data-guide-action="bach" onclick="showTeacherSchedule('bach')">Xem lịch còn slot của Hồ Bách <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                        </div>
+                     
     </div>
 
  <div class="lecturer-video">
@@ -2773,7 +3583,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 
 <!-- Tuệ Nhi -->
-                <div class="lecturer-row">
+                <div class="lecturer-row" data-bee-teacher="nhi" data-bee-guide-side="left">
                     <div class="lecturer-images">
                         <img src="https://i.ibb.co/bMKmDDLc/457736475-1739145653491500-430238909239537785-n.jpg" alt="Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)">
                         <img src="https://i.ibb.co/1GSTb1F9/IELTS-page-0001.jpg" alt="Bằng IELTS Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)">
@@ -2798,6 +3608,10 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 </a>
 
+                        </div>
+                        <div class="lecturer-conversion">
+                            <span class="lecturer-slot-note" data-slot-teacher="nhi" aria-live="polite">Đang kiểm tra slot lớp mới của Tuệ Nhi…</span>
+                            <a href="#schedule" class="lecturer-conversion-link" data-guide-action="nhi" onclick="showTeacherSchedule('nhi')">Xem lịch còn slot của Tuệ Nhi <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 
@@ -2835,7 +3649,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 </div>
 
  <!-- Gia Khang -->
-                <div class="lecturer-row">
+                <div class="lecturer-row" data-bee-teacher="khang" data-bee-guide-side="right">
                     <div class="lecturer-images">
                         <img src="https://i.ibb.co/1JspPgdb/IMG-20230513-145018.jpg" alt="Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)">
                         <img src="https://i.ibb.co/2G3Kbkb/Cam-Scanner-03-30-2026-18-24.jpg" alt="Bằng IELTS Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)">
@@ -2858,6 +3672,10 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 </a>
 
+                        </div>
+                        <div class="lecturer-conversion">
+                            <span class="lecturer-slot-note" data-slot-teacher="khang" aria-live="polite">Đang kiểm tra slot lớp mới của Gia Khang…</span>
+                            <a href="#schedule" class="lecturer-conversion-link" data-guide-action="khang" onclick="showTeacherSchedule('khang')">Xem lịch còn slot của Gia Khang <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                 
@@ -3127,7 +3945,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                     <p class="section-subtitle" style="color: #aeaeb2;">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
                 </div>
                 <div class="register-brand-mascot" aria-hidden="true">
-                    <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+                    <img src="assets/brand/maybe-handdrawn-logo.png" alt="">
                 </div>
             </div>
             
@@ -3158,7 +3976,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     </select>
 </div>
                     
-                    <button type="submit" class="submit-btn">Gửi thông tin cho tụi mình</button>
+                    <button type="submit" class="submit-btn">Nhận lộ trình phù hợp</button>
                 </form>
             </div>
         </div>
@@ -3169,8 +3987,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <div class="footer-top">
             <div class="footer-brand">
                 <div class="footer-brand-lockup">
-                    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#maybe-mark"/></svg>
-                    <h4><span class="may">MAY</span>BE</h4>
+                    <img class="footer-handdrawn-textmark" src="assets/brand/maybe-handdrawn-textmark.png" alt="MAY">
+                    <h4>BE</h4>
                 </div>
                 <p>may(be)ielts. đồng hành cùng người học biến một điều “có thể” thành một kết quả thật sự.</p>
             </div>
@@ -3378,6 +4196,14 @@ document.body.style.overflow = "hidden";
             </iframe>
         </div>
 
+        <div class="recording-conversion">
+            <div>
+                <strong>Cách dạy này có hợp với em không?</strong>
+                <span>Nếu có, team xem giúp em lớp nào vừa sức nhé.</span>
+            </div>
+            <a href="#register" onclick="closeRecording(); activateBeeGuide('recordingCta', false);">Nhận lộ trình 7.0+ <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+
     </div>
 
 </div>
@@ -3474,6 +4300,8 @@ btn.classList.add("active");
 
 frame.src=video.url;
 
+handleBeeRecordingProgress(teacher,index);
+
 };
 
 tabs.appendChild(btn);
@@ -3484,15 +4312,23 @@ modal.style.display="block";
 
 document.body.style.overflow="hidden";
 
+handleBeeRecordingOpen(teacher);
+
 }
 
 function closeRecording(){
+
+const viewedTeacher=beeLastRecordingTeacher;
 
 document.getElementById("recordingModal").style.display="none";
 
 document.getElementById("recordingFrame").src="";
 
 document.body.style.overflow="auto";
+
+if(viewedTeacher){
+handleBeeRecordingClose(viewedTeacher);
+}
 
 }
 
@@ -3559,34 +4395,46 @@ function toggleContact(){
 </script>
 
 
-<!-- Floating Contact -->
+<!-- Bee Study Buddy · contextual CTA guide -->
+<aside class="bee-guide" id="beeGuide" data-expression="hello" data-voice="on" aria-label="Bee Study Buddy">
+    <div class="bee-guide-prompt" id="beeGuidePrompt" aria-hidden="true">Chưa biết bắt đầu từ đâu à?</div>
 
-<div class="floating-contact">
-   
-<div class="floating-note" id="floatingNote">
-    💬 Cần tư vấn?
-</div>
-    <button class="floating-main" onclick="toggleContact()">
-        <i class="fa-solid fa-comments"></i>
-    </button>
-
-    <div class="floating-menu" id="floatingMenu">
-
-        <a href="https://m.me/maybebach1510" target="_blank">
-            👨‍🏫 Hồ Bách
-        </a>
-
-        <a href="https://m.me/tnhi.911" target="_blank">
-            👩‍🏫 Tuệ Nhi
-        </a>
-
-        <a href="https://m.me/laogiakhanglxag" target="_blank">
-            👨‍🏫 Gia Khang
-        </a>
-
+    <div class="bee-guide-panel" id="beeGuidePanel" aria-hidden="true" aria-live="polite">
+        <button type="button" class="bee-guide-close" aria-label="Thu gọn Bee Study Buddy" onclick="toggleBeeGuide(false, true)">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+        <span class="bee-guide-kicker">BEE · STUDY BUDDY</span>
+        <p class="bee-guide-message" id="beeGuideMessage">Chào bạn, mình là Bee. Cứ cho team biết band hiện tại và ngày thi dự kiến; chưa biết band cũng không sao đâu.</p>
+        <a href="#register" class="bee-guide-cta" onclick="activateBeeGuide('registerCta', false)">Nhận lộ trình 7.0+ <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        <button type="button" class="bee-guide-secondary" onclick="toggleBeeContacts()">Mình muốn hỏi giáo viên trước</button>
+        <div class="bee-guide-contacts" id="beeGuideContacts" hidden>
+            <a href="https://m.me/maybebach1510" target="_blank" rel="noopener">Hồ Bách</a>
+            <a href="https://m.me/tnhi.911" target="_blank" rel="noopener">Tuệ Nhi</a>
+            <a href="https://m.me/laogiakhanglxag" target="_blank" rel="noopener">Gia Khang</a>
+        </div>
     </div>
 
-</div>
+    <button type="button" class="bee-guide-voice-toggle" id="beeGuideVoiceToggle" aria-pressed="true" aria-label="Tắt giọng nói của Bee" title="Tắt giọng Bee" onclick="toggleBeeVoice(event)">
+        <span class="bee-guide-voice-glyph" aria-hidden="true">🔊</span>
+        <span class="bee-guide-voice-status" aria-hidden="true">Chạm để nghe Bee</span>
+    </button>
+    <audio id="beeGuideAudio" preload="metadata" aria-hidden="true"></audio>
+
+    <button type="button" class="bee-guide-avatar" id="beeGuideToggle" aria-expanded="false" aria-controls="beeGuidePanel" aria-label="Trò chuyện với Bee Study Buddy" onclick="toggleBeeGuide(undefined, true)">
+        <span class="bee-guide-cloud" aria-hidden="true"></span>
+        <img class="bee-guide-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true">
+        <span class="bee-guide-face" aria-hidden="true">
+            <span class="bee-guide-lid bee-guide-lid-left"></span>
+            <span class="bee-guide-lid bee-guide-lid-right"></span>
+            <span class="bee-guide-cheek bee-guide-cheek-left"></span>
+            <span class="bee-guide-cheek bee-guide-cheek-right"></span>
+            <span class="bee-guide-mouth"></span>
+        </span>
+        <span class="bee-guide-hand" aria-hidden="true"></span>
+        <span class="bee-guide-pointer" aria-hidden="true">➜</span>
+        <span class="bee-guide-spark" aria-hidden="true">✦</span>
+    </button>
+</aside>
 
 <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbyBZAXmm893kl4QA4rFwiDcVCMRTz4hXbMVCr-tkIVV6tm1NNWTQOGndH8jrbPgSylh/exec'; // Điền link thật của bạn vào đây
@@ -3607,6 +4455,7 @@ function toggleContact(){
             if (result.status === "success") {
                 publicAllScheduleRows = Array.isArray(result.data) ? result.data : [];
                 publicScheduleRows = filterClassesForRecruitment(publicAllScheduleRows);
+                updateLecturerSlotNotes(publicScheduleRows);
                 renderFilteredPublicSchedule();
             } else {
                 throw new Error(result.message || "Apps Script không trả về dữ liệu hợp lệ");
@@ -3615,6 +4464,9 @@ function toggleContact(){
             console.error("Lỗi tải dữ liệu:", error);
             document.querySelectorAll('#schedule tbody').forEach(tb => {
                 tb.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Tạm thời không thể tải lịch học. Xin vui lòng liên hệ Fanpage.</td></tr>';
+            });
+            document.querySelectorAll('[data-slot-teacher]').forEach(note => {
+                note.textContent = 'Chưa tải được số slot · Hỏi team để kiểm tra trực tiếp';
             });
         }
     }
@@ -3766,7 +4618,7 @@ function toggleContact(){
             ? ["bach", "nhi", "khang"]
             : [activeScheduleTeacher];
 
-        return teacherKeys.flatMap(key => {
+        const fullTeachers = teacherKeys.flatMap(key => {
             const currentRows = publicAllScheduleRows.filter(row => {
                 const openingDate = parseScheduleDate(row.KhaiGiang);
                 return teacherFilterKey(row.GiangVien) === key && openingDate &&
@@ -3783,8 +4635,28 @@ function toggleContact(){
             const followUp = nextDate
                 ? ` Lịch ${monthLabelFromDate(nextDate)} đang mở bên dưới.`
                 : " Lịch đợt tiếp theo sẽ được cập nhật sớm.";
-            return [`Lịch tháng ${current.month}/${current.year} của ${teacherNoticeLabel(key)} đã đủ học viên.${followUp}`];
+            return [{ key, nextDate, followUp }];
         });
+
+        if (activeScheduleTeacher === "all" && fullTeachers.length) {
+            const labels = fullTeachers.map(item => teacherNoticeLabel(item.key));
+            const teacherList = labels.length === 1
+                ? labels[0]
+                : labels.length === 2
+                    ? `${labels[0]} và ${labels[1]}`
+                    : `${labels.slice(0, -1).join(", ")} và ${labels[labels.length - 1]}`;
+            const nextMonths = [...new Set(fullTeachers
+                .map(item => item.nextDate ? monthLabelFromDate(item.nextDate) : "")
+                .filter(Boolean))];
+            const followUp = nextMonths.length === 1
+                ? ` Lịch ${nextMonths[0]} đang mở bên dưới.`
+                : " Các lịch tiếp theo đang mở bên dưới hoặc sẽ được cập nhật sớm.";
+            return [`Lịch tháng ${current.month}/${current.year} của ${teacherList} đã đủ học viên.${followUp}`];
+        }
+
+        return fullTeachers.map(item =>
+            `Lịch tháng ${current.month}/${current.year} của ${teacherNoticeLabel(item.key)} đã đủ học viên.${item.followUp}`
+        );
     }
 
     function renderFilteredPublicSchedule() {
@@ -3840,6 +4712,15 @@ function toggleContact(){
                 renderFilteredPublicSchedule();
             });
         }
+    }
+
+    function showTeacherSchedule(teacherKey) {
+        const allowed = ["bach", "nhi", "khang"];
+        activeScheduleTeacher = allowed.includes(teacherKey) ? teacherKey : "all";
+        activeScheduleDay = "all";
+        const dayFilter = document.getElementById("scheduleDayFilter");
+        if (dayFilter) dayFilter.value = "all";
+        renderFilteredPublicSchedule();
     }
 
     function roundToFriendlyDeadline(rawDeadline, referenceDate) {
@@ -4183,6 +5064,7 @@ async function submitRegister(e){
         const result = await res.json();
 
         if(result.status === "success"){
+            activateBeeGuide('success', true);
             alert("Cảm ơn em! Team đã nhận được thông tin và sẽ liên hệ sớm nhất ^^");
         } else {
             alert("Có lỗi xảy ra, thử lại sau.");
@@ -4193,6 +5075,911 @@ async function submitRegister(e){
         console.error(err);
     }
 }
+</script>
+
+<script>
+const BEE_GUIDE_STATES = {
+    hello: {
+        expression: "hello",
+        prompt: "Bee chào bạn nè ✦",
+        message: "Bee chào bạn nha! Nếu đang ngó quanh chưa biết bắt đầu từ đâu, mình xem lịch lớp trước cũng được. Chưa biết band hiện tại vẫn hỏi team thoải mái nhé."
+    },
+    features: {
+        expression: "excited",
+        prompt: "15 buổi mà gói gọn cả hệ thống đó!",
+        message: "Khúc này là bộ khung của may(be)write. nè: học theo lộ trình 15 buổi, có bài tập và bảo hành. Bạn đọc thử xem đúng thứ mình đang thiếu không nhé."
+    },
+    recordings: {
+        expression: "curious",
+        prompt: "Bee rủ bạn xem thử một đoạn nè.",
+        message: "Đừng vội chọn lớp nha. Mình xem thử một đoạn trước, để ý cách giáo viên giải thích và sửa bài có đúng kiểu bạn dễ tiếp thu không nhé."
+    },
+    recordingBach: {
+        expression: "focused",
+        prompt: "Bee chỉ bạn lớp thầy Bách nè ✦",
+        message: "Nếu bạn đang nhắm band 7.5–8.0+, Bee rủ bạn xem lớp thầy Bách trước nha. Nhớ để ý cách thầy mở rộng ý và xử lý đề khó có đúng kiểu mình cần không."
+    },
+    recordingNhi: {
+        expression: "curious",
+        prompt: "Thích được sửa kỹ thì ghé cô Nhi nè.",
+        message: "Nếu bạn thích được sửa kỹ từng câu và xây nền Writing chắc hơn, Bee kéo bạn qua lớp cô Tuệ Nhi nha. Nghe một đoạn là cảm được nhịp giảng có hợp mình không liền."
+    },
+    recordingKhang: {
+        expression: "excited",
+        prompt: "Team mê logic thì xem thầy Khang nha!",
+        message: "Nếu bạn thích bài được bóc tách thật rõ ràng, Bee chỉ lớp thầy Gia Khang nè. Cách này thường hợp mục tiêu 6.5–7.0+ và người không muốn học bài mẫu rập khuôn."
+    },
+    afterRecordingBach: {
+        expression: "curious",
+        prompt: "Cách thầy Bách có hợp bạn không?",
+        message: () => `Bạn thấy nhịp dạy của thầy Bách có hợp mình không? Nếu vẫn phân vân, xem thêm một đoạn của cô Nhi hoặc thầy Khang để so sánh nhé. ${getBeeSlotSentence("bach", "thầy Bách")}`
+    },
+    afterRecordingNhi: {
+        expression: "curious",
+        prompt: "Bạn có hợp cách cô Nhi sửa bài không?",
+        message: () => `Cách cô Nhi sửa từng chi tiết có đúng điều bạn đang cần không? Nếu muốn một nhịp tư duy nhanh hơn, bạn có thể xem thêm thầy Bách hoặc thầy Khang. ${getBeeSlotSentence("nhi", "cô Nhi")}`
+    },
+    afterRecordingKhang: {
+        expression: "curious",
+        prompt: "Logic của thầy Khang có dễ theo không?",
+        message: () => `Bạn thấy cách thầy Khang bóc tách bài có dễ theo không? Nếu hợp, mình có thể xem profile và lịch lớp bên dưới trước khi quyết định. ${getBeeSlotSentence("khang", "thầy Khang")}`
+    },
+    recordingCta: {
+        expression: "excited",
+        prompt: "Thấy cách dạy ổn chứ?",
+        message: "Nếu cách dạy vừa nãy hợp với bạn, để lại band hiện tại và ngày thi dự kiến nhé. Team sẽ ghép thử một lộ trình trước, mình chưa cần chốt lớp ngay đâu."
+    },
+    lecturers: {
+        expression: "curious",
+        prompt: "Bạn đang nghiêng về ai rồi?",
+        message: "Mỗi thầy cô có một cách dẫn bài khác nhau. Bạn đang nghiêng về ai rồi, hay muốn team hỏi thêm vài câu rồi gợi ý?"
+    },
+    lecturerBach: {
+        expression: "focused",
+        prompt: "Bee đậu cạnh profile thầy Bách nè.",
+        message: () => `Thầy Bách đạt Overall 8.5 và Writing 8.5, mạnh ở lớp Master và các chủ đề khó. Nếu bạn muốn được đẩy tư duy lên band cao thì đọc kỹ profile này nha. ${getBeeSlotSentence("bach", "thầy Bách")}`
+    },
+    lecturerNhi: {
+        expression: "curious",
+        prompt: "Cô Nhi sửa bài kỹ lắm đó nha.",
+        message: () => `Cô Tuệ Nhi đạt Overall 8.0 và Writing 8.0, nổi bật ở cách sửa từng lỗi diễn đạt và xây nền câu. Bạn cần một người đồng hành kiên nhẫn thì Bee nghĩ profile này rất đáng xem. ${getBeeSlotSentence("nhi", "cô Nhi")}`
+    },
+    lecturerKhang: {
+        expression: "excited",
+        prompt: "Bee bay qua thầy Khang rồi nè!",
+        message: () => `Thầy Gia Khang đạt Overall 8.5, Writing và Speaking 8.0; cách dạy thiên về logic, hợp mục tiêu 6.5–7.0+. Nếu bạn mê mọi thứ rõ ràng, đây có thể là đúng người đó. ${getBeeSlotSentence("khang", "thầy Khang")}`
+    },
+    teacherCtaBach: {
+        expression: "excited",
+        prompt: "Bee lọc lịch thầy Bách cho bạn nha!",
+        message: () => `Bee đưa bạn xuống đúng lịch của thầy Bách nè. ${getBeeSlotSentence("bach", "thầy Bách")} Chọn ca hợp thời gian trước rồi mình quyết định tiếp nhé.`
+    },
+    teacherCtaNhi: {
+        expression: "excited",
+        prompt: "Bee lọc lịch cô Nhi cho bạn nha!",
+        message: () => `Bee đưa bạn xuống đúng lịch của cô Nhi nè. ${getBeeSlotSentence("nhi", "cô Nhi")} Chọn ca hợp thời gian trước rồi mình quyết định tiếp nhé.`
+    },
+    teacherCtaKhang: {
+        expression: "excited",
+        prompt: "Bee lọc lịch thầy Khang cho bạn nha!",
+        message: () => `Bee đưa bạn xuống đúng lịch của thầy Khang nè. ${getBeeSlotSentence("khang", "thầy Khang")} Chọn ca hợp thời gian trước rồi mình quyết định tiếp nhé.`
+    },
+    teacherCta: {
+        expression: "excited",
+        prompt: "Ừ, mình ghi nhận rồi nha.",
+        message: "Ừ, mình ghi nhận giáo viên bạn đang quan tâm rồi. Bạn để lại thông tin nhé, team sẽ trao đổi kỹ với mình trước khi giữ lớp."
+    },
+    schedule: {
+        expression: "excited",
+        prompt: "Lịch mới ở đây nè ☁",
+        message: "Bee theo kịp rồi nè! Chạm tên giáo viên để lọc đúng lớp bạn muốn xem nhé. Số slot là dữ liệu đang mở thật; thấy ca hợp thì kiểm tra sớm một chút nha."
+    },
+    halloffame: {
+        expression: "celebrate",
+        prompt: "Một ngày có tên bạn ở đây thì sao ta?",
+        message: "Góc này toàn điểm số thật của học viên đó ✦ Bee mong một ngày được bay vào đây chúc mừng bạn nữa. Muốn biết mình nên bắt đầu từ band nào thì cứ hỏi team nha."
+    },
+    faq: {
+        expression: "curious",
+        prompt: "Còn câu nào làm bạn lăn tăn không?",
+        message: "Nếu vẫn còn một câu chưa được giải đáp, bấm hỏi giáo viên hoặc để lại thông tin nhé. Team trả lời rõ rồi mình quyết định sau, không cần vội đâu."
+    },
+    register: {
+        expression: "excited",
+        prompt: "Bee chờ bạn ở đích nè ✦",
+        message: "Tới đây là gần xong rồi! Bạn để lại kênh liên hệ thuận tiện nhất nha. Đây chỉ là bước để team nghe mục tiêu và tư vấn, chưa có thanh toán gì cả."
+    },
+    registerCta: {
+        expression: "focused",
+        prompt: "Mình chờ bạn ở form nha.",
+        message: "Bạn cứ điền kênh liên hệ thuận tiện nhất và chọn lớp mình đang quan tâm. Team sẽ hỏi kỹ mục tiêu trước rồi mới cùng bạn quyết định."
+    },
+    success: {
+        expression: "celebrate",
+        prompt: "Tụi mình nhận được rồi!",
+        message: "Xong rồi nè, tụi mình nhận được thông tin rồi. Team sẽ liên hệ sớm để nghe kỹ mục tiêu của bạn và cùng xem lộ trình nào hợp nhất nhé."
+    }
+};
+
+const BEE_VOICE_TRACKS = {
+    hello: "assets/audio/bee-01-hero.mp3",
+    features: "assets/audio/bee-02-features.mp3",
+    recordings: "assets/audio/bee-03-recordings-intro.mp3",
+    recordingBach: "assets/audio/bee-04-recording-bach.mp3",
+    afterRecordingBach: "assets/audio/bee-05-after-bach.mp3",
+    recordingNhi: "assets/audio/bee-06-recording-nhi.mp3",
+    afterRecordingNhi: "assets/audio/bee-07-after-nhi.mp3",
+    recordingKhang: "assets/audio/bee-08-recording-khang.mp3",
+    afterRecordingKhang: "assets/audio/bee-09-after-khang.mp3",
+    lecturers: "assets/audio/bee-10-lecturers.mp3",
+    lecturerBach: "assets/audio/bee-11-lecturer-bach.mp3",
+    lecturerNhi: "assets/audio/bee-12-lecturer-nhi.mp3",
+    lecturerKhang: "assets/audio/bee-13-lecturer-khang.mp3",
+    schedule: "assets/audio/bee-14-schedule.mp3",
+    halloffame: "assets/audio/bee-15-halloffame.mp3",
+    faq: "assets/audio/bee-16-faq.mp3",
+    register: "assets/audio/bee-17-register.mp3",
+    success: "assets/audio/bee-18-success.mp3"
+};
+
+const BEE_VOICE_DWELL_MS = 850;
+
+let beeGuideTalkTimer;
+let beeGuideMoveTimer;
+let beeGuideTypeTimer;
+let beeGuideAutoCloseTimer;
+let beeGuideResizeTimer;
+let beeRecordingTourTimer;
+let beeRecordingIntroTimer;
+let beeRecordingViewTimer;
+let beeLecturerIntroTimer;
+let beeScrollFrame;
+let beeVoicePendingTimer;
+let beeVoicePlayToken = 0;
+let beeVoiceEnabled = true;
+let beeVoiceUnlocked = false;
+let beeVoiceBlocked = false;
+let beeVoicePendingState = null;
+let beeVoiceCurrentTrack = null;
+let beeGuideCurrentState = "hello";
+let beeViewportContext = "";
+let beeActiveSectionId = "hero";
+let beeGuideManualInteraction = false;
+let beeGuideCurrentTarget = null;
+let beeLastRecordingTeacher = null;
+let beeRecordingTourIndex = 0;
+let beeTeacherSlots = {
+    bach: { total: 0, min: 0, classes: 0 },
+    nhi: { total: 0, min: 0, classes: 0 },
+    khang: { total: 0, min: 0, classes: 0 }
+};
+let beeHasOpenedRecordingTour = false;
+let beeRecordingIntroComplete = false;
+let beeRecordingIntroActive = false;
+let beeLecturerIntroComplete = false;
+let beeLecturerIntroActive = false;
+const beeSeenLecturerGuides = new Set();
+const beePlayedVoiceTracks = new Set();
+
+const BEE_RECORDING_STATES = {
+    bach: { preview: "recordingBach", after: "afterRecordingBach" },
+    nhi: { preview: "recordingNhi", after: "afterRecordingNhi" },
+    kane: { preview: "recordingKhang", after: "afterRecordingKhang" }
+};
+
+const BEE_LECTURER_STATES = {
+    bach: "lecturerBach",
+    nhi: "lecturerNhi",
+    khang: "lecturerKhang"
+};
+
+const BEE_LECTURER_CTA_STATES = {
+    bach: "teacherCtaBach",
+    nhi: "teacherCtaNhi",
+    khang: "teacherCtaKhang"
+};
+
+function getBeeSlotSentence(teacherKey, teacherLabel) {
+    const summary = beeTeacherSlots[teacherKey] || { total: 0, min: 0, classes: 0 };
+    if (summary.min > 0 && summary.min <= 4) {
+        return `Có lớp của ${teacherLabel} chỉ còn ${summary.min} slot thôi; mình xem lịch ngay bên dưới để khỏi lỡ ca hợp nhé.`;
+    }
+    if (summary.total > 0 && summary.total <= 6) {
+        return `Các lớp đang mở cùng ${teacherLabel} còn ${summary.total} slot; mình xem lịch sớm để chọn ca hợp nhé.`;
+    }
+    if (summary.classes > 0) {
+        return `Lịch của ${teacherLabel} đang mở theo từng ca; mình nên kiểm tra ca hợp trước khi số slot thay đổi nhé.`;
+    }
+    return `Slot mới của ${teacherLabel} được đối chiếu trực tiếp với lịch bên dưới; team sẽ kiểm tra giúp bạn trước khi giữ lớp.`;
+}
+
+function getBeeGuideState(stateKey) {
+    const rawState = BEE_GUIDE_STATES[stateKey] || BEE_GUIDE_STATES.hello;
+    return {
+        ...rawState,
+        message: typeof rawState.message === "function" ? rawState.message() : rawState.message
+    };
+}
+
+function typeBeeGuidePrompt(text, durationMs = 0) {
+    const guide = document.getElementById("beeGuide");
+    const prompt = document.getElementById("beeGuidePrompt");
+    if (!guide || !prompt) return;
+    clearTimeout(beeGuideTypeTimer);
+    const characters = Array.from(String(text || ""));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        prompt.textContent = characters.join("");
+        guide.classList.remove("is-typing");
+        return;
+    }
+
+    let index = 0;
+    prompt.textContent = "";
+    guide.classList.add("is-typing");
+    const totalWeight = characters.reduce((sum, character) => {
+        return sum + (/[.!?]/.test(character) ? 3 : /[,;:]/.test(character) ? 2 : 1);
+    }, 0);
+    const syncedDelay = durationMs > 0
+        ? Math.max(24, Math.min(115, durationMs * .78 / Math.max(totalWeight, 1)))
+        : 27;
+    const writeNext = () => {
+        prompt.textContent += characters[index] || "";
+        index += 1;
+        if (index >= characters.length) {
+            guide.classList.remove("is-typing");
+            return;
+        }
+        const lastCharacter = characters[index - 1];
+        const delay = /[.!?]/.test(lastCharacter)
+            ? syncedDelay * 3
+            : /[,;:]/.test(lastCharacter)
+                ? syncedDelay * 2
+                : syncedDelay;
+        beeGuideTypeTimer = setTimeout(writeNext, delay);
+    };
+    writeNext();
+}
+
+function getBeeGuideAudio() {
+    return document.getElementById("beeGuideAudio");
+}
+
+function updateBeeVoiceUi() {
+    const guide = document.getElementById("beeGuide");
+    const button = document.getElementById("beeGuideVoiceToggle");
+    if (!guide || !button) return;
+    const mode = !beeVoiceEnabled ? "muted" : beeVoiceBlocked ? "blocked" : "on";
+    guide.dataset.voice = mode;
+    button.setAttribute("aria-pressed", String(beeVoiceEnabled));
+    const label = mode === "muted"
+        ? "Bật giọng nói của Bee"
+        : mode === "blocked"
+            ? "Chạm để bật giọng nói của Bee"
+            : "Tắt giọng nói của Bee";
+    button.setAttribute("aria-label", label);
+    button.title = label.replace(" nói của", "");
+    const glyph = button.querySelector(".bee-guide-voice-glyph");
+    if (glyph) glyph.textContent = mode === "muted" ? "🔇" : mode === "blocked" ? "☝" : "🔊";
+}
+
+function loadBeeVoicePreference() {
+    try {
+        return sessionStorage.getItem("maybeBeeVoiceMuted") !== "1";
+    } catch (error) {
+        return true;
+    }
+}
+
+function saveBeeVoicePreference() {
+    try {
+        sessionStorage.setItem("maybeBeeVoiceMuted", beeVoiceEnabled ? "0" : "1");
+    } catch (error) {
+        /* The site still works when browser storage is unavailable. */
+    }
+}
+
+function stopBeeVoice({ clearPending = true } = {}) {
+    if (clearPending) {
+        clearTimeout(beeVoicePendingTimer);
+        beeVoicePendingState = null;
+    }
+    beeVoicePlayToken += 1;
+    const audio = getBeeGuideAudio();
+    if (audio) {
+        audio.onloadedmetadata = null;
+        audio.onended = null;
+        audio.onerror = null;
+        audio.pause();
+        try { audio.currentTime = 0; } catch (error) { /* metadata may not be ready yet */ }
+    }
+    beeVoiceCurrentTrack = null;
+    document.getElementById("beeGuide")?.classList.remove("is-speaking");
+}
+
+function playBeeVoiceForState(stateKey, promptText) {
+    const source = BEE_VOICE_TRACKS[stateKey];
+    const audio = getBeeGuideAudio();
+    if (!beeVoiceEnabled || !source || !audio || beePlayedVoiceTracks.has(source) || document.hidden) {
+        typeBeeGuidePrompt(promptText);
+        return;
+    }
+
+    stopBeeVoice({ clearPending: false });
+    const token = ++beeVoicePlayToken;
+    beeVoiceCurrentTrack = source;
+    audio.src = source;
+    audio.load();
+    audio.onloadedmetadata = () => {
+        if (token !== beeVoicePlayToken || beeGuideCurrentState !== stateKey) return;
+        const durationMs = Number.isFinite(audio.duration) ? audio.duration * 1000 : 0;
+        typeBeeGuidePrompt(promptText, durationMs);
+    };
+    audio.onended = () => {
+        if (token !== beeVoicePlayToken) return;
+        beeVoiceCurrentTrack = null;
+        document.getElementById("beeGuide")?.classList.remove("is-speaking");
+    };
+    audio.onerror = () => {
+        if (token !== beeVoicePlayToken) return;
+        document.getElementById("beeGuide")?.classList.remove("is-speaking");
+        typeBeeGuidePrompt(promptText);
+    };
+
+    const playAttempt = audio.play();
+    if (!playAttempt || typeof playAttempt.then !== "function") return;
+    playAttempt.then(() => {
+        if (token !== beeVoicePlayToken || beeGuideCurrentState !== stateKey) {
+            audio.pause();
+            return;
+        }
+        beeVoiceUnlocked = true;
+        beeVoiceBlocked = false;
+        beePlayedVoiceTracks.add(source);
+        document.getElementById("beeGuide")?.classList.add("is-speaking");
+        updateBeeVoiceUi();
+    }).catch(error => {
+        if (token !== beeVoicePlayToken) return;
+        beeVoiceCurrentTrack = null;
+        beeVoiceBlocked = error?.name === "NotAllowedError";
+        typeBeeGuidePrompt(promptText);
+        updateBeeVoiceUi();
+    });
+}
+
+function scheduleBeeVoiceForState(stateKey, promptText, immediate = false) {
+    clearTimeout(beeVoicePendingTimer);
+    beeVoicePendingState = null;
+    const source = BEE_VOICE_TRACKS[stateKey];
+    if (!beeVoiceEnabled || !source || beePlayedVoiceTracks.has(source)) {
+        stopBeeVoice();
+        typeBeeGuidePrompt(promptText);
+        return;
+    }
+    if (beeVoiceCurrentTrack === source) return;
+
+    stopBeeVoice({ clearPending: false });
+    beeVoicePendingState = stateKey;
+    const token = beeVoicePlayToken;
+    beeVoicePendingTimer = setTimeout(() => {
+        if (token !== beeVoicePlayToken || beeGuideCurrentState !== stateKey || beeVoicePendingState !== stateKey) return;
+        beeVoicePendingState = null;
+        playBeeVoiceForState(stateKey, promptText);
+    }, immediate ? 120 : BEE_VOICE_DWELL_MS);
+}
+
+function toggleBeeVoice(event) {
+    event?.stopPropagation();
+    const shouldRetryBlockedAutoplay = beeVoiceEnabled && beeVoiceBlocked;
+    if (!shouldRetryBlockedAutoplay) beeVoiceEnabled = !beeVoiceEnabled;
+    if (!shouldRetryBlockedAutoplay) saveBeeVoicePreference();
+    beeVoiceBlocked = false;
+    stopBeeVoice();
+    updateBeeVoiceUi();
+    if (beeVoiceEnabled) {
+        const state = getBeeGuideState(beeGuideCurrentState);
+        playBeeVoiceForState(beeGuideCurrentState, state.prompt);
+    }
+}
+
+function unlockBeeVoiceFromInteraction(event) {
+    if (!beeVoiceEnabled || beeVoiceUnlocked || event.target?.closest?.("#beeGuideVoiceToggle")) return;
+    const state = getBeeGuideState(beeGuideCurrentState);
+    clearTimeout(beeVoicePendingTimer);
+    beeVoicePendingState = null;
+    playBeeVoiceForState(beeGuideCurrentState, state.prompt);
+}
+
+function setBeeGuideTarget(target) {
+    const nextTarget = target && target.nodeType === 1 ? target : null;
+    if (beeGuideCurrentTarget && beeGuideCurrentTarget !== nextTarget) {
+        beeGuideCurrentTarget.classList.remove("bee-focus-target");
+    }
+    beeGuideCurrentTarget = nextTarget;
+    if (beeGuideCurrentTarget) beeGuideCurrentTarget.classList.add("bee-focus-target");
+}
+
+function moveBeeGuideForState(stateKey, target = beeGuideCurrentTarget) {
+    const guide = document.getElementById("beeGuide");
+    if (!guide) return;
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const isMobile = viewportWidth <= 680;
+    const isTablet = viewportWidth > 680 && viewportWidth <= 1024;
+    const margin = isMobile ? 12 : isTablet ? 16 : 22;
+    const guideWidth = isMobile ? 78 : 360;
+    const avatarSize = isMobile ? 78 : 92;
+    let dock;
+    let point = "none";
+    let x;
+    let y;
+    const targetRect = target && target.isConnected ? target.getBoundingClientRect() : null;
+    const targetIsVisible = targetRect && targetRect.bottom > 0 && targetRect.top < viewportHeight;
+    const maxX = Math.max(margin, viewportWidth - guideWidth - margin);
+    const maxY = Math.max(margin, viewportHeight - avatarSize - margin);
+
+    if (targetIsVisible) {
+        const gap = isMobile ? 10 : 16;
+        const requestedSide = target.dataset.beeGuideSide;
+        const visibleTop = Math.max(margin, targetRect.top);
+        const visibleBottom = Math.min(viewportHeight - margin, targetRect.bottom);
+        const visibleHeight = Math.max(avatarSize, visibleBottom - visibleTop);
+        const anchorY = visibleTop + Math.min(84, visibleHeight * .24);
+        const targetCenterX = Math.max(margin + avatarSize / 2, Math.min(viewportWidth - margin - avatarSize / 2, targetRect.left + targetRect.width / 2));
+        const rawCandidates = [
+            {
+                side: "right",
+                avatarLeft: targetRect.right + gap,
+                avatarTop: anchorY - avatarSize / 2,
+                dock: "right",
+                point: "left",
+                space: viewportWidth - margin - targetRect.right
+            },
+            {
+                side: "left",
+                avatarLeft: targetRect.left - avatarSize - gap,
+                avatarTop: anchorY - avatarSize / 2,
+                dock: "left",
+                point: "right",
+                space: targetRect.left - margin
+            },
+            {
+                side: "above",
+                avatarLeft: targetCenterX - avatarSize / 2,
+                avatarTop: targetRect.top - avatarSize - gap,
+                dock: targetCenterX < viewportWidth / 2 ? "left" : "right",
+                point: "down",
+                space: targetRect.top - margin
+            },
+            {
+                side: "below",
+                avatarLeft: targetCenterX - avatarSize / 2,
+                avatarTop: targetRect.bottom + gap,
+                dock: targetCenterX < viewportWidth / 2 ? "left" : "right",
+                point: "up",
+                space: viewportHeight - margin - targetRect.bottom
+            }
+        ];
+        const blockerSelector = ".teacher-recording-card, .lecturer-images, .lecturer-info, .lecturer-video, .schedule-filter-shell, .table-responsive, .register-box";
+        const blockers = Array.from(document.querySelectorAll(blockerSelector));
+        const overlapsContent = candidate => blockers.some(blocker => {
+            if (blocker === target || blocker.contains(target)) return false;
+            const rect = blocker.getBoundingClientRect();
+            if (rect.bottom <= 0 || rect.top >= viewportHeight) return false;
+            return candidate.avatarLeft < rect.right &&
+                candidate.avatarLeft + avatarSize > rect.left &&
+                candidate.avatarTop < rect.bottom &&
+                candidate.avatarTop + avatarSize > rect.top;
+        });
+        const fitsViewport = candidate => candidate.avatarLeft >= margin &&
+            candidate.avatarLeft + avatarSize <= viewportWidth - margin &&
+            candidate.avatarTop >= margin &&
+            candidate.avatarTop + avatarSize <= viewportHeight - margin;
+        const orderedCandidates = rawCandidates.sort((a, b) => {
+            if (a.side === requestedSide) return -1;
+            if (b.side === requestedSide) return 1;
+            return b.space - a.space;
+        });
+        const chosen = orderedCandidates.find(candidate => fitsViewport(candidate) && !overlapsContent(candidate)) ||
+            orderedCandidates.find(fitsViewport) ||
+            orderedCandidates[0];
+        const avatarLeft = Math.max(margin, Math.min(viewportWidth - avatarSize - margin, chosen.avatarLeft));
+        dock = chosen.dock;
+        point = chosen.point;
+        x = dock === "left" ? avatarLeft : avatarLeft - (guideWidth - avatarSize);
+        x = Math.max(margin, Math.min(maxX, x));
+        y = Math.max(margin, Math.min(maxY, chosen.avatarTop));
+        guide.classList.add("is-targeting");
+    } else {
+        const dockByState = {
+        hello: "right",
+        recordings: "left",
+        recordingCta: "left",
+        lecturers: "right",
+        teacherCta: "right",
+        schedule: "left",
+        register: "right",
+        registerCta: "right",
+        success: "right"
+        };
+        const heightByState = {
+        hello: .74,
+        recordings: .62,
+        recordingCta: .67,
+        lecturers: .54,
+        teacherCta: .60,
+        schedule: .68,
+        register: .57,
+        registerCta: .63,
+        success: .54
+        };
+        dock = dockByState[stateKey] || "right";
+        x = dock === "left" ? margin : maxX;
+        const minY = Math.min(isMobile ? 300 : 330, maxY);
+        const targetY = Math.round(viewportHeight * (heightByState[stateKey] || .62));
+        y = Math.max(minY, Math.min(maxY, targetY));
+        guide.classList.remove("is-targeting");
+    }
+
+    guide.dataset.dock = dock;
+    guide.dataset.point = point;
+    guide.dataset.panel = y < (isMobile ? 270 : 330) ? "below" : "above";
+    guide.style.setProperty("--bee-guide-x", `${Math.round(x)}px`);
+    guide.style.setProperty("--bee-guide-y", `${Math.round(y)}px`);
+    guide.classList.remove("is-moving");
+    void guide.offsetWidth;
+    guide.classList.add("is-moving");
+    clearTimeout(beeGuideMoveTimer);
+    beeGuideMoveTimer = setTimeout(() => guide.classList.remove("is-moving"), 1150);
+}
+
+function activateBeeGuide(stateKey, forceOpen = false, target = null, options = {}) {
+    const guide = document.getElementById("beeGuide");
+    const message = document.getElementById("beeGuideMessage");
+    const prompt = document.getElementById("beeGuidePrompt");
+    const state = getBeeGuideState(stateKey);
+    if (!guide || !message || !prompt) return;
+
+    const nextStateKey = stateKey in BEE_GUIDE_STATES ? stateKey : "hello";
+    const stateChanged = beeGuideCurrentState !== nextStateKey;
+    beeGuideCurrentState = nextStateKey;
+    setBeeGuideTarget(target);
+    guide.dataset.expression = state.expression;
+    message.textContent = state.message;
+    const allowVoice = options.voice !== false;
+    if (!allowVoice) {
+        stopBeeVoice();
+        typeBeeGuidePrompt(state.prompt);
+    } else if (stateChanged || !beeVoiceCurrentTrack) {
+        scheduleBeeVoiceForState(beeGuideCurrentState, state.prompt, beeGuideCurrentState === "hello");
+    }
+    moveBeeGuideForState(beeGuideCurrentState, beeGuideCurrentTarget);
+    guide.classList.remove("is-talking");
+    void guide.offsetWidth;
+    guide.classList.add("is-talking");
+    clearTimeout(beeGuideTalkTimer);
+    beeGuideTalkTimer = setTimeout(() => guide.classList.remove("is-talking"), 1100);
+
+    if (forceOpen) toggleBeeGuide(true);
+}
+
+function toggleBeeGuide(force, isManual = false) {
+    const guide = document.getElementById("beeGuide");
+    const panel = document.getElementById("beeGuidePanel");
+    const toggle = document.getElementById("beeGuideToggle");
+    if (!guide || !panel || !toggle) return;
+
+    if (isManual) beeGuideManualInteraction = true;
+    clearTimeout(beeGuideAutoCloseTimer);
+    const shouldOpen = typeof force === "boolean" ? force : !guide.classList.contains("is-open");
+    guide.classList.toggle("is-open", shouldOpen);
+    panel.setAttribute("aria-hidden", String(!shouldOpen));
+    toggle.setAttribute("aria-expanded", String(shouldOpen));
+}
+
+function toggleBeeContacts() {
+    const contacts = document.getElementById("beeGuideContacts");
+    if (!contacts) return;
+    contacts.hidden = !contacts.hidden;
+}
+
+function scheduleBeePanelAutoClose(delay = 7200) {
+    clearTimeout(beeGuideAutoCloseTimer);
+    if (beeGuideManualInteraction) return;
+    beeGuideAutoCloseTimer = setTimeout(() => toggleBeeGuide(false), delay);
+}
+
+function getBeeRecordingCard(teacher) {
+    return document.querySelector(`[data-bee-recording="${teacher}"]`);
+}
+
+function handleBeeRecordingOpen(teacher) {
+    const state = BEE_RECORDING_STATES[teacher];
+    if (!state) return;
+    beeLastRecordingTeacher = teacher;
+    stopBeeRecordingTour();
+    clearTimeout(beeRecordingViewTimer);
+    toggleBeeGuide(false);
+    const player = document.querySelector("#recordingModal .recording-player");
+    activateBeeGuide(state.preview, false, player);
+}
+
+function handleBeeRecordingProgress(teacher) {
+    const state = BEE_RECORDING_STATES[teacher];
+    if (!state) return;
+    beeLastRecordingTeacher = teacher;
+    clearTimeout(beeRecordingViewTimer);
+    const player = document.querySelector("#recordingModal .recording-player");
+    activateBeeGuide(state.preview, false, player);
+}
+
+function handleBeeRecordingClose(teacher) {
+    const state = BEE_RECORDING_STATES[teacher];
+    clearTimeout(beeRecordingViewTimer);
+    beeLastRecordingTeacher = null;
+    if (!state) return;
+    activateBeeGuide(state.after, false, getBeeRecordingCard(teacher));
+}
+
+function stopBeeRecordingTour() {
+    clearInterval(beeRecordingTourTimer);
+    beeRecordingTourTimer = null;
+}
+
+function beginBeeRecordingIntro() {
+    clearTimeout(beeRecordingIntroTimer);
+    stopBeeRecordingTour();
+    beeRecordingIntroActive = true;
+    activateBeeGuide("recordings", false);
+    beeRecordingIntroTimer = setTimeout(() => {
+        beeRecordingIntroActive = false;
+        beeRecordingIntroComplete = true;
+        if (beeActiveSectionId !== "recordings") return;
+        requestBeeViewportSync(true);
+    }, beeVoiceEnabled ? 7400 : 1200);
+}
+
+function showBeeRecordingRecommendation(teacher, target = getBeeRecordingCard(teacher), allowVoice = false) {
+    const state = BEE_RECORDING_STATES[teacher];
+    if (!state || !target) return;
+    beeHasOpenedRecordingTour = true;
+    activateBeeGuide(state.preview, false, target, { voice: allowVoice });
+}
+
+function startBeeRecordingTour() {
+    stopBeeRecordingTour();
+    if (window.innerWidth <= 1024) return;
+    const teachers = ["bach", "nhi", "kane"];
+    const showNextTeacher = () => {
+        if (beeActiveSectionId !== "recordings") {
+            stopBeeRecordingTour();
+            return;
+        }
+        const modal = document.getElementById("recordingModal");
+        if (modal && modal.style.display === "block") return;
+        const teacher = teachers[beeRecordingTourIndex % teachers.length];
+        beeRecordingTourIndex += 1;
+        showBeeRecordingRecommendation(teacher, getBeeRecordingCard(teacher), false);
+    };
+    showNextTeacher();
+    beeRecordingTourTimer = setInterval(showNextTeacher, 6600);
+}
+
+function beginBeeLecturerIntro() {
+    clearTimeout(beeLecturerIntroTimer);
+    beeLecturerIntroActive = true;
+    activateBeeGuide("lecturers", false);
+    beeLecturerIntroTimer = setTimeout(() => {
+        beeLecturerIntroActive = false;
+        beeLecturerIntroComplete = true;
+        if (beeActiveSectionId !== "lecturers") return;
+        requestBeeViewportSync(true);
+    }, beeVoiceEnabled ? 9200 : 1200);
+}
+
+function updateLecturerSlotNotes(rows) {
+    const summaries = {
+        bach: { total: 0, min: Infinity, classes: 0 },
+        nhi: { total: 0, min: Infinity, classes: 0 },
+        khang: { total: 0, min: Infinity, classes: 0 }
+    };
+    (Array.isArray(rows) ? rows : []).forEach(row => {
+        const key = teacherFilterKey(row.GiangVien);
+        if (!(key in summaries)) return;
+        const slotsLeft = Math.max(0, parseSlotNumber(row.TongSlot) - parseSlotNumber(row.HocVien));
+        if (slotsLeft <= 0) return;
+        summaries[key].total += slotsLeft;
+        summaries[key].min = Math.min(summaries[key].min, slotsLeft);
+        summaries[key].classes += 1;
+    });
+
+    Object.values(summaries).forEach(summary => {
+        if (!Number.isFinite(summary.min)) summary.min = 0;
+    });
+    beeTeacherSlots = summaries;
+    const teacherLabels = { bach: "Hồ Bách", nhi: "Tuệ Nhi", khang: "Gia Khang" };
+    Object.entries(summaries).forEach(([key, summary]) => {
+        const note = document.querySelector(`[data-slot-teacher="${key}"]`);
+        if (!note) return;
+        note.textContent = summary.min > 0 && summary.min <= 4
+            ? `Lớp gần đầy nhất chỉ còn ${summary.min} slot · Xem lịch để chọn ca phù hợp`
+            : summary.total > 0 && summary.total <= 6
+                ? `Các lớp đang mở còn ${summary.total} slot · Xem lịch để chọn ca phù hợp`
+                : summary.classes > 0
+                    ? `Slot thay đổi theo từng ca · Xem lịch đang mở của ${teacherLabels[key]}`
+                    : `Chưa có lớp đang tuyển của ${teacherLabels[key]} · Hỏi team về đợt tiếp theo`;
+    });
+
+    const activeState = getBeeGuideState(beeGuideCurrentState);
+    const message = document.getElementById("beeGuideMessage");
+    if (message && typeof activeState.message === "string") message.textContent = activeState.message;
+}
+
+function getBeeReadingSection() {
+    const sections = Array.from(document.querySelectorAll("section[id]"));
+    if (!sections.length) return null;
+    const probeY = window.innerHeight * .42;
+    const directHit = sections.find(section => {
+        const rect = section.getBoundingClientRect();
+        return rect.top <= probeY && rect.bottom >= probeY;
+    });
+    if (directHit) return directHit;
+    return sections
+        .map(section => {
+            const rect = section.getBoundingClientRect();
+            return { section, distance: Math.abs(rect.top + rect.height / 2 - probeY) };
+        })
+        .sort((a, b) => a.distance - b.distance)[0]?.section || null;
+}
+
+function getClosestBeeTarget(selector) {
+    const center = window.innerHeight * .44;
+    return Array.from(document.querySelectorAll(selector))
+        .map(element => ({ element, rect: element.getBoundingClientRect() }))
+        .filter(item => item.rect.bottom > 0 && item.rect.top < window.innerHeight)
+        .sort((a, b) => {
+            const distanceA = Math.abs(a.rect.top + a.rect.height / 2 - center);
+            const distanceB = Math.abs(b.rect.top + b.rect.height / 2 - center);
+            return distanceA - distanceB;
+        })[0]?.element || null;
+}
+
+function syncBeeGuideToViewport(force = false) {
+    const modal = document.getElementById("recordingModal");
+    if (modal && modal.style.display === "block") return;
+
+    const section = getBeeReadingSection();
+    if (!section) return;
+    const sectionId = section.id;
+    beeActiveSectionId = sectionId;
+    if (sectionId !== "recordings") {
+        stopBeeRecordingTour();
+        clearTimeout(beeRecordingIntroTimer);
+        if (beeRecordingIntroActive) {
+            beeRecordingIntroActive = false;
+            beeRecordingIntroComplete = true;
+        }
+    }
+    if (sectionId !== "lecturers") {
+        clearTimeout(beeLecturerIntroTimer);
+        if (beeLecturerIntroActive) {
+            beeLecturerIntroActive = false;
+            beeLecturerIntroComplete = true;
+        }
+    }
+
+    if (sectionId === "recordings") {
+        if (beeRecordingIntroActive) return;
+        if (!beeRecordingIntroComplete) {
+            const context = "recordings:intro";
+            if (!force && beeViewportContext === context) return;
+            beeViewportContext = context;
+            beginBeeRecordingIntro();
+            return;
+        }
+        if (window.innerWidth > 1024) {
+            const context = "recordings:tour";
+            if (!force && beeViewportContext === context) return;
+            beeViewportContext = context;
+            startBeeRecordingTour();
+            return;
+        }
+        const card = getClosestBeeTarget("[data-bee-recording]");
+        const teacher = card?.dataset.beeRecording;
+        const context = `recordings:${teacher || "general"}`;
+        if (!force && beeViewportContext === context) return;
+        beeViewportContext = context;
+        if (teacher) showBeeRecordingRecommendation(teacher, card, false);
+        else activateBeeGuide("recordings", false);
+        return;
+    }
+
+    if (sectionId === "lecturers") {
+        if (beeLecturerIntroActive) return;
+        if (!beeLecturerIntroComplete) {
+            const context = "lecturers:intro";
+            if (!force && beeViewportContext === context) return;
+            beeViewportContext = context;
+            beginBeeLecturerIntro();
+            return;
+        }
+        const row = getClosestBeeTarget("[data-bee-teacher]");
+        const teacher = row?.dataset.beeTeacher;
+        const state = BEE_LECTURER_STATES[teacher] || "lecturers";
+        const context = `lecturers:${teacher || "general"}`;
+        if (!force && beeViewportContext === context) return;
+        beeViewportContext = context;
+        if (!row) {
+            activateBeeGuide(state, false);
+            return;
+        }
+        beeSeenLecturerGuides.add(teacher);
+        activateBeeGuide(state, false, row);
+        return;
+    }
+
+    const stateBySection = {
+        hero: "hello",
+        features: "features",
+        schedule: "schedule",
+        halloffame: "halloffame",
+        faq: "faq",
+        register: "register"
+    };
+    const state = stateBySection[sectionId];
+    if (!state) return;
+    const context = `${sectionId}:${state}`;
+    if (!force && beeViewportContext === context) return;
+    beeViewportContext = context;
+    activateBeeGuide(state, false);
+}
+
+function requestBeeViewportSync(force = false) {
+    if (beeScrollFrame) cancelAnimationFrame(beeScrollFrame);
+    beeScrollFrame = requestAnimationFrame(() => {
+        beeScrollFrame = null;
+        syncBeeGuideToViewport(force);
+    });
+}
+
+function initBeeGuide() {
+    beeVoiceEnabled = loadBeeVoicePreference();
+    updateBeeVoiceUi();
+    activateBeeGuide("hello", false);
+
+    document.addEventListener("pointerdown", unlockBeeVoiceFromInteraction, { passive: true });
+    document.addEventListener("keydown", unlockBeeVoiceFromInteraction);
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) stopBeeVoice();
+        else requestBeeViewportSync(true);
+    });
+
+    window.addEventListener("resize", () => {
+        clearTimeout(beeGuideResizeTimer);
+        beeGuideResizeTimer = setTimeout(() => {
+            requestBeeViewportSync(true);
+        }, 90);
+    });
+    window.addEventListener("scroll", () => requestBeeViewportSync(false), { passive: true });
+    requestBeeViewportSync(true);
+
+    document.querySelectorAll("[data-guide-action]").forEach(link => {
+        link.addEventListener("click", () => {
+            const teacher = link.dataset.guideAction;
+            const state = BEE_LECTURER_CTA_STATES[teacher] || "teacherCta";
+            activateBeeGuide(state, false, link.closest("[data-bee-teacher]"));
+        });
+    });
+
+    const registerForm = document.querySelector("#register form");
+    if (registerForm) {
+        registerForm.addEventListener("focusin", () => {
+            activateBeeGuide("register", false, null, { voice: false });
+        }, { once: true });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", initBeeGuide);
 </script>
 
 </body>
