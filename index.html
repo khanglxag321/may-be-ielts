@@ -7,7 +7,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -1138,14 +1138,1410 @@ footer p {
 
 }
 
+/* ================================================================
+   MAYBE BRAND IDENTITY THEME
+   Visual system transferred from MAYBE-Brand-Identity.html while
+   preserving the original layout, content, links and interactions.
+   ================================================================ */
+:root {
+    --blue-500: #2C6BFF;
+    --blue-400: #4A8BFF;
+    --blue-300: #7FA7FF;
+    --blue-100: #DCE6FF;
+    --navy-900: #0F1B4C;
+    --navy-700: #1A2B6B;
+    --yellow: #FFD84D;
+    --coral: #FF6B5B;
+    --mint: #7FE0C2;
+    --lilac: #B4A7FF;
+    --cloud: #F4F7FF;
+    --ink: #0A0E1F;
+    --white: #FFFFFF;
+    --gray-500: #6B7391;
+    --gray-300: #D3D9E6;
+    --gray-100: #EEF1F8;
+
+    --bg-primary: var(--cloud);
+    --bg-secondary: var(--white);
+    --bg-dark: var(--navy-900);
+    --bg-card: var(--white);
+    --text-main: var(--ink);
+    --text-muted: var(--gray-500);
+    --text-light: var(--white);
+    --accent: var(--blue-500);
+    --border-color: var(--blue-100);
+    --status-low: var(--coral);
+    --status-ok: #16886a;
+    --transition: all .3s cubic-bezier(.22, 1, .36, 1);
+}
+
+body {
+    background: var(--cloud);
+    color: var(--ink);
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4,
+.logo,
+.section-title,
+.lecturer-name,
+.category-header,
+.tuition-modal-title {
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+    letter-spacing: -.025em;
+}
+
+.lecturer-badge,
+.schedule-filter-label,
+.schedule-select-field label,
+.tuition-modal-eyebrow,
+.tuition-trigger-label,
+th {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .08em;
+}
+
+::selection { background: var(--yellow); color: var(--navy-900); }
+
+:focus-visible {
+    outline: 3px solid rgba(44, 107, 255, .35);
+    outline-offset: 3px;
+}
+
+header {
+    background: rgba(255, 255, 255, .76);
+    border-bottom: 1px solid rgba(15, 27, 76, .08);
+    box-shadow: 0 8px 32px rgba(15, 27, 76, .04);
+}
+
+.logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--navy-900);
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.logo-mark {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    filter: drop-shadow(0 6px 10px rgba(44, 107, 255, .16));
+}
+
+.logo-may { color: var(--blue-500); }
+.logo-be { color: var(--navy-900); }
+
+.nav-links a { color: var(--navy-900); }
+.nav-links a:hover { color: var(--blue-500); }
+
+.nav-links a.nav-one-on-one {
+    border-color: var(--blue-100);
+    background: linear-gradient(180deg, var(--white), var(--cloud));
+    box-shadow: 0 6px 16px rgba(44, 107, 255, .08);
+}
+
+.nav-links a.nav-one-on-one::before {
+    background: var(--yellow);
+    box-shadow: 0 0 0 4px rgba(255, 216, 77, .22);
+}
+
+.cta-btn,
+.teacher-recording-card button,
+.submit-btn {
+    border-color: var(--blue-500);
+    background: var(--blue-500);
+    color: var(--white);
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(44, 107, 255, .2);
+}
+
+.cta-btn:hover,
+.teacher-recording-card button:hover,
+.submit-btn:hover {
+    border-color: var(--yellow);
+    background: var(--yellow);
+    color: var(--navy-900);
+    box-shadow: 0 12px 28px rgba(255, 216, 77, .2);
+    transform: translateY(-2px);
+}
+
+#hero {
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 78% 24%, rgba(44, 107, 255, .48), transparent 31%),
+        radial-gradient(circle at 18% 78%, rgba(180, 167, 255, .16), transparent 28%),
+        linear-gradient(135deg, #060A24 0%, var(--navy-900) 48%, #1A2F8F 100%);
+}
+
+#hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.95), transparent 60%),
+        radial-gradient(1px 1px at 78% 15%, rgba(255,255,255,.8), transparent 60%),
+        radial-gradient(2px 2px at 32% 68%, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(1px 1px at 88% 78%, rgba(255,255,255,.7), transparent 60%),
+        radial-gradient(1px 1px at 45% 12%, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(1px 1px at 65% 55%, rgba(255,255,255,.7), transparent 60%),
+        radial-gradient(2px 2px at 22% 88%, rgba(255,255,255,.8), transparent 60%),
+        radial-gradient(1px 1px at 55% 82%, rgba(255,255,255,.9), transparent 60%);
+    animation: maybeTwinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes maybeTwinkle { from { opacity: .4; } to { opacity: 1; } }
+@keyframes maybeFloat { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-16px) rotate(-2deg); } }
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-title {
+    color: var(--white);
+    font-size: clamp(4.5rem, 8vw, 8rem);
+    font-weight: 700;
+    line-height: .92;
+    letter-spacing: -.05em;
+    text-shadow: 0 18px 60px rgba(0, 0, 0, .24);
+}
+
+.hero-title-may { color: var(--blue-400); }
+.hero-title-be { color: var(--white); }
+
+.hero-slogan {
+    color: rgba(255, 255, 255, .74);
+    font-weight: 300;
+}
+
+.hero-buttons .btn-secondary {
+    border-color: rgba(255,255,255,.3);
+    color: var(--white);
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    backdrop-filter: blur(8px);
+}
+
+.hero-buttons .btn-secondary:hover {
+    border-color: var(--yellow);
+    background: rgba(255,216,77,.12);
+    color: var(--yellow);
+    transform: translateY(-2px);
+}
+
+.brand-hero-mascot {
+    position: absolute;
+    right: max(3vw, 24px);
+    bottom: 7%;
+    z-index: 1;
+    width: min(31vw, 390px);
+    height: auto;
+    opacity: .88;
+    pointer-events: none;
+    filter: drop-shadow(0 36px 70px rgba(74, 139, 255, .38));
+    animation: maybeFloat 6s ease-in-out infinite;
+}
+
+.section-padding { position: relative; }
+#features, #lecturers, #halloffame { background: var(--white); }
+#recordings, #schedule, #faq { background: var(--cloud); }
+
+.section-title {
+    color: var(--navy-900);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -.04em;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 42px;
+    height: 5px;
+    margin: 20px auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue-500) 0 68%, var(--yellow) 68%);
+}
+
+.section-subtitle { color: var(--gray-500); }
+
+.feature-card,
+.teacher-recording-card,
+.hof-cat-card,
+.faq-item,
+.schedule-filter-shell,
+.table-responsive {
+    border-color: var(--blue-100);
+    border-radius: 20px;
+    box-shadow: 0 12px 36px rgba(15, 27, 76, .055);
+}
+
+.feature-card,
+.teacher-recording-card,
+.hof-cat-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+}
+
+.feature-card::before,
+.teacher-recording-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 5px;
+    background: var(--blue-500);
+}
+
+.feature-card:nth-child(2)::before,
+.teacher-recording-card:nth-child(2)::before { background: var(--coral); }
+.feature-card:nth-child(3)::before,
+.teacher-recording-card:nth-child(3)::before { background: var(--mint); }
+.feature-card:nth-child(4)::before { background: var(--lilac); }
+
+.feature-card:hover,
+.teacher-recording-card:hover {
+    border-color: var(--blue-300);
+    background: linear-gradient(180deg, var(--white), var(--cloud));
+    box-shadow: 0 18px 44px rgba(44, 107, 255, .1);
+}
+
+.feature-icon,
+.teacher-recording-card > i {
+    color: var(--blue-500);
+}
+
+.teacher-recording-card:nth-child(2) > i { color: var(--coral); }
+.teacher-recording-card:nth-child(3) > i { color: #16886a; }
+
+.lecturer-row {
+    position: relative;
+    padding: 48px 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.lecturer-row:last-child { border-bottom: 0; }
+
+.zoomable-image,
+.teacher-preview video {
+    border-color: var(--blue-100);
+    border-radius: 22px;
+    box-shadow: 0 16px 38px rgba(15, 27, 76, .1);
+}
+
+.lecturer-badge {
+    border-radius: 999px;
+    background: var(--blue-100);
+    color: var(--blue-500);
+    font-size: .72rem;
+    letter-spacing: .06em;
+}
+
+.lecturer-name { color: var(--navy-900); }
+.lecturer-score { color: var(--blue-500); }
+
+.social-links a {
+    background: var(--cloud);
+    color: var(--navy-900);
+    border: 1px solid var(--blue-100);
+}
+
+.social-links a:hover {
+    background: var(--blue-500);
+    color: var(--white);
+    border-color: var(--blue-500);
+}
+
+.teacher-stats { color: var(--navy-700); }
+
+.schedule-filter-shell,
+.table-responsive { background: var(--white); }
+
+.schedule-filter-label,
+.schedule-select-field label { color: var(--blue-500); }
+
+.schedule-filter-select,
+.schedule-filter-button {
+    border-color: var(--blue-100);
+    background: var(--cloud);
+    color: var(--navy-900);
+}
+
+.schedule-filter-select:focus-visible,
+.schedule-filter-button:focus-visible { outline-color: rgba(44, 107, 255, .35); }
+.schedule-filter-button:hover { border-color: var(--blue-400); }
+
+.schedule-filter-button.active {
+    border-color: var(--blue-500);
+    background: var(--blue-500);
+    color: var(--white);
+    box-shadow: 0 7px 16px rgba(44, 107, 255, .18);
+}
+
+.schedule-full-notice {
+    border-color: rgba(255, 107, 91, .34);
+    border-left-color: var(--coral);
+    background: #FFF1EF;
+    color: #A83A2F;
+}
+
+.category-header {
+    color: var(--navy-900);
+    border-left-color: var(--blue-500);
+}
+
+th {
+    background: var(--navy-900);
+    color: var(--white);
+    border-bottom-color: var(--navy-700);
+    font-size: .72rem;
+}
+
+td { border-bottom-color: var(--gray-100); }
+tr:hover td { background: var(--cloud); }
+
+.status-badge.low { background: #FFF1EF; color: #C4493B; }
+.status-badge.ok { background: #E8FAF4; color: #11765C; }
+
+.tuition-trigger {
+    border-color: var(--blue-100);
+    background: var(--cloud);
+}
+
+.tuition-trigger:hover {
+    border-color: var(--blue-400);
+    background: #F7F9FF;
+    box-shadow: 0 7px 18px rgba(44, 107, 255, .1);
+}
+
+.tuition-trigger:focus-visible { outline-color: var(--blue-500); }
+.tuition-trigger-label,
+.tuition-trigger-link,
+.tuition-modal-eyebrow,
+.tuition-plan-heading { color: var(--blue-500); }
+
+.tuition-modal-overlay { background: rgba(6, 10, 36, .72); }
+
+.tuition-modal-card {
+    border-color: rgba(127, 167, 255, .35);
+    background: var(--white);
+    box-shadow: 0 30px 90px rgba(6, 10, 36, .34);
+}
+
+.tuition-modal-close { background: var(--cloud); color: var(--navy-900); }
+.tuition-modal-close:hover { background: var(--blue-500); color: var(--white); }
+.tuition-modal-note { background: var(--cloud); }
+.tuition-modal-note i { color: var(--blue-500); }
+.tuition-stage { border-color: var(--gray-100); background: var(--cloud); }
+
+.tuition-stage.active {
+    border-color: var(--blue-300);
+    background: linear-gradient(135deg, #F2F6FF, var(--blue-100));
+    box-shadow: 0 5px 16px rgba(44, 107, 255, .1);
+}
+
+.tuition-stage.active .tuition-stage-price { color: var(--blue-500); }
+.tuition-active-badge { background: var(--blue-500); }
+
+.hof-cat-card:hover {
+    border-color: var(--blue-500);
+    background: var(--navy-900);
+    color: var(--white);
+    box-shadow: 0 22px 52px rgba(15, 27, 76, .2);
+}
+
+.album-preview img {
+    border-color: var(--blue-100);
+    border-radius: 12px;
+}
+
+.faq-item:hover,
+.faq-item.active {
+    border-color: var(--blue-300);
+    box-shadow: 0 14px 36px rgba(44, 107, 255, .08);
+}
+
+.faq-question { color: var(--navy-900); }
+.faq-question:focus-visible { outline-color: var(--blue-500); }
+.faq-icon { background: var(--blue-100); color: var(--blue-500); }
+.faq-item.active .faq-icon { background: var(--blue-500); color: var(--white); }
+
+#register {
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 82% 18%, rgba(44,107,255,.42), transparent 30%),
+        linear-gradient(145deg, #060A24, var(--navy-900) 62%, #1A2B6B);
+}
+
+#register::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .64;
+    background-image:
+        radial-gradient(1px 1px at 18% 23%, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(1px 1px at 72% 15%, rgba(255,255,255,.7), transparent 60%),
+        radial-gradient(2px 2px at 36% 72%, rgba(255,255,255,.85), transparent 60%),
+        radial-gradient(1px 1px at 88% 78%, rgba(255,255,255,.65), transparent 60%);
+}
+
+#register .container { position: relative; z-index: 1; }
+#register .section-title { color: var(--white); }
+#register .section-title::after { background: linear-gradient(90deg, var(--yellow) 0 68%, var(--blue-400) 68%); }
+#register .section-subtitle { color: rgba(255,255,255,.65) !important; }
+
+.register-box {
+    border-color: rgba(127, 167, 255, .2);
+    background: rgba(15, 27, 76, .72);
+    box-shadow: 0 28px 70px rgba(0,0,0,.22);
+    backdrop-filter: blur(18px);
+}
+
+.form-group label { color: rgba(255,255,255,.7); }
+
+.form-control {
+    border-color: rgba(127, 167, 255, .25);
+    background-color: rgba(6, 10, 36, .62);
+    color: var(--white);
+}
+
+.form-control::placeholder { color: rgba(255,255,255,.35); }
+.form-control:focus { border-color: var(--blue-400); box-shadow: 0 0 0 4px rgba(74,139,255,.14); }
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    border-top-color: rgba(255,255,255,.08);
+    background: #060A24;
+}
+
+footer p { color: rgba(255,255,255,.48); }
+
+.footer-logo-mark {
+    width: 30px;
+    height: 30px;
+    opacity: .9;
+    filter: drop-shadow(0 6px 12px rgba(74,139,255,.24));
+}
+
+.recording-modal { background: rgba(6, 10, 36, .88); }
+.recording-modal-content { border: 1px solid var(--blue-100); background: var(--white); }
+.recording-video-tabs button { background: var(--cloud); color: var(--navy-900); }
+.recording-video-tabs button.active { background: var(--blue-500); color: var(--white); }
+
+.modal { background: rgba(6, 10, 36, .9); }
+.floating-main { background: var(--yellow); color: var(--navy-900); box-shadow: 0 10px 26px rgba(15,27,76,.24); }
+.floating-menu a, .floating-note { border-color: var(--blue-100); background: var(--white); color: var(--navy-900); }
+
+.mobile-menu {
+    border-top: 1px solid var(--blue-100);
+    background: rgba(255,255,255,.98);
+    box-shadow: 0 18px 36px rgba(15,27,76,.12);
+}
+
+.mobile-menu a.nav-one-on-one { background: var(--blue-500); color: var(--white); }
+.mobile-menu a.nav-one-on-one::before { background: var(--yellow); }
+
+/* ================================================================
+   MAYBE BRAND — COLOR RHYTHM & BEE STICKER PASS
+   Alternating dark/light chapters and animated brand-mark stickers.
+   ================================================================ */
+.section-padding > .container { position: relative; z-index: 2; }
+
+/* A clearer alternating page rhythm: dark galaxy / light / dark / light. */
+#features {
+    background:
+        radial-gradient(circle at 8% 14%, rgba(44,107,255,.1), transparent 24%),
+        linear-gradient(180deg, var(--cloud), var(--white));
+}
+
+#recordings,
+#halloffame {
+    isolation: isolate;
+    overflow: hidden;
+    color: var(--white);
+    background:
+        radial-gradient(circle at 84% 18%, rgba(44,107,255,.46), transparent 29%),
+        radial-gradient(circle at 10% 86%, rgba(180,167,255,.14), transparent 25%),
+        linear-gradient(145deg, #060A24 0%, var(--navy-900) 58%, #1A2F8F 100%);
+}
+
+#recordings::before,
+#halloffame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .68;
+    background-image:
+        radial-gradient(1px 1px at 12% 22%, rgba(255,255,255,.9), transparent 60%),
+        radial-gradient(1px 1px at 78% 15%, rgba(255,255,255,.75), transparent 60%),
+        radial-gradient(2px 2px at 32% 68%, rgba(255,255,255,.82), transparent 60%),
+        radial-gradient(1px 1px at 88% 78%, rgba(255,255,255,.62), transparent 60%),
+        radial-gradient(1px 1px at 45% 12%, rgba(255,255,255,.78), transparent 60%),
+        radial-gradient(1px 1px at 65% 55%, rgba(255,255,255,.62), transparent 60%);
+    animation: maybeTwinkle 4.8s ease-in-out infinite alternate;
+}
+
+#recordings .section-title,
+#halloffame .section-title,
+#register .section-title { color: var(--yellow); }
+
+#recordings .section-subtitle,
+#halloffame .section-subtitle { color: rgba(255,255,255,.68); }
+
+#recordings .section-title::after,
+#halloffame .section-title::after {
+    background: linear-gradient(90deg, var(--yellow) 0 68%, var(--blue-400) 68%);
+}
+
+#lecturers {
+    isolation: isolate;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 8% 12%, rgba(44,107,255,.08), transparent 25%),
+        radial-gradient(circle at 91% 84%, rgba(127,167,255,.1), transparent 24%),
+        linear-gradient(180deg, #F8FAFF 0%, #EEF3FF 100%);
+}
+
+#lecturers::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .34;
+    background-image:
+        radial-gradient(2px 2px at 12% 20%, rgba(44,107,255,.28), transparent 60%),
+        radial-gradient(2px 2px at 76% 12%, rgba(127,167,255,.42), transparent 60%),
+        radial-gradient(2px 2px at 31% 74%, rgba(44,107,255,.22), transparent 60%),
+        radial-gradient(2px 2px at 89% 67%, rgba(127,167,255,.34), transparent 60%);
+}
+
+#lecturers .section-title { color: var(--navy-900); }
+#lecturers .section-subtitle { color: #4E587C; }
+#lecturers .section-title::after {
+    background: linear-gradient(90deg, var(--blue-500) 0 72%, var(--yellow) 72%);
+}
+
+#schedule {
+    background:
+        radial-gradient(circle at 12% 10%, rgba(180,167,255,.26), transparent 22%),
+        linear-gradient(180deg, var(--blue-100), var(--cloud) 55%, var(--white));
+}
+
+#faq {
+    background:
+        radial-gradient(circle at 88% 14%, rgba(127,224,194,.18), transparent 22%),
+        linear-gradient(180deg, var(--cloud), var(--white));
+}
+
+.hero-slogan { color: rgba(255, 216, 77, .84); }
+
+/* More of the full palette in the light chapters. */
+.feature-card:nth-child(1) { background: linear-gradient(145deg, #EEF3FF, var(--white)); }
+.feature-card:nth-child(2) { background: linear-gradient(145deg, #FFF0ED, var(--white)); }
+.feature-card:nth-child(3) { background: linear-gradient(145deg, #E9FAF5, var(--white)); }
+.feature-card:nth-child(4) { background: linear-gradient(145deg, #F1EEFF, var(--white)); }
+.feature-card:nth-child(2) .feature-icon { color: var(--coral); }
+.feature-card:nth-child(3) .feature-icon { color: #16886a; }
+.feature-card:nth-child(4) .feature-icon { color: #7566D7; }
+
+/* Recording cards now use Bee instead of unrelated Font Awesome symbols. */
+.teacher-recording-card {
+    width: 330px;
+    min-height: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 34px 28px 32px;
+    color: var(--navy-900);
+}
+
+.teacher-recording-card:nth-child(1) { background: linear-gradient(150deg, var(--blue-100), var(--white) 72%); }
+.teacher-recording-card:nth-child(2) { background: linear-gradient(150deg, #FFE5E1, var(--white) 72%); }
+.teacher-recording-card:nth-child(3) { background: linear-gradient(150deg, #DFF8F0, var(--white) 72%); }
+
+.teacher-recording-card h3 { color: var(--navy-900); }
+.teacher-recording-card .aim { color: var(--gray-500); }
+.teacher-recording-card button { margin-top: auto; }
+.teacher-recording-card:nth-child(2) button { border-color: var(--coral); background: var(--coral); }
+.teacher-recording-card:nth-child(3) button { border-color: var(--navy-900); background: var(--navy-900); }
+.teacher-recording-card:nth-child(2) button:hover,
+.teacher-recording-card:nth-child(3) button:hover { border-color: var(--yellow); background: var(--yellow); color: var(--navy-900); }
+
+.recording-mascot {
+    position: relative;
+    width: 112px;
+    height: 112px;
+    margin: 0 auto 23px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.82);
+    border-radius: 34px;
+    background: rgba(255,255,255,.62);
+    box-shadow: 0 18px 36px rgba(15,27,76,.12), inset 0 1px rgba(255,255,255,.9);
+    backdrop-filter: blur(10px);
+}
+
+.recording-mascot svg {
+    width: 84px;
+    height: 84px;
+    filter: drop-shadow(0 12px 18px rgba(44,107,255,.2));
+}
+
+.recording-mascot::before,
+.recording-mascot::after,
+.teacher-mascot::before,
+.teacher-mascot::after {
+    position: absolute;
+    z-index: 2;
+    color: var(--yellow);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1;
+    text-shadow: 0 3px 10px rgba(15,27,76,.18);
+}
+
+.recording-mascot::before { content: '✦'; top: -10px; right: 2px; font-size: 25px; }
+.recording-mascot::after { content: '✧'; bottom: 2px; left: -9px; font-size: 20px; }
+.teacher-recording-card:nth-child(1) .recording-mascot { animation: beeStickerFloat 4.2s ease-in-out infinite; }
+.teacher-recording-card:nth-child(2) .recording-mascot { animation: beeStickerWave 4.8s ease-in-out infinite; }
+.teacher-recording-card:nth-child(3) .recording-mascot { animation: beeStickerCelebrate 4.4s ease-in-out infinite; }
+
+@keyframes beeStickerFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes beeStickerWave {
+    0%, 100% { transform: translateY(0) rotate(5deg); }
+    35% { transform: translateY(-8px) rotate(-4deg); }
+    55% { transform: translateY(-8px) rotate(8deg); }
+}
+
+@keyframes beeStickerCelebrate {
+    0%, 100% { transform: translateY(0) rotate(-2deg) scale(1); }
+    48% { transform: translateY(-11px) rotate(4deg) scale(1.04); }
+    62% { transform: translateY(-7px) rotate(-4deg) scale(1.02); }
+}
+
+/* Teacher profiles use one open editorial layout—not nested cards. */
+.lecturer-grid { gap: 0; }
+
+.lecturer-row {
+    max-width: 100%;
+    padding: 58px 8px;
+    border: 0;
+    border-bottom: 1px solid rgba(15,27,76,.1);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    transition: none;
+}
+
+.lecturer-row:nth-child(1),
+.lecturer-row:nth-child(2),
+.lecturer-row:nth-child(3) { background: transparent; }
+.lecturer-row:last-child { border-bottom: 0; }
+.lecturer-row:hover {
+    transform: none;
+    border-color: rgba(15,27,76,.1);
+    box-shadow: none;
+}
+
+.lecturer-images { width: min(43vw, 500px); }
+.lecturer-images {
+    gap: 16px;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+.lecturer-images .zoomable-image {
+    width: calc((100% - 16px) / 2);
+    border: 0;
+    transform-origin: center;
+    box-shadow: 0 12px 30px rgba(15,27,76,.1);
+}
+.lecturer-images .zoomable-image:hover {
+    transform: none;
+    filter: saturate(1.03) brightness(1.01);
+    box-shadow: 0 15px 34px rgba(15,27,76,.14);
+}
+.lecturer-info { width: min(31vw, 380px); }
+.lecturer-video { width: min(17vw, 200px); }
+.teacher-preview { width: 100%; }
+.teacher-preview video { height: 350px; border: 0; box-shadow: 0 12px 30px rgba(15,27,76,.1); }
+
+.lecturer-row:nth-child(1) .lecturer-badge { background: var(--blue-100); color: var(--blue-500); }
+.lecturer-row:nth-child(2) .lecturer-badge { background: #FFE3DF; color: #C44E41; }
+.lecturer-row:nth-child(3) .lecturer-badge { background: #DDF7EF; color: #13765E; }
+.lecturer-row:nth-child(1) .lecturer-score { color: var(--blue-500); }
+.lecturer-row:nth-child(2) .lecturer-score { color: #C44E41; }
+.lecturer-row:nth-child(3) .lecturer-score { color: #13765E; }
+
+.teacher-mascot {
+    position: absolute;
+    top: -30px;
+    right: 30px;
+    z-index: 3;
+    width: 82px;
+    height: 82px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(127,167,255,.5);
+    border-radius: 25px;
+    background: rgba(255,255,255,.86);
+    box-shadow: 0 13px 28px rgba(15,27,76,.12);
+    backdrop-filter: blur(10px);
+    pointer-events: none;
+    animation: beeMeetLead 7.8s cubic-bezier(.45,.05,.4,.95) infinite;
+}
+
+.lecturer-row:nth-child(even) .teacher-mascot:not(.teacher-mascot-friend) { right: auto; left: 30px; }
+.lecturer-row:nth-child(2) .teacher-mascot { animation-delay: -1.15s; }
+.lecturer-row:nth-child(3) .teacher-mascot { animation-delay: -2.3s; }
+.teacher-mascot svg { width: 62px; height: 62px; filter: drop-shadow(0 9px 14px rgba(44,107,255,.18)); }
+.teacher-mascot::before { content: '✦'; top: -8px; right: -5px; font-size: 21px; }
+.teacher-mascot::after { content: '·'; bottom: -2px; left: -5px; color: var(--blue-500); font-size: 34px; }
+
+.teacher-mascot-friend,
+.lecturer-row:nth-child(even) .teacher-mascot-friend {
+    top: auto;
+    right: auto;
+    bottom: -22px;
+    left: 34px;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.76);
+    animation-name: beeMeetFriend;
+    animation-duration: 7.8s;
+}
+
+.lecturer-row:nth-child(even) .teacher-mascot-friend { right: 34px; left: auto; }
+.teacher-mascot-friend svg { width: 48px; height: 48px; }
+.teacher-mascot-friend::before { content: '✧'; top: -6px; right: -4px; font-size: 17px; }
+.teacher-mascot-friend::after { content: '·'; bottom: -5px; left: -4px; color: var(--coral); font-size: 28px; }
+
+.bee-smile {
+    position: absolute;
+    z-index: 4;
+    top: 61%;
+    left: 50%;
+    width: 16%;
+    height: 9%;
+    border-bottom: 3px solid var(--navy-900);
+    border-radius: 0 0 999px 999px;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    animation: beeSmile 3.9s ease-in-out infinite;
+}
+
+.teacher-mascot-friend .bee-smile { border-bottom-width: 2px; animation-delay: -1.4s; }
+.lecturer-row:nth-child(2) .bee-smile { animation-delay: -.8s; }
+.lecturer-row:nth-child(3) .bee-smile { animation-delay: -1.7s; }
+
+.lecturer-row:hover .bee-smile {
+    width: 22%;
+    height: 13%;
+}
+
+.lecturer-row:hover .teacher-mascot {
+    border-color: rgba(255,216,77,.86);
+    box-shadow: 0 16px 34px rgba(44,107,255,.18), 0 0 0 5px rgba(255,216,77,.14);
+}
+
+@keyframes beeMeetLead {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(-5deg); }
+    22% { transform: translate3d(7px, -8px, 0) rotate(3deg); }
+    48% { transform: translate3d(-22px, 12px, 0) rotate(7deg); }
+    58% { transform: translate3d(-17px, 8px, 0) rotate(-2deg); }
+    78% { transform: translate3d(3px, -5px, 0) rotate(2deg); }
+}
+
+@keyframes beeMeetFriend {
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(5deg); }
+    22% { transform: translate3d(-5px, 5px, 0) rotate(-2deg); }
+    48% { transform: translate3d(24px, -14px, 0) rotate(-8deg); }
+    58% { transform: translate3d(18px, -10px, 0) rotate(3deg); }
+    78% { transform: translate3d(-3px, 3px, 0) rotate(-2deg); }
+}
+
+@keyframes beeSmile {
+    0%, 38%, 100% { transform: translate(-50%, -50%) scaleX(.82) scaleY(.8); }
+    48%, 68% { transform: translate(-50%, -50%) scaleX(1.18) scaleY(1.25); }
+}
+
+/* One dedicated mascot stage: playful, cute and safely away from profile cards. */
+#lecturers .container { position: relative; }
+#lecturers .section-subtitle { margin-bottom: 60px; }
+
+.lecturer-mascot-stage {
+    position: absolute;
+    top: 18px;
+    right: 0;
+    left: 0;
+    z-index: 4;
+    height: 104px;
+    pointer-events: none;
+}
+
+.section-bee {
+    --bee-x: 24px;
+    --blush-gap: 30px;
+    position: absolute;
+    top: 0;
+    width: 94px;
+    height: 94px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 30px;
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    animation: beeSidePlay 7.4s cubic-bezier(.45,.05,.4,.95) infinite;
+}
+
+.section-bee-left { left: 5px; }
+.section-bee-right { --bee-x: -24px; right: 5px; animation-delay: -.16s; }
+.section-bee svg { width: 72px; height: 72px; filter: drop-shadow(0 10px 16px rgba(44,107,255,.2)); }
+
+.section-bee::before {
+    content: '✦';
+    position: absolute;
+    top: -8px;
+    right: -4px;
+    color: var(--yellow);
+    font: 22px/1 'Space Grotesk', sans-serif;
+    text-shadow: 0 4px 10px rgba(15,27,76,.16);
+}
+
+.section-bee-right::before { right: auto; left: -4px; color: var(--coral); }
+
+/* A tiny double-curve mouth plus rosy cheeks reads as kawaii, not uncanny. */
+.section-bee .bee-smile {
+    top: 63%;
+    width: 14px;
+    height: 6px;
+    border: 0;
+    animation: beeCuteSmile 3.7s ease-in-out infinite;
+}
+
+.section-bee .bee-smile::before,
+.section-bee .bee-smile::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 7px;
+    height: 5px;
+    border-bottom: 2px solid var(--navy-900);
+    border-radius: 0 0 8px 8px;
+}
+
+.section-bee .bee-smile::before { left: 0; transform: rotate(7deg); }
+.section-bee .bee-smile::after { right: 0; transform: rotate(-7deg); }
+
+.bee-blush {
+    position: absolute;
+    z-index: 3;
+    top: 58%;
+    left: 29%;
+    width: 7px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255,107,91,.34);
+    box-shadow: var(--blush-gap) 0 rgba(255,107,91,.34);
+}
+
+@keyframes beeSidePlay {
+    0%, 100% { transform: translate3d(0,0,0) rotate(-4deg); }
+    18% { transform: translate3d(0,-7px,0) rotate(3deg); }
+    44% { transform: translate3d(var(--bee-x),2px,0) rotate(6deg); }
+    57% { transform: translate3d(var(--bee-x),-3px,0) rotate(-2deg); }
+    76% { transform: translate3d(4px,-5px,0) rotate(2deg); }
+}
+
+@keyframes beeCuteSmile {
+    0%, 38%, 100% { transform: translate(-50%,-50%) scale(.88); }
+    48%, 66% { transform: translate(-50%,-50%) scale(1.04); }
+}
+
+/* Hall of Fame stays colorful while sitting on a deep-navy chapter. */
+#halloffame .hof-cat-card:nth-child(1) { background: linear-gradient(145deg, var(--blue-100), var(--white)); }
+#halloffame .hof-cat-card:nth-child(2) { background: linear-gradient(145deg, #FFF1BA, var(--white)); }
+#halloffame .hof-cat-card { color: var(--navy-900); border-color: rgba(255,255,255,.28); }
+#halloffame .hof-cat-card p { color: var(--gray-500); }
+#halloffame .hof-cat-card:hover { background: var(--yellow); color: var(--navy-900); border-color: var(--yellow); }
+#halloffame .hof-cat-card:hover h3,
+#halloffame .hof-cat-card:hover p { color: var(--navy-900); }
+
+#register .submit-btn { background: var(--yellow); color: var(--navy-900); border-color: var(--yellow); }
+#register .submit-btn:hover { background: var(--white); border-color: var(--white); }
+
+@media (max-width: 1100px) {
+    .brand-hero-mascot { opacity: .34; right: -7%; width: min(43vw, 390px); }
+    #lecturers .section-subtitle { margin-bottom: 20px; }
+    .lecturer-mascot-stage {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        height: 88px;
+        margin: 0 0 34px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 58px;
+    }
+    .section-bee,
+    .section-bee-left,
+    .section-bee-right {
+        --bee-x: 14px;
+        --blush-gap: 25px;
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+        width: 80px;
+        height: 80px;
+        border-radius: 25px;
+    }
+    .section-bee-right { --bee-x: -14px; }
+    .section-bee svg { width: 61px; height: 61px; }
+}
+
+@media (max-width: 992px) {
+    .lecturer-row { padding: 52px 24px; }
+    .lecturer-images, .lecturer-info, .lecturer-video { width: min(100%, 560px); }
+    .lecturer-images .zoomable-image { width: calc((100% - 16px) / 2); }
+    .teacher-preview { width: min(220px, 100%); }
+}
+
+@media (max-width: 768px) {
+    .logo { gap: 7px; font-size: 1.13rem; }
+    .logo-mark { width: 28px; height: 28px; flex-basis: 28px; }
+    .hero-title { font-size: clamp(3.1rem, 15vw, 4.7rem); }
+    .brand-hero-mascot { width: 68vw; right: -27%; bottom: 12%; opacity: .25; }
+    .section-title { font-size: clamp(2.25rem, 11vw, 3.4rem); }
+    .section-padding { padding: 78px 0; }
+    .feature-card, .teacher-recording-card, .hof-cat-card, .faq-item { border-radius: 18px; }
+    .teacher-recording-card { min-height: 325px; }
+    .lecturer-row { padding: 48px 0; border-radius: 0; }
+    .lecturer-images .zoomable-image { width: 100%; }
+    .lecturer-mascot-stage { height: 74px; margin-bottom: 28px; gap: 42px; }
+    .section-bee,
+    .section-bee-left,
+    .section-bee-right {
+        --bee-x: 9px;
+        --blush-gap: 21px;
+        width: 68px;
+        height: 68px;
+        border-radius: 21px;
+    }
+    .section-bee-right { --bee-x: -9px; }
+    .section-bee svg { width: 52px; height: 52px; }
+    .section-bee .bee-smile { width: 12px; height: 5px; }
+    .section-bee .bee-smile::before,
+    .section-bee .bee-smile::after { width: 6px; height: 4px; }
+    .bee-blush { width: 6px; height: 3px; }
+    .teacher-mascot,
+    .lecturer-row:nth-child(even) .teacher-mascot:not(.teacher-mascot-friend) { top: -27px; right: 20px; left: auto; width: 70px; height: 70px; }
+    .teacher-mascot svg { width: 52px; height: 52px; }
+    .teacher-mascot-friend,
+    .lecturer-row:nth-child(even) .teacher-mascot-friend { top: auto; right: auto; bottom: -18px; left: 20px; width: 56px; height: 56px; }
+    .lecturer-row:nth-child(even) .teacher-mascot-friend { right: 20px; left: auto; }
+    .teacher-mascot-friend svg { width: 42px; height: 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #hero::before,
+    #recordings::before,
+    #halloffame::before,
+    .brand-hero-mascot,
+    .recording-mascot,
+    .teacher-mascot,
+    .section-bee,
+    .bee-smile { animation: none !important; }
+    .lecturer-row { transition: none; }
+}
+
+/* ================================================================
+   BRAND GUIDE APPLICATIONS — SOCIAL TILES, CONTACT COVER & FOOTER
+   Derived directly from the Applications section of the identity file.
+   ================================================================ */
+
+/* Feature tiles: the square social-post system from the brand guide. */
+#features {
+    background: linear-gradient(180deg, #F8FAFF, #EEF3FF);
+}
+
+#features .features-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+#features .feature-card {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    padding: 26px;
+    border: 0;
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: var(--white);
+    box-shadow: 0 22px 48px rgba(15,27,76,.12);
+    overflow: hidden;
+    isolation: isolate;
+}
+
+#features .feature-card::before { display: none; }
+#features .feature-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1px 1px at 15% 30%, rgba(255,255,255,.86), transparent 60%),
+        radial-gradient(1px 1px at 80% 25%, rgba(255,255,255,.56), transparent 60%),
+        radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,.72), transparent 60%),
+        radial-gradient(1px 1px at 88% 82%, rgba(255,255,255,.52), transparent 60%);
+    opacity: .8;
+}
+
+#features .feature-card:nth-child(1) {
+    background: radial-gradient(ellipse at 70% 20%, #1A2F8F 0%, var(--navy-900) 42%, #060A24 100%);
+}
+#features .feature-card:nth-child(2) { background: var(--yellow); color: var(--navy-900); }
+#features .feature-card:nth-child(3) { background: var(--blue-500); color: var(--white); }
+#features .feature-card:nth-child(4) { background: var(--mint); color: var(--navy-900); }
+#features .feature-card:nth-child(n+2)::after { display: none; }
+
+#features .feature-card:hover {
+    transform: translateY(-6px);
+    border: 0;
+    box-shadow: 0 30px 62px rgba(15,27,76,.18);
+}
+
+.feature-tile-top,
+.feature-tile-foot {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+
+.feature-chip {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--yellow);
+    color: var(--navy-900);
+    font-weight: 700;
+}
+
+#features .feature-card:nth-child(2) .feature-chip,
+#features .feature-card:nth-child(4) .feature-chip { background: var(--navy-900); color: var(--yellow); }
+#features .feature-card:nth-child(3) .feature-chip { background: var(--yellow); color: var(--navy-900); }
+
+.feature-card-copy { position: relative; z-index: 2; }
+#features .feature-card h3 {
+    margin: 0 0 14px;
+    color: inherit;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.55rem, 2vw, 2.15rem);
+    font-weight: 700;
+    line-height: .98;
+    letter-spacing: -.035em;
+}
+
+#features .feature-card h3 span { color: var(--blue-300); }
+#features .feature-card:nth-child(2) h3 span { color: var(--blue-500); }
+#features .feature-card:nth-child(3) h3 span { color: var(--yellow); }
+#features .feature-card:nth-child(4) h3 span { color: var(--blue-500); }
+
+#features .feature-card p {
+    color: inherit;
+    font-size: .78rem;
+    line-height: 1.52;
+    opacity: .72;
+}
+
+.feature-tile-foot { justify-content: flex-start; font-family: 'Space Grotesk', sans-serif; font-size: 12px; letter-spacing: -.01em; text-transform: none; font-weight: 600; }
+.feature-tile-foot svg { width: 22px; height: 22px; flex: 0 0 22px; }
+
+/* Teacher background flows gently through the three recording-card colors. */
+#lecturers {
+    background:
+        linear-gradient(180deg,
+            #EAF1FF 0%,
+            #F5F8FF 27%,
+            #FFF0ED 43%,
+            #FFF8F6 58%,
+            #E7F8F2 76%,
+            #F1FBF8 100%);
+}
+
+#lecturers::before {
+    opacity: .28;
+    background-image:
+        radial-gradient(3px 3px at 10% 12%, rgba(44,107,255,.3), transparent 60%),
+        radial-gradient(3px 3px at 91% 47%, rgba(255,107,91,.25), transparent 60%),
+        radial-gradient(3px 3px at 15% 84%, rgba(22,136,106,.25), transparent 60%);
+}
+
+/* Contact section: the Facebook-cover composition from the brand guide. */
+#register {
+    padding: 96px 0 84px;
+    background:
+        radial-gradient(ellipse at 82% 24%, #1A2F8F 0%, var(--navy-900) 46%, #060A24 100%);
+}
+
+.register-brand-banner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+    gap: 60px;
+    align-items: center;
+    margin-bottom: 56px;
+}
+
+.register-eyebrow {
+    margin-bottom: 18px;
+    color: var(--yellow);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.register-brand-headline {
+    margin: 0 0 26px;
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6.4rem);
+    font-weight: 700;
+    line-height: .91;
+    letter-spacing: -.045em;
+}
+
+.register-brand-headline em { color: var(--yellow); font-style: normal; }
+.register-brand-headline span { color: var(--blue-400); }
+.register-original-title {
+    margin-bottom: 10px;
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.35rem, 2.4vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -.025em;
+}
+
+#register .register-copy .section-subtitle {
+    max-width: 610px;
+    margin: 0;
+    color: rgba(255,255,255,.64) !important;
+    text-align: left;
+}
+
+.register-brand-mascot {
+    position: relative;
+    width: min(100%, 340px);
+    aspect-ratio: 1;
+    justify-self: end;
+    animation: maybeFloat 6s ease-in-out infinite;
+}
+
+.register-brand-mascot::before {
+    content: '';
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    background: rgba(74,139,255,.2);
+    filter: blur(34px);
+}
+
+.register-brand-mascot svg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 30px 60px rgba(74,139,255,.4));
+}
+
+#register .register-box {
+    max-width: 980px;
+    padding: 34px;
+    border: 1px solid rgba(127,167,255,.2);
+    border-radius: 24px;
+    background: rgba(15,27,76,.56);
+}
+
+#register .register-box form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+#register .form-group { margin: 0; }
+#register .form-group:nth-child(5),
+#register .submit-btn { grid-column: 1 / -1; }
+
+/* Footer: adapted from the brand guide's four-column footer. */
+footer.brand-footer {
+    display: block;
+    width: 100%;
+    padding: 78px 48px 36px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    background: #060A1B;
+    color: var(--white);
+    text-align: left;
+}
+
+.brand-footer .footer-top {
+    display: grid;
+    grid-template-columns: 1.8fr 1fr 1fr 1fr;
+    gap: 54px;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-bottom: 54px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.footer-brand-lockup {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.footer-brand-lockup svg { width: 52px; height: 52px; flex: 0 0 52px; }
+.brand-footer .footer-brand h4 {
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3.35rem;
+    font-weight: 700;
+    line-height: .92;
+    letter-spacing: -.04em;
+}
+.brand-footer .footer-brand h4 .may { color: var(--blue-400); }
+.brand-footer .footer-brand p { max-width: 330px; color: rgba(255,255,255,.48); font-size: .92rem; line-height: 1.65; }
+.brand-footer .footer-col h5 {
+    margin-bottom: 16px;
+    color: rgba(255,255,255,.46);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+}
+.brand-footer .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.brand-footer .footer-col li,
+.brand-footer .footer-col a { color: rgba(255,255,255,.82); font-size: .88rem; text-decoration: none; }
+.brand-footer .footer-col a:hover { color: var(--yellow); }
+.brand-footer .footer-bottom {
+    max-width: 1280px;
+    margin: 34px auto 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    color: rgba(255,255,255,.36);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .05em;
+}
+
+@media (max-width: 1100px) {
+    #features .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #features .feature-card h3 { font-size: clamp(2rem, 4vw, 3rem); }
+    #features .feature-card p { font-size: .9rem; }
+    .brand-footer .footer-top { grid-template-columns: 1.6fr 1fr 1fr; }
+    .brand-footer .footer-col:last-child { grid-column: 2 / -1; }
+}
+
+@media (max-width: 768px) {
+    #features .features-grid { grid-template-columns: 1fr; gap: 16px; }
+    #features .feature-card { max-width: 480px; width: 100%; margin: 0 auto; padding: 26px; }
+    #features .feature-card h3 { font-size: clamp(2rem, 9vw, 2.8rem); }
+    #features .feature-card p { font-size: .86rem; }
+    .register-brand-banner { grid-template-columns: 1fr; gap: 28px; margin-bottom: 42px; }
+    .register-brand-mascot { width: min(64vw, 250px); justify-self: center; }
+    .register-brand-headline { font-size: clamp(3.2rem, 16vw, 5rem); }
+    #register .register-box { padding: 26px 20px; }
+    #register .register-box form { grid-template-columns: 1fr; }
+    #register .form-group:nth-child(5), #register .submit-btn { grid-column: auto; }
+    footer.brand-footer { padding: 62px 24px 30px; }
+    .brand-footer .footer-top { grid-template-columns: 1fr; gap: 34px; }
+    .brand-footer .footer-col:last-child { grid-column: auto; }
+    .brand-footer .footer-bottom { flex-direction: column; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .register-brand-mascot { animation: none; }
+}
+
 </style>
 </head>
 <body>
 
+    <!-- Reusable MAYBE Bee brand mark -->
+    <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+        <defs>
+            <linearGradient id="maybe-bee-body" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#8FB4FF"/>
+                <stop offset="55%" stop-color="#7FA7FF"/>
+                <stop offset="100%" stop-color="#B4CBFF"/>
+            </linearGradient>
+            <clipPath id="maybe-bee-clip">
+                <path d="M32 10h36a5 5 0 0 1 5 5v15h15a5 5 0 0 1 5 5v30a5 5 0 0 1-5 5H73v15a5 5 0 0 1-5 5H32a5 5 0 0 1-5-5V70H12a5 5 0 0 1-5-5V35a5 5 0 0 1 5-5h15V15a5 5 0 0 1 5-5z"/>
+            </clipPath>
+            <symbol id="maybe-mark" viewBox="0 0 100 100">
+                <path d="M32 10h36a5 5 0 0 1 5 5v15h15a5 5 0 0 1 5 5v30a5 5 0 0 1-5 5H73v15a5 5 0 0 1-5 5H32a5 5 0 0 1-5-5V70H12a5 5 0 0 1-5-5V35a5 5 0 0 1 5-5h15V15a5 5 0 0 1 5-5z" fill="url(#maybe-bee-body)"/>
+                <g clip-path="url(#maybe-bee-clip)" fill="#fff">
+                    <path d="M22 22l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" opacity=".85"/>
+                    <path d="M78 18l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z" opacity=".85"/>
+                    <path d="M85 55l.7 1.7 1.7.7-1.7.7-.7 1.7-.7-1.7-1.7-.7 1.7-.7z" opacity=".85"/>
+                    <path d="M18 62l.7 1.7 1.7.7-1.7.7-.7 1.7-.7-1.7-1.7-.7 1.7-.7z" opacity=".85"/>
+                    <path d="M72 80l.7 1.7 1.7.7-1.7.7-.7 1.7-.7-1.7-1.7-.7 1.7-.7z" opacity=".85"/>
+                    <path d="M40 78l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z" opacity=".85"/>
+                    <circle cx="30" cy="72" r=".7" opacity=".5"/>
+                    <circle cx="68" cy="42" r=".6" opacity=".5"/>
+                    <circle cx="35" cy="40" r=".5" opacity=".5"/>
+                </g>
+                <rect x="41" y="44" width="6" height="15" rx="3" fill="#0F1B4C"/>
+                <rect x="53" y="44" width="6" height="15" rx="3" fill="#0F1B4C"/>
+            </symbol>
+        </defs>
+    </svg>
+
     <!-- Header Navbar -->
     <header>
         <div class="container nav-container">
-            <a href="#" class="logo">may(be)ielts.</a>
+            <a href="#" class="logo" aria-label="may(be)ielts. — Trang chủ">
+                <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg>
+                <span><span class="logo-may">may</span><span class="logo-be">(be)ielts.</span></span>
+            </a>
             <ul class="nav-links">
                 <li><a href="#features">Đặc Quyền</a></li>
                 <li><a href="#recordings">Học Thử</a></li>
@@ -1179,13 +2575,14 @@ footer p {
     <!-- Hero Section -->
     <section id="hero">
         <div class="container hero-content">
-            <h1 class="hero-title">may(be)ielts.</h1>
+            <h1 class="hero-title"><span class="hero-title-may">may</span><span class="hero-title-be">(be)ielts.</span></h1>
             <p class="hero-slogan">giới hạn duy nhất của bạn chỉ là thời gian mà thôi</p>
             <div class="hero-buttons">
                 <a href="#schedule" class="cta-btn" style="padding: 16px 32px; font-size: 1rem;">Xem lịch khai giảng</a>
                 <a href="#recordings" class="btn-secondary" style="padding: 16px 32px; font-size: 1rem;">Xem lớp học thử</a>
             </div>
         </div>
+        <svg class="brand-hero-mascot" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#maybe-mark"/></svg>
     </section>
 
     <!-- Features Section -->
@@ -1196,27 +2593,39 @@ footer p {
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-calendar-days"></i></div>
-                    <h3>Lộ trình 15 buổi</h3>
-                    <p>Học full toàn bộ các dạng bài. Cấu trúc chia đều thành 5 cặp dạng, mỗi cặp gồm 3 buổi tối ưu hóa (Task 1 - Task 2 - Luyện tập tổng hợp).</p>
+                    <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip">01</span></div>
+                    <div class="feature-card-copy">
+                        <h3>Lộ trình <span>15 buổi</span></h3>
+                        <p>Học full toàn bộ các dạng bài. Cấu trúc chia đều thành 5 cặp dạng, mỗi cặp gồm 3 buổi tối ưu hóa (Task 1 - Task 2 - Luyện tập tổng hợp).</p>
+                    </div>
+                    <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-pen-nib"></i></div>
-                    <h3>Chấm chữa 20 bài</h3>
-                    <p>Thực hành liên tục. Nhận feedback chi tiết cho 15 bài homework theo buổi và 5 bài test toàn diện sau khóa học.</p>
+                    <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip">02</span></div>
+                    <div class="feature-card-copy">
+                        <h3>Chấm chữa <span>20 bài</span></h3>
+                        <p>Thực hành liên tục. Nhận feedback chi tiết cho 15 bài homework theo buổi và 5 bài test toàn diện sau khóa học.</p>
+                    </div>
+                    <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
-                    <h3>Linh hoạt lớp học</h3>
-                    <p>Được quyền tham gia học song song tại các lớp cùng thời điểm, chủ động đổi lớp lên/xuống nếu cần điều chỉnh tốc độ.</p>
+                    <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip">03</span></div>
+                    <div class="feature-card-copy">
+                        <h3>Linh hoạt <span>lớp học</span></h3>
+                        <p>Được quyền tham gia học song song tại các lớp cùng thời điểm, chủ động đổi lớp lên/xuống nếu cần điều chỉnh tốc độ.</p>
+                    </div>
+                    <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
 
                 <div class="feature-card">
-                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                    <h3>Đặc quyền bảo hành</h3>
-                    <p>Tham gia nghe giảng lại cùng khóa tiếp theo miễn phí nếu chưa thi. Sẵn sàng file tài liệu mẫu cho mọi bài về nhà.</p>
+                    <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip">04</span></div>
+                    <div class="feature-card-copy">
+                        <h3>Đặc quyền <span>bảo hành</span></h3>
+                        <p>Tham gia nghe giảng lại cùng khóa tiếp theo miễn phí nếu chưa thi. Sẵn sàng file tài liệu mẫu cho mọi bài về nhà.</p>
+                    </div>
+                    <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
             </div>
         </div>
@@ -1237,7 +2646,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 <div class="teacher-grid">
 
      <div class="teacher-recording-card">
-        <i class="fa-solid fa-crown"></i>
+        <div class="recording-mascot" aria-hidden="true">
+            <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+        </div>
         <h3>Hồ Bách</h3>
         <p class="aim">Master 7.5 - 8.0+</p>
 
@@ -1247,7 +2658,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     </div>
 
     <div class="teacher-recording-card">
-        <i class="fa-solid fa-pencil"></i>
+        <div class="recording-mascot" aria-hidden="true">
+            <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+        </div>
         <h3>Tuệ Nhi</h3>
         <p class="aim">Writing 5.0 → 7.0+</p>
 
@@ -1257,7 +2670,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     </div>
 
  <div class="teacher-recording-card">
-        <i class="fa-solid fa-graduation-cap"></i>
+        <div class="recording-mascot" aria-hidden="true">
+            <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+        </div>
         <h3>Gia Khang</h3>
         <p class="aim">Writing 5.0 → 7.0+</p>
 
@@ -1278,6 +2693,19 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <div class="container">
             <h2 class="section-title">Đội ngũ giáo viên</h2>
             <p class="section-subtitle">Những người đồng hành có chuyên môn học thuật cao và sở hữu bảng điểm legit tuyệt đối. <br> Click vào ảnh để xem chi tiết. </br> </p>
+
+            <div class="lecturer-mascot-stage" aria-hidden="true">
+                <div class="section-bee section-bee-left">
+                    <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+                    <span class="bee-blush"></span>
+                    <span class="bee-smile"></span>
+                </div>
+                <div class="section-bee section-bee-right">
+                    <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+                    <span class="bee-blush"></span>
+                    <span class="bee-smile"></span>
+                </div>
+            </div>
             
             <div class="lecturer-grid">
                 
@@ -1692,8 +3120,16 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <!-- Register Section -->
     <section id="register" class="section-padding">
         <div class="container">
-            <h2 class="section-title">chúng mình có duyên với nhau.</h2>
-            <p class="section-subtitle" style="color: #aeaeb2;">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
+            <div class="register-brand-banner">
+                <div class="register-copy">
+                    <div class="register-eyebrow">— MAYBE IELTS · EST. 2026</div>
+                    <h2 class="register-brand-headline">chúng mình có <em>duyên</em><br> với <span>nhau</span>.</h2>
+                    <p class="section-subtitle" style="color: #aeaeb2;">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
+                </div>
+                <div class="register-brand-mascot" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" focusable="false"><use href="#maybe-mark"/></svg>
+                </div>
+            </div>
             
             <div class="register-box">
                 <form onsubmit="submitRegister(event); return false;">
@@ -1707,7 +3143,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                     </div>
                      <div class="form-group">
         <label>Email cá nhân</label>
-        <input type="email" id="email" class="form-control" placeholder="pw.hob9ch@gmail.com" required>
+        <input type="email" id="email" class="form-control" placeholder="emailcuaban@gmail.com" required>
     </div>
 
     <div class="form-group">
@@ -1729,9 +3165,47 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     </section>
 
     <!-- Footer -->
-    <footer>
-    <p>© 2026 may(be)ielts. Designed by Kane Lao.</p>
-</footer>
+    <footer id="footer" class="brand-footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="footer-brand-lockup">
+                    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#maybe-mark"/></svg>
+                    <h4><span class="may">MAY</span>BE</h4>
+                </div>
+                <p>may(be)ielts. đồng hành cùng người học biến một điều “có thể” thành một kết quả thật sự.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Khám phá</h5>
+                <ul>
+                    <li><a href="#features">Đặc quyền</a></li>
+                    <li><a href="#recordings">Học thử</a></li>
+                    <li><a href="#lecturers">Giáo viên</a></li>
+                    <li><a href="#schedule">Lịch khai giảng</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Contact</h5>
+                <ul>
+                    <li><a href="mailto:pw.hob9ch@gmail.com">pw.hob9ch@gmail.com</a></li>
+              
+                    <li>Ha Noi · Vietnam</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Kết nối</h5>
+                <ul>
+                    <li><a href="https://m.me/maybebach1510" target="_blank">Hồ Bách</a></li>
+                    <li><a href="https://m.me/tnhi.911" target="_blank">Tuệ Nhi</a></li>
+                    <li><a href="https://m.me/laogiakhanglxag" target="_blank">Gia Khang</a></li>
+                    <li><a href="#register">Đăng ký tư vấn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 may(be)ielts. Designed by Kane Lao.</span>
+            
+        </div>
+    </footer>
 
     <!-- JavaScript for Modals -->
     <script>
