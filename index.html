@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>may(be)ielts. - Chuyên sâu IELTS Writing & Speaking</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2466,13 +2466,17 @@ footer.brand-footer {
     object-fit: contain;
     object-position: left center;
 }
-.brand-footer .footer-brand-lockup .footer-handdrawn-textmark + h4 {
+.brand-footer .footer-brand-lockup .footer-wordmark-be {
     position: relative;
     z-index: 1;
     color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff;
+    -webkit-text-fill-color: #ffffff !important;
     opacity: 1;
     font-size: 3rem;
+    font-family: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    line-height: .92;
+    letter-spacing: -.04em;
     text-shadow: 0 7px 24px rgba(74, 139, 255, .18);
     mix-blend-mode: normal;
 }
@@ -3609,7 +3613,7 @@ button, a, input, select { touch-action: manipulation; }
     footer.brand-footer { padding: 54px 20px calc(28px + env(safe-area-inset-bottom)); }
     .brand-footer .footer-top { gap: 30px; padding-bottom: 38px; }
     .footer-handdrawn-textmark { width: 136px; height: 50px; }
-    .footer-brand-lockup .footer-handdrawn-textmark + h4 { font-size: 2.65rem; }
+    .footer-brand-lockup .footer-wordmark-be { font-size: 2.65rem; }
     .brand-footer .footer-col a { display: inline-flex; min-height: 42px; align-items: center; overflow-wrap: anywhere; }
     .brand-footer .footer-bottom { margin-top: 26px; line-height: 1.6; }
 }
@@ -3642,6 +3646,8 @@ button, a, input, select { touch-action: manipulation; }
     .bee-guide-secondary { min-height: 42px; }
     .bee-guide-contacts { grid-template-columns: 1fr; }
     .bee-guide-contacts a { min-height: 42px; display: grid; place-items: center; }
+    .bee-guide[data-point="right"] .bee-guide-pointer { right: -8px; transform: scale(.76); }
+    .bee-guide[data-point="left"] .bee-guide-pointer { left: -8px; transform: scaleX(-1) scale(.76); }
 }
 
 @media (max-width: 390px) {
@@ -3660,6 +3666,54 @@ button, a, input, select { touch-action: manipulation; }
     #hero { min-height: 540px; }
     .brand-hero-mascot { width: 42vw; right: -10%; }
     .bee-guide-panel { max-height: calc(100dvh - 24px); }
+}
+
+/* Lock the mobile canvas to one vertical viewport. This also prevents iOS
+   rubber-band panning from exposing a blank strip beside the page. */
+html,
+body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden !important;
+    overscroll-behavior-x: none;
+}
+
+@supports (overflow: clip) {
+    html,
+    body { overflow-x: clip !important; }
+}
+
+@media (max-width: 768px) {
+    html,
+    body {
+        position: relative;
+        touch-action: pan-y pinch-zoom;
+    }
+    body > header,
+    body > section,
+    body > footer {
+        width: 100%;
+        max-width: 100%;
+    }
+    body > section,
+    body > footer { overflow-x: clip; }
+    .container,
+    .nav-container,
+    .footer-top,
+    .footer-bottom,
+    .footer-brand,
+    .footer-brand-lockup { min-width: 0; max-width: 100%; }
+    .schedule-filter-buttons,
+    .recording-video-tabs {
+        flex-wrap: wrap;
+        overflow-x: visible;
+        scroll-snap-type: none;
+    }
+    .schedule-filter-button { flex: 1 1 auto; }
+    .table-responsive { max-width: 100%; overflow: clip; }
+    .brand-footer .footer-col,
+    .brand-footer .footer-col li,
+    .brand-footer .footer-col a { max-width: 100%; overflow-wrap: anywhere; word-break: break-word; }
 }
 
 @media (hover: none) {
@@ -4340,7 +4394,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="footer-brand">
                 <div class="footer-brand-lockup">
                     <img class="footer-handdrawn-textmark" src="assets/brand/maybe-handdrawn-textmark.png" alt="MAY" loading="lazy" decoding="async">
-                    <h4>BE</h4>
+                    <span class="footer-wordmark-be" aria-hidden="true" style="color:#ffffff;-webkit-text-fill-color:#ffffff;">BE</span>
                 </div>
                 <p>may(be)ielts. đồng hành cùng người học biến một điều “có thể” thành một kết quả thật sự.</p>
             </div>
