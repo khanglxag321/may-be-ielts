@@ -2417,6 +2417,19 @@ footer p { color: rgba(255,255,255,.48); }
 #register .form-group { margin: 0; }
 #register .form-group:nth-child(5),
 #register .submit-btn { grid-column: 1 / -1; }
+#register .register-status {
+    grid-column: 1 / -1;
+    min-height: 1.4em;
+    margin: -5px 0 0;
+    color: rgba(255,255,255,.72);
+    font-size: .84rem;
+    font-weight: 700;
+    line-height: 1.45;
+    text-align: center;
+}
+#register .register-status.is-success { color: #9CF0D5; }
+#register .register-status.is-error { color: #FFB2AA; }
+#register .submit-btn:disabled { cursor: wait; opacity: .72; transform: none; }
 
 /* Footer: adapted from the brand guide's four-column footer. */
 footer.brand-footer {
@@ -2453,7 +2466,16 @@ footer.brand-footer {
     object-fit: contain;
     object-position: left center;
 }
-.footer-brand-lockup .footer-handdrawn-textmark + h4 { color: var(--white); font-size: 3rem; }
+.brand-footer .footer-brand-lockup .footer-handdrawn-textmark + h4 {
+    position: relative;
+    z-index: 1;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff;
+    opacity: 1;
+    font-size: 3rem;
+    text-shadow: 0 7px 24px rgba(74, 139, 255, .18);
+    mix-blend-mode: normal;
+}
 .brand-footer .footer-brand h4 {
     margin: 0;
     font-family: 'Space Grotesk', sans-serif;
@@ -3307,6 +3329,348 @@ footer.brand-footer {
     .bee-guide[data-voice="blocked"] .bee-guide-voice-toggle { animation: none !important; }
 }
 
+/* ================================================================
+   MOBILE EXPERIENCE PASS · touch, compact layouts and safe areas
+   ================================================================ */
+html { scroll-padding-top: 84px; }
+section[id] { scroll-margin-top: 84px; }
+img, video, iframe { max-width: 100%; }
+button, a, input, select { touch-action: manipulation; }
+.hamburger {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--navy-900);
+    line-height: 1;
+}
+.is-form-focused .bee-guide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@supports (height: 100dvh) {
+    #hero { min-height: 100dvh; }
+}
+
+@media (max-width: 768px) {
+    html { scroll-padding-top: calc(72px + env(safe-area-inset-top)); }
+    body { -webkit-text-size-adjust: 100%; }
+    section[id] { scroll-margin-top: calc(72px + env(safe-area-inset-top)); }
+    .container { width: 100%; padding-right: 18px; padding-left: 18px; }
+    .section-padding { padding: 68px 0; }
+    .section-title {
+        max-width: 100%;
+        font-size: clamp(2.12rem, 10.5vw, 3.05rem);
+        line-height: 1.03;
+        overflow-wrap: anywhere;
+    }
+    .section-title::after { margin-top: 16px; }
+    .section-subtitle {
+        max-width: 34rem;
+        margin-bottom: 38px;
+        font-size: .95rem;
+        line-height: 1.65;
+    }
+
+    header { padding-top: env(safe-area-inset-top); }
+    .nav-container { height: 72px; }
+    .logo { min-width: 0; font-size: 1.12rem; white-space: nowrap; }
+    .logo-mark { width: 40px; height: 40px; flex-basis: 40px; }
+    .hamburger {
+        display: inline-grid;
+        flex: 0 0 46px;
+        place-items: center;
+        font-size: 1.3rem;
+        cursor: pointer;
+    }
+    .hamburger[aria-expanded="true"] { background: var(--blue-100); color: var(--blue-500); }
+    .mobile-menu {
+        position: fixed;
+        top: calc(72px + env(safe-area-inset-top));
+        right: 0;
+        left: 0;
+        width: 100%;
+        max-height: calc(100dvh - 72px - env(safe-area-inset-top));
+        margin: 0;
+        padding: 12px 18px calc(18px + env(safe-area-inset-bottom));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border-radius: 0 0 22px 22px;
+    }
+    .mobile-menu.show { display: grid; gap: 2px; }
+    .mobile-menu li { margin: 0; }
+    .mobile-menu a,
+    .mobile-menu a.nav-one-on-one {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-height: 48px;
+        padding: 11px 12px;
+        border-radius: 12px;
+    }
+    .mobile-menu a.nav-one-on-one { margin: 5px 0; }
+
+    #hero {
+        min-height: 100svh;
+        padding: calc(72px + env(safe-area-inset-top)) 0 max(44px, env(safe-area-inset-bottom));
+    }
+    #hero .hero-content { width: 100%; }
+    .hero-title {
+        font-size: clamp(2.8rem, 14.4vw, 4.25rem);
+        line-height: .96;
+        letter-spacing: -.055em;
+        white-space: nowrap;
+    }
+    .hero-slogan {
+        max-width: 310px;
+        margin: 0 auto 30px;
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+    .hero-buttons { width: min(100%, 340px); margin: 0 auto; gap: 12px; }
+    .hero-buttons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 52px;
+        max-width: none;
+    }
+    .brand-hero-mascot { right: -31%; bottom: 8%; width: 79vw; opacity: .18; }
+
+    #features .feature-card {
+        aspect-ratio: auto;
+        min-height: 330px;
+        padding: 25px;
+    }
+    #features .feature-card h3 { font-size: clamp(2rem, 9.2vw, 2.75rem); }
+    #features .feature-card p { font-size: .91rem; line-height: 1.58; }
+
+    .teacher-grid { width: 100%; gap: 18px; }
+    .teacher-recording-card {
+        width: 100%;
+        max-width: 430px;
+        min-height: 315px;
+        padding: 29px 24px 25px;
+    }
+    .teacher-recording-card button { min-height: 48px; font-size: .94rem; }
+    .recording-mascot { width: 98px; height: 98px; margin-bottom: 18px; }
+    .recording-mascot svg { width: 74px; height: 74px; }
+    .recording-modal { padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom)); }
+    .recording-modal-content {
+        width: 100%;
+        max-height: calc(100dvh - max(20px, env(safe-area-inset-top)) - max(20px, env(safe-area-inset-bottom)));
+        margin: 0 auto;
+        padding: 18px 14px;
+        overflow-y: auto;
+        border-radius: 18px;
+    }
+    .recording-header { align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .recording-header h2 { font-size: 1.25rem; line-height: 1.25; }
+    .recording-close {
+        display: inline-grid;
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        place-items: center;
+        margin: -8px -7px 0 0;
+        border-radius: 50%;
+    }
+    .recording-video-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 7px;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+    .recording-video-tabs::-webkit-scrollbar { display: none; }
+    .recording-video-tabs button { min-height: 44px; flex: 0 0 auto; }
+    .recording-player { border-radius: 10px; }
+
+    .lecturer-row,
+    .lecturer-row:nth-child(even) { gap: 26px; padding: 44px 0; }
+    .lecturer-images {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        align-items: stretch;
+    }
+    .lecturer-images .zoomable-image {
+        width: 100%;
+        max-width: none;
+        height: clamp(205px, 59vw, 278px);
+        object-fit: cover;
+        border-radius: 16px;
+    }
+    .lecturer-info { padding: 0; text-align: left; }
+    .lecturer-name { font-size: clamp(2rem, 10vw, 2.7rem); }
+    .lecturer-desc { font-size: .94rem; line-height: 1.7; }
+    .social-links { justify-content: flex-start; flex-wrap: wrap; gap: 10px; }
+    .social-links a { min-width: 44px; width: 44px; height: 44px; }
+    .social-links a.contact-phone { min-height: 44px; }
+    .lecturer-video { width: min(100%, 270px) !important; }
+    .teacher-preview video { height: 410px; border-radius: 18px; }
+    .lecturer-slot-note {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 14px;
+        font-size: .74rem;
+    }
+    .lecturer-conversion-link { min-height: 50px; padding: 12px 15px; font-size: .7rem; }
+    .bee-focus-target { outline-offset: 3px; }
+
+    .schedule-filter-shell { margin: 0 0 30px; border: 1px solid var(--blue-100); border-radius: 18px; }
+    .schedule-filter-selects { grid-template-columns: 1fr; }
+    .schedule-filter-select,
+    .schedule-filter-button { min-height: 48px; font-size: .94rem; }
+    .schedule-category { margin-bottom: 42px; }
+    .category-header { margin-bottom: 16px; padding-left: 12px; font-size: 1.36rem; line-height: 1.3; }
+    .table-responsive { overflow: visible; border: 0; background: transparent; box-shadow: none; }
+    .table-responsive table,
+    .table-responsive tbody { display: block; width: 100%; min-width: 0; }
+    .table-responsive thead { display: none; }
+    .table-responsive tbody { display: grid; gap: 13px; }
+    .table-responsive tr {
+        display: block;
+        overflow: hidden;
+        border: 1px solid var(--blue-100);
+        border-radius: 17px;
+        background: var(--white);
+        box-shadow: 0 9px 24px rgba(15,27,76,.055);
+    }
+    .table-responsive td,
+    .table-responsive td:nth-child(5) {
+        display: grid;
+        grid-template-columns: minmax(92px, 34%) minmax(0, 1fr);
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--blue-100);
+        font-size: .91rem;
+        line-height: 1.45;
+        text-align: right;
+    }
+    .table-responsive td:last-child { border-bottom: 0; }
+    .table-responsive td::before {
+        content: attr(data-label);
+        color: var(--gray-500);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: .66rem;
+        font-weight: 800;
+        letter-spacing: .045em;
+        text-align: left;
+        text-transform: uppercase;
+    }
+    .table-responsive td[colspan] { display: block; padding: 24px 14px; text-align: center !important; }
+    .table-responsive td[colspan]::before { display: none; }
+    .table-responsive .tuition-trigger { min-width: 0; text-align: left; }
+    .table-responsive .status-badge { justify-self: end; }
+
+    .album-preview { gap: 6px; }
+    .album-preview img { height: clamp(92px, 29vw, 122px); }
+    .hof-cat-card { padding: 24px 16px; }
+    .faq-question { min-height: 64px; padding: 18px 16px; font-size: 1rem; line-height: 1.45; }
+    .faq-icon { width: 38px; height: 38px; flex-basis: 38px; }
+    .faq-answer-inner { padding-right: 16px; padding-left: 16px; font-size: .94rem; line-height: 1.72; }
+
+    .modal { padding: calc(58px + env(safe-area-inset-top)) 12px calc(16px + env(safe-area-inset-bottom)); }
+    .modal-content { max-width: 100%; max-height: calc(100dvh - 86px); }
+    .gallery-container { max-height: calc(100dvh - 80px); padding-bottom: 20px; }
+    .close-modal {
+        top: calc(8px + env(safe-area-inset-top));
+        right: 10px;
+        display: grid;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(6,10,36,.72);
+        font-size: 34px;
+    }
+
+    .register-brand-banner { text-align: center; }
+    .register-brand-headline { font-size: clamp(3rem, 15vw, 4.65rem); line-height: .93; }
+    #register .register-box { padding: 22px 16px; border-radius: 20px; }
+    #register .register-box form { gap: 17px; }
+    .form-control {
+        min-height: 52px;
+        padding: 14px;
+        border-radius: 12px;
+        font-size: 16px;
+    }
+    select.form-control { padding-right: 48px; }
+    .submit-btn { min-height: 54px; font-size: 1rem; }
+
+    footer.brand-footer { padding: 54px 20px calc(28px + env(safe-area-inset-bottom)); }
+    .brand-footer .footer-top { gap: 30px; padding-bottom: 38px; }
+    .footer-handdrawn-textmark { width: 136px; height: 50px; }
+    .footer-brand-lockup .footer-handdrawn-textmark + h4 { font-size: 2.65rem; }
+    .brand-footer .footer-col a { display: inline-flex; min-height: 42px; align-items: center; overflow-wrap: anywhere; }
+    .brand-footer .footer-bottom { margin-top: 26px; line-height: 1.6; }
+}
+
+@media (max-width: 680px) {
+    .bee-guide {
+        width: 68px;
+        --bee-guide-x: calc(100vw - 80px);
+        --bee-guide-y: calc(100dvh - 80px - env(safe-area-inset-bottom));
+    }
+    .bee-guide-avatar { width: 68px; height: 68px; }
+    .bee-guide-voice-toggle { top: -6px; right: 48px; width: 36px; height: 36px; }
+    .bee-guide[data-dock="left"] .bee-guide-voice-toggle { right: auto; left: 48px; }
+    .bee-guide-panel {
+        right: 0;
+        bottom: 77px;
+        width: calc(100vw - 24px);
+        max-height: calc(100dvh - 112px - env(safe-area-inset-top));
+        padding: 18px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        border-radius: 20px 20px 7px 20px;
+    }
+    .bee-guide[data-panel="below"] .bee-guide-panel { top: 77px; bottom: auto; }
+    .bee-guide-prompt { right: 61px; bottom: 12px; max-width: min(205px, calc(100vw - 96px)); }
+    .bee-guide[data-dock="left"] .bee-guide-prompt { left: 61px; right: auto; }
+    .bee-guide.is-targeting .bee-guide-prompt { bottom: 76px; max-width: min(180px, calc(100vw - 92px)); }
+    .bee-guide-message { min-height: 0; margin: 10px 0 14px; font-size: .96rem; line-height: 1.43; }
+    .bee-guide-cta { min-height: 48px; }
+    .bee-guide-secondary { min-height: 42px; }
+    .bee-guide-contacts { grid-template-columns: 1fr; }
+    .bee-guide-contacts a { min-height: 42px; display: grid; place-items: center; }
+}
+
+@media (max-width: 390px) {
+    .container { padding-right: 14px; padding-left: 14px; }
+    .logo { gap: 5px; font-size: 1.02rem; }
+    .logo-mark { width: 36px; height: 36px; flex-basis: 36px; }
+    .hamburger { width: 44px; height: 44px; flex-basis: 44px; }
+    .hero-title { font-size: clamp(2.55rem, 13.5vw, 3.25rem); }
+    .hero-slogan { max-width: 275px; }
+    .lecturer-images .zoomable-image { height: 54vw; }
+    .table-responsive td,
+    .table-responsive td:nth-child(5) { grid-template-columns: 86px minmax(0, 1fr); padding: 11px 12px; }
+}
+
+@media (max-width: 768px) and (max-height: 540px) and (orientation: landscape) {
+    #hero { min-height: 540px; }
+    .brand-hero-mascot { width: 42vw; right: -10%; }
+    .bee-guide-panel { max-height: calc(100dvh - 24px); }
+}
+
+@media (hover: none) {
+    .feature-card:hover,
+    .teacher-recording-card:hover,
+    .hof-cat-card:hover,
+    .cta-btn:hover,
+    .conversion-cta:hover,
+    .lecturer-conversion-link:hover { transform: none; }
+}
+
 </style>
 </head>
 <body>
@@ -3345,7 +3709,7 @@ footer.brand-footer {
     <header>
         <div class="container nav-container">
             <a href="#" class="logo" aria-label="may(be)ielts. — Trang chủ">
-                <img class="logo-mark logo-mark-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true">
+                <img class="logo-mark logo-mark-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
                 <span><span class="logo-may">may</span><span class="logo-be">(be)ielts.</span></span>
             </a>
             <ul class="nav-links">
@@ -3357,9 +3721,11 @@ footer.brand-footer {
                 <li><a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1.</a></li>
             </ul>
             
-<div class="hamburger" onclick="toggleMenu()">
+<button class="hamburger" id="mobileMenuToggle" type="button" onclick="toggleMenu()" aria-controls="mobileMenu" aria-expanded="false" aria-label="Mở menu điều hướng">
+    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+</button>
 
-<ul class="mobile-menu" id="mobileMenu">
+<ul class="mobile-menu" id="mobileMenu" aria-hidden="true">
     <li><a href="#features">Đặc Quyền</a></li>
     <li><a href="#recordings">Học Thử</a></li>
     <li><a href="#lecturers">Giáo viên</a></li>
@@ -3369,9 +3735,6 @@ footer.brand-footer {
     <li><a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1.</a></li>
     <li><a href="#register">Nhận lộ trình 7.0+</a></li>
 </ul>
-
-    <i class="fa-solid fa-bars"></i>
-</div>
 
 
 <a href="#register" class="cta-btn">Nhận lộ trình 7.0+</a>
@@ -3388,7 +3751,7 @@ footer.brand-footer {
                 <a href="#recordings" class="btn-secondary" style="padding: 16px 32px; font-size: 1rem;">Xem lớp học thử</a>
             </div>
         </div>
-        <img class="brand-hero-mascot brand-hero-mascot-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true">
+        <img class="brand-hero-mascot brand-hero-mascot-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
     </section>
 
     <!-- Features Section -->
@@ -3518,9 +3881,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 <!-- Hồ Bách -->
                 <div class="lecturer-row" data-bee-teacher="bach" data-bee-guide-side="right">
                     <div class="lecturer-images">
-                        <img src="https://i.ibb.co/YMDr88y/561338466-2462022220881278-659980113980257469-n.jpg" alt="Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)">
+                        <img src="https://i.ibb.co/YMDr88y/561338466-2462022220881278-659980113980257469-n.jpg" alt="Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
                         
-                             <img src="https://i.ibb.co/JNcvVz1/Cam-Scanner-19-06-2026-21-57-2.jpg" alt="Bằng IELTS Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)">
+                             <img src="https://i.ibb.co/JNcvVz1/Cam-Scanner-19-06-2026-21-57-2.jpg" alt="Bằng IELTS Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
                     </div>
                     <div class="lecturer-info">
                         <span class="lecturer-badge">may(be)bach</span>
@@ -3553,11 +3916,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="teacher-preview">
 
-          <video
-    autoplay
-    muted
-    loop
-    playsinline>
+          <video class="teacher-preview-video" muted loop playsinline preload="none">
 
                     <source
                       <source src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/bachvideo.mp4" 
@@ -3585,8 +3944,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 <!-- Tuệ Nhi -->
                 <div class="lecturer-row" data-bee-teacher="nhi" data-bee-guide-side="left">
                     <div class="lecturer-images">
-                        <img src="https://i.ibb.co/bMKmDDLc/457736475-1739145653491500-430238909239537785-n.jpg" alt="Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)">
-                        <img src="https://i.ibb.co/1GSTb1F9/IELTS-page-0001.jpg" alt="Bằng IELTS Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)">
+                        <img src="https://i.ibb.co/bMKmDDLc/457736475-1739145653491500-430238909239537785-n.jpg" alt="Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
+                        <img src="https://i.ibb.co/1GSTb1F9/IELTS-page-0001.jpg" alt="Bằng IELTS Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
                    
                     </div>
                     
@@ -3622,11 +3981,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="teacher-preview">
 
-          <video
-    autoplay
-    muted
-    loop
-    playsinline>
+          <video class="teacher-preview-video" muted loop playsinline preload="none">
 
                     <source
                       src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/nhivideo.mp4"
@@ -3651,8 +4006,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
  <!-- Gia Khang -->
                 <div class="lecturer-row" data-bee-teacher="khang" data-bee-guide-side="right">
                     <div class="lecturer-images">
-                        <img src="https://i.ibb.co/1JspPgdb/IMG-20230513-145018.jpg" alt="Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)">
-                        <img src="https://i.ibb.co/2G3Kbkb/Cam-Scanner-03-30-2026-18-24.jpg" alt="Bằng IELTS Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)">
+                        <img src="https://i.ibb.co/1JspPgdb/IMG-20230513-145018.jpg" alt="Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
+                        <img src="https://i.ibb.co/2G3Kbkb/Cam-Scanner-03-30-2026-18-24.jpg" alt="Bằng IELTS Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
                     </div>
                     <div class="lecturer-info">
                         <span class="lecturer-badge">may(be)kane</span>
@@ -3686,11 +4041,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="teacher-preview">
 
-          <video
-    autoplay
-    muted
-    loop
-    playsinline>
+          <video class="teacher-preview-video" muted loop playsinline preload="none">
 
                     <source
                       src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/kanevideo.mp4"
@@ -3820,9 +4171,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="hof-cat-card" onclick="openGallery('gallery80')">
 
                 <div class="album-preview">
-<img src="https://i.ibb.co/KxXH7bqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259296.jpg">
-<img src="https://i.ibb.co/fVmR6NXQ/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259292.jpg">
-<img src="https://i.ibb.co/zHTsCZ15/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259288.jpg">
+<img src="https://i.ibb.co/KxXH7bqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259296.jpg" alt="Kết quả học viên đạt Writing 8.0" loading="lazy" decoding="async">
+<img src="https://i.ibb.co/fVmR6NXQ/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259292.jpg" alt="Feedback học viên đạt Writing 8.0" loading="lazy" decoding="async">
+<img src="https://i.ibb.co/zHTsCZ15/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259288.jpg" alt="Thành tích học viên đạt Writing 8.0" loading="lazy" decoding="async">
 
                 </div>
 
@@ -3834,9 +4185,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="hof-cat-card" onclick="openGallery('gallery75')">
 
                 <div class="album-preview">
-                    <img src="https://i.ibb.co/6c1xgcCh/dl-43e6421ea632.jpg">
-                    <img src="https://i.ibb.co/DgRmhTHX/dl-311504fa279e.jpg">
-                    <img src="https://i.ibb.co/W413nC6q/dl-7f68c262b780.jpg">
+                    <img src="https://i.ibb.co/6c1xgcCh/dl-43e6421ea632.jpg" alt="Kết quả học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
+                    <img src="https://i.ibb.co/DgRmhTHX/dl-311504fa279e.jpg" alt="Feedback học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
+                    <img src="https://i.ibb.co/W413nC6q/dl-7f68c262b780.jpg" alt="Thành tích học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
                 </div>
 
                 <h3>115+ Học viên</h3>
@@ -3945,7 +4296,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                     <p class="section-subtitle" style="color: #aeaeb2;">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
                 </div>
                 <div class="register-brand-mascot" aria-hidden="true">
-                    <img src="assets/brand/maybe-handdrawn-logo.png" alt="">
+                    <img src="assets/brand/maybe-handdrawn-logo.png" alt="" loading="lazy" decoding="async">
                 </div>
             </div>
             
@@ -3953,30 +4304,31 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 <form onsubmit="submitRegister(event); return false;">
                     <div class="form-group">
                         <label for="name">Họ và tên của em</label>
-                        <input type="text" id="name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" required>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name" required>
                     </div>
                     <div class="form-group">
                         <label for="fb-link">Link Facebook cá nhân</label>
-                        <input type="url" id="fb-link" class="form-control" placeholder="https://facebook.com/..." required>
+                        <input type="url" id="fb-link" name="facebook" class="form-control" placeholder="https://facebook.com/..." inputmode="url" autocomplete="url" required>
                     </div>
                      <div class="form-group">
-        <label>Email cá nhân</label>
-        <input type="email" id="email" class="form-control" placeholder="emailcuaban@gmail.com" required>
+        <label for="email">Email cá nhân</label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="emailcuaban@gmail.com" inputmode="email" autocomplete="email" required>
     </div>
 
     <div class="form-group">
-        <label>Số điện thoại</label>
-        <input type="tel" id="phone" class="form-control" placeholder="0943..." required>
+        <label for="phone">Số điện thoại</label>
+        <input type="tel" id="phone" name="phone" class="form-control" placeholder="0943..." inputmode="tel" autocomplete="tel" required>
     </div>
 
 <div class="form-group">
-    <label>Lớp muốn đăng ký</label>
-    <select id="course" class="form-control" required>
+    <label for="course">Lớp muốn đăng ký</label>
+    <select id="course" name="course" class="form-control" required>
         <option value="">-- Chọn lớp --</option>
     </select>
 </div>
                     
-                    <button type="submit" class="submit-btn">Nhận lộ trình phù hợp</button>
+                    <button type="submit" class="submit-btn" id="registerSubmitButton">Nhận lộ trình phù hợp</button>
+                    <p class="register-status" id="registerStatus" role="status" aria-live="polite"></p>
                 </form>
             </div>
         </div>
@@ -3987,7 +4339,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <div class="footer-top">
             <div class="footer-brand">
                 <div class="footer-brand-lockup">
-                    <img class="footer-handdrawn-textmark" src="assets/brand/maybe-handdrawn-textmark.png" alt="MAY">
+                    <img class="footer-handdrawn-textmark" src="assets/brand/maybe-handdrawn-textmark.png" alt="MAY" loading="lazy" decoding="async">
                     <h4>BE</h4>
                 </div>
                 <p>may(be)ielts. đồng hành cùng người học biến một điều “có thể” thành một kết quả thật sự.</p>
@@ -4004,7 +4356,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="footer-col">
                 <h5>Contact</h5>
                 <ul>
-                    <li><a href="mailto:pw.hob9ch@gmail.com">pw.hob9ch@gmail.com</a></li>
+                    <li><a href="mailto:mbi.maybebach@gmail.com">mbi.maybebach@gmail.com</a></li>
               
                     <li>Ha Noi · Vietnam</li>
                 </ul>
@@ -4167,7 +4519,7 @@ document.body.style.overflow = "hidden";
 
     galleries[galleryName].forEach(img => {
         galleryContainer.innerHTML += `
-            <img src="${img}" class="gallery-img">
+            <img src="${img}" class="gallery-img" alt="Kết quả và feedback học viên MAYBE IELTS" loading="lazy" decoding="async">
         `;
     });
 
@@ -4348,12 +4700,39 @@ closeRecording();
 
 <script>
 
-function toggleMenu(){
-    document
-        .getElementById("mobileMenu")
-        .classList
-        .toggle("show");
+function toggleMenu(force){
+    const menu = document.getElementById("mobileMenu");
+    const toggle = document.getElementById("mobileMenuToggle");
+    if (!menu || !toggle) return;
+    const shouldOpen = typeof force === "boolean" ? force : !menu.classList.contains("show");
+    menu.classList.toggle("show", shouldOpen);
+    menu.setAttribute("aria-hidden", String(!shouldOpen));
+    toggle.setAttribute("aria-expanded", String(shouldOpen));
+    toggle.setAttribute("aria-label", shouldOpen ? "Đóng menu điều hướng" : "Mở menu điều hướng");
+    const icon = toggle.querySelector("i");
+    if (icon) {
+        icon.classList.toggle("fa-bars", !shouldOpen);
+        icon.classList.toggle("fa-xmark", shouldOpen);
+    }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const menu = document.getElementById("mobileMenu");
+    const toggle = document.getElementById("mobileMenuToggle");
+    menu?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => toggleMenu(false)));
+    document.addEventListener("click", event => {
+        if (!menu?.classList.contains("show") || menu.contains(event.target) || toggle?.contains(event.target)) return;
+        toggleMenu(false);
+    });
+    document.addEventListener("keydown", event => {
+        if (event.key !== "Escape" || !menu?.classList.contains("show")) return;
+        toggleMenu(false);
+        toggle?.focus();
+    });
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 768 && menu?.classList.contains("show")) toggleMenu(false);
+    });
+});
 
 function toggleFaq(button) {
     const currentItem = button.closest(".faq-item");
@@ -4422,7 +4801,7 @@ function toggleContact(){
 
     <button type="button" class="bee-guide-avatar" id="beeGuideToggle" aria-expanded="false" aria-controls="beeGuidePanel" aria-label="Trò chuyện với Bee Study Buddy" onclick="toggleBeeGuide(undefined, true)">
         <span class="bee-guide-cloud" aria-hidden="true"></span>
-        <img class="bee-guide-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true">
+        <img class="bee-guide-handdrawn" src="assets/brand/bee-handdrawn.png" alt="" aria-hidden="true" decoding="async">
         <span class="bee-guide-face" aria-hidden="true">
             <span class="bee-guide-lid bee-guide-lid-left"></span>
             <span class="bee-guide-lid bee-guide-lid-right"></span>
@@ -4995,12 +5374,12 @@ if(courseSelect){
 
             const trHTML = `
                 <tr>
-                    <td><strong>${row.GiangVien}</strong></td>
-                    <td>${row.MaLop}</td>
-                    <td>${lichHocFormat}</td>
-                    <td>${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
-                    <td>${tuitionPlan}</td>
-                    <td><span class="status-badge ${slotStatus}">${slotsLeft}/${totalSlots}</span></td>
+                    <td data-label="Giáo viên"><strong>${row.GiangVien}</strong></td>
+                    <td data-label="Mã lớp">${row.MaLop}</td>
+                    <td data-label="Lịch học">${lichHocFormat}</td>
+                    <td data-label="Khai giảng">${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
+                    <td data-label="Học phí">${tuitionPlan}</td>
+                    <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft}/${totalSlots}</span></td>
                 </tr>
             `;
 
@@ -5044,6 +5423,19 @@ const REGISTER_API = "https://script.google.com/macros/s/AKfycbylC6irJ6wkKI_V3G9
 async function submitRegister(e){
     e.preventDefault();
 
+    const form = e.currentTarget;
+    const submitButton = document.getElementById("registerSubmitButton");
+    const status = document.getElementById("registerStatus");
+    if (submitButton?.disabled) return;
+    if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = "Đang gửi thông tin…";
+    }
+    if (status) {
+        status.textContent = "";
+        status.className = "register-status";
+    }
+
     const data = {
         name: document.getElementById("name").value,
         email: document.getElementById("email").value,
@@ -5065,14 +5457,29 @@ async function submitRegister(e){
 
         if(result.status === "success"){
             activateBeeGuide('success', true);
-            alert("Cảm ơn em! Team đã nhận được thông tin và sẽ liên hệ sớm nhất ^^");
+            if (status) {
+                status.textContent = "Đã gửi thành công! Team sẽ liên hệ với em sớm nhất nhé.";
+                status.classList.add("is-success");
+            }
+            form?.reset();
         } else {
-            alert("Có lỗi xảy ra, thử lại sau.");
+            if (status) {
+                status.textContent = "Chưa gửi được thông tin. Em thử lại sau một chút nhé.";
+                status.classList.add("is-error");
+            }
         }
 
     }catch(err){
-        alert("Không gửi được dữ liệu.");
+        if (status) {
+            status.textContent = "Không gửi được dữ liệu. Em kiểm tra kết nối rồi thử lại nhé.";
+            status.classList.add("is-error");
+        }
         console.error(err);
+    }finally{
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Nhận lộ trình phù hợp";
+        }
     }
 }
 </script>
@@ -5507,8 +5914,8 @@ function moveBeeGuideForState(stateKey, target = beeGuideCurrentTarget) {
     const isMobile = viewportWidth <= 680;
     const isTablet = viewportWidth > 680 && viewportWidth <= 1024;
     const margin = isMobile ? 12 : isTablet ? 16 : 22;
-    const guideWidth = isMobile ? 78 : 360;
-    const avatarSize = isMobile ? 78 : 92;
+    const guideWidth = isMobile ? 68 : 360;
+    const avatarSize = isMobile ? 68 : 92;
     let dock;
     let point = "none";
     let x;
@@ -5974,12 +6381,46 @@ function initBeeGuide() {
     const registerForm = document.querySelector("#register form");
     if (registerForm) {
         registerForm.addEventListener("focusin", () => {
+            document.body.classList.add("is-form-focused");
             activateBeeGuide("register", false, null, { voice: false });
-        }, { once: true });
+        });
+        registerForm.addEventListener("focusout", () => {
+            setTimeout(() => {
+                if (!registerForm.contains(document.activeElement)) document.body.classList.remove("is-form-focused");
+            }, 0);
+        });
     }
 }
 
+function initTeacherPreviewVideos() {
+    const videos = Array.from(document.querySelectorAll(".teacher-preview-video"));
+    if (!videos.length) return;
+
+    const setPlayback = (video, shouldPlay) => {
+        video.dataset.inViewport = String(shouldPlay);
+        if (!shouldPlay || document.hidden) {
+            video.pause();
+            return;
+        }
+        video.play().catch(() => {});
+    };
+
+    if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => setPlayback(entry.target, entry.isIntersecting && entry.intersectionRatio >= .12));
+        }, { rootMargin: "140px 0px", threshold: [0, .12, .45] });
+        videos.forEach(video => observer.observe(video));
+    } else {
+        videos.forEach(video => setPlayback(video, true));
+    }
+
+    document.addEventListener("visibilitychange", () => {
+        videos.forEach(video => setPlayback(video, video.dataset.inViewport === "true"));
+    });
+}
+
 document.addEventListener("DOMContentLoaded", initBeeGuide);
+document.addEventListener("DOMContentLoaded", initTeacherPreviewVideos);
 </script>
 
 </body>
