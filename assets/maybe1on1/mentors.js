@@ -30,7 +30,7 @@ window.MAYBE_MENTORS = [
     "skillScore": "7.5",
     "bio": "Đồng hành cùng học viên xây dựng tư duy viết mạch lạc, triển khai luận điểm chặt chẽ và sử dụng ngôn ngữ phù hợp với từng dạng bài. Các buổi học ưu tiên thực hành, chữa lỗi cụ thể và giúp bạn hình thành một quy trình viết có thể áp dụng ổn định trong phòng thi.",
     "zalo": "https://zalo.me/0973897128",
-    "facebook": "https://www.facebook.com/profile.php?id=100051223023470&locale=vi_VN",
+    "facebook": "https://www.facebook.com/profile.php?id=61593377714197",
     "image": "assets/maybe1on1/profile-2b3d2b0d715a.webp",
     "certificate": "assets/maybe1on1/certificate-6bb716a810ac.webp",
     "currentStudents": 0,
