@@ -5004,8 +5004,8 @@ function toggleContact(){
     }
 
     function publicClassNumber(value) {
-        const matches = String(value || "").match(/\d+/g);
-        return matches ? Number(matches[matches.length - 1]) : Number.MAX_SAFE_INTEGER;
+        const match = String(value || "").match(/^MB(?:Write|Speak)(\d+)/i);
+        return match ? Number(match[1]) : Number.MAX_SAFE_INTEGER;
     }
 
     function scheduleDayKey(value) {
@@ -5156,45 +5156,60 @@ function toggleContact(){
         renderFilteredPublicSchedule();
     }
 
-    function roundToFriendlyDeadline(rawDeadline, referenceDate) {
-        const rawDay = rawDeadline.getUTCDate();
+    const tuitionMonthCodes = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
-        if (rawDay >= 28) {
-            const firstOfNextMonth = new Date(Date.UTC(
-                rawDeadline.getUTCFullYear(),
-                rawDeadline.getUTCMonth() + 1,
-                1
-            ));
-            const daysBeforeReference = Math.round((referenceDate - firstOfNextMonth) / 86400000);
-
-            if (daysBeforeReference >= 7) return firstOfNextMonth;
-        }
-
-        const milestones = [25, 20, 15, 10, 5, 1];
-        const roundedDay = milestones.find(day => day <= rawDay) || 1;
-        return new Date(Date.UTC(
-            rawDeadline.getUTCFullYear(),
-            rawDeadline.getUTCMonth(),
-            roundedDay
-        ));
+    function monthlyTuitionCodeInfo(classCode) {
+        const match = String(classCode || "").trim().match(/^MBWrite(\d{2})\+?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(\d{2})$/i);
+        if (!match) return null;
+        return {
+            number: Number(match[1]),
+            month: tuitionMonthCodes.indexOf(match[2].toLowerCase()),
+            year: 2000 + Number(match[3])
+        };
     }
 
-    function calculatePromotionDeadlineDate(startDateValue) {
+    function calculateTuitionCutovers(startDateValue, classCode = "") {
         const startDate = parseScheduleDate(startDateValue);
         if (!startDate) return null;
 
-        // Lấy mốc khoảng 10 ngày trước khai giảng, sau đó làm tròn về
-        // các ngày dễ nhớ: 01, 05, 10, 15, 20 hoặc 25 trong tháng.
-        const rawDeadline = new Date(startDate.getTime());
-        rawDeadline.setUTCDate(rawDeadline.getUTCDate() - 10);
-        return roundToFriendlyDeadline(rawDeadline, startDate);
+        const day = startDate.getUTCDate();
+        const codeInfo = monthlyTuitionCodeInfo(classCode);
+        let policy;
+
+        if (day >= 7 && day <= 12) policy = "early";
+        else if (day >= 18 && day <= 24) policy = "late";
+        else if (codeInfo) policy = codeInfo.number >= 2 && codeInfo.number <= 5 ? "early" : "late";
+        else policy = day <= 14 || day >= 25 ? "early" : "late";
+
+        let year = startDate.getUTCFullYear();
+        let month = startDate.getUTCMonth();
+        if (codeInfo) {
+            year = codeInfo.year;
+            month = codeInfo.month;
+        } else if (policy === "early" && day >= 25) {
+            month += 1;
+            if (month > 11) {
+                month = 0;
+                year += 1;
+            }
+        }
+
+        return policy === "early"
+            ? {
+                policy,
+                firstCutover: new Date(Date.UTC(year, month - 1, 20)),
+                secondCutover: new Date(Date.UTC(year, month, 1))
+            }
+            : {
+                policy,
+                firstCutover: new Date(Date.UTC(year, month, 1)),
+                secondCutover: new Date(Date.UTC(year, month, 10))
+            };
     }
 
-    function calculateEarlyBirdDeadline(promotionDeadline) {
-        if (!promotionDeadline) return null;
-        const rawDeadline = new Date(promotionDeadline.getTime());
-        rawDeadline.setUTCDate(rawDeadline.getUTCDate() - 10);
-        return roundToFriendlyDeadline(rawDeadline, promotionDeadline);
+    function calculatePromotionDeadlineDate(startDateValue, classCode = "") {
+        const cutovers = calculateTuitionCutovers(startDateValue, classCode);
+        return cutovers ? addUtcDays(cutovers.secondCutover, -1) : null;
     }
 
     function addUtcDays(date, days) {
@@ -5210,8 +5225,8 @@ function toggleContact(){
         return `${day}/${month}`;
     }
 
-    function calculatePromotionDeadline(startDateValue) {
-        return formatShortDate(calculatePromotionDeadlineDate(startDateValue));
+    function calculatePromotionDeadline(startDateValue, classCode = "") {
+        return formatShortDate(calculatePromotionDeadlineDate(startDateValue, classCode));
     }
 
     function parseVnd(value) {
@@ -5234,8 +5249,9 @@ function toggleContact(){
     function createTuitionPlan(row) {
         const lowestFee = parseVnd(row.HocPhiUuDai);
         const originalFee = parseVnd(row.HocPhiGoc);
-        const promotionDeadline = calculatePromotionDeadlineDate(row.KhaiGiang);
-        const earlyBirdDeadline = calculateEarlyBirdDeadline(promotionDeadline);
+        const cutovers = calculateTuitionCutovers(row.KhaiGiang, row.MaLop);
+        const promotionDeadline = cutovers ? addUtcDays(cutovers.secondCutover, -1) : null;
+        const earlyBirdDeadline = cutovers ? addUtcDays(cutovers.firstCutover, -1) : null;
 
         if (!lowestFee || !originalFee || !promotionDeadline || !earlyBirdDeadline) {
             return null;
@@ -5244,15 +5260,15 @@ function toggleContact(){
         // Mức giữa là trung bình của giá sớm nhất và giá gốc,
         // làm tròn đến 100.000đ: 5tr → 5,5tr → 6tr; 4,5tr → 4,8tr → 5tr.
         const middleFee = Math.round(((lowestFee + originalFee) / 2) / 100000) * 100000;
-        const middleStart = addUtcDays(earlyBirdDeadline, 1);
-        const fullPriceStart = addUtcDays(promotionDeadline, 1);
+        const middleStart = cutovers.firstCutover;
+        const fullPriceStart = cutovers.secondCutover;
         const today = getTodayUtc();
-        const activeStage = today <= earlyBirdDeadline ? 0 : (today <= promotionDeadline ? 1 : 2);
+        const activeStage = today < middleStart ? 0 : (today < fullPriceStart ? 1 : 2);
 
         const stages = [
             {
                 title: "Giá sớm nhất",
-                date: `Đến hết ${formatShortDate(earlyBirdDeadline)}`,
+                date: `Trước ${formatShortDate(middleStart)}`,
                 price: formatVnd(lowestFee)
             },
             {
@@ -5271,6 +5287,7 @@ function toggleContact(){
             className: String(row.MaLop || "Lớp học"),
             teacher: String(row.GiangVien || ""),
             openingDate: String(row.KhaiGiang || ""),
+            policy: cutovers.policy,
             activeStage,
             stages
         };
