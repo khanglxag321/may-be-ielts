@@ -82,6 +82,8 @@
       textarea { min-height: 260px; resize: vertical; line-height: 1.55; }
       label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 750; color: #344054; }
       .field { margin-bottom: 14px; }
+      .intake-meta { display: grid; grid-template-columns: 180px minmax(220px, 1fr); gap: 12px; margin-bottom: 14px; }
+      .intake-meta .field { margin-bottom: 0; }
       .actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
       .btn {
         display: inline-flex; align-items: center; justify-content: center; gap: 7px;
@@ -96,7 +98,6 @@
       .btn-quiet { background: transparent; color: var(--blue-strong); padding-inline: 8px; }
       .btn-small { min-height: 34px; padding: 7px 10px; font-size: 13px; }
 
-      .tip { margin-top: 14px; border-left: 4px solid var(--gold); border-radius: 8px; background: #fff9e8; padding: 11px 13px; color: #73510d; font-size: 13px; line-height: 1.5; }
       .empty { display: grid; place-items: center; min-height: 240px; padding: 32px; text-align: center; color: var(--muted); }
       .empty strong { display: block; margin-bottom: 5px; color: #344054; }
 
@@ -112,6 +113,8 @@
       .status.syncing { background: #eaf2ff; color: #175cd3; }
       .syncing-row { opacity: .78; }
       .syncing-row .btn { pointer-events: none; opacity: .55; }
+      .sheet-check { width: 19px; height: 19px; margin: 0; accent-color: var(--blue); cursor: pointer; }
+      .sheet-check:disabled { cursor: wait; }
 
       .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
       .stat { padding: 17px 18px; border-radius: 18px; color: white; background: linear-gradient(145deg, #07102e, var(--navy) 65%, #1a2f8f); box-shadow: 0 10px 28px rgba(15,27,76,.14); }
@@ -119,7 +122,7 @@
       .stat:nth-child(3) { color:var(--navy); background: var(--mint,#7fe0c2); }
       .stat strong { display: block; font-size: 26px; }
       .stat span { font-size: 12px; opacity: .88; }
-      .toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) 220px auto; gap: 10px; padding: 16px; border-bottom: 1px solid var(--line); }
+      .toolbar { display: grid; grid-template-columns: minmax(210px, 1fr) repeat(4, minmax(145px, 175px)) auto; gap: 10px; padding: 16px; border-bottom: 1px solid var(--line); }
       .table-card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 18px 14px; }
       .table-card-head h1 { margin-bottom: 0; }
       .row-actions { display: flex; gap: 6px; }
@@ -131,6 +134,9 @@
       .dialog-head h2 { margin: 0; }
       .dialog-body { padding: 20px 22px; }
       .dialog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+      .dialog-grid .field { margin-bottom: 0; }
+      .dialog-grid .field-wide { grid-column: 1 / -1; }
+      .dialog-grid textarea { min-height: 92px; }
       .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; padding: 16px 22px 20px; }
 
       .toast { position: fixed; right: 20px; bottom: 20px; z-index: 100; max-width: min(420px, calc(100% - 40px)); border-radius: 12px; padding: 13px 15px; color: white; background: #17213d; box-shadow: 0 16px 46px rgba(15,23,42,.25); transform: translateY(20px); opacity: 0; pointer-events: none; transition: .2s; }
@@ -151,7 +157,7 @@
         .brand small, .sheet-link span { display: none; }
         .shell { padding-top: 16px; }
         .stats { grid-template-columns: 1fr; }
-        .toolbar, .dialog-grid { grid-template-columns: 1fr; }
+        .toolbar, .dialog-grid, .intake-meta { grid-template-columns: 1fr; }
         .nav-tab { flex: 1 1 auto; }
         .card-head, .card-body { padding-left: 16px; padding-right: 16px; }
       }
@@ -205,14 +211,16 @@
               </div>
             </div>
             <div class="card-body">
+              <div class="intake-meta">
+                <div class="field"><label for="intakeMonth">Tháng ghi nhận</label><input id="intakeMonth" type="month"></div>
+                <div class="field"><label for="teacherSelect">Giáo viên phụ trách</label><select id="teacherSelect"></select></div>
+              </div>
               <label for="rawInput">Nội dung cần xử lý</label>
               <textarea id="rawInput" placeholder="1. Nguyễn Minh Anh + 0989123456 + minhanh@gmail.com + facebook.com/minhanh + MBWrite02 OCT26&#10;2. Trần Thu Hà, 0901234567, thuha@gmail.com, fb.com/thuha, MBSpeak05"></textarea>
               <div class="actions" style="margin-top: 12px">
                 <button id="parseBtn" class="btn btn-primary">Phân loại dữ liệu</button>
-                <button id="sampleBtn" class="btn btn-secondary">Điền dữ liệu mẫu</button>
                 <button id="clearBtn" class="btn btn-quiet">Xóa ô nhập</button>
               </div>
-              <div class="tip">Số điện thoại được giữ dạng văn bản để không mất số 0 đầu. Hệ thống sẽ bỏ qua bản ghi trùng số điện thoại hoặc email.</div>
             </div>
           </article>
 
@@ -233,18 +241,21 @@
 
       <section id="view-database" class="view">
         <div class="stats">
-          <div class="stat"><strong id="statTotal">0</strong><span>Học viên đang hoạt động</span></div>
-          <div class="stat"><strong id="statComplete">0</strong><span>Hồ sơ đầy đủ</span></div>
-          <div class="stat"><strong id="statMissing">0</strong><span>Hồ sơ cần bổ sung</span></div>
+          <div class="stat"><strong id="statTotal">0</strong><span>Học viên trong bộ lọc</span></div>
+          <div class="stat"><strong id="statDeposited">0</strong><span>Đã đóng cọc</span></div>
+          <div class="stat"><strong id="statPaid">0</strong><span>Đã đóng đủ học phí</span></div>
         </div>
         <article class="card">
           <div class="table-card-head">
-            <div><div class="eyebrow">Google Sheets database</div><h1>Danh sách học viên</h1></div>
+            <div><div class="eyebrow">Theo dõi tuyển sinh</div><h1>Danh sách học viên</h1></div>
             <button class="btn btn-secondary refresh-btn">↻ Đồng bộ</button>
           </div>
           <div class="toolbar">
-            <input id="searchInput" type="search" placeholder="Tìm tên, SĐT, email hoặc lớp…">
+            <input id="searchInput" type="search" placeholder="Tìm tên, SĐT, email, lớp…">
+            <input id="monthFilter" type="month" aria-label="Lọc theo tháng">
+            <select id="teacherFilter" aria-label="Lọc theo giáo viên"><option value="ALL">Tất cả giáo viên</option></select>
             <select id="classFilter" aria-label="Lọc theo lớp"><option value="ALL">Tất cả lớp</option></select>
+            <select id="paymentFilter" aria-label="Lọc theo học phí"><option value="ALL">Tất cả học phí</option><option value="DEPOSIT_PENDING">Chưa đóng cọc</option><option value="DEPOSITED">Đã đóng cọc</option><option value="TUITION_PENDING">Chưa đóng đủ</option><option value="PAID">Đã đóng đủ học phí</option></select>
             <div class="actions">
               <button id="copyBtn" class="btn btn-secondary btn-small">Copy bảng</button>
               <button id="csvBtn" class="btn btn-secondary btn-small">Xuất CSV</button>
@@ -276,6 +287,13 @@
             <div class="field"><label for="editEmail">Email</label><input id="editEmail" type="email"></div>
             <div class="field"><label for="editFacebook">Link Facebook</label><input id="editFacebook"></div>
             <div class="field"><label for="editClass">Mã lớp</label><input id="editClass"></div>
+            <div class="field"><label for="editMonth">Tháng ghi nhận</label><input id="editMonth" type="month"></div>
+            <div class="field"><label for="editTeacher">Giáo viên phụ trách</label><select id="editTeacher"></select></div>
+            <div class="field"><label for="editStatus">Trạng thái học viên</label><select id="editStatus"><option>Mới</option><option>Đang tư vấn</option><option>Đã xếp lớp</option><option>Đang học</option><option>Hoàn thành</option><option>Ngưng</option></select></div>
+            <div class="field"><label for="editDepositAmount">Số tiền cọc</label><input id="editDepositAmount" type="number" min="0" step="1000" inputmode="numeric"></div>
+            <div class="field"><label for="editTuitionAmount">Tổng học phí</label><input id="editTuitionAmount" type="number" min="0" step="1000" inputmode="numeric"></div>
+            <div class="field"><label for="editAmountPaid">Đã thu</label><input id="editAmountPaid" type="number" min="0" step="1000" inputmode="numeric"></div>
+            <div class="field field-wide"><label for="editNotes">Ghi chú</label><textarea id="editNotes"></textarea></div>
           </div>
         </div>
         <div class="dialog-actions"><button type="button" class="btn btn-secondary" id="cancelDialogBtn">Hủy</button><button type="submit" class="btn btn-primary">Lưu thay đổi</button></div>
@@ -289,7 +307,9 @@
       const teamSession = MaybeTeamAuth.requireSession();
       (function () {
         const APPS_SCRIPT_URL = String(window.MAYBE_TEAM_CONFIG.studentsApiUrl || '');
-        const state = { students: [], archived: [], parsed: [], view: 'input' };
+        const CONFIGURED_SHEET_URL = String(window.MAYBE_TEAM_CONFIG.studentsSheetUrl || '');
+        const CACHE_KEY = 'maybe_students_cache_v3:' + teamSession.email.toLowerCase();
+        const state = { students: [], archived: [], teachers: [], parsed: [], view: 'input' };
         const $ = (selector) => document.querySelector(selector);
         const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
@@ -297,6 +317,7 @@
           const initials = teamSession.name.trim().split(/\s+/).slice(-2).map((part) => part[0]).join('').toUpperCase();
           $('#teamAccount').innerHTML = '<span class="account-avatar">' + initials + '</span><span class="account-copy"><strong>' + teamSession.name + '</strong><span>' + (teamSession.role === 'manager' ? 'Quản lý' : 'Giáo viên') + '</span></span><button class="logout-button" id="teamLogout">Đăng xuất</button>';
           $('#teamLogout').onclick = () => MaybeTeamAuth.logout('index.html');
+          $('#sheetLink').href = CONFIGURED_SHEET_URL || '#';
           if (teamSession.role !== 'manager') $('#sheetLink').style.display = 'none';
           if (teamSession.demo) {
             const note = document.createElement('p');
@@ -337,14 +358,47 @@
           toast.timer = setTimeout(() => element.classList.remove('show'), 3800);
         }
 
+        function defaultMonth() {
+          const now = new Date();
+          return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+        }
+
+        function hydrateCache() {
+          try {
+            const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+            if (!cached) return false;
+            state.students = Array.isArray(cached.students) ? cached.students : [];
+            state.archived = Array.isArray(cached.archived) ? cached.archived : [];
+            state.teachers = Array.isArray(cached.teachers) ? cached.teachers : [];
+            renderAll();
+            return true;
+          } catch (_) {
+            sessionStorage.removeItem(CACHE_KEY);
+            return false;
+          }
+        }
+
+        function persistCache() {
+          try {
+            sessionStorage.setItem(CACHE_KEY, JSON.stringify({
+              students: state.students.filter((item) => !item._syncState),
+              archived: state.archived,
+              teachers: state.teachers,
+              savedAt: Date.now(),
+            }));
+          } catch (_) {}
+        }
+
         async function loadData(silent) {
           if (!silent) setBusy(true);
           try {
             const data = await serverCall('getAppData');
             state.students = Array.isArray(data.students) ? data.students : [];
             state.archived = Array.isArray(data.archived) ? data.archived : [];
-            $('#sheetLink').href = data.spreadsheetUrl || '#';
+            state.teachers = Array.isArray(data.teachers) ? data.teachers : [];
+            $('#sheetLink').href = CONFIGURED_SHEET_URL || data.spreadsheetUrl || '#';
             renderAll();
+            persistCache();
             if (!silent) toast('Đã đồng bộ dữ liệu từ Google Sheet.');
           } catch (error) {
             toast(error.message, true);
@@ -459,6 +513,9 @@
           const records = state.parsed.map((item) => ({ ...item, status: evaluateStatus(item) }));
           const savedInput = $('#rawInput').value;
           const now = new Date().toISOString();
+          const intakeMonth = $('#intakeMonth').value || defaultMonth();
+          const selectedTeacherId = $('#teacherSelect').value || teamSession.teacherId;
+          const selectedTeacher = state.teachers.find((teacher) => teacher.teacherId === selectedTeacherId);
           const optimisticIds = [];
           const optimisticRecords = records.map((item, index) => {
             const id = 'syncing-' + Date.now() + '-' + index;
@@ -469,6 +526,12 @@
               createdAt: now,
               updatedAt: now,
               createdBy: teamSession.email,
+              intakeMonth,
+              teacherId: selectedTeacherId,
+              teacherName: selectedTeacher ? selectedTeacher.name : teamSession.name,
+              depositPaid: false,
+              tuitionPaid: false,
+              studentStatus: 'Mới',
               _syncState: 'syncing',
             };
           });
@@ -480,11 +543,12 @@
           switchView('database');
           toast('Đã nhận ' + records.length + ' học viên · đang đồng bộ với Google Sheet…');
 
-          serverCall('addStudents', records).then((result) => {
+          serverCall('addStudents', { records, intakeMonth, teacherId: selectedTeacherId }).then((result) => {
             const optimisticSet = new Set(optimisticIds);
             state.students = (Array.isArray(result.added) ? result.added : [])
               .concat(state.students.filter((item) => !optimisticSet.has(item.id)));
             renderAll();
+            persistCache();
             const skipped = result.skipped && result.skipped.length ? ' · Bỏ qua ' + result.skipped.length + ' bản ghi trùng.' : '';
             toast('Đã lưu ' + result.addedCount + ' học viên vào Google Sheet.' + skipped);
           }).catch((error) => {
@@ -500,11 +564,20 @@
 
         function getFilteredStudents() {
           const query = $('#searchInput').value.trim().toLocaleLowerCase('vi-VN');
+          const intakeMonth = $('#monthFilter').value;
+          const teacherId = $('#teacherFilter').value;
           const classCode = $('#classFilter').value;
+          const payment = $('#paymentFilter').value;
           return state.students.filter((item) => {
+            if (intakeMonth && item.intakeMonth !== intakeMonth) return false;
+            if (teacherId !== 'ALL' && item.teacherId !== teacherId) return false;
             if (classCode !== 'ALL' && item.classCode !== classCode) return false;
+            if (payment === 'DEPOSIT_PENDING' && item.depositPaid) return false;
+            if (payment === 'DEPOSITED' && !item.depositPaid) return false;
+            if (payment === 'TUITION_PENDING' && item.tuitionPaid) return false;
+            if (payment === 'PAID' && !item.tuitionPaid) return false;
             if (!query) return true;
-            return [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode]
+            return [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.teacherName, item.studentStatus]
               .some((value) => String(value || '').toLocaleLowerCase('vi-VN').includes(query));
           });
         }
@@ -512,13 +585,42 @@
         function renderAll() {
           $('#activeCount').textContent = '(' + state.students.length + ')';
           $('#archiveCount').textContent = '(' + state.archived.length + ')';
-          $('#statTotal').textContent = state.students.length;
-          const complete = state.students.filter((item) => item.status === 'Đầy đủ').length;
-          $('#statComplete').textContent = complete;
-          $('#statMissing').textContent = state.students.length - complete;
+          renderTeacherControls();
           renderClassFilter();
+          renderStats();
           renderStudentTable();
           renderArchiveTable();
+        }
+
+        function renderStats() {
+          const items = getFilteredStudents();
+          $('#statTotal').textContent = items.length;
+          $('#statDeposited').textContent = items.filter((item) => item.depositPaid).length;
+          $('#statPaid').textContent = items.filter((item) => item.tuitionPaid).length;
+        }
+
+        function renderTeacherControls() {
+          const fallback = { teacherId: teamSession.teacherId, name: teamSession.name, email: teamSession.email };
+          const teachers = state.teachers.length ? state.teachers : [fallback];
+          const options = teachers.map((teacher) => '<option value="' + escapeHtml(teacher.teacherId) + '">' + escapeHtml(teacher.name) + '</option>').join('');
+
+          const intake = $('#teacherSelect');
+          const intakeSelected = intake.value || teamSession.teacherId;
+          intake.innerHTML = options;
+          intake.value = teachers.some((teacher) => teacher.teacherId === intakeSelected) ? intakeSelected : teachers[0].teacherId;
+          intake.disabled = teamSession.role !== 'manager';
+
+          const filter = $('#teacherFilter');
+          const filterSelected = filter.value || (teamSession.role === 'manager' ? 'ALL' : teamSession.teacherId);
+          filter.innerHTML = (teamSession.role === 'manager' ? '<option value="ALL">Tất cả giáo viên</option>' : '') + options;
+          filter.value = Array.from(filter.options).some((option) => option.value === filterSelected) ? filterSelected : filter.options[0].value;
+          filter.disabled = teamSession.role !== 'manager';
+
+          const edit = $('#editTeacher');
+          const editSelected = edit.value || teamSession.teacherId;
+          edit.innerHTML = options;
+          edit.value = teachers.some((teacher) => teacher.teacherId === editSelected) ? editSelected : teachers[0].teacherId;
+          edit.disabled = teamSession.role !== 'manager';
         }
 
         function renderClassFilter() {
@@ -536,19 +638,43 @@
             area.innerHTML = '<div class="empty"><div><strong>Không có học viên phù hợp</strong>Thử thay đổi từ khóa hoặc nhập học viên mới.</div></div>';
             return;
           }
-          area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Facebook</th><th>Mã lớp</th><th>Tình trạng</th><th>Cập nhật</th><th>Thao tác</th></tr></thead><tbody>' +
+          area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Tháng</th><th>Giáo viên</th><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Facebook</th><th>Mã lớp</th><th>Đã cọc</th><th>Đủ học phí</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody>' +
             items.map((item) => {
               const syncing = item._syncState === 'syncing';
-              const statusClass = syncing ? 'syncing' : (item.status === 'Đầy đủ' ? 'ok' : 'warn');
-              const statusText = syncing ? 'Đang đồng bộ…' : item.status;
+              const statusClass = syncing ? 'syncing' : (item.studentStatus === 'Ngưng' ? 'warn' : 'ok');
+              const statusText = syncing ? 'Đang đồng bộ…' : (item.studentStatus || 'Mới');
               const actions = syncing
                 ? '<button class="btn btn-secondary btn-small" disabled>Đang lưu</button>'
                 : '<button class="btn btn-secondary btn-small edit-btn" data-id="' + escapeHtml(item.id) + '">Sửa</button><button class="btn btn-danger btn-small archive-btn" data-id="' + escapeHtml(item.id) + '">Lưu trữ</button>';
-              return '<tr class="' + (syncing ? 'syncing-row' : '') + '"><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td class="nowrap">' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + (safeHref(item.facebookUrl) ? '<a href="' + escapeHtml(safeHref(item.facebookUrl)) + '" target="_blank" rel="noopener">Mở link ↗</a>' : '—') + '</td><td class="nowrap">' + escapeHtml(item.classCode || '—') + '</td><td><span class="status ' + statusClass + '">' + escapeHtml(statusText) + '</span></td><td class="nowrap">' + escapeHtml(formatDate(item.updatedAt)) + '</td><td><div class="row-actions">' + actions + '</div></td></tr>';
+              return '<tr class="' + (syncing ? 'syncing-row' : '') + '"><td class="nowrap">' + escapeHtml(formatMonth(item.intakeMonth)) + '</td><td class="nowrap">' + escapeHtml(item.teacherName || '—') + '</td><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td class="nowrap">' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + (safeHref(item.facebookUrl) ? '<a href="' + escapeHtml(safeHref(item.facebookUrl)) + '" target="_blank" rel="noopener">Mở link ↗</a>' : '—') + '</td><td class="nowrap">' + escapeHtml(item.classCode || '—') + '</td><td><input class="sheet-check payment-check" type="checkbox" aria-label="Đã đóng cọc" data-id="' + escapeHtml(item.id) + '" data-field="depositPaid" ' + (item.depositPaid ? 'checked ' : '') + (syncing ? 'disabled' : '') + '></td><td><input class="sheet-check payment-check" type="checkbox" aria-label="Đã đóng đủ học phí" data-id="' + escapeHtml(item.id) + '" data-field="tuitionPaid" ' + (item.tuitionPaid ? 'checked ' : '') + (syncing ? 'disabled' : '') + '></td><td><span class="status ' + statusClass + '">' + escapeHtml(statusText) + '</span></td><td><div class="row-actions">' + actions + '</div></td></tr>';
             }).join('') +
             '</tbody></table></div>';
           area.querySelectorAll('.edit-btn').forEach((button) => button.addEventListener('click', () => openEdit(button.dataset.id)));
           area.querySelectorAll('.archive-btn').forEach((button) => button.addEventListener('click', () => archiveRecord(button.dataset.id)));
+          area.querySelectorAll('.payment-check').forEach((input) => input.addEventListener('change', () => updatePayment(input)));
+        }
+
+        function updatePayment(input) {
+          const item = state.students.find((record) => record.id === input.dataset.id);
+          if (!item) return;
+          const field = input.dataset.field;
+          const previous = Boolean(item[field]);
+          item[field] = input.checked;
+          input.disabled = true;
+          renderStats();
+          serverCall('setPaymentStatus', { id: item.id, field, value: input.checked }).then((result) => {
+            const index = state.students.findIndex((record) => record.id === item.id);
+            if (index >= 0 && result && result.record) state.students[index] = result.record;
+            persistCache();
+            renderAll();
+            toast(field === 'depositPaid' ? 'Đã cập nhật trạng thái tiền cọc.' : 'Đã cập nhật trạng thái học phí.');
+          }).catch((error) => {
+            item[field] = previous;
+            input.checked = previous;
+            input.disabled = false;
+            renderStats();
+            toast('Chưa đồng bộ được thay đổi. ' + error.message, true);
+          });
         }
 
         function renderArchiveTable() {
@@ -557,8 +683,8 @@
             area.innerHTML = '<div class="empty"><div><strong>Archive đang trống</strong>Học viên cũ được chuyển vào đây thay vì xóa ngay.</div></div>';
             return;
           }
-          area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Mã lớp</th><th>Ngày lưu trữ</th><th>Thao tác</th></tr></thead><tbody>' +
-            state.archived.map((item) => '<tr><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td>' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.classCode) + '</td><td>' + escapeHtml(formatDate(item.archivedAt)) + '</td><td><div class="row-actions"><button class="btn btn-secondary btn-small restore-btn" data-id="' + escapeHtml(item.id) + '">Khôi phục</button>' + (teamSession.role === 'manager' ? '<button class="btn btn-danger btn-small delete-btn" data-id="' + escapeHtml(item.id) + '">Xóa vĩnh viễn</button>' : '') + '</div></td></tr>').join('') +
+          area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Tháng</th><th>Giáo viên</th><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Mã lớp</th><th>Ngày lưu trữ</th><th>Thao tác</th></tr></thead><tbody>' +
+            state.archived.map((item) => '<tr><td>' + escapeHtml(formatMonth(item.intakeMonth)) + '</td><td>' + escapeHtml(item.teacherName || '—') + '</td><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td>' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.classCode) + '</td><td>' + escapeHtml(formatDate(item.archivedAt)) + '</td><td><div class="row-actions"><button class="btn btn-secondary btn-small restore-btn" data-id="' + escapeHtml(item.id) + '">Khôi phục</button>' + (teamSession.role === 'manager' ? '<button class="btn btn-danger btn-small delete-btn" data-id="' + escapeHtml(item.id) + '">Xóa vĩnh viễn</button>' : '') + '</div></td></tr>').join('') +
             '</tbody></table></div>';
           area.querySelectorAll('.restore-btn').forEach((button) => button.addEventListener('click', () => restoreRecord(button.dataset.id)));
           area.querySelectorAll('.delete-btn').forEach((button) => button.addEventListener('click', () => deleteRecord(button.dataset.id)));
@@ -573,6 +699,13 @@
           $('#editEmail').value = item.email;
           $('#editFacebook').value = item.facebookUrl;
           $('#editClass').value = item.classCode;
+          $('#editMonth').value = item.intakeMonth || defaultMonth();
+          $('#editTeacher').value = item.teacherId || teamSession.teacherId;
+          $('#editStatus').value = item.studentStatus || 'Mới';
+          $('#editDepositAmount').value = Number(item.depositAmount || 0);
+          $('#editTuitionAmount').value = Number(item.tuitionAmount || 0);
+          $('#editAmountPaid').value = Number(item.amountPaid || 0);
+          $('#editNotes').value = item.notes || '';
           $('#editDialog').showModal();
         }
 
@@ -586,6 +719,13 @@
             email: $('#editEmail').value,
             facebookUrl: $('#editFacebook').value,
             classCode: $('#editClass').value,
+            intakeMonth: $('#editMonth').value,
+            teacherId: $('#editTeacher').value,
+            studentStatus: $('#editStatus').value,
+            depositAmount: Number($('#editDepositAmount').value || 0),
+            tuitionAmount: Number($('#editTuitionAmount').value || 0),
+            amountPaid: Number($('#editAmountPaid').value || 0),
+            notes: $('#editNotes').value,
           });
           $('#editDialog').close();
           await mutate('updateStudent', record, 'Đã cập nhật học viên.');
@@ -604,15 +744,15 @@
         }
         async function mutate(name, value, successMessage) {
           setBusy(true);
-          try { await serverCall(name, value); await loadData(true); toast(successMessage); }
+          try { await serverCall(name, value); await loadData(true); persistCache(); toast(successMessage); }
           catch (error) { toast(error.message, true); }
           finally { setBusy(false); }
         }
 
         function exportCsv() {
           const items = getFilteredStudents();
-          const rows = [['Họ và tên', 'Số điện thoại', 'Email', 'Link Facebook', 'Mã lớp', 'Tình trạng']]
-            .concat(items.map((item) => [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.status]));
+          const rows = [['Tháng', 'Giáo viên', 'Họ và tên', 'Số điện thoại', 'Email', 'Link Facebook', 'Mã lớp', 'Đã đóng cọc', 'Đã đóng đủ học phí', 'Trạng thái']]
+            .concat(items.map((item) => [item.intakeMonth, item.teacherName, item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.depositPaid ? 'Có' : 'Chưa', item.tuitionPaid ? 'Có' : 'Chưa', item.studentStatus]));
           const csv = '\uFEFF' + rows.map((row) => row.map(csvCell).join(',')).join('\r\n');
           const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
           const link = document.createElement('a');
@@ -621,8 +761,8 @@
         }
         async function copyTable() {
           const items = getFilteredStudents();
-          const rows = [['Họ và tên', 'Số điện thoại', 'Email', 'Link Facebook', 'Mã lớp', 'Tình trạng']]
-            .concat(items.map((item) => [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.status]));
+          const rows = [['Tháng', 'Giáo viên', 'Họ và tên', 'Số điện thoại', 'Email', 'Link Facebook', 'Mã lớp', 'Đã đóng cọc', 'Đã đóng đủ học phí', 'Trạng thái']]
+            .concat(items.map((item) => [item.intakeMonth, item.teacherName, item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.depositPaid ? 'Có' : 'Chưa', item.tuitionPaid ? 'Có' : 'Chưa', item.studentStatus]));
           try { await navigator.clipboard.writeText(rows.map((row) => row.join('\t')).join('\n')); toast('Đã copy bảng vào clipboard.'); }
           catch (_) { toast('Trình duyệt không cho phép copy. Hãy dùng Xuất CSV.', true); }
         }
@@ -630,6 +770,10 @@
         function formatDate(value) {
           const date = new Date(value);
           return Number.isNaN(date.getTime()) ? String(value || '') : date.toLocaleString('vi-VN');
+        }
+        function formatMonth(value) {
+          const match = String(value || '').match(/^(\d{4})-(\d{2})$/);
+          return match ? 'Tháng ' + Number(match[2]) + '/' + match[1] : String(value || '—');
         }
         function safeHref(value) {
           try {
@@ -648,12 +792,9 @@
           renderPreview();
           if (!state.parsed.length) toast('Chưa nhận diện được học viên. Kiểm tra lại dữ liệu đầu vào.', true);
         });
-        $('#sampleBtn').addEventListener('click', () => {
-          $('#rawInput').value = '1. Nguyễn Minh Anh + 0989123456 + minhanh@gmail.com + facebook.com/minhanh.ielts + MBWrite02 OCT26\n2. Trần Thu Hà, 0901234567, thuha@gmail.com, fb.com/thuha.ielts, MBSpeak05 SEP26\n3. Lê Gia Huy + 0938123456 + giahuy@gmail.com + facebook.com/giahuy + IELTS65';
-        });
         $('#clearBtn').addEventListener('click', () => { $('#rawInput').value = ''; state.parsed = []; renderPreview(); });
-        $('#searchInput').addEventListener('input', renderStudentTable);
-        $('#classFilter').addEventListener('change', renderStudentTable);
+        $('#searchInput').addEventListener('input', () => { renderStats(); renderStudentTable(); });
+        ['monthFilter', 'teacherFilter', 'classFilter', 'paymentFilter'].forEach((id) => $('#' + id).addEventListener('change', () => { renderStats(); renderStudentTable(); }));
         $('#csvBtn').addEventListener('click', exportCsv);
         $('#copyBtn').addEventListener('click', copyTable);
         $('#editForm').addEventListener('submit', updateRecord);
@@ -661,9 +802,13 @@
         $('#cancelDialogBtn').addEventListener('click', () => $('#editDialog').close());
 
         renderTeamAccount();
+        $('#intakeMonth').value = defaultMonth();
+        $('#monthFilter').value = defaultMonth();
         renderPreview();
-        loadData(false);
-        setInterval(() => { if (state.view !== 'input' && !document.hidden) loadData(true); }, 60000);
+        hydrateCache();
+        renderAll();
+        if (!teamSession.demo) loadData(true).catch(() => {});
+        setInterval(() => { if (!teamSession.demo && state.view !== 'input' && !document.hidden) loadData(true); }, 60000);
       })();
     </script>
   </body>

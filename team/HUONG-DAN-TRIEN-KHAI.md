@@ -47,7 +47,7 @@ Thao tác trong Apps Script đang kết nối với Google Sheet lịch hiện c
 Thao tác trong Apps Script mở từ Google Sheet lưu dữ liệu học viên:
 
 1. Thay nội dung `Code.gs` bằng file `apps-script/students/Code.gs`.
-2. Chọn hàm `setupApp` và bấm **Run** đúng một lần. Hàm sẽ tạo/kiểm tra các tab `Students`, `Archive`, `Audit_Log`.
+2. Chọn hàm `setupApp` và bấm **Run**. Hàm sẽ tạo/kiểm tra các tab `Students`, `Archive`, `Audit_Log` và áp dụng lại định dạng gọn cho toàn bộ dữ liệu hiện có. Có thể chạy lại hàm này sau mỗi lần nâng cấp code; dữ liệu học viên không bị xóa.
 3. Lấy ID của Google Sheet lịch — đoạn nằm giữa `/d/` và `/edit` trong URL của Sheet lịch.
 4. Mở **Project Settings → Script Properties**, thêm hai property:
    - `MAYBE_USERS_SPREADSHEET_ID` = ID Google Sheet lịch có tab `Users`;
@@ -60,6 +60,8 @@ Thao tác trong Apps Script mở từ Google Sheet lưu dữ liệu học viên:
 8. Nếu URL `/exec` thay đổi, mở `config.js` và thay giá trị `studentsApiUrl` bằng URL mới. URL hiện có trong file là URL bạn đã cung cấp.
 
 Giáo viên không cần được chia sẻ Google Sheet học viên. Apps Script chạy bằng quyền của chủ Sheet, nhưng chỉ xử lý yêu cầu sau khi xác minh token và danh sách `Users`.
+
+`setupApp` không tạo tab theo tháng. Hàm nâng cấp tab `Students` hiện có bằng cách thêm các cột quản lý, điền lại tháng/giáo viên cho dữ liệu cũ và ẩn cột kỹ thuật; không xóa các dòng đã có. Hãy giữ nguyên ba tab `Students`, `Archive`, `Audit_Log`.
 
 ## D. Đưa website lên GitHub Pages
 
@@ -93,9 +95,11 @@ Hai manager hiện tại:
 2. Gia Khang đăng nhập: thấy nhãn Quản lý, mở mặc định lịch Gia Khang, chuyển được sang giáo viên khác.
 3. Tuệ Nhi đăng nhập: chỉ thấy lịch Tuệ Nhi; thử thay đổi lịch của người khác phải bị backend từ chối.
 4. Mỗi tài khoản nhập một học viên giả, tải lại trang, xác nhận dữ liệu vẫn còn trong tab `Students`.
-5. Chuyển học viên giả vào Archive rồi khôi phục.
-6. Xác nhận Tuệ Nhi không thấy nút **Xóa vĩnh viễn**; hai manager thấy và dùng được nút này.
-7. Đặt `HoatDong=FALSE` cho một tài khoản test và xác nhận tài khoản đó không đăng nhập được.
+5. Đăng nhập Tuệ Nhi và xác nhận chỉ thấy học viên của `nhi`; đăng nhập Hồ Bách hoặc Gia Khang và xác nhận thấy mọi giáo viên.
+6. Thử lọc theo tháng, giáo viên, lớp và trạng thái học phí; tick tiền cọc/học phí rồi tải lại để xác nhận trạng thái đã lưu.
+7. Chuyển học viên giả vào Archive rồi khôi phục.
+8. Xác nhận Tuệ Nhi không thấy nút **Xóa vĩnh viễn**; hai manager thấy và dùng được nút này.
+9. Đặt `HoatDong=FALSE` cho một tài khoản test và xác nhận tài khoản đó không đăng nhập được.
 
 ## G. Xem thử giao diện trên máy
 
