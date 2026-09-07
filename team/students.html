@@ -109,6 +109,9 @@
       .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 800; white-space: nowrap; }
       .status.ok { background: #eaf8ee; color: var(--success); }
       .status.warn { background: #fff4e5; color: var(--warning); }
+      .status.syncing { background: #eaf2ff; color: #175cd3; }
+      .syncing-row { opacity: .78; }
+      .syncing-row .btn { pointer-events: none; opacity: .55; }
 
       .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
       .stat { padding: 17px 18px; border-radius: 18px; color: white; background: linear-gradient(145deg, #07102e, var(--navy) 65%, #1a2f8f); box-shadow: 0 10px 28px rgba(15,27,76,.14); }
@@ -307,14 +310,16 @@
           if (!teamSession.credential) {
             throw new Error('Chế độ xem thử không được phép truy cập dữ liệu Google Sheet thật.');
           }
+          const requestBody = JSON.stringify({
+            action: functionName,
+            payload: typeof argument === 'undefined' ? null : argument,
+            idToken: teamSession.credential,
+          });
           const response = await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
             redirect: 'follow',
-            body: JSON.stringify({
-              action: functionName,
-              payload: typeof argument === 'undefined' ? null : argument,
-              idToken: teamSession.credential,
-            }),
+            keepalive: new Blob([requestBody]).size <= 60000,
+            body: requestBody,
           });
           if (!response.ok) throw new Error('Không kết nối được Google Apps Script (HTTP ' + response.status + ').');
           const result = await response.json();
@@ -449,21 +454,48 @@
           return '<td><input data-index="' + index + '" data-field="' + field + '" value="' + escapeHtml(value) + '"></td>';
         }
 
-        async function saveParsed() {
+        function saveParsed() {
           if (!state.parsed.length) return;
-          setBusy(true);
-          try {
-            const result = await serverCall('addStudents', state.parsed);
-            state.parsed = [];
-            $('#rawInput').value = '';
-            renderPreview();
-            await loadData(true);
+          const records = state.parsed.map((item) => ({ ...item, status: evaluateStatus(item) }));
+          const savedInput = $('#rawInput').value;
+          const now = new Date().toISOString();
+          const optimisticIds = [];
+          const optimisticRecords = records.map((item, index) => {
+            const id = 'syncing-' + Date.now() + '-' + index;
+            optimisticIds.push(id);
+            return {
+              ...item,
+              id,
+              createdAt: now,
+              updatedAt: now,
+              createdBy: teamSession.email,
+              _syncState: 'syncing',
+            };
+          });
+
+          state.parsed = [];
+          $('#rawInput').value = '';
+          state.students = optimisticRecords.concat(state.students);
+          renderPreview();
+          switchView('database');
+          toast('Đã nhận ' + records.length + ' học viên · đang đồng bộ với Google Sheet…');
+
+          serverCall('addStudents', records).then((result) => {
+            const optimisticSet = new Set(optimisticIds);
+            state.students = (Array.isArray(result.added) ? result.added : [])
+              .concat(state.students.filter((item) => !optimisticSet.has(item.id)));
+            renderAll();
             const skipped = result.skipped && result.skipped.length ? ' · Bỏ qua ' + result.skipped.length + ' bản ghi trùng.' : '';
             toast('Đã lưu ' + result.addedCount + ' học viên vào Google Sheet.' + skipped);
-            switchView('database');
-          } catch (error) {
-            toast(error.message, true);
-          } finally { setBusy(false); }
+          }).catch((error) => {
+            const optimisticSet = new Set(optimisticIds);
+            state.students = state.students.filter((item) => !optimisticSet.has(item.id));
+            state.parsed = records.concat(state.parsed);
+            if (!$('#rawInput').value) $('#rawInput').value = savedInput;
+            renderPreview();
+            renderAll();
+            toast('Chưa lưu được vào Sheet. Dữ liệu đã được giữ lại để thử lại. ' + error.message, true);
+          });
         }
 
         function getFilteredStudents() {
@@ -505,7 +537,15 @@
             return;
           }
           area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Facebook</th><th>Mã lớp</th><th>Tình trạng</th><th>Cập nhật</th><th>Thao tác</th></tr></thead><tbody>' +
-            items.map((item) => '<tr><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td class="nowrap">' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + (safeHref(item.facebookUrl) ? '<a href="' + escapeHtml(safeHref(item.facebookUrl)) + '" target="_blank" rel="noopener">Mở link ↗</a>' : '—') + '</td><td class="nowrap">' + escapeHtml(item.classCode || '—') + '</td><td><span class="status ' + (item.status === 'Đầy đủ' ? 'ok' : 'warn') + '">' + escapeHtml(item.status) + '</span></td><td class="nowrap">' + escapeHtml(formatDate(item.updatedAt)) + '</td><td><div class="row-actions"><button class="btn btn-secondary btn-small edit-btn" data-id="' + escapeHtml(item.id) + '">Sửa</button><button class="btn btn-danger btn-small archive-btn" data-id="' + escapeHtml(item.id) + '">Lưu trữ</button></div></td></tr>').join('') +
+            items.map((item) => {
+              const syncing = item._syncState === 'syncing';
+              const statusClass = syncing ? 'syncing' : (item.status === 'Đầy đủ' ? 'ok' : 'warn');
+              const statusText = syncing ? 'Đang đồng bộ…' : item.status;
+              const actions = syncing
+                ? '<button class="btn btn-secondary btn-small" disabled>Đang lưu</button>'
+                : '<button class="btn btn-secondary btn-small edit-btn" data-id="' + escapeHtml(item.id) + '">Sửa</button><button class="btn btn-danger btn-small archive-btn" data-id="' + escapeHtml(item.id) + '">Lưu trữ</button>';
+              return '<tr class="' + (syncing ? 'syncing-row' : '') + '"><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td class="nowrap">' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + (safeHref(item.facebookUrl) ? '<a href="' + escapeHtml(safeHref(item.facebookUrl)) + '" target="_blank" rel="noopener">Mở link ↗</a>' : '—') + '</td><td class="nowrap">' + escapeHtml(item.classCode || '—') + '</td><td><span class="status ' + statusClass + '">' + escapeHtml(statusText) + '</span></td><td class="nowrap">' + escapeHtml(formatDate(item.updatedAt)) + '</td><td><div class="row-actions">' + actions + '</div></td></tr>';
+            }).join('') +
             '</tbody></table></div>';
           area.querySelectorAll('.edit-btn').forEach((button) => button.addEventListener('click', () => openEdit(button.dataset.id)));
           area.querySelectorAll('.archive-btn').forEach((button) => button.addEventListener('click', () => archiveRecord(button.dataset.id)));
