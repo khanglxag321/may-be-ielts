@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>may(be)team. — Nhập liệu học viên</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --navy: #0f1b4c;
+        --blue: #2c6bff;
+        --blue-strong: #174fd2;
+        --blue-soft: #e9f0ff;
+        --gold: #ffd84d;
+        --ink: #0a0e1f;
+        --muted: #64708b;
+        --line: #dce5fb;
+        --surface: #ffffff;
+        --canvas: #f4f7ff;
+        --success: #15803d;
+        --warning: #b45309;
+        --danger: #b42318;
+        --radius: 16px;
+        font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; color: var(--ink); background: var(--canvas); font-size: 16px; }
+      button, input, select, textarea { font: inherit; }
+      button { cursor: pointer; }
+      button:disabled { cursor: wait; opacity: .55; }
+      a { color: var(--blue-strong); }
+
+      .topbar {
+        position: sticky; top: 0; z-index: 20;
+        display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        min-height: 72px; padding: 12px clamp(16px, 4vw, 48px);
+        color: var(--navy); background: rgba(255,255,255,.88);
+        border-bottom: 1px solid rgba(44,107,255,.12);
+        box-shadow: none; backdrop-filter: blur(18px);
+      }
+      .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+      .bee {
+        display: grid; place-items: center; width: 43px; height: 43px; flex: 0 0 auto;
+        border-radius: 14px; background: var(--gold); color: var(--navy); font: 700 21px/1 "Space Grotesk",sans-serif;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+      }
+      .brand strong { display: block; color:var(--navy); font:700 18px/1.2 "Space Grotesk",sans-serif; letter-spacing: -.035em; }
+      .brand strong em { color:var(--blue); font-style:normal; }
+      .brand small { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+      .sheet-link { color: var(--blue-strong); text-decoration: none; font-weight: 700; font-size: 13px; white-space: nowrap; }
+      .sheet-link:hover { text-decoration: underline; }
+
+      .shell { width: min(1440px, 100%); margin: 0 auto; padding: 22px clamp(14px, 3vw, 36px) 48px; }
+      .nav-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+      .nav-tab {
+        border: 1px solid var(--line); border-radius: 999px; background: white; color: #475467;
+        padding: 10px 16px; font-weight: 750; font-size: 14px;
+      }
+      .nav-tab.active { border-color: var(--blue); background: var(--blue); color: white; box-shadow: 0 7px 18px rgba(37,99,235,.2); }
+
+      .view { display: none; }
+      .view.active { display: block; }
+      .grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(380px, .95fr); gap: 18px; }
+      .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(15,23,42,.06); }
+      .card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 20px 22px 0; }
+      .card-body { padding: 20px 22px 22px; }
+      h1, h2, p { margin-top: 0; }
+      h1 { margin-bottom: 5px; color:var(--navy); font:700 clamp(24px,3vw,34px)/1.05 "Space Grotesk",sans-serif; letter-spacing: -.045em; }
+      h2 { margin-bottom: 5px; color:var(--navy); font:700 19px/1.15 "Space Grotesk",sans-serif; letter-spacing: -.025em; }
+      .muted { color: var(--muted); font-size: 14px; line-height: 1.55; }
+      .eyebrow { color: var(--blue-strong); font-size: 12px; font-weight: 850; letter-spacing: .09em; text-transform: uppercase; }
+
+      textarea, input, select {
+        width: 100%; border: 1px solid #cfd8e6; border-radius: 11px; background: white; color: var(--ink);
+        padding: 11px 12px; outline: none; transition: border-color .15s, box-shadow .15s;
+      }
+      textarea:focus, input:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+      textarea { min-height: 260px; resize: vertical; line-height: 1.55; }
+      label { display: block; margin-bottom: 7px; font-size: 13px; font-weight: 750; color: #344054; }
+      .field { margin-bottom: 14px; }
+      .actions { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+        min-height: 42px; border: 1px solid transparent; border-radius: 10px; padding: 10px 14px;
+        font-weight: 780; font-size: 14px;
+      }
+      .btn-primary { background: var(--blue); color: white; }
+      .btn-primary:hover { background: var(--blue-strong); }
+      .btn-secondary { background: white; border-color: var(--line); color: #344054; }
+      .btn-secondary:hover { background: #f8fafc; }
+      .btn-danger { background: #fff1f0; color: var(--danger); border-color: #ffd0cc; }
+      .btn-quiet { background: transparent; color: var(--blue-strong); padding-inline: 8px; }
+      .btn-small { min-height: 34px; padding: 7px 10px; font-size: 13px; }
+
+      .tip { margin-top: 14px; border-left: 4px solid var(--gold); border-radius: 8px; background: #fff9e8; padding: 11px 13px; color: #73510d; font-size: 13px; line-height: 1.5; }
+      .empty { display: grid; place-items: center; min-height: 240px; padding: 32px; text-align: center; color: var(--muted); }
+      .empty strong { display: block; margin-bottom: 5px; color: #344054; }
+
+      .preview-wrap, .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
+      table { width: 100%; border-collapse: collapse; min-width: 980px; }
+      th { position: sticky; top: 0; z-index: 1; padding: 11px 12px; background: #edf3ff; color: #344054; text-align: left; font-size: 12px; letter-spacing: .02em; white-space: nowrap; }
+      td { padding: 11px 12px; border-top: 1px solid #edf0f5; vertical-align: top; font-size: 14px; }
+      tr:hover td { background: #fbfdff; }
+      td input { min-width: 140px; padding: 8px 9px; font-size: 13px; }
+      .status { display: inline-flex; align-items: center; border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+      .status.ok { background: #eaf8ee; color: var(--success); }
+      .status.warn { background: #fff4e5; color: var(--warning); }
+
+      .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+      .stat { padding: 17px 18px; border-radius: 18px; color: white; background: linear-gradient(145deg, #07102e, var(--navy) 65%, #1a2f8f); box-shadow: 0 10px 28px rgba(15,27,76,.14); }
+      .stat:nth-child(2) { color:var(--navy); background: var(--gold); }
+      .stat:nth-child(3) { color:var(--navy); background: var(--mint,#7fe0c2); }
+      .stat strong { display: block; font-size: 26px; }
+      .stat span { font-size: 12px; opacity: .88; }
+      .toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) 220px auto; gap: 10px; padding: 16px; border-bottom: 1px solid var(--line); }
+      .table-card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 18px 18px 14px; }
+      .table-card-head h1 { margin-bottom: 0; }
+      .row-actions { display: flex; gap: 6px; }
+      .nowrap { white-space: nowrap; }
+
+      dialog { width: min(660px, calc(100% - 28px)); border: 0; border-radius: 18px; padding: 0; box-shadow: 0 30px 80px rgba(15,23,42,.28); }
+      dialog::backdrop { background: rgba(15,23,42,.54); backdrop-filter: blur(3px); }
+      .dialog-head { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; border-bottom: 1px solid var(--line); }
+      .dialog-head h2 { margin: 0; }
+      .dialog-body { padding: 20px 22px; }
+      .dialog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+      .dialog-actions { display: flex; justify-content: flex-end; gap: 9px; padding: 16px 22px 20px; }
+
+      .toast { position: fixed; right: 20px; bottom: 20px; z-index: 100; max-width: min(420px, calc(100% - 40px)); border-radius: 12px; padding: 13px 15px; color: white; background: #17213d; box-shadow: 0 16px 46px rgba(15,23,42,.25); transform: translateY(20px); opacity: 0; pointer-events: none; transition: .2s; }
+      .toast.show { transform: translateY(0); opacity: 1; }
+      .toast.error { background: var(--danger); }
+      .busy { position: fixed; inset: 0; z-index: 90; display: none; place-items: center; background: rgba(244,247,251,.72); backdrop-filter: blur(2px); }
+      .busy.show { display: grid; }
+      .spinner { width: 42px; height: 42px; border: 4px solid #dbeafe; border-top-color: var(--blue); border-radius: 50%; animation: spin .8s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      @media (max-width: 900px) {
+        .grid { grid-template-columns: 1fr; }
+        .toolbar { grid-template-columns: 1fr 1fr; }
+        .toolbar .actions { grid-column: 1 / -1; }
+      }
+      @media (max-width: 620px) {
+        .topbar { align-items: flex-start; }
+        .brand small, .sheet-link span { display: none; }
+        .shell { padding-top: 16px; }
+        .stats { grid-template-columns: 1fr; }
+        .toolbar, .dialog-grid { grid-template-columns: 1fr; }
+        .nav-tab { flex: 1 1 auto; }
+        .card-head, .card-body { padding-left: 16px; padding-right: 16px; }
+      }
+    </style>
+    <link rel="stylesheet" href="shared.css">
+    <style>
+      .topbar { padding-inline:clamp(14px,4vw,54px); }
+      .topbar-left,.topbar-right { display:flex; align-items:center; gap:12px; }
+      .topbar .back-link { min-height:38px; }
+      .topbar .account-chip { color:var(--ink); }
+      .card { border-color:rgba(44,107,255,.14); border-radius:20px; box-shadow:0 14px 40px rgba(15,27,76,.07); }
+      .nav-tab { border-radius:999px; }
+      .nav-tab.active { border-color:var(--blue); background:var(--blue); }
+      .btn,.preview-wrap,.table-wrap,textarea,input,select { border-radius:12px; }
+      .eyebrow { font-family:"JetBrains Mono",monospace; font-weight:500; }
+      @media(max-width:760px){.topbar{align-items:flex-start}.topbar-left{align-items:flex-start;flex-direction:column;gap:6px}.topbar .back-link{min-height:24px;padding:0;border:0;background:transparent}.topbar-right .account-copy{display:none}}
+    </style>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-left">
+        <a class="back-link" href="index.html">← <span>Trang công cụ</span></a>
+        <div class="brand">
+          <div class="bee" aria-hidden="true">m.</div>
+          <div>
+            <strong><em>may(be)</em>data.</strong>
+            <small>Nhập nhanh và lưu trực tiếp vào Google Sheets</small>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right"><a id="sheetLink" class="sheet-link" href="#" target="_blank" rel="noopener"><span>Mở Google Sheet</span> ↗</a><div class="account-chip" id="teamAccount"></div></div>
+    </header>
+
+    <main class="shell">
+      <nav class="nav-tabs" aria-label="Chức năng">
+        <button class="nav-tab active" data-view="input">Nhập nhanh</button>
+        <button class="nav-tab" data-view="database">Danh sách học viên <span id="activeCount"></span></button>
+        <button class="nav-tab" data-view="archive">Lưu trữ <span id="archiveCount"></span></button>
+      </nav>
+
+      <section id="view-input" class="view active">
+        <div class="grid">
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <div class="eyebrow">01 · Dữ liệu đầu vào</div>
+                <h1>Dán thông tin học viên</h1>
+                <p class="muted">Mỗi học viên một dòng, hoặc dùng các nhãn Họ tên, SĐT, Email, Facebook và Lớp.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <label for="rawInput">Nội dung cần xử lý</label>
+              <textarea id="rawInput" placeholder="1. Nguyễn Minh Anh + 0989123456 + minhanh@gmail.com + facebook.com/minhanh + MBWrite02 OCT26&#10;2. Trần Thu Hà, 0901234567, thuha@gmail.com, fb.com/thuha, MBSpeak05"></textarea>
+              <div class="actions" style="margin-top: 12px">
+                <button id="parseBtn" class="btn btn-primary">Phân loại dữ liệu</button>
+                <button id="sampleBtn" class="btn btn-secondary">Điền dữ liệu mẫu</button>
+                <button id="clearBtn" class="btn btn-quiet">Xóa ô nhập</button>
+              </div>
+              <div class="tip">Số điện thoại được giữ dạng văn bản để không mất số 0 đầu. Hệ thống sẽ bỏ qua bản ghi trùng số điện thoại hoặc email.</div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <div class="eyebrow">02 · Kiểm tra trước khi lưu</div>
+                <h2>Kết quả phân loại</h2>
+                <p id="previewSummary" class="muted">Chưa có dữ liệu được phân loại.</p>
+              </div>
+            </div>
+            <div id="previewArea" class="card-body empty">
+              <div><strong>Dữ liệu sẽ xuất hiện ở đây</strong>Bạn có thể sửa từng ô trước khi lưu vào Sheet.</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-database" class="view">
+        <div class="stats">
+          <div class="stat"><strong id="statTotal">0</strong><span>Học viên đang hoạt động</span></div>
+          <div class="stat"><strong id="statComplete">0</strong><span>Hồ sơ đầy đủ</span></div>
+          <div class="stat"><strong id="statMissing">0</strong><span>Hồ sơ cần bổ sung</span></div>
+        </div>
+        <article class="card">
+          <div class="table-card-head">
+            <div><div class="eyebrow">Google Sheets database</div><h1>Danh sách học viên</h1></div>
+            <button class="btn btn-secondary refresh-btn">↻ Đồng bộ</button>
+          </div>
+          <div class="toolbar">
+            <input id="searchInput" type="search" placeholder="Tìm tên, SĐT, email hoặc lớp…">
+            <select id="classFilter" aria-label="Lọc theo lớp"><option value="ALL">Tất cả lớp</option></select>
+            <div class="actions">
+              <button id="copyBtn" class="btn btn-secondary btn-small">Copy bảng</button>
+              <button id="csvBtn" class="btn btn-secondary btn-small">Xuất CSV</button>
+            </div>
+          </div>
+          <div id="studentTableArea"></div>
+        </article>
+      </section>
+
+      <section id="view-archive" class="view">
+        <article class="card">
+          <div class="table-card-head">
+            <div><div class="eyebrow">Không xóa vội</div><h1>Học viên đã lưu trữ</h1><p class="muted">Có thể khôi phục hoặc xóa vĩnh viễn khi đã sao lưu.</p></div>
+            <button class="btn btn-secondary refresh-btn">↻ Đồng bộ</button>
+          </div>
+          <div id="archiveTableArea"></div>
+        </article>
+      </section>
+    </main>
+
+    <dialog id="editDialog">
+      <form id="editForm" method="dialog">
+        <div class="dialog-head"><h2>Chỉnh sửa học viên</h2><button type="button" class="btn btn-quiet" id="closeDialogBtn" aria-label="Đóng">✕</button></div>
+        <div class="dialog-body">
+          <input id="editId" type="hidden">
+          <div class="dialog-grid">
+            <div class="field"><label for="editName">Họ và tên</label><input id="editName" required></div>
+            <div class="field"><label for="editPhone">Số điện thoại</label><input id="editPhone" inputmode="tel"></div>
+            <div class="field"><label for="editEmail">Email</label><input id="editEmail" type="email"></div>
+            <div class="field"><label for="editFacebook">Link Facebook</label><input id="editFacebook"></div>
+            <div class="field"><label for="editClass">Mã lớp</label><input id="editClass"></div>
+          </div>
+        </div>
+        <div class="dialog-actions"><button type="button" class="btn btn-secondary" id="cancelDialogBtn">Hủy</button><button type="submit" class="btn btn-primary">Lưu thay đổi</button></div>
+      </form>
+    </dialog>
+
+    <div id="busy" class="busy" aria-live="polite"><div><div class="spinner"></div><p style="margin:12px 0 0;font-weight:750">Đang làm việc…</p></div></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const teamSession = MaybeTeamAuth.requireSession();
+      (function () {
+        const APPS_SCRIPT_URL = String(window.MAYBE_TEAM_CONFIG.studentsApiUrl || '');
+        const state = { students: [], archived: [], parsed: [], view: 'input' };
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+        function renderTeamAccount() {
+          const initials = teamSession.name.trim().split(/\s+/).slice(-2).map((part) => part[0]).join('').toUpperCase();
+          $('#teamAccount').innerHTML = '<span class="account-avatar">' + initials + '</span><span class="account-copy"><strong>' + teamSession.name + '</strong><span>' + (teamSession.role === 'manager' ? 'Quản lý' : 'Giáo viên') + '</span></span><button class="logout-button" id="teamLogout">Đăng xuất</button>';
+          $('#teamLogout').onclick = () => MaybeTeamAuth.logout('index.html');
+          if (teamSession.role !== 'manager') $('#sheetLink').style.display = 'none';
+          if (teamSession.demo) {
+            const note = document.createElement('p');
+            note.className = 'internal-demo-note';
+            note.textContent = 'Chế độ xem thử trên máy — chỉ dùng dữ liệu giả để kiểm tra.';
+            document.body.prepend(note);
+          }
+        }
+
+        async function serverCall(functionName, argument) {
+          if (!teamSession.credential) {
+            throw new Error('Chế độ xem thử không được phép truy cập dữ liệu Google Sheet thật.');
+          }
+          const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            redirect: 'follow',
+            body: JSON.stringify({
+              action: functionName,
+              payload: typeof argument === 'undefined' ? null : argument,
+              idToken: teamSession.credential,
+            }),
+          });
+          if (!response.ok) throw new Error('Không kết nối được Google Apps Script (HTTP ' + response.status + ').');
+          const result = await response.json();
+          if (!result.ok) throw new Error(result.error || 'Google Apps Script trả về lỗi.');
+          return result.data;
+        }
+
+        function setBusy(isBusy) { $('#busy').classList.toggle('show', isBusy); }
+        function toast(message, isError) {
+          const element = $('#toast');
+          element.textContent = message;
+          element.classList.toggle('error', Boolean(isError));
+          element.classList.add('show');
+          clearTimeout(toast.timer);
+          toast.timer = setTimeout(() => element.classList.remove('show'), 3800);
+        }
+
+        async function loadData(silent) {
+          if (!silent) setBusy(true);
+          try {
+            const data = await serverCall('getAppData');
+            state.students = Array.isArray(data.students) ? data.students : [];
+            state.archived = Array.isArray(data.archived) ? data.archived : [];
+            $('#sheetLink').href = data.spreadsheetUrl || '#';
+            renderAll();
+            if (!silent) toast('Đã đồng bộ dữ liệu từ Google Sheet.');
+          } catch (error) {
+            toast(error.message, true);
+            if (silent) throw error;
+          } finally {
+            if (!silent) setBusy(false);
+          }
+        }
+
+        function switchView(view) {
+          state.view = view;
+          $$('.nav-tab').forEach((button) => button.classList.toggle('active', button.dataset.view === view));
+          $$('.view').forEach((element) => element.classList.toggle('active', element.id === 'view-' + view));
+          if (view !== 'input') renderAll();
+        }
+
+        function parseInput(raw) {
+          const clean = String(raw || '').replace(/\r/g, '').trim();
+          if (!clean) return [];
+          const hasLabels = /(?:họ\s*(?:và\s*)?tên|sđt|số\s*điện\s*thoại)\s*:/i.test(clean);
+          const entries = hasLabels
+            ? clean.split(/\n\s*\n+/).filter(Boolean)
+            : clean.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+          return entries.map(parseEntry).filter((item) => item.fullName);
+        }
+
+        function parseEntry(rawEntry) {
+          const raw = rawEntry.replace(/^\s*\d+[.)]\s*/, '').trim();
+          const emailMatch = raw.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+          const phoneMatch = raw.match(/(?:\+?84|0)(?:[\s.()-]?\d){8,10}/);
+          const urlMatch = raw.match(/(?:https?:\/\/)?(?:www\.)?(?:facebook\.com|fb\.com|fb\.me)\/[^\s,+;]+/i);
+          const classLabel = raw.match(/(?:mã\s*lớp|lớp(?:\s*đăng\s*ký)?)\s*:\s*([^\n,+;]+)/i);
+          const classToken = raw.match(/\b(?:MB(?:WRITE|SPEAK|W|S)[\s-]*\d{1,2}(?:\s+[A-Z]{3}\d{2})?|MB(?:W|S)\s+[A-Z]{3}\d{2}\s+\d{1,2}|IELTS\s*\d{2,3})\b/i);
+          const nameLabel = raw.match(/(?:họ\s*(?:và\s*)?tên|họ\s*tên|tên)\s*:\s*(.+?)(?=\s+(?:sđt|số\s*điện\s*thoại|phone|email|facebook|link\s*fb|mã\s*lớp|lớp(?:\s*đăng\s*ký)?)\s*:|\n|$)/i);
+
+          const positions = [emailMatch, phoneMatch, urlMatch, classLabel || classToken]
+            .filter(Boolean).map((match) => match.index).filter((index) => typeof index === 'number');
+          let fallbackName = raw.slice(0, positions.length ? Math.min.apply(null, positions) : raw.length);
+          fallbackName = fallbackName
+            .replace(/(?:họ\s*(?:và\s*)?tên|họ\s*tên|tên)\s*:\s*/i, '')
+            .replace(/[,+;\-\s]+$/, '').trim();
+
+          const item = {
+            fullName: titleCase(nameLabel ? nameLabel[1] : fallbackName),
+            phoneNumber: normalizePhone(phoneMatch ? phoneMatch[0] : ''),
+            email: emailMatch ? emailMatch[0].toLowerCase() : '',
+            facebookUrl: normalizeFacebook(urlMatch ? urlMatch[0] : ''),
+            classCode: normalizeClass(classLabel ? classLabel[1] : (classToken ? classToken[0] : '')),
+            rawText: rawEntry,
+          };
+          item.status = evaluateStatus(item);
+          return item;
+        }
+
+        function titleCase(value) {
+          return String(value || '').toLocaleLowerCase('vi-VN').replace(/(^|[\s'-])([^\s'-])/g, (_, separator, character) => separator + character.toLocaleUpperCase('vi-VN'));
+        }
+        function normalizePhone(value) {
+          let phone = String(value || '').replace(/[\s.()-]/g, '');
+          if (phone.startsWith('+84')) phone = '0' + phone.slice(3);
+          if (phone.startsWith('84') && phone.length >= 11) phone = '0' + phone.slice(2);
+          return phone.replace(/\D/g, '');
+        }
+        function normalizeFacebook(value) {
+          const url = String(value || '').trim().replace(/[),.;]+$/, '');
+          return url && !/^https?:\/\//i.test(url) ? 'https://' + url : url;
+        }
+        function normalizeClass(value) {
+          return String(value || '').toUpperCase().replace(/\bMBW\b/g, 'MBWRITE').replace(/\bMBS\b/g, 'MBSPEAK').replace(/\s+/g, ' ').trim();
+        }
+        function evaluateStatus(item) {
+          const missing = [];
+          if (!item.fullName) missing.push('Họ tên');
+          if (!item.phoneNumber) missing.push('SĐT');
+          if (!item.email) missing.push('Email');
+          if (!item.facebookUrl) missing.push('Facebook');
+          if (!item.classCode) missing.push('Mã lớp');
+          return missing.length ? 'Thiếu ' + missing.join(', ') : 'Đầy đủ';
+        }
+
+        function renderPreview() {
+          const area = $('#previewArea');
+          if (!state.parsed.length) {
+            area.className = 'card-body empty';
+            area.innerHTML = '<div><strong>Dữ liệu sẽ xuất hiện ở đây</strong>Bạn có thể sửa từng ô trước khi lưu vào Sheet.</div>';
+            $('#previewSummary').textContent = 'Chưa có dữ liệu được phân loại.';
+            return;
+          }
+          const complete = state.parsed.filter((item) => evaluateStatus(item) === 'Đầy đủ').length;
+          $('#previewSummary').textContent = state.parsed.length + ' học viên · ' + complete + ' đầy đủ · ' + (state.parsed.length - complete) + ' cần bổ sung';
+          area.className = 'card-body';
+          area.innerHTML = '<div class="preview-wrap"><table><thead><tr><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Facebook</th><th>Mã lớp</th><th>Tình trạng</th></tr></thead><tbody>' +
+            state.parsed.map((item, index) => '<tr>' +
+              editableCell(index, 'fullName', item.fullName) + editableCell(index, 'phoneNumber', item.phoneNumber) +
+              editableCell(index, 'email', item.email) + editableCell(index, 'facebookUrl', item.facebookUrl) +
+              editableCell(index, 'classCode', item.classCode) + '<td><span class="status ' + (evaluateStatus(item) === 'Đầy đủ' ? 'ok' : 'warn') + '">' + escapeHtml(evaluateStatus(item)) + '</span></td></tr>').join('') +
+            '</tbody></table></div><div class="actions" style="margin-top:14px"><button id="saveParsedBtn" class="btn btn-primary">Lưu ' + state.parsed.length + ' học viên vào Sheet</button><button id="discardParsedBtn" class="btn btn-secondary">Bỏ kết quả</button></div>';
+          area.querySelectorAll('input[data-index]').forEach((input) => input.addEventListener('input', (event) => {
+            const index = Number(event.target.dataset.index);
+            state.parsed[index][event.target.dataset.field] = event.target.value;
+          }));
+          $('#saveParsedBtn').addEventListener('click', saveParsed);
+          $('#discardParsedBtn').addEventListener('click', () => { state.parsed = []; renderPreview(); });
+        }
+
+        function editableCell(index, field, value) {
+          return '<td><input data-index="' + index + '" data-field="' + field + '" value="' + escapeHtml(value) + '"></td>';
+        }
+
+        async function saveParsed() {
+          if (!state.parsed.length) return;
+          setBusy(true);
+          try {
+            const result = await serverCall('addStudents', state.parsed);
+            state.parsed = [];
+            $('#rawInput').value = '';
+            renderPreview();
+            await loadData(true);
+            const skipped = result.skipped && result.skipped.length ? ' · Bỏ qua ' + result.skipped.length + ' bản ghi trùng.' : '';
+            toast('Đã lưu ' + result.addedCount + ' học viên vào Google Sheet.' + skipped);
+            switchView('database');
+          } catch (error) {
+            toast(error.message, true);
+          } finally { setBusy(false); }
+        }
+
+        function getFilteredStudents() {
+          const query = $('#searchInput').value.trim().toLocaleLowerCase('vi-VN');
+          const classCode = $('#classFilter').value;
+          return state.students.filter((item) => {
+            if (classCode !== 'ALL' && item.classCode !== classCode) return false;
+            if (!query) return true;
+            return [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode]
+              .some((value) => String(value || '').toLocaleLowerCase('vi-VN').includes(query));
+          });
+        }
+
+        function renderAll() {
+          $('#activeCount').textContent = '(' + state.students.length + ')';
+          $('#archiveCount').textContent = '(' + state.archived.length + ')';
+          $('#statTotal').textContent = state.students.length;
+          const complete = state.students.filter((item) => item.status === 'Đầy đủ').length;
+          $('#statComplete').textContent = complete;
+          $('#statMissing').textContent = state.students.length - complete;
+          renderClassFilter();
+          renderStudentTable();
+          renderArchiveTable();
+        }
+
+        function renderClassFilter() {
+          const select = $('#classFilter');
+          const selected = select.value;
+          const classes = Array.from(new Set(state.students.map((item) => item.classCode).filter(Boolean))).sort();
+          select.innerHTML = '<option value="ALL">Tất cả lớp</option>' + classes.map((value) => '<option value="' + escapeHtml(value) + '">' + escapeHtml(value) + '</option>').join('');
+          if (classes.includes(selected)) select.value = selected;
+        }
+
+        function renderStudentTable() {
+          const items = getFilteredStudents();
+          const area = $('#studentTableArea');
+          if (!items.length) {
+            area.innerHTML = '<div class="empty"><div><strong>Không có học viên phù hợp</strong>Thử thay đổi từ khóa hoặc nhập học viên mới.</div></div>';
+            return;
+          }
+          area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Facebook</th><th>Mã lớp</th><th>Tình trạng</th><th>Cập nhật</th><th>Thao tác</th></tr></thead><tbody>' +
+            items.map((item) => '<tr><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td class="nowrap">' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + (safeHref(item.facebookUrl) ? '<a href="' + escapeHtml(safeHref(item.facebookUrl)) + '" target="_blank" rel="noopener">Mở link ↗</a>' : '—') + '</td><td class="nowrap">' + escapeHtml(item.classCode || '—') + '</td><td><span class="status ' + (item.status === 'Đầy đủ' ? 'ok' : 'warn') + '">' + escapeHtml(item.status) + '</span></td><td class="nowrap">' + escapeHtml(formatDate(item.updatedAt)) + '</td><td><div class="row-actions"><button class="btn btn-secondary btn-small edit-btn" data-id="' + escapeHtml(item.id) + '">Sửa</button><button class="btn btn-danger btn-small archive-btn" data-id="' + escapeHtml(item.id) + '">Lưu trữ</button></div></td></tr>').join('') +
+            '</tbody></table></div>';
+          area.querySelectorAll('.edit-btn').forEach((button) => button.addEventListener('click', () => openEdit(button.dataset.id)));
+          area.querySelectorAll('.archive-btn').forEach((button) => button.addEventListener('click', () => archiveRecord(button.dataset.id)));
+        }
+
+        function renderArchiveTable() {
+          const area = $('#archiveTableArea');
+          if (!state.archived.length) {
+            area.innerHTML = '<div class="empty"><div><strong>Archive đang trống</strong>Học viên cũ được chuyển vào đây thay vì xóa ngay.</div></div>';
+            return;
+          }
+          area.innerHTML = '<div class="table-wrap" style="border:0;border-radius:0 0 16px 16px"><table><thead><tr><th>Họ và tên</th><th>SĐT</th><th>Email</th><th>Mã lớp</th><th>Ngày lưu trữ</th><th>Thao tác</th></tr></thead><tbody>' +
+            state.archived.map((item) => '<tr><td><strong>' + escapeHtml(item.fullName) + '</strong></td><td>' + escapeHtml(item.phoneNumber) + '</td><td>' + escapeHtml(item.email) + '</td><td>' + escapeHtml(item.classCode) + '</td><td>' + escapeHtml(formatDate(item.archivedAt)) + '</td><td><div class="row-actions"><button class="btn btn-secondary btn-small restore-btn" data-id="' + escapeHtml(item.id) + '">Khôi phục</button>' + (teamSession.role === 'manager' ? '<button class="btn btn-danger btn-small delete-btn" data-id="' + escapeHtml(item.id) + '">Xóa vĩnh viễn</button>' : '') + '</div></td></tr>').join('') +
+            '</tbody></table></div>';
+          area.querySelectorAll('.restore-btn').forEach((button) => button.addEventListener('click', () => restoreRecord(button.dataset.id)));
+          area.querySelectorAll('.delete-btn').forEach((button) => button.addEventListener('click', () => deleteRecord(button.dataset.id)));
+        }
+
+        function openEdit(id) {
+          const item = state.students.find((record) => record.id === id);
+          if (!item) return;
+          $('#editId').value = item.id;
+          $('#editName').value = item.fullName;
+          $('#editPhone').value = item.phoneNumber;
+          $('#editEmail').value = item.email;
+          $('#editFacebook').value = item.facebookUrl;
+          $('#editClass').value = item.classCode;
+          $('#editDialog').showModal();
+        }
+
+        async function updateRecord(event) {
+          event.preventDefault();
+          const old = state.students.find((item) => item.id === $('#editId').value);
+          if (!old) return;
+          const record = Object.assign({}, old, {
+            fullName: $('#editName').value,
+            phoneNumber: $('#editPhone').value,
+            email: $('#editEmail').value,
+            facebookUrl: $('#editFacebook').value,
+            classCode: $('#editClass').value,
+          });
+          $('#editDialog').close();
+          await mutate('updateStudent', record, 'Đã cập nhật học viên.');
+        }
+
+        async function archiveRecord(id) {
+          const item = state.students.find((record) => record.id === id);
+          if (!item || !confirm('Chuyển "' + item.fullName + '" sang Archive?')) return;
+          await mutate('archiveStudent', id, 'Đã chuyển học viên sang Archive.');
+        }
+        async function restoreRecord(id) { await mutate('restoreStudent', id, 'Đã khôi phục học viên.'); }
+        async function deleteRecord(id) {
+          const item = state.archived.find((record) => record.id === id);
+          if (!item || !confirm('Xóa vĩnh viễn "' + item.fullName + '"? Hành động này không thể hoàn tác.')) return;
+          await mutate('deleteStudentPermanently', id, 'Đã xóa vĩnh viễn học viên.');
+        }
+        async function mutate(name, value, successMessage) {
+          setBusy(true);
+          try { await serverCall(name, value); await loadData(true); toast(successMessage); }
+          catch (error) { toast(error.message, true); }
+          finally { setBusy(false); }
+        }
+
+        function exportCsv() {
+          const items = getFilteredStudents();
+          const rows = [['Họ và tên', 'Số điện thoại', 'Email', 'Link Facebook', 'Mã lớp', 'Tình trạng']]
+            .concat(items.map((item) => [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.status]));
+          const csv = '\uFEFF' + rows.map((row) => row.map(csvCell).join(',')).join('\r\n');
+          const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+          const link = document.createElement('a');
+          link.href = url; link.download = 'DanhSachHocVien_' + new Date().toISOString().slice(0, 10) + '.csv'; link.click();
+          URL.revokeObjectURL(url);
+        }
+        async function copyTable() {
+          const items = getFilteredStudents();
+          const rows = [['Họ và tên', 'Số điện thoại', 'Email', 'Link Facebook', 'Mã lớp', 'Tình trạng']]
+            .concat(items.map((item) => [item.fullName, item.phoneNumber, item.email, item.facebookUrl, item.classCode, item.status]));
+          try { await navigator.clipboard.writeText(rows.map((row) => row.join('\t')).join('\n')); toast('Đã copy bảng vào clipboard.'); }
+          catch (_) { toast('Trình duyệt không cho phép copy. Hãy dùng Xuất CSV.', true); }
+        }
+        function csvCell(value) { return '"' + String(value || '').replace(/"/g, '""') + '"'; }
+        function formatDate(value) {
+          const date = new Date(value);
+          return Number.isNaN(date.getTime()) ? String(value || '') : date.toLocaleString('vi-VN');
+        }
+        function safeHref(value) {
+          try {
+            const url = new URL(String(value || ''));
+            return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : '';
+          } catch (_) { return ''; }
+        }
+        function escapeHtml(value) {
+          return String(value == null ? '' : value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]);
+        }
+
+        $$('.nav-tab').forEach((button) => button.addEventListener('click', () => switchView(button.dataset.view)));
+        $$('.refresh-btn').forEach((button) => button.addEventListener('click', () => loadData(false)));
+        $('#parseBtn').addEventListener('click', () => {
+          state.parsed = parseInput($('#rawInput').value);
+          renderPreview();
+          if (!state.parsed.length) toast('Chưa nhận diện được học viên. Kiểm tra lại dữ liệu đầu vào.', true);
+        });
+        $('#sampleBtn').addEventListener('click', () => {
+          $('#rawInput').value = '1. Nguyễn Minh Anh + 0989123456 + minhanh@gmail.com + facebook.com/minhanh.ielts + MBWrite02 OCT26\n2. Trần Thu Hà, 0901234567, thuha@gmail.com, fb.com/thuha.ielts, MBSpeak05 SEP26\n3. Lê Gia Huy + 0938123456 + giahuy@gmail.com + facebook.com/giahuy + IELTS65';
+        });
+        $('#clearBtn').addEventListener('click', () => { $('#rawInput').value = ''; state.parsed = []; renderPreview(); });
+        $('#searchInput').addEventListener('input', renderStudentTable);
+        $('#classFilter').addEventListener('change', renderStudentTable);
+        $('#csvBtn').addEventListener('click', exportCsv);
+        $('#copyBtn').addEventListener('click', copyTable);
+        $('#editForm').addEventListener('submit', updateRecord);
+        $('#closeDialogBtn').addEventListener('click', () => $('#editDialog').close());
+        $('#cancelDialogBtn').addEventListener('click', () => $('#editDialog').close());
+
+        renderTeamAccount();
+        renderPreview();
+        loadData(false);
+        setInterval(() => { if (state.view !== 'input' && !document.hidden) loadData(true); }, 60000);
+      })();
+    </script>
+  </body>
+</html>
