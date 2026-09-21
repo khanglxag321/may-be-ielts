@@ -7,6 +7,10 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://iframe.videodelivery.net" crossorigin>
+    <link rel="preconnect" href="https://customer-waga3zog2j0ywxnt.cloudflarestream.com" crossorigin>
+    <link rel="dns-prefetch" href="https://iframe.videodelivery.net">
+    <link rel="dns-prefetch" href="https://customer-waga3zog2j0ywxnt.cloudflarestream.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="preload" href="assets/audio/bee-01-hero.mp3" as="audio" type="audio/mpeg">
     <!-- Font Awesome Icons -->
@@ -275,13 +279,19 @@ html, body {
     width:220px;
 }
 
-.teacher-preview video{
+.teacher-preview video,
+.teacher-preview-stream{
     width:100%;
     height:390px;
     object-fit:cover;
     border-radius:16px;
     cursor:pointer;
     border:1px solid var(--border-color);
+}
+
+.teacher-preview-stream{
+    display:block;
+    pointer-events:none;
 }
 .teacher-stats{
     display:flex;
@@ -1437,7 +1447,8 @@ header {
 .lecturer-row:last-child { border-bottom: 0; }
 
 .zoomable-image,
-.teacher-preview video {
+.teacher-preview video,
+.teacher-preview-stream {
     border-color: var(--blue-100);
     border-radius: 22px;
     box-shadow: 0 16px 38px rgba(15, 27, 76, .1);
@@ -1893,7 +1904,8 @@ footer p { color: rgba(255,255,255,.48); }
 .lecturer-info { width: min(31vw, 380px); }
 .lecturer-video { width: min(17vw, 200px); }
 .teacher-preview { width: 100%; }
-.teacher-preview video { height: 350px; border: 0; box-shadow: 0 12px 30px rgba(15,27,76,.1); }
+.teacher-preview video,
+.teacher-preview-stream { height: 350px; border: 0; box-shadow: 0 12px 30px rgba(15,27,76,.1); }
 
 .lecturer-row:nth-child(1) .lecturer-badge { background: var(--blue-100); color: var(--blue-500); }
 .lecturer-row:nth-child(2) .lecturer-badge { background: #FFE3DF; color: #C44E41; }
@@ -3517,7 +3529,8 @@ button, a, input, select { touch-action: manipulation; }
     .social-links a { min-width: 44px; width: 44px; height: 44px; }
     .social-links a.contact-phone { min-height: 44px; }
     .lecturer-video { width: min(100%, 270px) !important; }
-    .teacher-preview video { height: 410px; border-radius: 18px; }
+    .teacher-preview video,
+    .teacher-preview-stream { height: 410px; border-radius: 18px; }
     .lecturer-slot-note {
         width: 100%;
         padding: 10px 12px;
@@ -3970,13 +3983,12 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="teacher-preview">
 
-          <video class="teacher-preview-video" muted loop playsinline preload="none">
-
-                    <source
-                      <source src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/bachvideo.mp4" 
-                      type="video/mp4">
-
-                </video>
+          <iframe class="teacher-preview-stream"
+                  src="https://iframe.videodelivery.net/77cf432e9110190d698b09e20cf027cb?autoplay=true&amp;muted=true&amp;loop=true&amp;controls=false&amp;preload=true"
+                  title="Video giới thiệu thầy Hồ Bách"
+                  loading="lazy"
+                  allow="autoplay; encrypted-media; picture-in-picture">
+          </iframe>
 
             </div>
 
@@ -4035,13 +4047,12 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="teacher-preview">
 
-          <video class="teacher-preview-video" muted loop playsinline preload="none">
-
-                    <source
-                      src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/nhivideo.mp4"
-                      type="video/mp4">
-
-                </video>
+          <iframe class="teacher-preview-stream"
+                  src="https://iframe.videodelivery.net/c494324419453252b845fa1633370fd9?autoplay=true&amp;muted=true&amp;loop=true&amp;controls=false&amp;preload=true"
+                  title="Video giới thiệu cô Tuệ Nhi"
+                  loading="lazy"
+                  allow="autoplay; encrypted-media; picture-in-picture">
+          </iframe>
 
             </div>
 
@@ -4095,13 +4106,12 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="teacher-preview">
 
-          <video class="teacher-preview-video" muted loop playsinline preload="none">
-
-                    <source
-                      src="https://raw.githubusercontent.com/khanglxag321/may-be-ielts/main/kanevideo.mp4"
-                      type="video/mp4">
-
-                </video>
+          <iframe class="teacher-preview-stream"
+                  src="https://iframe.videodelivery.net/ad88730a2ab9bd6d820fee587b49014d?autoplay=true&amp;muted=true&amp;loop=true&amp;controls=false&amp;preload=true"
+                  title="Video giới thiệu thầy Gia Khang"
+                  loading="lazy"
+                  allow="autoplay; encrypted-media; picture-in-picture">
+          </iframe>
 
             </div>
 
@@ -4598,6 +4608,8 @@ document.body.style.overflow = "hidden";
 
         <div class="recording-player">
             <iframe id="recordingFrame"
+                    title="Recording lớp học thử"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
                     allowfullscreen>
             </iframe>
         </div>
@@ -4623,15 +4635,15 @@ title:"Hồ Bách",
 videos:[
 {
 name:"Advanced Task 1",
-url:"https://drive.google.com/file/d/1mRHjc6SL9ItxpX2o4L2WPZjf5MmbyJcn/preview"
+url:"https://iframe.videodelivery.net/ea4f9812628abb1c30d8243bcc03c8bf?preload=true"
 },
 {
 name:"Advanced Task 2",
-url:"https://drive.google.com/file/d/1Jy7T8SGOf3ZRJtaJ32u02GgJJC67GiYN/preview"
+url:"https://iframe.videodelivery.net/515bee8f8b94c92d7ee835211fc98d5f?preload=true"
 },
 {
 name:"Advanced Speaking",
-url:"https://drive.google.com/file/d/1aXRrxkXTnCjTEeZL68ln8hiNmElia47j/preview"
+url:"https://iframe.videodelivery.net/afb601d4aee8fb4e513d88957eee0e34?preload=true"
 }
 ]
 },
@@ -4643,11 +4655,11 @@ title:"Tuệ Nhi",
 videos:[
 {
 name:"Writing Task 1",
-url:"https://drive.google.com/file/d/1Zp7lSKaxiicTXq7KK91mLqLkjIF-ds1o/preview"
+url:"https://iframe.videodelivery.net/1b9b358e90d543c8c98268f5a3b882ac?preload=true"
 },
 {
 name:"Writing Task 2",
-url:"https://drive.google.com/file/d/1f8Wcjrf2OKqOhuekVy1ajnuLkMF6OzVz/preview"
+url:"https://iframe.videodelivery.net/25e138b71d10e2487e789bda52de034a?preload=true"
 }
 ]
 },
@@ -4656,12 +4668,12 @@ kane:{
 title:"Gia Khang",
 videos:[
 {
-name:"Writing Task 1",
-url:"https://drive.google.com/file/d/16Xt7C7WdAZV2qgSKIm6ZHawJForxMkyh/preview"
+name:"Lesson 1",
+url:"https://iframe.videodelivery.net/7675b113a75ea6cb33a9087aef2c41a8?preload=true"
 },
 {
-name:"Writing Task 2",
-url:"https://drive.google.com/file/d/1rWuclgCJZlfLvVZq7z4m8sH870pHF5QG/preview"
+name:"Lesson 2",
+url:"https://iframe.videodelivery.net/bcc636865ebc81c4d202a501d268d9eb?preload=true"
 }
 ]
 },
@@ -6463,35 +6475,7 @@ function initBeeGuide() {
     }
 }
 
-function initTeacherPreviewVideos() {
-    const videos = Array.from(document.querySelectorAll(".teacher-preview-video"));
-    if (!videos.length) return;
-
-    const setPlayback = (video, shouldPlay) => {
-        video.dataset.inViewport = String(shouldPlay);
-        if (!shouldPlay || document.hidden) {
-            video.pause();
-            return;
-        }
-        video.play().catch(() => {});
-    };
-
-    if ("IntersectionObserver" in window) {
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => setPlayback(entry.target, entry.isIntersecting && entry.intersectionRatio >= .12));
-        }, { rootMargin: "140px 0px", threshold: [0, .12, .45] });
-        videos.forEach(video => observer.observe(video));
-    } else {
-        videos.forEach(video => setPlayback(video, true));
-    }
-
-    document.addEventListener("visibilitychange", () => {
-        videos.forEach(video => setPlayback(video, video.dataset.inViewport === "true"));
-    });
-}
-
 document.addEventListener("DOMContentLoaded", initBeeGuide);
-document.addEventListener("DOMContentLoaded", initTeacherPreviewVideos);
 </script>
 
 </body>
