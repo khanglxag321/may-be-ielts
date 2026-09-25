@@ -4460,11 +4460,11 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <dialog class="register-success-dialog" id="registerSuccessDialog" aria-labelledby="registerSuccessTitle" aria-describedby="registerSuccessMessage">
         <div class="register-success-content">
             <div class="register-success-icon" aria-hidden="true"><i class="fa-solid fa-check"></i></div>
-            <h3 id="registerSuccessTitle">Tụi mình đã nhận được thông tin!</h3>
+            <h3 id="registerSuccessTitle">Đăng ký thành công — nhớ kiểm tra tin nhắn ngay nhé!</h3>
             <p id="registerSuccessMessage">
-                Em nhớ kiểm tra mục <strong>Tin nhắn chờ</strong> trên Facebook hoặc Zalo nhé. Anh/chị trong team và giáo viên sẽ liên hệ với em sớm nhất để tư vấn kỹ hơn về lộ trình phù hợp.
+                Anh/chị trong team hoặc giáo viên may(be)ielts. sẽ sớm liên hệ qua Facebook hoặc Zalo để tư vấn kỹ hơn về lộ trình. Em nhớ kiểm tra cả mục <strong>Tin nhắn chờ / Tin nhắn từ người lạ</strong> để không bỏ lỡ nhé.
             </p>
-            <button type="button" class="register-success-close" id="registerSuccessClose">Mình đã hiểu</button>
+            <button type="button" class="register-success-close" id="registerSuccessClose">Đã rõ — mình kiểm tra ngay</button>
         </div>
     </dialog>
 
@@ -5583,7 +5583,7 @@ function showRegisterSuccessDialog(){
         return;
     }
 
-    alert("Tụi mình đã nhận được thông tin! Em nhớ kiểm tra mục Tin nhắn chờ trên Facebook hoặc Zalo nhé. Anh/chị trong team và giáo viên sẽ liên hệ với em sớm nhất để tư vấn kỹ hơn về lộ trình phù hợp.");
+    alert("Đăng ký thành công — nhớ kiểm tra tin nhắn ngay nhé! Anh/chị trong team hoặc giáo viên may(be)ielts. sẽ sớm liên hệ qua Facebook hoặc Zalo để tư vấn kỹ hơn về lộ trình. Em nhớ kiểm tra cả mục Tin nhắn chờ / Tin nhắn từ người lạ để không bỏ lỡ nhé.");
 }
 
 document.getElementById("registerSuccessClose")?.addEventListener("click", () => {
@@ -5633,7 +5633,7 @@ async function submitRegister(e){
             activateBeeGuide('success', true);
             showRegisterSuccessDialog();
             if (status) {
-                status.textContent = "Đã gửi thành công! Em nhớ kiểm tra Tin nhắn chờ trên Facebook hoặc Zalo nhé.";
+                status.textContent = "Đã gửi thành công! Em nhớ kiểm tra Tin nhắn chờ / Tin nhắn từ người lạ trên Facebook hoặc Zalo nhé.";
                 status.classList.add("is-success");
             }
             form?.reset();
