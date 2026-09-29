@@ -3926,7 +3926,7 @@ body {
                 </div>
                 <div class="feature-card feature-study">
                     <div class="feature-tile-top"><span>Độc quyền học viên Maybe</span><span class="feature-chip">05</span></div>
-                    <div class="feature-card-copy"><h3>Nền tảng <span>Maybe Study</span></h3><p>Học viên được cấp quyền truy cập bằng email đăng ký lớp, đăng nhập ngay với tài khoản Google đó. Luyện cả 4 kỹ năng, đặc biệt Reading &amp; Listening với nhiều bài tập mô phỏng phòng thi.</p><a class="privilege-link" href="https://maybestudy.com/" target="_blank" rel="noopener">Khám phá Maybe Study ↗</a></div>
+                    <div class="feature-card-copy"><h3>Nền tảng <span>Maybe Study</span></h3><p>Đăng nhập bằng Google với email đã đăng ký lớp. Luyện Reading &amp; Listening, xem đáp án chi tiết và theo dõi lịch sử làm bài. Writing &amp; Speaking sắp ra mắt.</p><button type="button" class="privilege-link" data-privilege-open="studyDialog">▶ Xem video giới thiệu</button></div>
                     <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)study.</span></div>
                 </div>
             </div>
@@ -3995,6 +3995,22 @@ body {
             <div class="cv-layout"><article class="cv-paper" id="cvPaper" aria-label="Bài viết và phần sửa"></article><aside class="cv-notes" id="cvNotes" aria-label="Nhận xét của giáo viên"></aside></div>
         </div>
     </dialog>
+    <dialog class="privilege-dialog" id="studyDialog" aria-labelledby="studyTitle">
+        <div class="privilege-dialog-head"><div><p class="privilege-eyebrow">ĐẶC QUYỀN 05 · MAYBE STUDY</p><h2 id="studyTitle">Khám phá không gian luyện tập của bạn</h2></div><button type="button" class="privilege-close" aria-label="Đóng video Maybe Study" data-privilege-close>×</button></div>
+        <p>Luyện Reading &amp; Listening, đối chiếu đáp án chi tiết và xem lại từng lần làm bài. Writing đang phát triển; Speaking mới có bản demo và sắp ra mắt chính thức.</p>
+        <video id="studyVideo" controls playsinline preload="none" width="1920" height="1080" poster="assets/media/maybe-study-poster.jpg" data-video-src="assets/media/maybe-study-intro-v2.mp4" aria-label="Video giới thiệu Maybe Study, có phụ đề tiếng Việt">
+            Trình duyệt của bạn không hỗ trợ video. <a href="assets/media/maybe-study-intro-v2.mp4">Mở video giới thiệu Maybe Study</a>.
+        </video>
+        <div class="study-video-footer"><span>1 phút 38 giây · Có phụ đề tiếng Việt</span><a class="privilege-link" href="https://maybestudy.com/" target="_blank" rel="noopener">Vào Maybe Study ↗</a></div>
+    </dialog>
+    <style>
+        #studyDialog{width:min(1100px,calc(100% - 32px))}
+        #studyDialog > p{margin-bottom:18px}
+        #studyVideo{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#101a49;border-radius:14px}
+        .study-video-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px}
+        .study-video-footer > span{font-size:.8rem;color:#596580}
+        .study-video-footer .privilege-link{margin-top:0}
+    </style>
     <script>
     (() => {
         let opener = null;
@@ -4006,6 +4022,9 @@ body {
                 previousOverflow = document.body.style.overflow;
                 dialog.querySelectorAll('img[data-src]').forEach(image => {
                     if (!image.hasAttribute('src')) image.src = image.dataset.src;
+                });
+                dialog.querySelectorAll('video[data-video-src]').forEach(video => {
+                    if (!video.hasAttribute('src')) video.src = video.dataset.videoSrc;
                 });
                 dialog.showModal();
                 document.body.style.overflow = 'hidden';
@@ -4019,6 +4038,7 @@ body {
                 if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
             });
             dialog.addEventListener('close', () => {
+                dialog.querySelectorAll('video').forEach(video => video.pause());
                 document.body.style.overflow = previousOverflow;
                 if (opener) opener.focus();
             });
