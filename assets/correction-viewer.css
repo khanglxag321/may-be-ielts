@@ -1,4 +1,19 @@
 /* Read-only teaching samples. Blue / coral / mint mirror the teacher section. */
+/* Desktop-only: shared title, copy and action baselines; mobile stays unchanged. */
+@media(min-width:1151px){
+  #features > .container{max-width:1560px;width:100%;padding-inline:32px}
+  #features > .container .features-grid{gap:18px}
+  #features .features-grid .feature-card{min-height:0;padding:24px;gap:22px;justify-content:flex-start}
+  #features .feature-tile-top{min-height:28px;align-items:center}
+  #features .feature-card-copy{display:flex;flex-direction:column;flex:1;max-width:none}
+  #features .features-grid .feature-card h3{font-size:clamp(21px,1.7vw,27px);line-height:1.15;min-height:2.3em;margin:0 0 14px;letter-spacing:-.035em}
+  #features .feature-card h3 span{display:block}
+  #features .features-grid .feature-card p{font-size:13px;line-height:1.6;margin:0;flex:1}
+  #features .privilege-link{height:56px;min-height:56px;flex-shrink:0;margin-top:18px;font-size:12px;line-height:1.4;justify-content:flex-start}
+  #features .feature-card:nth-child(3) .feature-card-copy::after,
+  #features .feature-card:nth-child(4) .feature-card-copy::after{content:'';height:56px;min-height:56px;flex-shrink:0;margin-top:18px}
+  #features .feature-tile-foot{margin-top:auto}
+}
 #features .features-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
 #features .feature-card{padding:22px;min-height:350px}
 #features .feature-study{grid-column:auto;background:#ff6b5b;color:#101b4c}
