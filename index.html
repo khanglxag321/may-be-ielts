@@ -3892,6 +3892,7 @@ body {
                     <div class="feature-card-copy">
                         <h3>Lộ trình <span>15 buổi</span></h3>
                         <p>Học full toàn bộ các dạng bài. Cấu trúc chia đều thành 5 cặp dạng, mỗi cặp gồm 3 buổi tối ưu hóa (Task 1 - Task 2 - Luyện tập tổng hợp).</p>
+                        <button type="button" class="privilege-link" data-privilege-open="curriculumDialog" aria-haspopup="dialog">Bấm xem lộ trình chi tiết ↗</button>
                     </div>
                     <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
@@ -3900,7 +3901,8 @@ body {
                     <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip">02</span></div>
                     <div class="feature-card-copy">
                         <h3>Chấm chữa <span>20 bài</span></h3>
-                        <p>Thực hành liên tục. Nhận feedback chi tiết cho 15 bài homework theo buổi và 5 bài test toàn diện sau khóa học.</p>
+                        <p>Làm bài trên Google Docs, nhận góp ý và giải thích lỗi trực tiếp từ giáo viên. Gồm 15 bài theo buổi và 5 bài Writing tự chọn trong hoặc sau khóa học.</p>
+                        <button type="button" class="privilege-link" data-privilege-open="feedbackDialog" aria-haspopup="dialog">Bấm xem bài chấm chữa mẫu ↗</button>
                     </div>
                     <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
@@ -3922,9 +3924,108 @@ body {
                     </div>
                     <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)write.</span></div>
                 </div>
+                <div class="feature-card feature-study">
+                    <div class="feature-tile-top"><span>Độc quyền học viên Maybe</span><span class="feature-chip">05</span></div>
+                    <div class="feature-card-copy"><h3>Nền tảng <span>Maybe Study</span></h3><p>Học viên được cấp quyền truy cập bằng email đăng ký lớp, đăng nhập ngay với tài khoản Google đó. Luyện cả 4 kỹ năng, đặc biệt Reading &amp; Listening với nhiều bài tập mô phỏng phòng thi.</p><a class="privilege-link" href="https://maybestudy.com/" target="_blank" rel="noopener">Khám phá Maybe Study ↗</a></div>
+                    <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"/></svg><span>may(be)study.</span></div>
+                </div>
             </div>
         </div>
     </section>
+
+    <style>
+        #features .feature-card { aspect-ratio: auto; min-height: 300px; gap: 22px; }
+        #features .feature-study { grid-column: 1 / -1; min-height: 0; background: #eeeaff; color: #101b4c; }
+        #features .feature-study .feature-card-copy { max-width: 850px; }
+        #features .feature-study h3 span { color: #5142ad; }
+        #features .feature-study p { font-size: .95rem; }
+        .privilege-link { display: inline-flex; align-items: center; margin-top: 16px; padding: 10px 12px; border: 1px solid #ffd2ca; border-radius: 10px; background: #fff3f0; color: #ad2418; font: 700 .82rem/1.45 'Plus Jakarta Sans', sans-serif; text-align: left; cursor: pointer; text-decoration: none; }
+        .privilege-link:hover { background: #ffe1d9; text-decoration: underline; }
+        .privilege-link:focus-visible, .privilege-dialog a:focus-visible, .privilege-close:focus-visible { outline: 3px solid #2871ff; outline-offset: 4px; }
+        .privilege-dialog { position: fixed; inset: 0; margin: auto; width: min(940px, calc(100% - 32px)); max-height: 88vh; max-height: 88dvh; padding: 30px; border: 0; border-radius: 24px; background: #fbfcff; color: #101b4c; box-shadow: 0 24px 100px #070e3b55; overflow: auto; overscroll-behavior: contain; }
+        .privilege-dialog::backdrop { background: #080f36b8; backdrop-filter: blur(5px); }
+        .privilege-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 18px; }
+        .privilege-dialog h2 { font: 700 clamp(1.6rem, 4vw, 2.2rem)/1.15 'Space Grotesk', sans-serif; margin-top: 8px; }
+        .privilege-eyebrow { font-size: .68rem; font-weight: 800; letter-spacing: .09em; color: #575f7d; }
+        .privilege-dialog > p { line-height: 1.75; }
+        .privilege-close { flex: 0 0 44px; height: 44px; border: 1px solid #dce0ec; border-radius: 50%; background: white; color: #101b4c; font-size: 26px; cursor: pointer; }
+        .privilege-action { display: inline-block; margin: 18px 0; padding: 12px 18px; border-radius: 10px; background: #193cbb; color: white; font-weight: 700; }
+        .curriculum-pages { display: grid; gap: 16px; }
+        .curriculum-pages img { display: block; width: 100%; height: auto; border: 1px solid #dce0ec; border-radius: 12px; }
+        .privilege-note { margin-top: 18px; padding: 14px 16px; background: #eef1f8; border-radius: 12px; font-size: .82rem; color: #535d79; }
+        .feedback-teachers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 24px 0; }
+        .feedback-teachers article { padding: 22px 18px; border-radius: 16px; background: #eaf0ff; }
+        .feedback-teachers article:nth-child(2) { background: #fff0dd; }
+        .feedback-teachers article:nth-child(3) { background: #e0f4ee; }
+        .feedback-teachers h3 { font-size: 1.3rem; margin: 12px 0 20px; }
+        .feedback-teachers article > div { display: flex; flex-wrap: wrap; gap: 8px; }
+        .feedback-teachers a { padding: 10px 12px; background: white; border: 1px solid #d4daeb; border-radius: 8px; color: #183795; font-size: .85rem; font-weight: 700; }
+        @media(max-width: 600px) { .privilege-dialog { padding: 22px 18px; } .feedback-teachers { grid-template-columns: 1fr; } .feedback-teachers article { padding: 16px; } .feedback-teachers h3 { margin: 8px 0 12px; } #features .feature-study { max-width: 480px; } }
+    </style>
+    <dialog class="privilege-dialog" id="curriculumDialog" aria-labelledby="curriculumTitle">
+        <div class="privilege-dialog-head"><div><p class="privilege-eyebrow">ĐẶC QUYỀN 01 · MAY(BE)WRITE.</p><h2 id="curriculumTitle">15 buổi. Một lộ trình rõ ràng.</h2></div><button type="button" class="privilege-close" aria-label="Đóng lộ trình" data-privilege-close>×</button></div>
+        <p>5 chặng học, mỗi chặng gồm Task 1 → Task 2 → Practice. Xem nội dung từng buổi trong tài liệu bên dưới.</p>
+        <a class="privilege-action" href="assets/docs/maybe-ielts-lo-trinh-15-buoi.pdf" target="_blank" rel="noopener">Mở PDF trong tab mới ↗</a>
+        <div class="curriculum-pages">
+            <img data-src="assets/docs/curriculum-hd-1.webp" width="990" height="1400" alt="Lộ trình 15 buổi IELTS Writing: 5 cặp dạng bài, 20 lượt chấm chữa.">
+            <img data-src="assets/docs/curriculum-hd-2.webp" width="990" height="1400" loading="lazy" alt="Tổng quan 5 chặng: Dynamic Chart, Static Chart, Mixed Chart, Map và Process, kết hợp Task 2 và Practice.">
+            <img data-src="assets/docs/curriculum-hd-3.webp" width="990" height="1400" loading="lazy" alt="Buổi 1–3: Dynamic Chart, Agree or Disagree và Practice.">
+            <img data-src="assets/docs/curriculum-hd-4.webp" width="990" height="1400" loading="lazy" alt="Buổi 4–6: Static Chart, Discuss Both Views và Practice.">
+            <img data-src="assets/docs/curriculum-hd-5.webp" width="990" height="1400" loading="lazy" alt="Buổi 7–9: Mixed Chart, Advantages and Disadvantages và Practice.">
+            <img data-src="assets/docs/curriculum-hd-6.webp" width="990" height="1400" loading="lazy" alt="Buổi 10–12: Map, Positive or Negative Development và Practice.">
+            <img data-src="assets/docs/curriculum-hd-7.webp" width="990" height="1400" loading="lazy" alt="Buổi 13–15: Process, Two-part Question và Practice.">
+        </div>
+    </dialog>
+    <link rel="stylesheet" href="assets/correction-viewer.css">
+    <dialog class="privilege-dialog" id="feedbackDialog" aria-labelledby="feedbackTitle">
+        <div class="privilege-dialog-head"><div><p class="privilege-eyebrow">BÀI CHẤM CHỮA MẪU · MAYBE IELTS</p><h2 id="feedbackTitle">Xem cách giáo viên chấm chữa bài</h2><div class="cv-doc-menu" aria-hidden="true">File &nbsp; Edit &nbsp; View &nbsp; Insert &nbsp; Format &nbsp; Tools &nbsp; Help</div></div><button type="button" class="privilege-close" aria-label="Đóng bài chấm chữa" data-privilege-close>×</button></div>
+        <div class="cv-home" id="cvHome">
+            <p class="cv-intro">Em làm homework trên Google Docs và được giáo viên sửa trực tiếp, giải thích lỗi ngay trong bài. <strong>Homework luôn được chấm chữa trước buổi học tiếp theo</strong> để em có thời gian đọc feedback và hỏi lại giáo viên những chỗ chưa rõ trong buổi học. Chọn một bài mẫu bên dưới để xem cách chấm chữa — không cần đăng nhập.</p>
+            <p id="cvStatus" role="status">Đang tải bài mẫu…</p>
+            <div class="cv-teachers" id="cvTeachers"></div>
+            <p class="privilege-note">Bản trích từ tài liệu lớp học, giữ nguyên cách viết và lời chấm chữa của giáo viên. Đây là trình xem riêng của Maybe, không phải giao diện Google Docs; nội dung chỉ để đọc, không thể chỉnh sửa hay thêm bình luận.</p>
+        </div>
+        <div id="cvReader" hidden>
+            <div class="cv-doc-tools" aria-label="Thanh công cụ mô phỏng Google Docs, chỉ xem">
+                <div class="cv-tools-preview" aria-hidden="true"><span>↶</span><span>↷</span><span>▣</span><span class="cv-tool-divider"></span><span>100% ▾</span><span class="cv-tool-divider"></span><span>Normal text ▾</span><span class="cv-tool-divider"></span><span id="cvFontLabel">Arial ▾</span><span class="cv-tool-size">12</span><b>B</b><i>I</i><u>U</u><span>≡</span><span>☷</span></div>
+                <span class="cv-view-badge">◉ Chỉ xem · mô phỏng Google Docs</span>
+            </div>
+            <div class="cv-toolbar"><button type="button" id="cvBack">← Chọn bài khác</button><h3 id="cvReaderTitle"></h3><button type="button" id="cvAllNotes">Đọc nhận xét ↓</button></div>
+            <p class="cv-legend"><span class="cv-add">Gạch dưới: đề xuất thêm</span> · <span class="cv-delete">Gạch ngang: đề xuất xóa</span> · <span class="cv-anchor">Nền vàng: bấm để đọc comment</span>. Bản mô phỏng chỉ xem, không chỉnh sửa.</p>
+            <div class="cv-layout"><article class="cv-paper" id="cvPaper" aria-label="Bài viết và phần sửa"></article><aside class="cv-notes" id="cvNotes" aria-label="Nhận xét của giáo viên"></aside></div>
+        </div>
+    </dialog>
+    <script>
+    (() => {
+        let opener = null;
+        let previousOverflow = '';
+        document.querySelectorAll('[data-privilege-open]').forEach(button => {
+            button.addEventListener('click', () => {
+                const dialog = document.getElementById(button.dataset.privilegeOpen);
+                opener = button;
+                previousOverflow = document.body.style.overflow;
+                dialog.querySelectorAll('img[data-src]').forEach(image => {
+                    if (!image.hasAttribute('src')) image.src = image.dataset.src;
+                });
+                dialog.showModal();
+                document.body.style.overflow = 'hidden';
+                dialog.querySelector('[data-privilege-close]').focus();
+            });
+        });
+        document.querySelectorAll('.privilege-dialog').forEach(dialog => {
+            dialog.querySelector('[data-privilege-close]').addEventListener('click', () => dialog.close());
+            dialog.addEventListener('click', event => {
+                const bounds = dialog.getBoundingClientRect();
+                if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
+            });
+            dialog.addEventListener('close', () => {
+                document.body.style.overflow = previousOverflow;
+                if (opener) opener.focus();
+            });
+        });
+    })();
+    </script>
+    <script src="assets/correction-viewer.js"></script>
 
      <!-- Recording Section -->
 
@@ -4007,9 +4108,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 <!-- Hồ Bách -->
                 <div class="lecturer-row" data-bee-teacher="bach" data-bee-guide-side="right">
                     <div class="lecturer-images">
-                        <img src="https://i.ibb.co/YMDr88y/561338466-2462022220881278-659980113980257469-n.jpg" alt="Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
+                        <img src="assets/media/eada5dc61385f42a-thumb.webp" data-full="assets/media/eada5dc61385f42a.webp" alt="Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.dataset.full || this.src)" loading="lazy" decoding="async">
                         
-                             <img src="https://i.ibb.co/JNcvVz1/Cam-Scanner-19-06-2026-21-57-2.jpg" alt="Bằng IELTS Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
+                             <img src="assets/media/8320226f1cf21209-thumb.webp" data-full="assets/media/8320226f1cf21209.webp" alt="Bằng IELTS Thầy Bách" class="zoomable-image" onclick="openSingleImage(this.dataset.full || this.src)" loading="lazy" decoding="async">
                     </div>
                     <div class="lecturer-info">
                         <span class="lecturer-badge">may(be)bach</span>
@@ -4069,8 +4170,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 <!-- Tuệ Nhi -->
                 <div class="lecturer-row" data-bee-teacher="nhi" data-bee-guide-side="left">
                     <div class="lecturer-images">
-                        <img src="https://i.ibb.co/bMKmDDLc/457736475-1739145653491500-430238909239537785-n.jpg" alt="Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
-                        <img src="https://i.ibb.co/1GSTb1F9/IELTS-page-0001.jpg" alt="Bằng IELTS Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
+                        <img src="assets/media/4fb2de8b8e6ff0c6-thumb.webp" data-full="assets/media/4fb2de8b8e6ff0c6.webp" alt="Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.dataset.full || this.src)" loading="lazy" decoding="async">
+                        <img src="assets/media/31ea3e3379649dbb-thumb.webp" data-full="assets/media/31ea3e3379649dbb.webp" alt="Bằng IELTS Cô Nhi" class="zoomable-image" onclick="openSingleImage(this.dataset.full || this.src)" loading="lazy" decoding="async">
                    
                     </div>
                     
@@ -4130,8 +4231,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
  <!-- Gia Khang -->
                 <div class="lecturer-row" data-bee-teacher="khang" data-bee-guide-side="right">
                     <div class="lecturer-images">
-                        <img src="https://i.ibb.co/1JspPgdb/IMG-20230513-145018.jpg" alt="Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
-                        <img src="https://i.ibb.co/2G3Kbkb/Cam-Scanner-03-30-2026-18-24.jpg" alt="Bằng IELTS Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.src)" loading="lazy" decoding="async">
+                        <img src="assets/media/96f3c608f5d2df6c-thumb.webp" data-full="assets/media/96f3c608f5d2df6c.webp" alt="Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.dataset.full || this.src)" loading="lazy" decoding="async">
+                        <img src="assets/media/d658413731ad2bcd-thumb.webp" data-full="assets/media/d658413731ad2bcd.webp" alt="Bằng IELTS Thầy Khang" class="zoomable-image" onclick="openSingleImage(this.dataset.full || this.src)" loading="lazy" decoding="async">
                     </div>
                     <div class="lecturer-info">
                         <span class="lecturer-badge">may(be)kane</span>
@@ -4294,9 +4395,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="hof-cat-card" onclick="openGallery('gallery80')">
 
                 <div class="album-preview">
-<img src="https://i.ibb.co/KxXH7bqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259296.jpg" alt="Kết quả học viên đạt Writing 8.0" loading="lazy" decoding="async">
-<img src="https://i.ibb.co/fVmR6NXQ/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259292.jpg" alt="Feedback học viên đạt Writing 8.0" loading="lazy" decoding="async">
-<img src="https://i.ibb.co/zHTsCZ15/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259288.jpg" alt="Thành tích học viên đạt Writing 8.0" loading="lazy" decoding="async">
+<img src="assets/media/50351fbaee7aa0ea-thumb.webp" data-full="assets/media/50351fbaee7aa0ea.webp" alt="Kết quả học viên đạt Writing 8.0" loading="lazy" decoding="async">
+<img src="assets/media/02e516dba4289ef2-thumb.webp" data-full="assets/media/02e516dba4289ef2.webp" alt="Feedback học viên đạt Writing 8.0" loading="lazy" decoding="async">
+<img src="assets/media/c13b0ddea31f4e2e-thumb.webp" data-full="assets/media/c13b0ddea31f4e2e.webp" alt="Thành tích học viên đạt Writing 8.0" loading="lazy" decoding="async">
 
                 </div>
 
@@ -4308,9 +4409,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="hof-cat-card" onclick="openGallery('gallery75')">
 
                 <div class="album-preview">
-                    <img src="https://i.ibb.co/6c1xgcCh/dl-43e6421ea632.jpg" alt="Kết quả học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
-                    <img src="https://i.ibb.co/DgRmhTHX/dl-311504fa279e.jpg" alt="Feedback học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
-                    <img src="https://i.ibb.co/W413nC6q/dl-7f68c262b780.jpg" alt="Thành tích học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
+                    <img src="assets/media/aa9a55cc25ba1462-thumb.webp" data-full="assets/media/aa9a55cc25ba1462.webp" alt="Kết quả học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
+                    <img src="assets/media/af6ec89b8d3ad752-thumb.webp" data-full="assets/media/af6ec89b8d3ad752.webp" alt="Feedback học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
+                    <img src="assets/media/d1dcf10e8df1373a-thumb.webp" data-full="assets/media/d1dcf10e8df1373a.webp" alt="Thành tích học viên đạt Writing 7.0 đến 7.5" loading="lazy" decoding="async">
                 </div>
 
                 <h3>115+ Học viên</h3>
@@ -4540,105 +4641,105 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         const galleries = {
 
     gallery80: [
-    "https://i.ibb.co/KxXH7bqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259296.jpg",
-    "https://i.ibb.co/fVmR6NXQ/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259292.jpg",
-    "https://i.ibb.co/zHTsCZ15/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259288.jpg",
-    "https://i.ibb.co/8nCzNH2R/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259284.jpg",
-    "https://i.ibb.co/tMJbfy8F/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259279.jpg",
-    "https://i.ibb.co/XkFRT04k/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259274.jpg",
-    "https://i.ibb.co/YT0ntY8z/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259270.jpg",
-    "https://i.ibb.co/QFPbgNqg/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259261.jpg",
-    "https://i.ibb.co/cWnHqsc/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259256.jpg",
-    "https://i.ibb.co/mVHs9vDR/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259244.jpg",
-    "https://i.ibb.co/zHQSLk4k/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259240.jpg",
-    "https://i.ibb.co/gMcT1LDk/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259234.jpg",
-    "https://i.ibb.co/3yd38YqT/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259228.jpg",
-    "https://i.ibb.co/60ZPjkbt/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259304.jpg",
-    "https://i.ibb.co/BKfVdJtx/Brave-Down-Com-Facebook-Story-15-Ho-Bach-1781259300.jpg"
+    "assets/media/50351fbaee7aa0ea.webp",
+    "assets/media/02e516dba4289ef2.webp",
+    "assets/media/c13b0ddea31f4e2e.webp",
+    "assets/media/a4f1eaa073587dbb.webp",
+    "assets/media/b0631325ddc40f12.webp",
+    "assets/media/994e7b2d6319452e.webp",
+    "assets/media/bf92f758a4e912e8.webp",
+    "assets/media/a817b15d55e25b52.webp",
+    "assets/media/370ce03bb44c04f0.webp",
+    "assets/media/c540f96e5ff7f68c.webp",
+    "assets/media/e645465a6c6d7687.webp",
+    "assets/media/fee9d2f216998ebd.webp",
+    "assets/media/b344ef0f56b448f3.webp",
+    "assets/media/b70be65a257a9490.webp",
+    "assets/media/a368bf8fbfc66629.webp"
 ],
 
     gallery75: [
-        "https://i.ibb.co/PzvNntZX/4fd43fac-5437-4209-89fc-bf6d9921d363.jpg",
-"https://i.ibb.co/LX6mS4GZ/644f0756-5d9b-4f26-96a2-835eaa7c10ef.jpg",
-"https://i.ibb.co/pvSBcbXD/a8a923e3-70d7-4989-b62a-4bfa1d0afca7.jpg",
-"https://i.ibb.co/275gDrrc/0a12d045-bd02-4804-9a0b-daef7d79c061.jpg",
-"https://i.ibb.co/hJ44v6fc/ad040963-909d-4e4f-b511-ba4434eadc70.jpg",
-"https://i.ibb.co/20bBXNGm/7dda53e9-f4ce-4af4-8de2-e86936db2aaf.jpg",
-"https://i.ibb.co/fY2jn1hK/9f4ae87a-e859-47cc-aea7-261640c77c16.jpg",
-"https://i.ibb.co/bTfr9y9/0690205d-b0e2-4e9d-97c8-bdc6fdd66cd5.jpg",
-"https://i.ibb.co/S4n9sF2v/731058455-1024855793613392-5328045540773151880-n.jpg",
-"https://i.ibb.co/N67SCXQM/727715174-992696870299740-2266605247857125512-n.jpg",
-"https://i.ibb.co/Q3QcRB45/725816682-1503427424100057-1673386021148138815-n.jpg",
-"https://i.ibb.co/m5hFb58n/718294138-1880633166239754-601253061827015554-n.jpg",
-"https://i.ibb.co/xKYSzLMR/715507841-1072732641964417-5837826818268576609-n.jpg",
-"https://i.ibb.co/QFt3TSTF/712085717-976529434978676-3706144693513525014-n.jpg",
-"https://i.ibb.co/7dh5gr8n/712196688-1151568803821772-3947103681391077260-n.jpg",
-"https://i.ibb.co/kV2kdPzx/698557903-2412540885943505-4514427643370125898-n.jpg",
-"https://i.ibb.co/DPRK3qwM/672582397-2027003268244512-2105307337464827148-n.jpg",
-"https://i.ibb.co/dJjtWvBr/666735394-1683641826248491-67970223259478209-n.jpg",
-"https://i.ibb.co/MDJBjnfS/663932296-818553970747426-933321992455660698-n.jpg",
-"https://i.ibb.co/sdsvXjZg/659634062-863384850085011-5992833988303173213-n.jpg",
-"https://i.ibb.co/vCZ2QxFN/662126414-876982325383982-180845726887809431-n.jpg",
-"https://i.ibb.co/SXBbvtYF/653054635-4402275183362586-775147829681988480-n.jpg",
-"https://i.ibb.co/27t9L0px/650453065-1637133697302350-6148646807495825591-n.jpg",
-"https://i.ibb.co/q3fhPWZc/651586639-1004896872711501-2054152444315504639-n.jpg",
-"https://i.ibb.co/TxhYjQVK/652863933-932292106048836-1123073970377916834-n.jpg",
-"https://i.ibb.co/QFR99h25/648899975-26343413521966187-8761239846063256608-n.jpg",
-"https://i.ibb.co/Z6gp0cd7/649702114-1898009931096577-1106410766145348817-n.jpg",
-"https://i.ibb.co/bjQF5XzQ/650097184-942578541552423-6984478992032836389-n.jpg",
-"https://i.ibb.co/gL4vBJTQ/649698819-1206734077918964-6728074243809691783-n.jpg",
-"https://i.ibb.co/YFfJJcgd/649110589-2186313798844604-9130114294078922124-n.jpg",
-"https://i.ibb.co/QvWYNmP2/649223053-1247834836857460-6755822577525808541-n.jpg",
-"https://i.ibb.co/0jnF3393/643745239-907408328809424-4506005407815790818-n.jpg",
-"https://i.ibb.co/G4cNk1rg/644225129-905694692163240-3464160483850839555-n.jpg",
-"https://i.ibb.co/M52ffZNY/623154650-2251824092011237-3210530723989480036-n.jpg",
-"https://i.ibb.co/KjNgg9xJ/625028429-1423051752851428-7441953418455578636-n.jpg",
-"https://i.ibb.co/LDvfkXWZ/623001829-1418559329795538-8519191913570680229-n.jpg",
-"https://i.ibb.co/4vCQBFZ/623829069-2115847052516325-6919496729977920878-n.jpg",
-"https://i.ibb.co/tMW4s2XM/622994974-1906353759979999-8032574530866010374-n.jpg",
-"https://i.ibb.co/Wvfs9JvS/615574385-848505394884301-5659964396157798831-n.jpg",
-"https://i.ibb.co/prMHgY0x/614573197-1398801448461295-8957544109030708590-n.jpg",
-"https://i.ibb.co/LhkVVcDg/609172385-850890987841641-3638938468308163024-n.jpg",
-"https://i.ibb.co/Fb2CPWHN/608020060-1841146260539762-3088559502014465311-n.jpg",
-"https://i.ibb.co/CK79TH9w/604651911-2423263534810453-2923378718024735581-n.jpg",
-"https://i.ibb.co/HfLPVN7h/609244895-663634223407039-464183039168551814-n.jpg",
-"https://i.ibb.co/Q3jkJGxM/608834483-860583656671396-5437539399595381820-n.jpg",
-"https://i.ibb.co/V0LQwd2B/604154976-845181964996001-550794522423665263-n.jpg",
-"https://i.ibb.co/KRs7Zb7/598822875-2310221999485123-5478715391575451073-n.jpg",
-"https://i.ibb.co/sd7dVgvn/603064502-1570692720516466-4650902936283474479-n.jpg",
-"https://i.ibb.co/k2YNCdmj/598825624-4149484368633593-2653074320934686998-n.jpg",
-"https://i.ibb.co/0VYTSQPC/603102577-1201706798566664-1046475742484824387-n.jpg",
-"https://i.ibb.co/cKff9mG1/598295788-1179644637692149-5390318315284362858-n.jpg",
-"https://i.ibb.co/3y7QYwGD/597882668-1585381309302302-6844217799006983981-n.jpg",
-"https://i.ibb.co/n9fRnfY/592496952-1376626363918316-4421996975866848963-n.jpg",
-"https://i.ibb.co/LdGxWd57/590793186-743546248078412-2898568878883853483-n.jpg",
-"https://i.ibb.co/s9Gjck7d/578793123-1407830790759162-5820191859114000306-n.jpg",
-"https://i.ibb.co/C38BD8gc/541664436-1069713765187445-7385299134737041904-n.jpg",
-"https://i.ibb.co/8DBJPRQj/539660191-2226025554533638-185900933933864599-n.jpg",
-"https://i.ibb.co/BHfDmTdw/539965053-779279371319181-6060964193764155466-n.jpg",
-"https://i.ibb.co/BH6MSVwf/539224911-2234159040339318-6264380822214672473-n.jpg",
-"https://i.ibb.co/PvkfHP0g/528930379-1129457049069470-7020213926141262306-n.jpg",
-"https://i.ibb.co/TDxkjFMP/509790977-1535796904059256-1859765215956011881-n.jpg",
-"https://i.ibb.co/ymtdgsf0/505830495-23996679786636164-2311875441193044677-n.jpg",
-"https://i.ibb.co/rGHvsrSX/489878589-2436073880089876-6277274793471566519-n.jpg",
-"https://i.ibb.co/WWCNP05g/473036952-969003775084836-7310122876492697624-n.jpg",
-"https://i.ibb.co/Z1MD3FKC/471576695-1152541179625420-5919553138130006808-n.jpg",
-"https://i.ibb.co/WbnbgNR/470685702-411708368688718-6324134873862880247-n.jpg",
-"https://i.ibb.co/RT55BqXb/470295763-1613437839381254-7738072426264414927-n.jpg",
-"https://i.ibb.co/b9c7Z8j/469970175-2403175606692871-4264533651877691334-n.jpg",
-"https://i.ibb.co/C358XXBn/469457958-2541996486009850-6963851946999506845-n.jpg",
-"https://i.ibb.co/8n7t9Y6H/491752645-2303597156723786-2887159282265417343-n.jpg",
-"https://i.ibb.co/RxB9nqX/466574702-1212443233199329-7420642046029019872-n.jpg",
-"https://i.ibb.co/wNGyqhKh/462390300-1221532865723667-3932359910285083125-n.jpg",
-"https://i.ibb.co/vxsCmG02/460621511-407952818987266-8805897045328243123-n.jpg",
-"https://i.ibb.co/hJ956F0j/457508340-869807061340979-2929602543525742384-n.jpg",
-"https://i.ibb.co/HDz95N8z/456325321-1936904146768070-3534112173109537826-n.jpg",
-"https://i.ibb.co/5hfbKfhg/453653251-374173208764912-1369886327943977006-n.jpg",
-"https://i.ibb.co/BV3RbSBr/452868107-378377198286049-620896021413886072-n.jpg",
-"https://i.ibb.co/fVh8X2Q2/a8f9e6af-7bf1-4aa5-8e99-db599b3b7073-1.jpg",
-"https://i.ibb.co/fVh8X2Q2/a8f9e6af-7bf1-4aa5-8e99-db599b3b7073-1.jpg",
-"https://i.ibb.co/4nhgwRzD/72952100-1b0f-40e9-ab6e-f95f11d3c0b0.jpg",
-"https://i.ibb.co/HLY09M2z/909bd3fa-1654-4920-bced-d9d979e5947c.jpg",
+        "assets/media/9440705758d86a79.webp",
+"assets/media/2112866210ed7cfe.webp",
+"assets/media/a93dec4aa1d3e5bc.webp",
+"assets/media/32952a8da3dc0839.webp",
+"assets/media/c1404780034506e0.webp",
+"assets/media/4fe8a69ccae22537.webp",
+"assets/media/e989618da80a2889.webp",
+"assets/media/60904c2eb54b0a4e.webp",
+"assets/media/1d64edc26c20aa4e.webp",
+"assets/media/7a1294ee08579cbf.webp",
+"assets/media/99e6a1d318fc4bf5.webp",
+"assets/media/5832141a1c845f7d.webp",
+"assets/media/2e279ea3f295f2af.webp",
+"assets/media/3c47029e588eed1f.webp",
+"assets/media/7ee582513ae6ffe5.webp",
+"assets/media/a3b373408069bd18.webp",
+"assets/media/b10c2ed0d44cc006.webp",
+"assets/media/b4e65f5539f0f031.webp",
+"assets/media/1a0a3e40544e434f.webp",
+"assets/media/c0dd87aba7029a8d.webp",
+"assets/media/749213378cc5590c.webp",
+"assets/media/4aa3eaca35c6a25f.webp",
+"assets/media/dce3d80c7ff7d33d.webp",
+"assets/media/6a65e9fafc19d810.webp",
+"assets/media/25bb84660d8c3318.webp",
+"assets/media/e12425c3d5caf9ef.webp",
+"assets/media/ead0e756e15d2422.webp",
+"assets/media/e71f87e9065b1ec7.webp",
+"assets/media/ed8610754e2d6868.webp",
+"assets/media/c3d5d889171d192c.webp",
+"assets/media/f992e178720017bc.webp",
+"assets/media/77c09e94d900966b.webp",
+"assets/media/601297e69abf0b9c.webp",
+"assets/media/8cf929466d80c4e9.webp",
+"assets/media/2c95fe5999493a78.webp",
+"assets/media/e88fb3da9ef1d9a3.webp",
+"assets/media/33a61e70d4914b5b.webp",
+"assets/media/f5610c983bafc361.webp",
+"assets/media/dad283527066f049.webp",
+"assets/media/80383258f0078051.webp",
+"assets/media/73eddde39cff26b9.webp",
+"assets/media/79a68c65fdc8045d.webp",
+"assets/media/1a228220bf156ac3.webp",
+"assets/media/488827db47996c2a.webp",
+"assets/media/c1a2e1c63fc80a34.webp",
+"assets/media/5a3af98a0d20eaff.webp",
+"assets/media/96160d6e7c661b0f.webp",
+"assets/media/53ee003943b5e53e.webp",
+"assets/media/e70a439c3b25ad51.webp",
+"assets/media/1ea26bf0574090b2.webp",
+"assets/media/691052c140b4fa97.webp",
+"assets/media/da05773e8679aaa4.webp",
+"assets/media/56f9ccf229a10724.webp",
+"assets/media/eafa020ecf12de2c.webp",
+"assets/media/31e9459234ea7652.webp",
+"assets/media/3c230bafa24879e8.webp",
+"assets/media/56a743e91b1affe5.webp",
+"assets/media/790ed7ba78336165.webp",
+"assets/media/e53d004a645c849b.webp",
+"assets/media/c5c24b217e07ac8d.webp",
+"assets/media/1f2a3c20a6c3499a.webp",
+"assets/media/1ae8440e07490b3f.webp",
+"assets/media/2e56d75cbd2c9373.webp",
+"assets/media/9f7e776294496748.webp",
+"assets/media/0f74e41f8080e5cc.webp",
+"assets/media/2cfe081eb8eaddbf.webp",
+"assets/media/2680e19355955952.webp",
+"assets/media/8ddff50aae9c3cd5.webp",
+"assets/media/06718429ef01dbef.webp",
+"assets/media/1ec1d619b893fc3b.webp",
+"assets/media/c5107bcc464c4a59.webp",
+"assets/media/a01c609a84262d85.webp",
+"assets/media/624c0ab83ba44b55.webp",
+"assets/media/b42b17cb3ebd7858.webp",
+"assets/media/a372a3fefa70d7bc.webp",
+"assets/media/7b4305479b568e52.webp",
+"assets/media/75983c8aa5c4f748.webp",
+"assets/media/9d68a18d600489db.webp",
+"assets/media/9d68a18d600489db.webp",
+"assets/media/f2d777a2a664e932.webp",
+"assets/media/2db73217fd24a737.webp",
     ]
 };
 
