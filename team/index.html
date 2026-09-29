@@ -62,7 +62,7 @@
     @media(max-width:520px){.portal-shell{width:min(100% - 26px,1160px)}.portal-status{display:none}.login-layout{padding-top:38px}.login-card{padding:25px;border-radius:24px}.dashboard-head{padding-top:42px}.tool-card{min-height:330px;padding:23px;border-radius:24px}.tool-icon{margin:35px 0 28px}}
   </style>
   <script src="config.js"></script>
-  <script src="auth.js"></script>
+  <script src="auth.js?v=20260929"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="maybe-internal">
@@ -84,6 +84,7 @@
         <h2 id="loginTitle">Đăng nhập nội bộ</h2>
         <p>Chỉ tài khoản có trong danh sách của team mới truy cập được.</p>
         <div id="googleButton"></div>
+        <p>Thiết bị này sẽ ghi nhớ tài khoản của bạn. Nếu dùng máy chung, hãy đăng xuất sau khi sử dụng.</p>
         <p id="loginError" class="login-error" role="alert"></p>
         <div id="setupNote" class="setup-note">Chưa cấu hình Google OAuth Client ID. Mở <strong>config.js</strong> và làm theo bốn bước ở đầu file.</div>
         <div id="demoArea" class="demo-area">
@@ -180,8 +181,17 @@
           setTimeout(initializeGoogleButton, 120);
           return;
         }
-        google.accounts.id.initialize({ client_id: window.MAYBE_TEAM_CONFIG.googleClientId, callback: handleGoogleCredential });
+        const loginHint = MaybeTeamAuth.getLoginHint();
+        google.accounts.id.initialize({
+          client_id: window.MAYBE_TEAM_CONFIG.googleClientId,
+          callback: handleGoogleCredential,
+          auto_select: Boolean(loginHint),
+          ...(loginHint ? { login_hint: loginHint } : {})
+        });
         google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large", shape: "pill", text: "continue_with", width: 280 });
+        // Google obtains a fresh ID token; the backend still verifies every login.
+        // Keep the normal button available if automatic sign-in is not permitted.
+        if (loginHint) google.accounts.id.prompt();
       }
       initializeGoogleButton();
     })();

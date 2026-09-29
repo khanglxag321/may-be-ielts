@@ -2,6 +2,37 @@
   "use strict";
 
   const STORAGE_KEY = "maybe_team_google_session_v1";
+  const REMEMBER_KEY = "maybe_team_remembered_account_v1";
+
+  // Storage can be blocked (private browsing, device policy, full quota).
+  function readStore(store, key) {
+    try { return JSON.parse(window[store].getItem(key) || "null"); } catch { return null; }
+  }
+  function writeStore(store, key, value) {
+    try { window[store].setItem(key, JSON.stringify(value)); return true; } catch { return false; }
+  }
+  function removeStore(store, key) {
+    try { window[store].removeItem(key); } catch { /* unavailable storage */ }
+  }
+  function rememberAccount(session) {
+    const claims = decodeCredential(session.credential);
+    if (claims && claims.aud === config().googleClientId && claims.sub) {
+      writeStore("localStorage", REMEMBER_KEY, { loginHint: String(claims.sub) });
+    }
+  }
+  function getLoginHint() {
+    const remembered = readStore("localStorage", REMEMBER_KEY);
+    return remembered && typeof remembered.loginHint === "string" ? remembered.loginHint : "";
+  }
+  function saveSession(session) {
+    if (session.demo) {
+      writeStore("sessionStorage", STORAGE_KEY, session);
+      return;
+    }
+    rememberAccount(session);
+    if (writeStore("localStorage", STORAGE_KEY, session)) removeStore("sessionStorage", STORAGE_KEY);
+    else writeStore("sessionStorage", STORAGE_KEY, session);
+  }
 
   function config() {
     return window.MAYBE_TEAM_CONFIG || { googleClientId: "", scheduleApiUrl: "" };
@@ -36,7 +67,7 @@
     const claims = decodeCredential(credential);
     const expectedAudience = config().googleClientId;
     const now = Math.floor(Date.now() / 1000);
-    if (!claims || claims.aud !== expectedAudience || claims.exp <= now || claims.email_verified !== true) {
+    if (!claims || claims.aud !== expectedAudience || !Number.isFinite(claims.exp) || claims.exp <= now || claims.email_verified !== true || !claims.email) {
       throw new Error("Google không trả về phiên đăng nhập hợp lệ.");
     }
     const response = await fetch(config().scheduleApiUrl, {
@@ -62,22 +93,31 @@
       expiresAt: claims.exp * 1000,
       demo: false
     };
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+    saveSession(session);
     return session;
   }
 
   function getSession() {
-    try {
-      const session = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "null");
-      if (!session || !session.email || Number(session.expiresAt || 0) <= Date.now()) {
-        sessionStorage.removeItem(STORAGE_KEY);
-        return null;
+    // Migrate existing tab sessions; demo sessions must never survive the tab.
+    for (const store of ["sessionStorage", "localStorage"]) {
+      const session = readStore(store, STORAGE_KEY);
+      if (!session) continue;
+      const expiresAt = Number(session.expiresAt);
+      const claims = decodeCredential(session.credential);
+      const validAccount = session.demo
+        ? store === "sessionStorage" && isLocalPreview()
+        : claims && claims.aud === config().googleClientId && claims.email_verified === true &&
+          String(claims.email || "").toLowerCase() === session.email && Number.isFinite(claims.exp);
+      if (validAccount && !session.demo) rememberAccount(session);
+      if (!session.email || !validAccount || !Number.isFinite(expiresAt) || expiresAt <= Date.now() ||
+          (!session.demo && claims.exp * 1000 <= Date.now())) {
+        removeStore(store, STORAGE_KEY);
+        continue;
       }
+      if (!session.demo && store === "sessionStorage") saveSession(session);
       return session;
-    } catch {
-      sessionStorage.removeItem(STORAGE_KEY);
-      return null;
     }
+    return null;
   }
 
   function isLocalPreview() {
@@ -97,12 +137,14 @@
       expiresAt: Date.now() + 8 * 60 * 60 * 1000,
       demo: true
     };
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+    saveSession(session);
     return session;
   }
 
   function logout(returnTo) {
-    sessionStorage.removeItem(STORAGE_KEY);
+    removeStore("sessionStorage", STORAGE_KEY);
+    removeStore("localStorage", STORAGE_KEY);
+    removeStore("localStorage", REMEMBER_KEY);
     if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect();
     location.href = returnTo || "index.html";
   }
@@ -126,6 +168,7 @@
     createDemoSession,
     createSession,
     getSession,
+    getLoginHint,
     isConfigured,
     isLocalPreview,
     logout,

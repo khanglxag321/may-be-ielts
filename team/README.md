@@ -37,4 +37,8 @@ Chạy `node preview-server.js`, sau đó mở `http://127.0.0.1:4173`. Tài kho
 
 ## An toàn
 
-Frontend chỉ giữ ID token trong `sessionStorage`. Mỗi thao tác ghi đều được Apps Script xác minh lại với Google, kiểm tra email trong tab `Users`, rồi mới cho phép thay đổi Sheet. Quyền thật nằm ở backend, không phụ thuộc vào việc ẩn/hiện nút trên giao diện.
+Frontend lưu phiên Google trong `localStorage` để giữ đăng nhập khi đóng tab/trình duyệt trên cùng thiết bị. Phiên cũ trong `sessionStorage` được chuyển sang khi mở lại trang; demo vẫn chỉ dùng `sessionStorage`. Nếu trình duyệt chặn lưu trữ lâu dài, hệ thống thử lưu theo tab.
+
+Không kéo dài thời hạn ID token: token hết hạn bị xóa, còn mã tài khoản Google (`sub`) được giữ làm gợi ý cho One Tap/tự đăng nhập lại. Google có thể yêu cầu xác nhận nếu đã đăng xuất Google, dùng ẩn danh, xóa dữ liệu hoặc chặn tự đăng nhập. Đăng xuất Maybe Team xóa cả phiên và gợi ý tài khoản trên thiết bị, đồng thời tắt tự chọn Google.
+
+Mỗi lần nhận token mới và mỗi thao tác ghi đều được Apps Script xác minh lại với Google, kiểm tra email trong tab `Users`, rồi mới cho phép thay đổi Sheet. Quyền thật nằm ở backend, không phụ thuộc vào việc ẩn/hiện nút trên giao diện. Đây không phải phiên đăng nhập dài hạn do backend cấp; muốn bảo đảm đăng nhập nhiều ngày độc lập với Google One Tap cần triển khai cơ chế phiên máy chủ riêng.
