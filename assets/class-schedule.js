@@ -11,13 +11,13 @@
     if (!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month || '')) return '';
     if (program === 'speak' && teacher !== 'bach') return '';
     if (program !== 'speak' && !numbers[teacher]?.includes(Number(number))) return '';
-    const suffix = months[Number(month.slice(5))-1] + month.slice(2,4);
+    const suffix = months[Number(month.slice(5))-1].toLowerCase() + month.slice(2,4);
     return program === 'speak' ? `MBSpeak ${suffix}` : `MBWrite${String(number).padStart(2,'0')}${teacher==='bach'?'+':''} ${suffix}`;
   }
   function validate(teacher, program, code) {
     if (program === 'speak' && teacher !== 'bach') return 'Lớp Speaking chỉ do thầy Hồ Bách phụ trách.';
     const info = parse(code);
-    if (!info || info.program !== program || make(teacher,program,info.number,info.month).toLowerCase() !== code.trim().toLowerCase()) return 'Mã lớp cần đúng số của giáo viên và đuôi đợt tuyển sinh, ví dụ MBWrite06 NOV26.';
+    if (!info || info.program !== program || make(teacher,program,info.number,info.month).toLowerCase() !== code.trim().toLowerCase()) return 'Mã lớp cần đúng số của giáo viên và đuôi đợt tuyển sinh, ví dụ MBWrite06 nov26.';
     return '';
   }
   function teacher(name) {
@@ -79,7 +79,20 @@
     const seen=new Set();
     return candidates.filter(item=>{const key=item.source.days.join(',')+'|'+item.source.time;if(seen.has(key))return false;seen.add(key);return true;});
   }
-  const api={months,numbers,parse,make,validate,teacher,date,cohort,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,continuationCandidates};
+  function normalizeCode(code) {return String(code||'').trim().replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(\d{2})$/i,match=>match.toLowerCase());}
+  function escapeHtml(value) {return String(value||'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));}
+  function codeMarkup(code) {
+    const text=normalizeCode(code),info=parse(text);
+    if(!info)return escapeHtml(text);
+    const split=text.lastIndexOf(' '),month=Number(info.month.slice(5));
+    return `<span class="schedule-code">${escapeHtml(text.slice(0,split))} <span class="cohort-tag cohort-${month}" title="Đợt tuyển sinh tháng ${month}/${info.month.slice(0,4)}">${text.slice(split+1)}</span></span>`;
+  }
+  function dateMarkup(value,referenceMonth) {
+    const iso=date(value,referenceMonth);
+    if(!iso)return escapeHtml(value)||'—';
+    return `<time class="schedule-date" datetime="${iso}">${iso.slice(8)}.${iso.slice(5,7)}<span class="date-year">${iso.slice(0,4)}</span></time>`;
+  }
+  const api={months,numbers,parse,make,validate,teacher,date,cohort,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,continuationCandidates,normalizeCode,codeMarkup,dateMarkup};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.MaybeSchedule=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

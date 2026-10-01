@@ -3798,7 +3798,7 @@ body {
 }
 
 </style>
-<script src="assets/class-schedule.js?v=20261001"></script>
+<script src="assets/class-schedule.js?v=20261001c"></script>
 <style>.status-badge.full{background:#eef0f4;color:#626978;white-space:normal}</style>
 <style>
     .speaking-meta{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:-12px 0 22px;font-family:inherit}
@@ -3812,6 +3812,7 @@ body {
     .speaking-offer span{color:#526181;font-size:.73rem;font-weight:550;line-height:1.5}
     @media(max-width:600px){.speaking-meta{margin-top:0}.speaking-price{max-width:none}}
     </style>
+<link rel="stylesheet" href="assets/class-schedule.css?v=20261001c">
 </head>
 <body>
 
@@ -5643,10 +5644,10 @@ if(courseSelect){
     const option = document.createElement("option");
 
     option.value =
-        `${row.MaLop} | ${row.GiangVien}`;
+        `${MaybeSchedule.normalizeCode(row.MaLop)} | ${row.GiangVien}`;
 
     option.textContent =
-        `${row.MaLop} - ${row.GiangVien} (${row.LichHoc})`;
+        `${MaybeSchedule.normalizeCode(row.MaLop)} - ${row.GiangVien} (${row.LichHoc})`;
 
             courseSelect.appendChild(option);
 }
@@ -5664,9 +5665,9 @@ if(courseSelect){
             const trHTML = `
                 <tr>
                     <td data-label="Giáo viên"><strong>${row.GiangVien}</strong></td>
-                    <td data-label="Mã lớp">${row.MaLop}</td>
+                    <td data-label="Mã lớp">${MaybeSchedule.codeMarkup(row.MaLop)}</td>
                     <td data-label="Lịch học">${lichHocFormat}</td>
-                    <td data-label="Khai giảng">${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
+                    <td data-label="Khai giảng">${MaybeSchedule.dateMarkup(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7))}<span class="schedule-end">Kết thúc: ${MaybeSchedule.dateMarkup(row.KetThuc,MaybeSchedule.date(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7)).slice(0,7))}</span></td>
                     <td data-label="Học phí">${tuitionPlan}</td>
                     <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft === 0 ? "Full slot" : `${slotsLeft}/${totalSlots}`}</span></td>
                 </tr>
