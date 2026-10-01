@@ -3798,6 +3798,8 @@ body {
 }
 
 </style>
+<script src="assets/class-schedule.js?v=20261001"></script>
+<style>.status-badge.full{background:#eef0f4;color:#626978;white-space:normal}</style>
 </head>
 <body>
 
@@ -4317,7 +4319,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <section id="schedule" class="section-padding">
         <div class="container">
             <h2 class="section-title">Lịch khai giảng & Lớp đang mở</h2>
-            <p class="section-subtitle">Các lớp còn chỗ từ tháng hiện tại và những đợt khai giảng sắp tới của team.</p>
+            <p class="section-subtitle">Lịch khai giảng, học phí và tình trạng chỗ của từng lớp.</p>
 
             <div class="schedule-filter-shell" aria-label="Bộ lọc lịch khai giảng theo giáo viên">
                 <div class="schedule-filter-layout">
@@ -4328,7 +4330,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         <button class="schedule-filter-button" type="button" data-teacher-filter="khang" aria-pressed="false">Gia Khang</button>
                     </div></div>
                     <div class="schedule-filter-selects">
-                        <div class="schedule-select-field"><label for="scheduleDayFilter">Lọc theo lịch học</label><select class="schedule-filter-select" id="scheduleDayFilter"><option value="all">Tất cả các thứ</option><option value="2+5">Thứ 2 + 5</option><option value="3+6">Thứ 3 + 6</option><option value="4+7">Thứ 4 + 7</option></select></div>
+                        <div class="schedule-select-field"><label for="scheduleDayFilter">Lọc theo lịch học</label><select class="schedule-filter-select" id="scheduleDayFilter"><option value="all">Tất cả các thứ</option><option value="2+5">Thứ 2 + 5</option><option value="3+6">Thứ 3 + 6</option><option value="4+7">Thứ 4 + 7</option><option value="4">Thứ 4 · Speaking</option></select></div>
                         <div class="schedule-select-field"><label for="scheduleSort">Sắp xếp</label><select class="schedule-filter-select" id="scheduleSort"><option value="class">Mã lớp tăng dần</option><option value="date">Khai giảng gần nhất</option></select></div>
                     </div>
                 </div>
@@ -4379,7 +4381,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             </div>
 
             <div class="schedule-category" data-schedule-category="speaking">
-                <h3 class="category-header">Speaking 5.5 → 7.0+ (Hồ Bách)</h3>
+                <h3 class="category-header">Speaking 5.0 → 6.5–7.0+ (Hồ Bách)</h3>
+                <p>may(be)speak. · Chỉ thầy Hồ Bách phụ trách.</p>
                 <div class="table-responsive">
                     <table>
                         <thead>
@@ -4619,6 +4622,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="footer-col">
                 <h5>Kết nối</h5>
                 <ul>
+                    <li><a href="https://www.facebook.com/profile.php?id=61590639400547" target="_blank" rel="noopener noreferrer">Fanpage may(be)ielts.</a></li>
                     <li><a href="https://m.me/maybebach1510" target="_blank">Hồ Bách</a></li>
                     <li><a href="https://m.me/tnhi.911" target="_blank">Tuệ Nhi</a></li>
                     <li><a href="https://m.me/laogiakhanglxag" target="_blank">Gia Khang</a></li>
@@ -5175,12 +5179,8 @@ function toggleContact(){
     }
 
     function filterClassesForRecruitment(data) {
-        const monthStart = currentMonthStartUtc();
-        return (Array.isArray(data) ? data : []).filter(row => {
-            const openingDate = parseScheduleDate(row.KhaiGiang);
-            return openingDate && openingDate >= monthStart &&
-                classHasAvailableSlots(row);
-        });
+        const current = currentMonthInVietnam();
+        return MaybeSchedule.visible(Array.isArray(data) ? data : [], `${current.year}-${String(current.month).padStart(2,'0')}`);
     }
 
     function parseSlotNumber(value) {
@@ -5265,7 +5265,7 @@ function toggleContact(){
             if (!currentRows.length || currentRows.some(classHasAvailableSlots)) return [];
 
             const nextOpen = publicScheduleRows
-                .filter(row => teacherFilterKey(row.GiangVien) === key)
+                .filter(row => teacherFilterKey(row.GiangVien) === key && classHasAvailableSlots(row))
                 .sort((a, b) => (parseScheduleDate(a.KhaiGiang)?.getTime() || Infinity) - (parseScheduleDate(b.KhaiGiang)?.getTime() || Infinity))[0];
             const nextDate = nextOpen ? parseScheduleDate(nextOpen.KhaiGiang) : null;
             const followUp = nextDate
@@ -5319,7 +5319,7 @@ function toggleContact(){
         const result = document.getElementById("scheduleFilterResult");
         if (result) {
             result.textContent = filtered.length
-                ? `Đang hiển thị ${filtered.length} lớp còn chỗ từ tháng ${current.month} trở đi · ${teacherFilterLabel(activeScheduleTeacher)}.`
+                ? `Đang hiển thị ${filtered.length} lớp · ${filtered.filter(classHasAvailableSlots).length} lớp còn chỗ · ${teacherFilterLabel(activeScheduleTeacher)}.`
                 : notices.length
                     ? "Các lớp trong lịch hiện tại đã đủ học viên. Vui lòng xem thông báo tuyển sinh bên trên."
                     : "Không có lớp phù hợp với bộ lọc đang chọn.";
@@ -5526,6 +5526,9 @@ function toggleContact(){
     }
 
     function buildTuitionPlan(row) {
+        if (/^MBSpeak/i.test(row.MaLop)) {
+            return `<strong>${row.HocPhiGoc}</strong><br><small>${row.HocPhiUuDai} dành cho học viên lớp MBWrite</small>`;
+        }
         const plan = createTuitionPlan(row);
         if (!plan) {
             return `<strong>${row.HocPhiUuDai}</strong><br><small>Giá gốc: ${row.HocPhiGoc}</small>`;
@@ -5619,11 +5622,11 @@ if(courseSelect){
         tbMasterWrite.innerHTML = '';
         tbSpeaking.innerHTML = '';
 
-        data.filter(classHasAvailableSlots).forEach(row => {
+        data.forEach(row => {
             const totalSlots = parseSlotNumber(row.TongSlot);
             const enrolled = parseSlotNumber(row.HocVien);
             const slotsLeft = Math.max(0, totalSlots - enrolled);
-            if(courseSelect){
+            if(courseSelect && slotsLeft > 0){
 
     const option = document.createElement("option");
 
@@ -5635,7 +5638,7 @@ if(courseSelect){
 
             courseSelect.appendChild(option);
 }
-            let slotStatus = slotsLeft <= 5 ? "low" : "ok";
+            let slotStatus = slotsLeft === 0 ? "full" : slotsLeft <= 5 ? "low" : "ok";
             const tuitionPlan = buildTuitionPlan(row);
             
             // Format lại cột Lịch học: "Thứ 2 + 5 (8:00 PM - 10:00 PM)" thành 2 dòng cho đẹp
@@ -5653,7 +5656,7 @@ if(courseSelect){
                     <td data-label="Lịch học">${lichHocFormat}</td>
                     <td data-label="Khai giảng">${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
                     <td data-label="Học phí">${tuitionPlan}</td>
-                    <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft}/${totalSlots}</span></td>
+                    <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft === 0 ? "Full slot — Không còn chỗ" : `${slotsLeft}/${totalSlots}`}</span></td>
                 </tr>
             `;
 
@@ -5667,7 +5670,7 @@ if(courseSelect){
                     tbFoundation.innerHTML += trHTML; // Lớp của Khang & Nhi
                     categoryCounts.foundation++;
                 }
-            } else if (row.MaLop.startsWith('MBSpeak')) {
+            } else if (/^MBSpeak/i.test(row.MaLop) && teacherFilterKey(row.GiangVien) === 'bach') {
                 // Nếu là lớp Speaking
                 tbSpeaking.innerHTML += trHTML;
                 categoryCounts.speaking++;
@@ -5680,7 +5683,7 @@ if(courseSelect){
         if (tbSpeaking.innerHTML === '') tbSpeaking.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
 
         document.querySelectorAll('[data-schedule-category]').forEach(section => {
-            section.hidden = categoryCounts[section.dataset.scheduleCategory] === 0;
+            section.hidden = categoryCounts[section.dataset.scheduleCategory] === 0 && !(section.dataset.scheduleCategory === "speaking" && ["all","bach"].includes(activeScheduleTeacher));
         });
     }
 
