@@ -29,6 +29,26 @@ function app(local=storage(),tab=storage(),host='maybeielts.com',allowed=true) {
   assert(local.getItem(KEY));
   assert.equal(app(local).auth.getSession().email,'test@example.com','survives a new browser tab/session');
   assert.equal(app(local).auth.getLoginHint(),'test-subject');
+  assert.equal((await app(local).auth.ensureSession()).email,'test@example.com');
+  assert(a.auth.avatarMarkup({name:'Test',picture:'https://lh3.googleusercontent.com/photo'}).includes('referrerpolicy="no-referrer"'));
+  assert(!a.auth.avatarMarkup({name:'Test',picture:'javascript:bad'}).includes('<img'));
+
+  // Expired credentials are replaced through Google + backend, never extended.
+  const renewLocal=storage(),renew=app(renewLocal);
+  await renew.auth.createSession(credential({exp:Math.floor(Date.now()/1000)+1}));
+  const stale=JSON.parse(renewLocal.getItem(KEY));
+  renewLocal.setItem(KEY,JSON.stringify({...stale,credential:credential({exp:1}),expiresAt:1}));
+  let removed=false,options,verifications=0;
+  renew.ctx.document={body:{appendChild(){}},createElement(){return {setAttribute(){},querySelector(){return {}},remove(){removed=true}}}};
+  renew.ctx.google.accounts.id.initialize=value=>{options=value};
+  renew.ctx.google.accounts.id.renderButton=()=>{};
+  renew.ctx.google.accounts.id.prompt=()=>{Promise.resolve().then(()=>options.callback({credential:credential({picture:'https://lh3.googleusercontent.com/new'})}))};
+  renew.ctx.fetch=async()=>{verifications++;return {ok:true,json:async()=>({status:'success',user:{email:'test@example.com',name:'Test',role:'teacher',teacherId:'test'}})}};
+  const restored=await Promise.all([renew.auth.ensureSession(),renew.auth.ensureSession()]);
+  assert.equal(verifications,1,'concurrent calls share one renewal');
+  assert(removed);assert(options.auto_select);assert(options.button_auto_select);
+  assert.equal(restored[0].picture,'https://lh3.googleusercontent.com/new');
+  assert(app(renewLocal).auth.getSession(),'fresh session survives another tab');
 
   const legacy=storage(),session=JSON.parse(local.getItem(KEY));legacy.setItem(KEY,JSON.stringify(session));
   const migrated=storage();assert(app(migrated,legacy).auth.getSession());

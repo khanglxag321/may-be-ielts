@@ -3800,6 +3800,18 @@ body {
 </style>
 <script src="assets/class-schedule.js?v=20261001"></script>
 <style>.status-badge.full{background:#eef0f4;color:#626978;white-space:normal}</style>
+<style>
+    .speaking-meta{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin:-12px 0 22px;font-family:inherit}
+    .speaking-brand{font-size:1.1rem;font-weight:750;letter-spacing:-.04em;color:var(--primary-color,#14204e)}
+    .speaking-teacher{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid #dbe5ff;border-radius:99px;background:#f1f5ff;color:#425681;font-size:.78rem;font-weight:600;line-height:1.4}
+    .speaking-price{display:grid;gap:4px;max-width:290px;font-family:inherit;line-height:1.5}
+    .speaking-price-label{font-size:.7rem;color:#77809b;font-weight:600}
+    .speaking-price>strong{font-size:1rem;color:#293757}
+    .speaking-offer{display:grid;gap:3px;margin-top:6px;padding:11px 14px;border:1px solid #dce6ff;border-radius:12px;background:#f1f5ff}
+    .speaking-offer strong{color:#2c6bff;font-size:1.13rem;letter-spacing:-.03em;font-weight:800}
+    .speaking-offer span{color:#526181;font-size:.73rem;font-weight:550;line-height:1.5}
+    @media(max-width:600px){.speaking-meta{margin-top:0}.speaking-price{max-width:none}}
+    </style>
 </head>
 <body>
 
@@ -4382,7 +4394,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="schedule-category" data-schedule-category="speaking">
                 <h3 class="category-header">Speaking 5.0 → 6.5–7.0+ (Hồ Bách)</h3>
-                <p>may(be)speak. · Chỉ thầy Hồ Bách phụ trách.</p>
+                <div class="speaking-meta"><span class="speaking-brand">may(be)speak.</span><span class="speaking-teacher"><i class="fa-solid fa-microphone" aria-hidden="true"></i> Cùng thầy Hồ Bách</span></div>
                 <div class="table-responsive">
                     <table>
                         <thead>
@@ -5527,7 +5539,7 @@ function toggleContact(){
 
     function buildTuitionPlan(row) {
         if (/^MBSpeak/i.test(row.MaLop)) {
-            return `<strong>${row.HocPhiGoc}</strong><br><small>${row.HocPhiUuDai} dành cho học viên lớp MBWrite</small>`;
+            return `<div class="speaking-price"><span class="speaking-price-label">Học phí tiêu chuẩn</span><strong>${row.HocPhiGoc}</strong><div class="speaking-offer"><strong>${row.HocPhiUuDai}</strong><span>Giá ưu đãi cho học viên lớp Writing</span></div></div>`;
         }
         const plan = createTuitionPlan(row);
         if (!plan) {
@@ -5656,7 +5668,7 @@ if(courseSelect){
                     <td data-label="Lịch học">${lichHocFormat}</td>
                     <td data-label="Khai giảng">${row.KhaiGiang}<br><small>Kết thúc: ${row.KetThuc}</small></td>
                     <td data-label="Học phí">${tuitionPlan}</td>
-                    <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft === 0 ? "Full slot — Không còn chỗ" : `${slotsLeft}/${totalSlots}`}</span></td>
+                    <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft === 0 ? "Full slot" : `${slotsLeft}/${totalSlots}`}</span></td>
                 </tr>
             `;
 

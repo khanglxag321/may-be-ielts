@@ -162,7 +162,7 @@
         .card-head, .card-body { padding-left: 16px; padding-right: 16px; }
       }
     </style>
-    <link rel="stylesheet" href="shared.css">
+    <link rel="stylesheet" href="shared.css?v=20261001b">
     <style>
       .topbar { padding-inline:clamp(14px,4vw,54px); }
       .topbar-left,.topbar-right { display:flex; align-items:center; gap:12px; }
@@ -176,7 +176,7 @@
       @media(max-width:760px){.topbar{align-items:flex-start}.topbar-left{align-items:flex-start;flex-direction:column;gap:6px}.topbar .back-link{min-height:24px;padding:0;border:0;background:transparent}.topbar-right .account-copy{display:none}}
     </style>
     <script src="config.js"></script>
-    <script src="auth.js?v=20260929"></script>
+    <script src="auth.js?v=20261001b"></script>
   </head>
   <body>
     <header class="topbar">
@@ -304,8 +304,8 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
-      const teamSession = MaybeTeamAuth.requireSession();
-      (function () {
+      (async function () {
+        let teamSession = await MaybeTeamAuth.ensureSession();
         const APPS_SCRIPT_URL = String(window.MAYBE_TEAM_CONFIG.studentsApiUrl || '');
         const CONFIGURED_SHEET_URL = String(window.MAYBE_TEAM_CONFIG.studentsSheetUrl || '');
         const CACHE_KEY = 'maybe_students_cache_v3:' + teamSession.email.toLowerCase();
@@ -315,7 +315,7 @@
 
         function renderTeamAccount() {
           const initials = teamSession.name.trim().split(/\s+/).slice(-2).map((part) => part[0]).join('').toUpperCase();
-          $('#teamAccount').innerHTML = '<span class="account-avatar">' + initials + '</span><span class="account-copy"><strong>' + teamSession.name + '</strong><span>' + (teamSession.role === 'manager' ? 'Quản lý' : 'Giáo viên') + '</span></span><button class="logout-button" id="teamLogout">Đăng xuất</button>';
+          $('#teamAccount').innerHTML = '<span class="account-avatar">' + MaybeTeamAuth.avatarMarkup(teamSession) + '</span><span class="account-copy"><strong>' + teamSession.name + '</strong><span>' + (teamSession.role === 'manager' ? 'Quản lý' : 'Giáo viên') + '</span></span><button class="logout-button" id="teamLogout">Đăng xuất</button>';
           $('#teamLogout').onclick = () => MaybeTeamAuth.logout('index.html');
           $('#sheetLink').href = CONFIGURED_SHEET_URL || '#';
           if (teamSession.role !== 'manager') $('#sheetLink').style.display = 'none';
@@ -328,6 +328,9 @@
         }
 
         async function serverCall(functionName, argument) {
+          const restored = await MaybeTeamAuth.ensureSession();
+          if (restored.email !== teamSession.email) throw new Error("Tài khoản đã thay đổi. Hãy tải lại trang trước khi tiếp tục.");
+          teamSession = restored;
           if (!teamSession.credential) {
             throw new Error('Chế độ xem thử không được phép truy cập dữ liệu Google Sheet thật.');
           }
@@ -809,7 +812,7 @@
         renderAll();
         if (!teamSession.demo) loadData(true).catch(() => {});
         setInterval(() => { if (!teamSession.demo && state.view !== 'input' && !document.hidden) loadData(true); }, 60000);
-      })();
+      })().catch(error => { if (error.message !== "AUTH_REQUIRED") console.error(error); });
     </script>
   </body>
 </html>

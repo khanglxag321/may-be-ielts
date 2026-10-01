@@ -49,7 +49,37 @@
       return available(row) ? date(row.KhaiGiang,month)>=`${currentMonth}-01` : month===latest;
     });
   }
-  const api={months,numbers,parse,make,validate,teacher,date,cohort,available,visible};
+  const fixedKhangSlots=[
+    {days:[1,4],time:'2–4PM'},{days:[2,5],time:'2–4PM'},{days:[3,6],time:'2–4PM'},
+    {days:[1,4],time:'8–10PM'},{days:[2,5],time:'8–10PM'},{days:[3,6],time:'6–8PM'}
+  ];
+  function allowedSlot(teacherId,days,time) {
+    return teacherId!=='khang'||fixedKhangSlots.some(slot=>slot.time===time&&slot.days.join(',')===days.join(','));
+  }
+  function nextLesson(end,days) {
+    const day=new Date(end+'T00:00:00Z');
+    if(!Number.isFinite(day.getTime())||!days.length)return '';
+    do {day.setUTCDate(day.getUTCDate()+1);}while(!days.includes(day.getUTCDay()));
+    return day.toISOString().slice(0,10);
+  }
+  function lessonEnd(start,days,count) {
+    let result=start;
+    for(let i=1;i<count;i++)result=nextLesson(result,days);
+    return result;
+  }
+  function continuationCandidates(items,teacherId,month,buffer=2,today='') {
+    const candidates=items.filter(item=>item.teacher===teacherId&&item.program==='write'&&item.end&&allowedSlot(teacherId,item.days,item.time)).map(source=>{
+      const start=nextLesson(source.end,source.days);
+      return {source,start,end:lessonEnd(start,source.days,source.sessions+buffer)};
+    }).filter(item=>item.start.startsWith(month)&&(!today||item.start>=today)).filter(candidate=>
+      !items.some(other=>other!==candidate.source&&other.teacher===teacherId&&other.time===candidate.source.time&&
+        other.days.some(day=>candidate.source.days.includes(day))&&other.start<=candidate.end&&other.end>=candidate.start)
+    ).sort((a,b)=>a.start.localeCompare(b.start)||a.source.time.localeCompare(b.source.time));
+    // One successor per fixed teaching slot; existing future classes count as occupied.
+    const seen=new Set();
+    return candidates.filter(item=>{const key=item.source.days.join(',')+'|'+item.source.time;if(seen.has(key))return false;seen.add(key);return true;});
+  }
+  const api={months,numbers,parse,make,validate,teacher,date,cohort,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,continuationCandidates};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.MaybeSchedule=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

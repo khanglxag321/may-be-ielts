@@ -99,7 +99,7 @@
 
   function getSession() {
     // Migrate existing tab sessions; demo sessions must never survive the tab.
-    for (const store of ["sessionStorage", "localStorage"]) {
+    for (const store of ["localStorage", "sessionStorage"]) {
       const session = readStore(store, STORAGE_KEY);
       if (!session) continue;
       const expiresAt = Number(session.expiresAt);
@@ -115,6 +115,7 @@
         continue;
       }
       if (!session.demo && store === "sessionStorage") saveSession(session);
+      if (!session.demo) session.picture = claims.picture || session.picture || "";
       return session;
     }
     return null;
@@ -159,6 +160,65 @@
     return session;
   }
 
+  let renewal = null;
+  function avatarMarkup(session) {
+    const initials = String(session.name || 'M').trim().split(/\s+/).slice(-2).map(part => part[0]).join('').toUpperCase();
+    const escape = text => String(text).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    return /^https:\/\//.test(session.picture || '')
+      ? `<img src="${escape(session.picture)}" alt="${escape(initials)}" referrerpolicy="no-referrer">`
+      : escape(initials);
+  }
+
+  async function ensureSession() {
+    const current = getSession();
+    if (current) return current;
+    if (!getLoginHint()) return requireSession();
+    if (renewal) return renewal;
+    // A stored Google token cannot be extended. Obtain and verify a fresh one,
+    // keeping the current page/form in place if Google needs a confirmation.
+    renewal = new Promise((resolve) => {
+      const panel = document.createElement('div');
+      panel.className = 'session-restore';
+      panel.setAttribute('role', 'dialog');
+      panel.setAttribute('aria-modal', 'true');
+      panel.setAttribute('aria-label', 'Khôi phục đăng nhập');
+      panel.innerHTML = '<div class="session-restore-card"><strong>Chào mừng bạn trở lại.</strong><p class="session-restore-message">Đang khôi phục tài khoản Google đã lưu…</p><div class="session-restore-google"></div><a href="index.html">Về trang đăng nhập</a></div>';
+      document.body.appendChild(panel);
+      const message = panel.querySelector('.session-restore-message');
+      let started = false;
+      function initialize() {
+        if (started || !window.google?.accounts?.id) return;
+        started = true;
+        google.accounts.id.initialize({
+          client_id: config().googleClientId,
+          login_hint: getLoginHint(),
+          auto_select: true,
+          button_auto_select: true,
+          callback: async response => {
+            try {
+              const session = await createSession(response.credential);
+              panel.remove();
+              resolve(session);
+            } catch (error) { message.textContent = error.message; }
+          }
+        });
+        google.accounts.id.renderButton(panel.querySelector('.session-restore-google'), {theme:'outline',size:'large',shape:'pill',text:'continue_with',width:280});
+        message.textContent = 'Nếu Google yêu cầu xác nhận, chọn tài khoản bên dưới để tiếp tục.';
+        google.accounts.id.prompt();
+      }
+      if (window.google?.accounts?.id) initialize();
+      else {
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.onload = initialize;
+        script.onerror = () => {message.textContent = 'Chưa kết nối được Google. Vui lòng tải lại trang.';};
+        document.head.appendChild(script);
+      }
+    });
+    try { return await renewal; } finally { renewal = null; }
+  }
+
   function safeReturnTo() {
     const value = new URLSearchParams(location.search).get("returnTo") || "";
     return ["admin.html", "students.html"].includes(value) ? value : "";
@@ -167,6 +227,8 @@
   window.MaybeTeamAuth = Object.freeze({
     createDemoSession,
     createSession,
+    ensureSession,
+    avatarMarkup,
     getSession,
     getLoginHint,
     isConfigured,

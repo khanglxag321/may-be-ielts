@@ -42,3 +42,7 @@ Frontend lưu phiên Google trong `localStorage` để giữ đăng nhập khi �
 Không kéo dài thời hạn ID token: token hết hạn bị xóa, còn mã tài khoản Google (`sub`) được giữ làm gợi ý cho One Tap/tự đăng nhập lại. Google có thể yêu cầu xác nhận nếu đã đăng xuất Google, dùng ẩn danh, xóa dữ liệu hoặc chặn tự đăng nhập. Đăng xuất Maybe Team xóa cả phiên và gợi ý tài khoản trên thiết bị, đồng thời tắt tự chọn Google.
 
 Mỗi lần nhận token mới và mỗi thao tác ghi đều được Apps Script xác minh lại với Google, kiểm tra email trong tab `Users`, rồi mới cho phép thay đổi Sheet. Quyền thật nằm ở backend, không phụ thuộc vào việc ẩn/hiện nút trên giao diện. Đây không phải phiên đăng nhập dài hạn do backend cấp; muốn bảo đảm đăng nhập nhiều ngày độc lập với Google One Tap cần triển khai cơ chế phiên máy chủ riêng.
+
+Khi mở trực tiếp công cụ hoặc gửi dữ liệu sau khi token hết hạn, ensureSession thử khôi phục Google tại chỗ. Nút Google vẫn hiện nếu trình duyệt yêu cầu xác nhận; dữ liệu biểu mẫu được giữ. Token mới phải được backend xác minh trước khi thao tác tiếp. Các công cụ dùng chung ảnh Google từ phiên đã xác minh.
+
+Tạo lớp nối tiếp: chọn tháng để tìm buổi học kế tiếp nằm trong chính tháng đó, loại khung đã có lớp khác chiếm lịch. Gia Khang dùng sáu khung cố định: 14–16h cho cả ba cặp thứ, 20–22h thứ 2+5 và 3+6, 18–20h thứ 4+7. Có thể tạo tối đa ba lớp mỗi lần; thiếu khung thì hiển thị số lớp thực sự hợp lệ.
