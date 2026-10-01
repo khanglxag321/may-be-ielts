@@ -3,4 +3,4 @@
 .cohort-1{--cohort-bg:#e0f2fe;--cohort-ink:#075985}.cohort-2{--cohort-bg:#fce7f3;--cohort-ink:#9d174d}.cohort-3{--cohort-bg:#dcfce7;--cohort-ink:#166534}.cohort-4{--cohort-bg:#fef3c7;--cohort-ink:#92400e}.cohort-5{--cohort-bg:#e0e7ff;--cohort-ink:#3730a3}.cohort-6{--cohort-bg:#cffafe;--cohort-ink:#155e75}.cohort-7{--cohort-bg:#ffe4e6;--cohort-ink:#9f1239}.cohort-8{--cohort-bg:#ecfccb;--cohort-ink:#3f6212}.cohort-9{--cohort-bg:#fae8ff;--cohort-ink:#86198f}.cohort-10{--cohort-bg:#ffedd5;--cohort-ink:#9a3412}.cohort-11{--cohort-bg:#ede9fe;--cohort-ink:#5b21b6}.cohort-12{--cohort-bg:#ccfbf1;--cohort-ink:#115e59}
 .schedule-date{display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .date-year{font-size:11px;font-weight:500;color:#64748b}
-.schedule-end{display:block;margin-top:5px;font-size:12px;color:#64748b;white-space:nowrap}
+.schedule-end{display:block;margin-top:5px;font-size:inherit;color:inherit;white-space:nowrap}
