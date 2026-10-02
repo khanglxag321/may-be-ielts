@@ -4850,6 +4850,10 @@ name:"Advanced Task 2",
 url:"https://iframe.videodelivery.net/515bee8f8b94c92d7ee835211fc98d5f?preload=auto"
 },
 {
+name:"Speaking Part 1",
+url:"https://drive.google.com/file/d/1XqIOWyyE-ThmOX1ppvEd2jDmBlCRSywn/preview"
+},
+{
 name:"Advanced Speaking",
 url:"https://iframe.videodelivery.net/afb601d4aee8fb4e513d88957eee0e34?preload=auto"
 }
@@ -5108,6 +5112,7 @@ function toggleContact(){
             if (result.status === "success") {
                 publicAllScheduleRows = Array.isArray(result.data) ? result.data : [];
                 publicScheduleRows = filterClassesForRecruitment(publicAllScheduleRows);
+                renderRegistrationCourses(publicScheduleRows);
                 updateLecturerSlotNotes(publicScheduleRows);
                 renderFilteredPublicSchedule();
             } else {
@@ -5617,14 +5622,22 @@ function toggleContact(){
         }
     });
 
-    function renderPublicTables(data) { 
+    // Registration always uses the complete intake, independently of schedule filters.
+    function renderRegistrationCourses(rows) {
+        const select = document.getElementById("course");
+        if (!select) return;
+        const previous = select.value;
+        select.innerHTML = '<option value="">-- Chọn lớp --</option>';
+        rows.filter(classHasAvailableSlots).slice().sort(comparePublicClasses).forEach(row => {
+            const option = document.createElement("option");
+            option.value = MaybeSchedule.normalizeCode(row.MaLop) + " | " + row.GiangVien;
+            option.textContent = MaybeSchedule.normalizeCode(row.MaLop) + " - " + row.GiangVien + " (" + row.LichHoc + ")";
+            select.appendChild(option);
+        });
+        if ([...select.options].some(option => option.value === previous)) select.value = previous;
+    }
 
-        const courseSelect = document.getElementById("course");
-
-if(courseSelect){
-    courseSelect.innerHTML =
-        '<option value="">-- Chọn lớp --</option>';
-}
+    function renderPublicTables(data) {
         const tbFoundation = document.getElementById('tbody-foundation');
         const tbMasterWrite = document.getElementById('tbody-master-write');
         const tbSpeaking = document.getElementById('tbody-speaking');
@@ -5639,18 +5652,6 @@ if(courseSelect){
             const totalSlots = parseSlotNumber(row.TongSlot);
             const enrolled = parseSlotNumber(row.HocVien);
             const slotsLeft = Math.max(0, totalSlots - enrolled);
-            if(courseSelect && slotsLeft > 0){
-
-    const option = document.createElement("option");
-
-    option.value =
-        `${MaybeSchedule.normalizeCode(row.MaLop)} | ${row.GiangVien}`;
-
-    option.textContent =
-        `${MaybeSchedule.normalizeCode(row.MaLop)} - ${row.GiangVien} (${row.LichHoc})`;
-
-            courseSelect.appendChild(option);
-}
             let slotStatus = slotsLeft === 0 ? "full" : slotsLeft <= 5 ? "low" : "ok";
             const tuitionPlan = buildTuitionPlan(row);
             

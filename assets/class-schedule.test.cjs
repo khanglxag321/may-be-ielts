@@ -45,11 +45,27 @@ vm.createContext(context);
 vm.runInContext(html.slice(html.indexOf('    function renderPublicTables'),html.indexOf('    // Tự động chạy khi website vừa load xong')),context);
 context.renderPublicTables([full,open].map(row=>({...row,LichHoc:'Thứ 2 + 5 (8 - 10 PM)',KetThuc:'10.12'})));
 assert(nodes['tbody-foundation'].innerHTML.includes('Full slot'));
-assert.equal(nodes.course.children.length,1);
-assert(nodes.course.children[0].value.includes('MBWrite09'));
+assert.equal(nodes.course.children.length,0, "schedule table must not change registration options");
+
 console.log('PASS: naming, teacher ranges, Speaking restriction, year rollover, full-class retention/replacement, registration exclusion, inline JavaScript syntax');
 
 assert(S.codeMarkup('MBWrite04 NOV26').includes('cohort-11'));
 assert(S.codeMarkup('MBWrite04 NOV26').includes('nov26'));
 assert(S.dateMarkup('06.01','2026-11').includes('2027'));
 assert(S.dateMarkup('28.10.2026','2026-11').includes('28.10'));
+
+const select = {value:'',children:[],get options(){return this.children},set innerHTML(value){this.children=[{value:'',textContent:'-- Chọn lớp --'}]},appendChild(option){this.children.push(option)}};
+const regContext={MaybeSchedule:S,document:{getElementById:()=>select,createElement:()=>({})},classHasAvailableSlots:S.available,comparePublicClasses:(a,b)=>a.MaLop.localeCompare(b.MaLop)};
+vm.createContext(regContext);
+vm.runInContext(html.slice(html.indexOf('    function renderRegistrationCourses'),html.indexOf('    function renderPublicTables')),regContext);
+const registrationRows=[full,open,{...open,MaLop:'MBWrite02 nov26',GiangVien:'Tuệ Nhi'},{...open,MaLop:'MBSpeak oct26',GiangVien:'Hồ Bách'}];
+regContext.renderRegistrationCourses(registrationRows);
+assert.equal(select.options.length,4);
+assert.deepEqual(new Set(select.options.slice(1).map(o=>o.value.split(' | ')[1])),new Set(['Gia Khang','Tuệ Nhi','Hồ Bách']));
+select.value='MBSpeak oct26 | Hồ Bách';
+context.renderPublicTables([]);
+assert.equal(select.value,'MBSpeak oct26 | Hồ Bách');
+assert.equal(select.options.length,4);
+regContext.renderRegistrationCourses(registrationRows);
+assert.equal(select.value,'MBSpeak oct26 | Hồ Bách');
+console.log('PASS: all teachers in registration, full classes excluded, selection independent of schedule filters');
