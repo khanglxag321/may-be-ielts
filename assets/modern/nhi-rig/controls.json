@@ -1,0 +1,535 @@
+{
+  "defaults": {
+    "Pose": 1.0,
+    "Auto Blink": 100.0,
+    "Blink L": 0.0,
+    "Blink R": 0.0,
+    "Eye Open L": 100.0,
+    "Eye Open R": 100.0,
+    "Eye Width": 0.0,
+    "Look X": 0.0,
+    "Look Y": 0.0,
+    "Happy Eyes": 0.0,
+    "Pupil Sparkle": 100.0,
+    "Brow Lift L": 0.0,
+    "Brow Lift R": 0.0,
+    "Brow Tilt L": 0.0,
+    "Brow Tilt R": 0.0,
+    "Brow Arch L": 0.0,
+    "Brow Arch R": 0.0,
+    "Smile": 45.0,
+    "Mouth Open": 0.0,
+    "Mouth Width": 0.0,
+    "Mouth Round": 0.0,
+    "Mouth X": 0.0,
+    "Teeth": 70.0,
+    "Tongue": 60.0,
+    "Blush": 0.0,
+    "Sweat": 0.0,
+    "Sparkle": 0.0,
+    "Body Tilt": 0.0,
+    "Nod": 0.0,
+    "Face Tilt": 0.0,
+    "Breathe": 65.0,
+    "Float": 35.0,
+    "Wave": 0.0,
+    "Point": 0.0,
+    "Lean X": 0.0,
+    "Lean Y": 0.0,
+    "Head Yaw": 0,
+    "Head Pitch": 0,
+    "Shoulder": 0,
+    "Elbow": 0,
+    "Wrist": 0,
+    "Wave Blend": 0,
+    "Think Blend": 0,
+    "Hand Spread": 0
+  },
+  "faces": {
+    "Mischievous": {
+      "Smile": 76.0,
+      "Brow Lift R": 17.0,
+      "Eye Open L": 90.0,
+      "Look X": -15.0,
+      "Blush": 20.0,
+      "Face Tilt": -2.2
+    },
+    "Deadpan": {
+      "Eye Open L": 62.0,
+      "Eye Open R": 65.0,
+      "Brow Lift R": 12.0,
+      "Smile": 0.0,
+      "Mouth X": 10.0,
+      "Face Tilt": -2.6
+    },
+    "Gotcha": {
+      "Smile": 84.0,
+      "Eye Open L": 118.0,
+      "Eye Open R": 114.0,
+      "Brow Lift L": 17.0,
+      "Brow Lift R": 22.0,
+      "Sparkle": 60.0,
+      "Nod": -4.0
+    },
+    "Friendly": {
+      "Smile": 60.0,
+      "Brow Lift R": 6.0,
+      "Blush": 12.0
+    },
+    "Big_Smile": {
+      "Smile": 90.0,
+      "Mouth Open": 30.0,
+      "Mouth Width": 35.0,
+      "Happy Eyes": 20.0,
+      "Blush": 45.0,
+      "Brow Lift L": 10.0,
+      "Brow Lift R": 8.0
+    },
+    "Laugh": {
+      "Smile": 100.0,
+      "Mouth Open": 72.0,
+      "Mouth Width": 28.0,
+      "Happy Eyes": 100.0,
+      "Blush": 65.0,
+      "Body Tilt": -2.0
+    },
+    "Wink": {
+      "Blink L": 100.0,
+      "Smile": 75.0,
+      "Brow Lift R": 15.0,
+      "Blush": 22.0
+    },
+    "Thinking": {
+      "Look X": -42.0,
+      "Look Y": -38.0,
+      "Brow Tilt L": 13.0,
+      "Brow Lift R": 12.0,
+      "Smile": 8.0,
+      "Mouth X": -16.0,
+      "Face Tilt": -2.0
+    },
+    "Curious": {
+      "Eye Open L": 112.0,
+      "Eye Open R": 112.0,
+      "Brow Lift L": 15.0,
+      "Brow Lift R": 9.0,
+      "Look X": 25.0,
+      "Smile": 30.0,
+      "Face Tilt": 2.0
+    },
+    "Doubt": {
+      "Eye Open L": 60.0,
+      "Eye Open R": 100.0,
+      "Brow Lift L": -7.0,
+      "Brow Lift R": 18.0,
+      "Smile": -18.0,
+      "Mouth X": 15.0,
+      "Face Tilt": -2.0
+    },
+    "Aha": {
+      "Eye Open L": 114.0,
+      "Eye Open R": 114.0,
+      "Brow Lift L": 18.0,
+      "Brow Lift R": 15.0,
+      "Smile": 75.0,
+      "Mouth Open": 28.0,
+      "Sparkle": 80.0,
+      "Nod": -5.0
+    },
+    "Surprised": {
+      "Eye Open L": 125.0,
+      "Eye Open R": 125.0,
+      "Brow Lift L": 22.0,
+      "Brow Lift R": 19.0,
+      "Smile": 0.0,
+      "Mouth Open": 68.0,
+      "Mouth Round": 85.0,
+      "Nod": -7.0
+    },
+    "Emphasis": {
+      "Brow Lift L": -4.0,
+      "Brow Lift R": -5.0,
+      "Brow Tilt L": 18.0,
+      "Brow Tilt R": -17.0,
+      "Smile": 15.0,
+      "Mouth Open": 24.0,
+      "Point": 3.0,
+      "Lean X": -8.0
+    },
+    "Confused": {
+      "Brow Lift L": 15.0,
+      "Brow Lift R": -6.0,
+      "Brow Tilt L": -14.0,
+      "Brow Tilt R": 20.0,
+      "Smile": -30.0,
+      "Mouth X": 12.0,
+      "Sweat": 45.0,
+      "Face Tilt": 2.3
+    },
+    "Worried": {
+      "Brow Lift L": 7.0,
+      "Brow Lift R": 3.0,
+      "Brow Tilt L": -20.0,
+      "Brow Tilt R": 21.0,
+      "Eye Open L": 80.0,
+      "Eye Open R": 80.0,
+      "Smile": -55.0,
+      "Sweat": 65.0
+    },
+    "Empathetic": {
+      "Brow Tilt L": -12.0,
+      "Brow Tilt R": 10.0,
+      "Eye Open L": 85.0,
+      "Eye Open R": 85.0,
+      "Smile": 38.0,
+      "Blush": 24.0,
+      "Face Tilt": -1.5
+    },
+    "Proud": {
+      "Smile": 78.0,
+      "Happy Eyes": 55.0,
+      "Blush": 32.0,
+      "Brow Lift L": 5.0,
+      "Brow Lift R": 5.0,
+      "Nod": -4.0,
+      "Sparkle": 45.0
+    },
+    "Encourage": {
+      "Smile": 80.0,
+      "Mouth Open": 26.0,
+      "Blush": 30.0,
+      "Brow Lift L": 8.0,
+      "Brow Lift R": 8.0,
+      "Wave": 65.0
+    },
+    "Serious": {
+      "Eye Open L": 88.0,
+      "Eye Open R": 88.0,
+      "Brow Tilt L": 19.0,
+      "Brow Tilt R": -19.0,
+      "Brow Lift L": -7.0,
+      "Brow Lift R": -7.0,
+      "Smile": -12.0
+    },
+    "Relief": {
+      "Happy Eyes": 100.0,
+      "Smile": 65.0,
+      "Blush": 20.0,
+      "Nod": 5.0,
+      "Mouth Open": 10.0
+    },
+    "Listening": {
+      "Smile": 20.0,
+      "Look X": -20.0,
+      "Brow Lift R": 8.0,
+      "Face Tilt": 1.7
+    },
+    "Playful_Squint": {
+      "Smile": 70,
+      "Eye Open L": 58,
+      "Eye Open R": 82,
+      "Brow Lift R": 18,
+      "Face Tilt": -3,
+      "Head Yaw": -5
+    },
+    "Side_Eye": {
+      "Smile": 12,
+      "Eye Open L": 70,
+      "Eye Open R": 76,
+      "Look X": 48,
+      "Brow Lift R": 12,
+      "Head Yaw": 10
+    },
+    "Hold_On": {
+      "Smile": 0,
+      "Brow Lift L": 18,
+      "Brow Lift R": 20,
+      "Eye Open L": 112,
+      "Eye Open R": 112,
+      "Wave Blend": 85
+    },
+    "Confident": {
+      "Smile": 80,
+      "Brow Lift R": 12,
+      "Eye Open L": 95,
+      "Eye Open R": 95,
+      "Head Pitch": -3
+    },
+    "Realisation": {
+      "Smile": 70,
+      "Eye Open L": 120,
+      "Eye Open R": 118,
+      "Brow Lift L": 18,
+      "Brow Lift R": 19,
+      "Sparkle": 65,
+      "Nod": -5
+    },
+    "Suspicious": {
+      "Smile": -12,
+      "Eye Open L": 55,
+      "Eye Open R": 75,
+      "Brow Lift L": -3,
+      "Brow Lift R": 17,
+      "Head Yaw": -8
+    },
+    "Reassure": {
+      "Smile": 65,
+      "Eye Open L": 85,
+      "Eye Open R": 88,
+      "Brow Tilt L": -9,
+      "Brow Tilt R": 10,
+      "Blush": 25
+    },
+    "Focus": {
+      "Smile": 8,
+      "Eye Open L": 90,
+      "Eye Open R": 90,
+      "Brow Tilt L": 15,
+      "Brow Tilt R": -12,
+      "Look X": -32,
+      "Head Yaw": -10
+    },
+    "Tiny_Celebration": {
+      "Smile": 90,
+      "Happy Eyes": 75,
+      "Sparkle": 70,
+      "Blush": 40,
+      "Nod": -8
+    },
+    "Oops": {
+      "Smile": -10,
+      "Eye Open L": 108,
+      "Eye Open R": 105,
+      "Brow Lift L": 15,
+      "Brow Lift R": 8,
+      "Sweat": 45
+    },
+    "Satisfied": {
+      "Smile": 78,
+      "Happy Eyes": 90,
+      "Blush": 32,
+      "Head Pitch": 2
+    }
+  },
+  "mouths": {
+    "Rest": {
+      "Smile": 30.0,
+      "Mouth Open": 0.0
+    },
+    "A_AA": {
+      "Smile": 12.0,
+      "Mouth Open": 92.0,
+      "Mouth Width": -8.0,
+      "Teeth": 35.0
+    },
+    "E_EE": {
+      "Smile": 35.0,
+      "Mouth Open": 35.0,
+      "Mouth Width": 65.0,
+      "Teeth": 90.0
+    },
+    "O_OO": {
+      "Smile": 0.0,
+      "Mouth Open": 73.0,
+      "Mouth Round": 100.0,
+      "Teeth": 15.0
+    },
+    "U_UU": {
+      "Smile": 0.0,
+      "Mouth Open": 35.0,
+      "Mouth Round": 100.0,
+      "Teeth": 0.0,
+      "Tongue": 0.0
+    },
+    "M_B_P": {
+      "Smile": 0.0,
+      "Mouth Open": 0.0,
+      "Mouth Width": -16.0
+    },
+    "F_V": {
+      "Smile": 8.0,
+      "Mouth Open": 16.0,
+      "Mouth Width": 30.0,
+      "Teeth": 100.0,
+      "Tongue": 0.0
+    },
+    "L": {
+      "Smile": 12.0,
+      "Mouth Open": 47.0,
+      "Mouth Width": 0.0,
+      "Tongue": 100.0,
+      "Teeth": 65.0
+    },
+    "TH": {
+      "Smile": 12.0,
+      "Mouth Open": 25.0,
+      "Mouth Width": 40.0,
+      "Tongue": 100.0,
+      "Teeth": 100.0
+    },
+    "Smile": {
+      "Smile": 85.0,
+      "Mouth Open": 0.0,
+      "Mouth Width": 32.0
+    },
+    "I_Y": {
+      "Smile": 15,
+      "Mouth Open": 28,
+      "Mouth Width": 72,
+      "Teeth": 90
+    },
+    "AO_AU": {
+      "Smile": 0,
+      "Mouth Open": 66,
+      "Mouth Round": 55,
+      "Teeth": 20
+    },
+    "OE": {
+      "Smile": 0,
+      "Mouth Open": 44,
+      "Mouth Round": 50,
+      "Teeth": 30
+    },
+    "N_NG": {
+      "Smile": 0,
+      "Mouth Open": 15,
+      "Tongue": 75,
+      "Teeth": 50
+    },
+    "S_Z": {
+      "Smile": 5,
+      "Mouth Open": 12,
+      "Mouth Width": 45,
+      "Teeth": 95
+    },
+    "Breath": {
+      "Smile": 0,
+      "Mouth Open": 10,
+      "Mouth Round": 25,
+      "Teeth": 10
+    }
+  },
+  "gestures": {
+    "Wave_Hello": {
+      "Wave Blend": 100,
+      "Wave": 85,
+      "Smile": 75
+    },
+    "Point_Explain": {
+      "Shoulder": -5,
+      "Elbow": 3,
+      "Look X": -35,
+      "Head Yaw": -9
+    },
+    "Nod_Yes": {
+      "Nod": 8,
+      "Smile": 65
+    },
+    "Shake_No": {
+      "Face Tilt": -4,
+      "Head Yaw": 10,
+      "Smile": 2
+    },
+    "Think_Then_Aha": {
+      "Think Blend": 100,
+      "Smile": 8,
+      "Look X": -30
+    },
+    "Lean_To_Content": {
+      "Lean X": -16,
+      "Body Tilt": -2,
+      "Head Yaw": -12,
+      "Look X": -40
+    },
+    "Celebrate": {
+      "Wave Blend": 100,
+      "Wave": 55,
+      "Smile": 90,
+      "Happy Eyes": 90
+    },
+    "Quiet_Idle": {
+      "Smile": 25,
+      "Float": 12,
+      "Breathe": 28
+    },
+    "Stop_Palm": {
+      "Wave Blend": 100,
+      "Wave": 0,
+      "Shoulder": -5,
+      "Smile": 10
+    },
+    "Palm_Offer": {
+      "Wave Blend": 100,
+      "Wave": 0,
+      "Shoulder": -18,
+      "Smile": 60
+    },
+    "Trace_Up": {
+      "Shoulder": -9,
+      "Elbow": 6,
+      "Wrist": -3,
+      "Head Yaw": -9
+    },
+    "Trace_Down": {
+      "Shoulder": 9,
+      "Elbow": -5,
+      "Wrist": 3,
+      "Head Yaw": -8
+    },
+    "Compare_Left_Right": {
+      "Head Yaw": -13,
+      "Look X": -45,
+      "Shoulder": -3
+    },
+    "Circle_Point": {
+      "Shoulder": 3,
+      "Elbow": 5,
+      "Wrist": 4,
+      "Smile": 45
+    },
+    "Pick_Card": {
+      "Shoulder": 14,
+      "Elbow": -9,
+      "Wrist": 8,
+      "Head Yaw": -7
+    },
+    "Place_Card": {
+      "Shoulder": -11,
+      "Elbow": 8,
+      "Wrist": -5,
+      "Head Yaw": -8
+    },
+    "Count_Two": {
+      "Wave Blend": 60,
+      "Wrist": -3,
+      "Smile": 65
+    },
+    "Settle_And_Listen": {
+      "Smile": 22,
+      "Head Pitch": 3,
+      "Head Yaw": -5,
+      "Breathe": 20
+    }
+  },
+  "headAngles": {
+    "Front": {
+      "Head Yaw": 0
+    },
+    "Look_Left": {
+      "Head Yaw": -16,
+      "Look X": -30
+    },
+    "Look_Right": {
+      "Head Yaw": 16,
+      "Look X": 30
+    }
+  },
+  "idleLoops": [
+    "Breathe",
+    "Listening",
+    "Thinking",
+    "Eye_Scan",
+    "Settle",
+    "Calm_Float"
+  ]
+}
