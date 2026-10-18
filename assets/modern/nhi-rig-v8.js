@@ -5,11 +5,14 @@
   const base = new URL('./nhi-rig/', document.currentScript.src);
   const clamp = (v, a=0, b=1) => Math.max(a, Math.min(b,v));
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');
+  const coarse = matchMedia('(pointer:coarse)');
+  const compactProfile = () => innerWidth<=820 || coarse.matches;
   const point = 'polygon(0% 27.34%,13.67% 27.34%,13.67% 34.77%,17.11% 37.97%,20.7% 40.47%,23.52% 43.52%,24.84% 46.02%,26.8% 47.5%,28.05% 49.22%,31.41% 52.58%,35% 55.94%,39.06% 58.05%,41.41% 61.33%,41.41% 65.23%,34.77% 69.53%,19.53% 67.97%,8.44% 57.27%,0% 49.92%)';
   const wave = 'polygon(8.2% 47.66%,10.16% 44.53%,12.11% 41.8%,14.84% 38.91%,18.36% 38.83%,21.09% 42.19%,23.98% 44.38%,25.47% 42.66%,27.58% 42.73%,27.81% 45.94%,26.48% 50.16%,28.59% 54.3%,32.66% 57.58%,38.67% 59.77%,40.47% 64.84%,36.56% 68.91%,28.91% 69.38%,22.27% 67.11%,18.36% 63.36%,16.17% 59.06%,15% 56.56%,12.11% 54.22%,8.59% 50.63%)';
   let controls = null, rigs = [], lookX = 0, lookY = 0, energy = 0, analyser = null, samples, context;
   const audio = document.getElementById('beeGuideAudio');
   const intro = document.getElementById('heroNhiIntro');
+  const guide = document.getElementById('beeGuide');
   function makeRig(el, index) {
     const uid = 'nhi-'+index;
     const img = (file, klass='rig-layer', extra='') => `<img src="${new URL(file+'.webp',base)}" class="${klass}" alt="" ${extra} draggable="false">`;
@@ -33,7 +36,7 @@
       <svg class="rig-grip-hand" viewBox="400 628 217 190" aria-hidden="true"><defs><clipPath id="${uid}-grip"><path d="M438 754C429 735 450 697 483 674C536 638 580 638 607 655C625 675 608 693 576 700C602 714 605 738 583 764C564 786 535 812 506 809C480 795 450 775 438 754Z"/></clipPath></defs><image href="${new URL('bee-thinking-base.webp',base)}" width="1280" height="1280" clip-path="url(#${uid}-grip)"/></svg>
      </div>`;
     const q = s => el.querySelector(s);
-    return {el,body:q('.rig-body'),head:q('.rig-head'),point:q('.rig-point'),wave:q('.rig-wave'),sleeve:q('.rig-contact-sleeve'),grip:q('.rig-grip-hand'),eyes:[q('.eye-0'),q('.eye-1')],brows:[q('.brow-0'),q('.brow-1')],mouth:q('.mouth-open'),shape:q('.mouth-shape'),clip:q('.mouth-clip'),closed:q('.mouth-closed'),teeth:q('.mouth-teeth'),tongue:q('.mouth-tongue'),sparkle:q('.face-sparkle'),visible:true};
+    return {el,carrier:el.closest('#beeGuide'),body:q('.rig-body'),head:q('.rig-head'),point:q('.rig-point'),wave:q('.rig-wave'),sleeve:q('.rig-contact-sleeve'),grip:q('.rig-grip-hand'),eyes:[q('.eye-0'),q('.eye-1')],openEyes:[q('.eye-0 .eye-open'),q('.eye-1 .eye-open')],happyEyes:[q('.eye-0 .eye-happy'),q('.eye-1 .eye-happy')],brows:[q('.brow-0'),q('.brow-1')],mouth:q('.mouth-open'),shape:q('.mouth-shape'),clip:q('.mouth-clip'),closed:q('.mouth-closed'),teeth:q('.mouth-teeth'),tongue:q('.mouth-tongue'),sparkle:q('.face-sparkle'),visible:true,reducedState:''};
   }
   window.connectNhiAudio = async () => {
     try {
@@ -48,20 +51,29 @@
     } catch(error) { console.info('Using fallback speech motion',error.message); }
   };
   const faceMap = {hello:'Friendly',curious:'Curious',excited:'Big_Smile',celebrate:'Tiny_Celebration',focused:'Focus'};
-  let start = performance.now(), last = 0;
+  let start = performance.now(), last = 0, tickFrame = 0, updateCount = 0;
+  const rigVisible = rig => rig.visible && (!rig.carrier || rig.carrier.classList.contains('is-launched'));
+  function requestTick(){if(!tickFrame && controls && !document.hidden)tickFrame=requestAnimationFrame(tick);}
   function tick(now) {
-    requestAnimationFrame(tick);
-    if(document.hidden || now-last<33 || !controls) return;
+    tickFrame=0;
+    if(document.hidden || !controls) return;
+    const speaking = audio && !audio.paused && !audio.ended;
+    const visibleRigs = rigs.filter(rigVisible);
+    // The hero can still need speech energy while the floating rig is hidden.
+    if(!visibleRigs.length && !speaking && energy<=.0005){energy=0;window.beeSpeechEnergy=0;return;}
+    const interval=1000/(compactProfile()?30:60);
+    if(last && now-last<interval-.7){requestTick();return;}
+    const dt=last?Math.min(now-last,100):interval;
     last = now;
     const t = (now-start)/1000;
-    const speaking = audio && !audio.paused && !audio.ended;
     if(speaking && analyser && samples) {
       analyser.getByteTimeDomainData(samples);
       const rms = Math.sqrt(samples.reduce((sum,n)=>sum+((n-128)/128)**2,0)/samples.length);
-      energy += (clamp(rms*5.5)-energy)*.6;
-    } else energy += ((speaking ? (.2+.55*Math.abs(Math.sin(t*13)*Math.sin(t*7))) : 0)-energy)*.55;
+      energy += (clamp(rms*5.5)-energy)*(1-Math.pow(.4,dt/(1000/30)));
+    } else energy += ((speaking ? (.2+.55*Math.abs(Math.sin(t*13)*Math.sin(t*7))) : 0)-energy)*(1-Math.pow(.45,dt/(1000/30)));
+    if(!speaking && energy<.0005)energy=0;
     window.beeSpeechEnergy = energy;
-    const expression = document.getElementById('beeGuide')?.dataset.expression || 'hello';
+    const expression = guide?.dataset.expression || 'hello';
     const face = {...controls.defaults,...controls.faces[faceMap[expression] || 'Friendly']};
     const movement = reduced.matches ? 0 : 1;
     const phase = t%4.7, blink = phase>4.43 && phase<4.63 ? Math.sin((phase-4.43)/.2*Math.PI) : 0;
@@ -69,8 +81,10 @@
     const pose=window.beeGuidePose||{gesture:'wave',facing:1};
     const contact=pose.gesture==='grip'||pose.gesture==='lean';
     const lx = lookX*movement*(pose.facing||1), ly = lookY*movement;
-    for(const rig of rigs) {
-      if(!rig.visible) continue;
+    const reducedState=movement?'':JSON.stringify([expression,pose.gesture,pose.facing,pose.mount,pose.pointAngle,Math.round(energy*2000)]);
+    for(const rig of visibleRigs) {
+      if(!movement && rig.reducedState===reducedState)continue;
+      rig.reducedState=reducedState;updateCount++;
       rig.el.style.setProperty('--bee-facing',pose.facing||1);
       rig.body.style.transform = contact?'none':`translateY(${Math.sin(t*1.9)*.6*movement}%) rotate(${Math.sin(t*1.3)*.5*movement}deg)`;
       rig.head.style.transform = `perspective(1000px) rotateY(${lx*.12}deg) rotateX(${-ly*.05}deg) rotateZ(${(Math.sin(t*1.3)*.8+(pose.gesture==='lean'?3.5:0))*movement}deg)`;
@@ -86,10 +100,10 @@
       for(let i=0;i<2;i++) {
         const p = i ? {x:821,y:588,bx:800,by:478,angle:-28,side:'R'} : {x:591,y:604,bx:594,by:512,angle:13,side:'L'};
         const open = Math.max(.045,(face['Eye Open '+p.side] || 100)/100*(1-blink*movement)*(1-(face['Happy Eyes']||0)*.0097));
-        const eye = rig.eyes[i].querySelector('.eye-open');
+        const eye = rig.openEyes[i];
         eye.setAttribute('transform',`translate(${p.x+lx*.33} ${p.y+ly*.21}) scale(1 ${open})`);
         eye.setAttribute('opacity',1-happy);
-        rig.eyes[i].querySelector('.eye-happy').setAttribute('opacity',happy);
+        rig.happyEyes[i].setAttribute('opacity',happy);
         const a=(p.angle+(face['Brow Tilt '+p.side]||0))*Math.PI/180,dx=Math.cos(a)*27,dy=Math.sin(a)*27,by=p.by-(face['Brow Lift '+p.side]||0);
         rig.brows[i].setAttribute('d',`M${p.bx-dx} ${by-dy} Q${p.bx} ${by-(face['Brow Arch '+p.side]||0)*.28} ${p.bx+dx} ${by+dy}`);
       }
@@ -109,17 +123,25 @@
       rig.tongue.setAttribute('rx',24+opening*4);rig.tongue.setAttribute('opacity',clamp((opening-.15)*2));
       rig.mouth.setAttribute('opacity',1);rig.closed.setAttribute('opacity',0);
 
-      rig.sparkle.setAttribute('opacity',(face.Sparkle||0)/100*(.72+Math.sin(t*4)*.28));
+      rig.sparkle.setAttribute('opacity',(face.Sparkle||0)/100*(.72+Math.sin(t*4)*.28*movement));
     }
+    if(speaking || energy>.0005 || (visibleRigs.length && !reduced.matches))requestTick();
   }
   document.addEventListener('pointermove',event => {lookX=clamp((event.clientX/innerWidth-.5)*100,-40,40);lookY=clamp((event.clientY/innerHeight-.5)*100,-30,30);},{passive:true});
   rigs = Array.from(document.querySelectorAll('.nhi-rig')).map(makeRig);
-  const visibility = new IntersectionObserver(entries=>entries.forEach(entry=>{const rig=rigs.find(r=>r.el===entry.target);if(rig)rig.visible=entry.isIntersecting;}));
+  const visibility = new IntersectionObserver(entries=>{entries.forEach(entry=>{const rig=rigs.find(r=>r.el===entry.target);if(rig)rig.visible=entry.isIntersecting;});requestTick();});
   rigs.forEach(r=>visibility.observe(r.el));
-  fetch(new URL('controls.json',base)).then(r=>r.json()).then(library=>{controls=library;requestAnimationFrame(tick);}).catch(()=>{
+  // React to state changes without continuously updating a hidden or static rig.
+  if(guide)new MutationObserver(requestTick).observe(guide,{attributes:true,attributeFilter:['class','data-expression','data-gesture','data-mount','data-slot']});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(tickFrame);tickFrame=0;}else{last=0;requestTick();}});
+  reduced.addEventListener('change',()=>{rigs.forEach(r=>r.reducedState='');last=0;requestTick();});coarse.addEventListener('change',()=>{last=0;requestTick();});
+  addEventListener('resize',()=>{last=0;requestTick();},{passive:true});
+  window.beeRigDiagnostics=()=>({profile:compactProfile()?'compact':'desktop',targetFps:compactProfile()?30:60,visibleRigs:rigs.filter(rigVisible).length,updateCount,energy,reducedMotion:reduced.matches});
+  fetch(new URL('controls.json',base)).then(r=>r.json()).then(library=>{controls=library;requestTick();}).catch(()=>{
     rigs.forEach(r=>r.el.innerHTML=`<img src="assets/modern/bee-nhi.webp" alt="Bee Nhi" style="width:100%;height:100%;object-fit:contain">`);
   });
   ['playing','pause','ended'].forEach(event=>audio?.addEventListener(event,()=>{
+    requestTick();
     intro?.classList.toggle('is-playing',!audio.paused && !audio.ended);
     intro?.setAttribute('aria-pressed',String(!audio.paused && !audio.ended));
   }));
