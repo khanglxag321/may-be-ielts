@@ -1,0 +1,125 @@
+/* Confirmed audit fixes. Original fonts, brand palette and mascot artwork are retained. */
+:root {
+  --quality-focus-light: #1A2B6B;
+  --quality-focus-dark: #FFD84D;
+  --quality-field-edge: #6B7391;
+  --quality-trial-blue: #2457D8;
+  --quality-trial-pink: #B23B6A;
+  --quality-trial-green: #146D58;
+  --quality-copy: #58617E;
+  --quality-copy-strong: #334263;
+  --quality-warranty-blue: #1A4CB8;
+  --quality-status-amber: #795C0B;
+  --quality-status-red: #A32935;
+  --quality-focus: var(--quality-focus-light);
+}
+
+#hero, #halloffame, #how-it-works, footer {
+  --quality-focus: var(--quality-focus-dark);
+}
+
+body :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--quality-focus);
+  outline-offset: 4px;
+}
+
+/* Dialogs and the flying guide have their own light surfaces above the page. */
+dialog, .bee-guide, .recording-player, .recording-conversion {
+  --quality-focus: var(--quality-focus-light);
+}
+.bee-guide :is(a, button):focus-visible {
+  box-shadow: 0 0 0 3px #fff;
+  outline-offset: 3px;
+}
+
+.form-control, .schedule-filter-select {
+  border-color: var(--quality-field-edge);
+}
+.form-control:focus-visible, .schedule-filter-select:focus-visible {
+  border-color: var(--quality-focus-light);
+  outline: 3px solid var(--quality-focus-light);
+  outline-offset: 3px;
+}
+
+#features .feature-card:nth-child(4) h3 span {
+  color: var(--quality-warranty-blue);
+}
+:is(#features, #recordings, #lecturers, #schedule, #faq, #register) .section-heading .eyebrow {
+  color: var(--quality-trial-blue);
+}
+:is(#features, #recordings, #lecturers, #schedule, #faq, #register) .section-subtitle {
+  color: var(--quality-copy);
+}
+#recordings .teacher-recording-card button {
+  background: var(--quality-trial-blue);
+  color: #fff;
+}
+#recordings .teacher-recording-card:nth-child(2) button {
+  background: var(--quality-trial-pink);
+}
+#recordings .teacher-recording-card:nth-child(3) button {
+  background: var(--quality-trial-green);
+}
+.lecturer-row[data-bee-teacher="bach"] {
+  --quality-teacher-ink: var(--quality-trial-blue);
+}
+.lecturer-row[data-bee-teacher="nhi"] {
+  --quality-teacher-ink: var(--quality-trial-pink);
+}
+.lecturer-row[data-bee-teacher="khang"] {
+  --quality-teacher-ink: var(--quality-trial-green);
+}
+.lecturer-row :is(.lecturer-badge, .lecturer-score, .social-links a, .lecturer-conversion-link) {
+  color: var(--quality-teacher-ink);
+}
+#lecturers .section-heading .eyebrow {
+  color: var(--quality-warranty-blue);
+}
+#lecturers .section-heading .section-subtitle {
+  color: var(--quality-copy-strong);
+}
+.lecturer-row :is(.lecturer-desc, .lecturer-slot-note),
+#schedule .tuition-trigger-label {
+  color: var(--quality-copy);
+}
+#schedule .tuition-trigger-link {
+  color: var(--quality-trial-blue);
+}
+#schedule .status-badge.ok {
+  color: var(--quality-trial-green);
+}
+#schedule .status-badge.low {
+  color: var(--quality-status-amber);
+}
+#schedule .status-badge.full {
+  color: var(--quality-status-red);
+}
+#schedule .speaking-brand {
+  color: var(--quality-trial-blue);
+}
+#schedule .speaking-teacher {
+  color: var(--quality-copy);
+}
+
+/* A readable badge wraps below the name when a card has insufficient room. */
+.mentor-header {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.mentor-name {
+  flex: 1 1 180px;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 2.5em;
+}
+.mentor-role {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--maybe-navy, #0F1B4C);
+  max-width: 100%;
+  white-space: nowrap;
+}
+@media (max-width: 460px) {
+  .mentor-name { min-height: 0; }
+}
