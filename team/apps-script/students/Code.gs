@@ -102,7 +102,7 @@ function doPost(event) {
   try {
     if (!event || !event.postData || !event.postData.contents) throw new Error('Không nhận được dữ liệu.');
     const body = JSON.parse(event.postData.contents);
-    const user = verifyTeamUser_(body.idToken);
+    const user = verifyTeamRequest_(body);
     const action = String(body.action || '');
     const payload = typeof body.payload === 'undefined' ? null : body.payload;
     let result;
@@ -121,7 +121,7 @@ function doPost(event) {
 
     return jsonResponse_({ ok: true, data: result });
   } catch (error) {
-    return jsonResponse_({ ok: false, error: error.message || String(error) });
+    return jsonResponse_({ ok: false, error: error.message || String(error), code: error.code || '' });
   }
 }
 
@@ -782,27 +782,124 @@ function listActiveTeamUsers_() {
 }
 
 function verifyTeamUser_(idToken) {
-  if (!idToken) throw new Error('Bạn cần đăng nhập lại bằng Google.');
+  if (!idToken) throw authError_('Bạn cần đăng nhập lại bằng Google.');
   const expectedClientId = PropertiesService.getScriptProperties().getProperty(APP_CONFIG.GOOGLE_CLIENT_ID_KEY);
   if (!expectedClientId) throw new Error('Chưa đặt Script Property ' + APP_CONFIG.GOOGLE_CLIENT_ID_KEY + '.');
   const response = UrlFetchApp.fetch(
     'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(String(idToken)),
     { muteHttpExceptions: true }
   );
-  if (response.getResponseCode() !== 200) throw new Error('Phiên đăng nhập Google không hợp lệ hoặc đã hết hạn.');
+  if (response.getResponseCode() !== 200) throw authError_('Phiên đăng nhập Google không hợp lệ hoặc đã hết hạn.');
   const claims = JSON.parse(response.getContentText());
   if (['accounts.google.com', 'https://accounts.google.com'].indexOf(claims.iss) === -1) {
     throw new Error('Nhà phát hành phiên đăng nhập Google không hợp lệ.');
   }
   if (claims.aud !== expectedClientId) throw new Error('Phiên đăng nhập không thuộc ứng dụng này.');
   if (String(claims.email_verified) !== 'true') throw new Error('Email Google chưa được xác minh.');
-  if (Number(claims.exp || 0) * 1000 <= Date.now()) throw new Error('Phiên đăng nhập đã hết hạn.');
+  if (!Number.isFinite(Number(claims.exp)) || Number(claims.exp || 0) * 1000 <= Date.now()) throw authError_('Phiên đăng nhập đã hết hạn.');
   const user = findActiveTeamUser_(claims.email);
-  if (!user) throw new Error('Tài khoản này chưa được cấp quyền hoặc đã bị khóa.');
+  if (!user) throw authError_('Tài khoản này chưa được cấp quyền hoặc đã bị khóa.', 'AUTH_FORBIDDEN');
   return user;
 }
 
 function jsonResponse_(payload) {
   return ContentService.createTextOutput(JSON.stringify(payload))
     .setMimeType(ContentService.MimeType.JSON);
+}
+/**
+ * Thirty-day application sessions shared by the two backends through the
+ * existing Users spreadsheet. Only SHA-256 digests are stored, never bearer
+ * tokens. Role/active status always comes from Users at request time.
+ */
+const TEAM_SESSION_SHEET = 'TeamSessions';
+const TEAM_SESSION_HEADERS = ['TokenHash', 'Email', 'CreatedAt', 'ExpiresAt', 'RevokedAt'];
+const TEAM_SESSION_LIFETIME_MS = 30 * 24 * 60 * 60 * 1000;
+
+function authError_(message, code) {
+  const error = new Error(message);
+  error.code = code || 'AUTH_REQUIRED';
+  return error;
+}
+
+function teamSessionHash_(token) {
+  if (!/^[a-f0-9]{64}$/.test(String(token || ''))) {
+    throw authError_('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
+  }
+  return Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, token, Utilities.Charset.UTF_8)
+    .map(function (byte) { return ('0' + (byte & 255).toString(16)).slice(-2); }).join('');
+}
+
+function teamSessionsSheet_(create) {
+  const spreadsheet = getTeamUsersSheet_().getParent();
+  let sheet = spreadsheet.getSheetByName(TEAM_SESSION_SHEET);
+  if (!sheet && create) {
+    sheet = spreadsheet.insertSheet(TEAM_SESSION_SHEET);
+    sheet.getRange(1, 1, 1, TEAM_SESSION_HEADERS.length).setValues([TEAM_SESSION_HEADERS]);
+    sheet.setFrozenRows(1);
+    sheet.hideSheet();
+    // Match the private Users spreadsheet's existing access. Hiding is only UI
+    // hygiene; server verification and the bearer digest enforce authentication.
+  }
+  if (sheet) {
+    const headers = sheet.getRange(1, 1, 1, TEAM_SESSION_HEADERS.length).getDisplayValues()[0];
+    if (headers.join('|') !== TEAM_SESSION_HEADERS.join('|')) throw new Error('Tab TeamSessions có tiêu đề khác. Không tự ghi đè.');
+  }
+  return sheet;
+}
+
+function findTeamSession_(token) {
+  const hash = teamSessionHash_(token);
+  const sheet = teamSessionsSheet_(false);
+  if (!sheet || sheet.getLastRow() < 2) throw authError_('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+  const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, TEAM_SESSION_HEADERS.length).getValues();
+  const index = rows.findIndex(function (row) { return String(row[0]) === hash; });
+  if (index === -1 || rows[index][4] || !Number.isFinite(Number(rows[index][3])) || Number(rows[index][3]) <= Date.now()) {
+    throw authError_('Phiên đăng nhập đã hết hạn hoặc đã đăng xuất. Vui lòng đăng nhập lại.');
+  }
+  return { sheet: sheet, row: index + 2, email: String(rows[index][1]), expiresAt: Number(rows[index][3]) };
+}
+
+function verifyTeamRequest_(payload) {
+  if (!payload.sessionToken) return verifyTeamUser_(payload.idToken);
+  const session = findTeamSession_(payload.sessionToken);
+  const user = findActiveTeamUser_(session.email);
+  if (!user) throw authError_('Tài khoản này chưa được cấp quyền hoặc đã bị khóa.', 'AUTH_FORBIDDEN');
+  return user;
+}
+
+function createTeamSession_(user) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = teamSessionsSheet_(true);
+    const now = Date.now();
+    // Bound stored history without ever touching business data.
+    if (sheet.getLastRow() > 1) {
+      const rows = sheet.getRange(2, 1, sheet.getLastRow() - 1, TEAM_SESSION_HEADERS.length).getValues();
+      for (let i = rows.length - 1; i >= 0; i--) {
+        if (rows[i][4] || Number(rows[i][3]) <= now) sheet.deleteRow(i + 2);
+      }
+    }
+    const token = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, '').toLowerCase();
+    const expiresAt = now + TEAM_SESSION_LIFETIME_MS;
+    sheet.getRange(sheet.getLastRow() + 1, 1, 1, TEAM_SESSION_HEADERS.length)
+      .setValues([[teamSessionHash_(token), user.email, now, expiresAt, '']]);
+    return { token: token, expiresAt: expiresAt };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function revokeTeamSession_(token) {
+  if (!token) return;
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const session = findTeamSession_(token);
+    session.sheet.getRange(session.row, 5).setValue(Date.now());
+  } catch (error) {
+    if (error.code !== 'AUTH_REQUIRED') throw error;
+  } finally {
+    lock.releaseLock();
+  }
 }

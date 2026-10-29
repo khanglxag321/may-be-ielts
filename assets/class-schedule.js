@@ -1,18 +1,20 @@
 (function (root) {
   'use strict';
   const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  const numbers = {bach:[1], nhi:[2,3,4,5], khang:[6,7,8,9]};
+  // Keep existing class numbers stable while allowing six teaching tracks.
+  const numbers = {bach:[1,12,13,14,15,16], nhi:[2,3,4,5,10,11], khang:[6,7,8,9,17,18]};
+  const speakingNumbers = [0,2,3,4,5,6];
   function parse(code) {
-    const match = String(code || '').trim().match(/^MB(Write(\d{2})(\+)?|Speak)\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(\d{2})$/i);
+    const match = String(code || '').trim().match(/^MB(Write(\d{2})(\+)?|Speak(\d{2})?)\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(\d{2})$/i);
     if (!match) return null;
-    return {program:/^Speak$/i.test(match[1])?'speak':'write', number:Number(match[2] || 0), plus:!!match[3], month:`20${match[5]}-${String(months.indexOf(match[4].toUpperCase())+1).padStart(2,'0')}`};
+    return {program:/^Speak/i.test(match[1])?'speak':'write', number:Number(match[2] || match[4] || 0), plus:!!match[3], month:`20${match[6]}-${String(months.indexOf(match[5].toUpperCase())+1).padStart(2,'0')}`};
   }
   function make(teacher, program, number, month) {
     if (!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month || '')) return '';
-    if (program === 'speak' && teacher !== 'bach') return '';
+    if (program === 'speak' && (teacher !== 'bach' || !speakingNumbers.includes(Number(number)))) return '';
     if (program !== 'speak' && !numbers[teacher]?.includes(Number(number))) return '';
     const suffix = months[Number(month.slice(5))-1].toLowerCase() + month.slice(2,4);
-    return program === 'speak' ? `MBSpeak ${suffix}` : `MBWrite${String(number).padStart(2,'0')}${teacher==='bach'?'+':''} ${suffix}`;
+    return program === 'speak' ? `MBSpeak${Number(number)?String(number).padStart(2,'0'):''} ${suffix}` : `MBWrite${String(number).padStart(2,'0')}${teacher==='bach'?'+':''} ${suffix}`;
   }
   function validate(teacher, program, code) {
     if (program === 'speak' && teacher !== 'bach') return 'Lớp Speaking chỉ do thầy Hồ Bách phụ trách.';
@@ -58,13 +60,114 @@
   }
   function nextLesson(end,days) {
     const day=new Date(end+'T00:00:00Z');
-    if(!Number.isFinite(day.getTime())||!days.length)return '';
-    do {day.setUTCDate(day.getUTCDate()+1);}while(!days.includes(day.getUTCDay()));
+    const validDays=normalizedDays(days);
+    if(!Number.isFinite(day.getTime())||!validDays.length)return '';
+    do {day.setUTCDate(day.getUTCDate()+1);}while(!validDays.includes(day.getUTCDay()));
     return day.toISOString().slice(0,10);
   }
   function lessonEnd(start,days,count) {
+    if(!Number.isFinite(Number(count))||Number(count)<1||!normalizedDays(days).length)return '';
     let result=start;
     for(let i=1;i<count;i++)result=nextLesson(result,days);
+    return result;
+  }
+  function normalizedDays(days) {return [...new Set((Array.isArray(days)?days:[]).map(Number).filter(day=>Number.isInteger(day)&&day>=0&&day<=6))].sort((a,b)=>a-b);}
+  function timeRange(time) {
+    const match=String(time||'').trim().match(/^(\d{1,2})(?::(\d{2}))?\s*[–—-]\s*(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+    if(!match)return null;
+    const period=String(match[5]||'').toUpperCase();
+    const minutes=(hour,minute)=>{let value=Number(hour);if(period)value=value%12+(period==='PM'?12:0);return value*60+Number(minute||0);};
+    const result=[minutes(match[1],match[2]),minutes(match[3],match[4])];
+    return result[0]>=0&&result[1]<=1440&&result[0]<result[1]?result:null;
+  }
+  function sameSlot(a,b) {
+    const left=timeRange(a.time),right=timeRange(b.time);
+    return normalizedDays(a.days).join(',')===normalizedDays(b.days).join(',')&&
+      (left&&right?left[0]===right[0]&&left[1]===right[1]:a.time===b.time);
+  }
+  function slotsOverlap(a,b) {
+    if(!normalizedDays(a.days).some(day=>normalizedDays(b.days).includes(day)))return false;
+    const left=timeRange(a.time),right=timeRange(b.time);
+    // An unrecognized time cannot safely be treated as a free teaching window.
+    return !left||!right||left[0]<right[1]&&right[0]<left[1];
+  }
+  function itemsOverlap(a,b) {return a.teacher===b.teacher&&a.start<=b.end&&a.end>=b.start&&slotsOverlap(a,b);}
+  function firstLessonOnOrAfter(iso,days) {
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(iso||'')||!normalizedDays(days).length)return '';
+    const previous=new Date(iso+'T00:00:00Z');
+    previous.setUTCDate(previous.getUTCDate()-1);
+    return nextLesson(previous.toISOString().slice(0,10),normalizedDays(days));
+  }
+  function slotLabel(slot) {return `${slot.dayLabel||normalizedDays(slot.days).map(day=>day===0?'Chủ nhật':`Thứ ${day+1}`).join('+')} · ${slot.time}`;}
+  function slotCovered(items,slot,from,to) {
+    for(let lesson=firstLessonOnOrAfter(from,slot.days);lesson&&lesson<=to;lesson=nextLesson(lesson,slot.days)) {
+      if(!items.some(item=>sameSlot(item,slot)&&item.start<=lesson&&item.end>=lesson))return false;
+    }
+    return true;
+  }
+  function monthlyPlan(items,teacherId,month,buffer=2,today='') {
+    const target=6,result={teacher:teacherId,month,target,existingCount:0,existingCoveredCount:0,coveredCount:0,plannedCount:0,candidates:[],slots:[],unmet:[],targetReached:false};
+    if(!numbers[teacherId]||!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month||'')) {
+      result.unmet.push('Hãy chọn giáo viên và tháng hợp lệ.');return result;
+    }
+    const monthStart=month+'-01',monthEnd=new Date(Date.UTC(Number(month.slice(0,4)),Number(month.slice(5)),0)).toISOString().slice(0,10);
+    const floor=today&&today>monthStart?today:monthStart;
+    if(floor>monthEnd){result.unmet.push('Tháng đã qua; không tự tạo lớp có ngày khai giảng trong quá khứ.');return result;}
+    const bufferSessions=Math.min(3,Math.max(2,Math.trunc(Number(buffer)||2)));
+    const records=items.filter(item=>item.teacher===teacherId&&item.start&&item.end&&item.start<=item.end&&normalizedDays(item.days).length);
+    const active=records.filter(item=>item.start<=monthEnd&&item.end>=floor);
+    const slots=[];
+    const addSlot=item=>{
+      if(slots.length>=target||!timeRange(item.time)||!allowedSlot(teacherId,normalizedDays(item.days),item.time))return;
+      const slot={days:normalizedDays(item.days),time:item.time,program:item.program==='speak'&&teacherId==='bach'?'speak':'write',dayLabel:item.dayLabel,suggestedSlot:teacherId!=='khang'&&!item.code};
+      if(slots.some(other=>slotsOverlap(slot,other)))return;
+      if(!slot.dayLabel)slot.dayLabel=slot.days.map(day=>day===0?'Chủ nhật':`Thứ ${day+1}`).join('+');
+      slots.push(slot);
+    };
+    if(teacherId==='khang')fixedKhangSlots.forEach(addSlot);
+    else {
+      // Prefer the teacher's real timetable before suggesting any vacant frame.
+      [...active].sort((a,b)=>b.start.localeCompare(a.start)).forEach(addSlot);
+      [...records].sort((a,b)=>b.end.localeCompare(a.end)).forEach(addSlot);
+      fixedKhangSlots.forEach(addSlot);
+      ['2–4PM','4–6PM','6–8PM','8–10PM'].forEach(time=>[[1,4],[2,5],[3,6]].forEach(days=>addSlot({days,time})));
+    }
+    const used=new Set(records.map(item=>normalizeCode(item.code).toLowerCase()));
+    const combined=[...records];
+    for(const slot of slots) {
+      const matching=records.filter(item=>sameSlot(item,slot));
+      const slotResult={...slot,existing:matching.filter(item=>item.start<=monthEnd&&item.end>=floor),existingCovered:slotCovered(records,slot,floor,monthEnd),candidates:[],covered:false};
+      result.slots.push(slotResult);
+      if(slotResult.existing.length)result.existingCount++;
+      if(slotResult.existingCovered)result.existingCoveredCount++;
+      let cursor=firstLessonOnOrAfter(floor,slot.days),attempts=0;
+      while(cursor&&cursor<=monthEnd&&attempts++<40) {
+        const current=combined.filter(item=>sameSlot(item,slot)&&item.start<=cursor&&item.end>=cursor).sort((a,b)=>b.end.localeCompare(a.end))[0];
+        if(current){cursor=nextLesson(current.end,slot.days);continue;}
+        const source=[...matching].filter(item=>item.end<cursor).sort((a,b)=>b.end.localeCompare(a.end))[0]||null;
+        const program=source?.program==='speak'&&teacherId==='bach'?'speak':slot.program;
+        const requestedSessions=Number(source?.sessions),sessions=Number.isFinite(requestedSessions)&&requestedSessions>0?Math.trunc(requestedSessions):(program==='speak'?6:15);
+        const candidate={teacher:teacherId,program,days:[...slot.days],dayLabel:slot.dayLabel,time:slot.time,sessions,bufferSessions,start:cursor,end:lessonEnd(cursor,slot.days,sessions+bufferSessions),students:0,capacity:teacherId==='khang'?15:20,source,suggestedSlot:slot.suggestedSlot,reason:source&&nextLesson(source.end,slot.days)===cursor?'successor':'vacant',fullFee:source?.fullFee||(program==='speak'?'5.000.000':'6.000.000'),promoFee:source?.promoFee||(program==='speak'?'3.500.000':'5.000.000')};
+        const conflict=combined.filter(other=>itemsOverlap(candidate,other)).sort((a,b)=>a.start.localeCompare(b.start))[0];
+        if(conflict) {
+          result.unmet.push(`${slotLabel(slot)}: khoảng trống từ ${cursor} không đủ ${sessions+bufferSessions} buổi trước lớp ${normalizeCode(conflict.code)} (${conflict.start}–${conflict.end}).`);
+          cursor=nextLesson(conflict.end,slot.days);continue;
+        }
+        const pool=program==='speak'?speakingNumbers:numbers[teacherId],old=parse(source?.code);
+        const preferred=old&&old.program===program&&pool.includes(old.number)?old.number:pool[0];
+        const code=[preferred,...pool.filter(number=>number!==preferred)].map(number=>make(teacherId,program,number,month)).find(value=>value&&!used.has(value.toLowerCase()));
+        if(!code){result.unmet.push(`${slotLabel(slot)}: đã dùng hết mã lớp ${program==='speak'?'Speaking':'Writing'} của đợt ${month}.`);break;}
+        candidate.code=code;used.add(code.toLowerCase());combined.push(candidate);result.candidates.push(candidate);slotResult.candidates.push(candidate);
+        cursor=nextLesson(candidate.end,slot.days);
+      }
+      // Count tracks, not the number of old/new cohorts touching the month.
+      slotResult.covered=slotCovered(combined,slot,floor,monthEnd);
+      if(slotResult.covered)result.coveredCount++;
+    }
+    if(slots.length<target)result.unmet.push(`Chỉ tìm được ${slots.length}/${target} khung giờ phù hợp; hãy bổ sung khung giờ dạy.`);
+    result.candidates.sort((a,b)=>a.start.localeCompare(b.start)||a.time.localeCompare(b.time)||a.days.join(',').localeCompare(b.days.join(',')));
+    result.plannedCount=result.candidates.length;
+    result.targetReached=result.coveredCount===target;
     return result;
   }
   function continuationCandidates(items,teacherId,month,buffer=2,today='') {
@@ -72,8 +175,7 @@
       const start=nextLesson(source.end,source.days);
       return {source,start,end:lessonEnd(start,source.days,source.sessions+buffer)};
     }).filter(item=>item.start.startsWith(month)&&(!today||item.start>=today)).filter(candidate=>
-      !items.some(other=>other!==candidate.source&&other.teacher===teacherId&&other.time===candidate.source.time&&
-        other.days.some(day=>candidate.source.days.includes(day))&&other.start<=candidate.end&&other.end>=candidate.start)
+      !items.some(other=>other!==candidate.source&&itemsOverlap({...candidate.source,start:candidate.start,end:candidate.end},other))
     ).sort((a,b)=>a.start.localeCompare(b.start)||a.source.time.localeCompare(b.source.time));
     // One successor per fixed teaching slot; existing future classes count as occupied.
     const seen=new Set();
@@ -92,7 +194,7 @@
     if(!iso)return escapeHtml(value)||'—';
     return `<time class="schedule-date" datetime="${iso}">${iso.slice(8)}.${iso.slice(5,7)}<span class="date-year">${iso.slice(0,4)}</span></time>`;
   }
-  const api={months,numbers,parse,make,validate,teacher,date,cohort,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,continuationCandidates,normalizeCode,codeMarkup,dateMarkup};
+  const api={months,numbers,speakingNumbers,parse,make,validate,teacher,date,cohort,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,monthlyPlan,timeRange,sameSlot,slotsOverlap,itemsOverlap,continuationCandidates,normalizeCode,codeMarkup,dateMarkup};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.MaybeSchedule=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

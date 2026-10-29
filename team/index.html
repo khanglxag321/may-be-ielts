@@ -34,6 +34,9 @@
     .login-card h2 { margin:0; color:var(--maybe-navy); font:700 1.55rem/1.15 "Space Grotesk",sans-serif; letter-spacing:-.04em; }
     .login-card p { margin:10px 0 24px; color:var(--maybe-muted); font-size:.92rem; }
     #googleButton { min-height:44px; }
+    .login-progress { display:none; margin:14px 0 0!important; color:var(--maybe-blue)!important; font-size:.84rem!important; }
+    .login-progress.show { display:block; }
+    .login-card[aria-busy="true"] #googleButton { pointer-events:none; opacity:.65; }
     .login-error { display:none; margin:16px 0 0!important; padding:11px 13px; border:1px solid #ffc6c0; border-radius:12px; color:#9d2c20!important; background:#fff2f0; font-size:.8rem!important; }
     .login-error.show { display:block; }
     .setup-note { display:none; margin-top:16px; padding:13px 14px; border:1px solid var(--maybe-line); border-radius:14px; color:var(--maybe-muted); background:var(--maybe-cloud); font-size:.79rem; }
@@ -67,7 +70,7 @@
     @media(max-width:520px){.portal-shell{width:min(100% - 26px,1160px)}.portal-status{display:none}.login-layout{padding-top:38px}.login-card{padding:25px;border-radius:24px}.dashboard-head{padding-top:42px}.tool-card{min-height:330px;padding:23px;border-radius:24px}.tool-icon{margin:35px 0 28px}}
   </style>
   <script src="config.js"></script>
-  <script src="auth.js?v=20261001b"></script>
+  <script src="auth.js?v=20261029a"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body class="maybe-internal">
@@ -89,7 +92,8 @@
         <h2 id="loginTitle">Đăng nhập nội bộ</h2>
         <p>Chỉ tài khoản có trong danh sách của team mới truy cập được.</p>
         <div id="googleButton"></div>
-        <p>Thiết bị này sẽ ghi nhớ tài khoản của bạn. Nếu dùng máy chung, hãy đăng xuất sau khi sử dụng.</p>
+        <p id="loginProgress" class="login-progress" role="status" aria-live="polite"></p>
+        <p>Ghi nhớ đăng nhập trên thiết bị này trong 30 ngày. Nếu dùng máy chung, hãy đăng xuất sau khi sử dụng.</p>
         <p id="loginError" class="login-error" role="alert"></p>
         <div id="setupNote" class="setup-note">Chưa cấu hình Google OAuth Client ID. Mở <strong>config.js</strong> và làm theo bốn bước ở đầu file.</div>
         <div id="demoArea" class="demo-area">
@@ -132,6 +136,14 @@
       const loginView = document.getElementById("loginView");
       const dashboardView = document.getElementById("dashboardView");
       const errorBox = document.getElementById("loginError");
+      const progress = document.getElementById("loginProgress");
+      const loginCard = document.querySelector('.login-card');
+      let verifying = false;
+
+      function showProgress(message) {
+        progress.textContent = message;
+        progress.classList.toggle('show', Boolean(message));
+      }
 
       function initials(name) {
         return String(name || "M").trim().split(/\s+/).slice(-2).map(part => part[0]).join("").toUpperCase();
@@ -164,8 +176,14 @@
       }
 
       window.handleGoogleCredential = async function (response) {
+        if (verifying) return;
+        verifying = true;
+        errorBox.classList.remove('show');
+        loginCard.setAttribute('aria-busy', 'true');
+        showProgress('Đang xác nhận tài khoản và lưu phiên đăng nhập…');
         try { showDashboard(await MaybeTeamAuth.createSession(response.credential)); }
-        catch (error) { showError(error.message); }
+        catch (error) { showProgress(''); showError(error.message); }
+        finally { verifying = false; loginCard.removeAttribute('aria-busy'); }
       };
 
       const existing = MaybeTeamAuth.getSession();
@@ -189,10 +207,11 @@
           client_id: window.MAYBE_TEAM_CONFIG.googleClientId,
           callback: handleGoogleCredential,
           auto_select: Boolean(loginHint),
+          use_fedcm_for_button: true,
           button_auto_select: Boolean(loginHint),
           ...(loginHint ? { login_hint: loginHint } : {})
         });
-        google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large", shape: "pill", text: "continue_with", width: 280 });
+        google.accounts.id.renderButton(document.getElementById("googleButton"), { theme: "outline", size: "large", shape: "pill", text: "continue_with", width: 280, click_listener: () => showProgress('Đang mở tài khoản Google…') });
         // Google obtains a fresh ID token; the backend still verifies every login.
         // Keep the normal button available if automatic sign-in is not permitted.
         if (loginHint) google.accounts.id.prompt();

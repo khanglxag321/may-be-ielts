@@ -40,7 +40,7 @@ Thao tác trong Apps Script đang kết nối với Google Sheet lịch hiện c
    - Who has access: **Anyone**.
 8. Bấm **Deploy**. Nếu Google giữ nguyên URL `/exec`, không cần sửa `scheduleApiUrl` trong `config.js`. Nếu URL thay đổi, dán URL mới vào `config.js`.
 
-`doGet` của backend lịch vẫn cho website chính đọc lịch công khai. Mọi thao tác ghi phải có Google ID token hợp lệ và được kiểm tra theo tab `Users`.
+`doGet` của backend lịch vẫn cho website chính đọc lịch công khai. Mọi thao tác ghi phải có Google ID token hợp lệ hoặc phiên ứng dụng còn hiệu lực và được kiểm tra theo tab `Users`.
 
 ## C. Nâng cấp Apps Script học viên
 
@@ -72,6 +72,12 @@ Giáo viên không cần được chia sẻ Google Sheet học viên. Apps Scrip
 5. Mở website, đăng nhập từng tài khoản và kiểm tra theo mục F.
 
 Ba trang `index.html`, `admin.html`, `students.html` phải nằm cùng một origin để dùng chung phiên đăng nhập trong tab trình duyệt.
+
+### Nâng cấp phiên đăng nhập 30 ngày (29/10/2026)
+
+Triển khai **cả hai** file `apps-script/*/Code.gs` thành phiên bản mới trước khi đưa frontend mới lên GitHub Pages. Giữ nguyên các Script Property và URL `/exec`. Lần đăng nhập Google tiếp theo sẽ tự tạo tab ẩn `TeamSessions` trong Sheet phân quyền, không cần chạy lại `setupTeamAccess` hoặc `setupApp`. Hai backend phải trỏ cùng `MAYBE_USERS_SPREADSHEET_ID` như hiện tại. Không chia sẻ thêm Sheet phân quyền và không xuất dữ liệu `TeamSessions` qua API công khai.
+
+Phiên có thời hạn cố định 30 ngày; token ngẫu nhiên chỉ ở trình duyệt, máy chủ giữ SHA-256. Đăng xuất gửi `AUTH_LOGOUT` để thu hồi phiên của thiết bị. Muốn khóa toàn bộ thiết bị của một người, đặt `HoatDong=FALSE` trong `Users`; mỗi yêu cầu đều kiểm tra lại quyền hiện tại. Giữ tab `TeamSessions` để phiên không bị mất; xóa một dòng phiên sẽ thu hồi phiên đó. Dòng hết hạn/đã thu hồi được dọn khi tạo phiên mới, không đụng đến lớp hoặc học viên.
 
 ## E. Quản lý tài khoản sau này
 

@@ -3,6 +3,9 @@
 
   const STORAGE_KEY = "maybe_team_google_session_v1";
   const REMEMBER_KEY = "maybe_team_remembered_account_v1";
+  let sessionGeneration = 0;
+  let legacyMigration = null;
+  let migrationAttemptedFor = "";
 
   // Storage can be blocked (private browsing, device policy, full quota).
   function readStore(store, key) {
@@ -63,7 +66,8 @@
     }
   }
 
-  async function createSession(credential) {
+  async function createSession(credential, migratingCredential = "") {
+    const generation = sessionGeneration;
     const claims = decodeCredential(credential);
     const expectedAudience = config().googleClientId;
     const now = Math.floor(Date.now() / 1000);
@@ -72,7 +76,7 @@
     }
     const response = await fetch(config().scheduleApiUrl, {
       method: "POST",
-      body: JSON.stringify({ action: "AUTH_ME", idToken: credential })
+      body: JSON.stringify({ action: "AUTH_ME", idToken: credential, rememberSession: true })
     });
     if (!response.ok) throw new Error("Không kết nối được hệ thống phân quyền.");
     const result = await response.json();
@@ -84,15 +88,26 @@
       throw new Error("Thông tin tài khoản từ máy chủ không khớp.");
     }
     const session = {
-      credential,
+      credential: result.session?.token ? "" : credential,
+      sessionToken: result.session?.token || "",
       email: claims.email.toLowerCase(),
       picture: claims.picture || "",
       name: profile.name || claims.name || claims.email,
       role: profile.role === "manager" ? "manager" : "teacher",
       teacherId: profile.teacherId || "",
-      expiresAt: claims.exp * 1000,
+      expiresAt: result.session?.token ? Number(result.session.expiresAt) : claims.exp * 1000,
       demo: false
     };
+    // A delayed migration must never restore a session after logout or replace
+    // an account/session changed by another tab while the request was in flight.
+    const latest = migratingCredential ? getSession() : null;
+    if (generation !== sessionGeneration || migratingCredential && latest?.credential !== migratingCredential) {
+      if (result.session?.token) revokeSessionToken(result.session.token);
+      if (generation === sessionGeneration && latest?.sessionToken && latest.email === session.email) return latest;
+      throw new Error('AUTH_CANCELLED');
+    }
+    // Keep the Google account hint before discarding its short-lived ID token.
+    rememberAccount({ credential });
     saveSession(session);
     return session;
   }
@@ -104,18 +119,19 @@
       if (!session) continue;
       const expiresAt = Number(session.expiresAt);
       const claims = decodeCredential(session.credential);
+      const durable = !session.demo && /^[a-f0-9]{64}$/.test(session.sessionToken || "");
       const validAccount = session.demo
         ? store === "sessionStorage" && isLocalPreview()
-        : claims && claims.aud === config().googleClientId && claims.email_verified === true &&
+        : durable || claims && claims.aud === config().googleClientId && claims.email_verified === true &&
           String(claims.email || "").toLowerCase() === session.email && Number.isFinite(claims.exp);
       if (validAccount && !session.demo) rememberAccount(session);
       if (!session.email || !validAccount || !Number.isFinite(expiresAt) || expiresAt <= Date.now() ||
-          (!session.demo && claims.exp * 1000 <= Date.now())) {
+          (!session.demo && !durable && claims.exp * 1000 <= Date.now())) {
         removeStore(store, STORAGE_KEY);
         continue;
       }
       if (!session.demo && store === "sessionStorage") saveSession(session);
-      if (!session.demo) session.picture = claims.picture || session.picture || "";
+      if (!session.demo && claims) session.picture = claims.picture || session.picture || "";
       return session;
     }
     return null;
@@ -142,7 +158,18 @@
     return session;
   }
 
+  function revokeSessionToken(sessionToken) {
+    // keepalive lets the server revoke this device's token across navigation.
+    fetch(config().scheduleApiUrl, {
+        method: "POST", keepalive: true,
+        body: JSON.stringify({ action: "AUTH_LOGOUT", sessionToken })
+    }).catch(() => {});
+  }
+
   function logout(returnTo) {
+    sessionGeneration++;
+    const current = getSession();
+    if (current?.sessionToken) revokeSessionToken(current.sessionToken);
     removeStore("sessionStorage", STORAGE_KEY);
     removeStore("localStorage", STORAGE_KEY);
     removeStore("localStorage", REMEMBER_KEY);
@@ -161,6 +188,28 @@
   }
 
   let renewal = null;
+  function authPayload(session) {
+    if (!session || session.demo) throw new Error('Chế độ xem thử không được phép truy cập Google Sheet thật.');
+    return session.sessionToken ? { sessionToken: session.sessionToken } : { idToken: session.credential };
+  }
+
+  async function request(url, payload, expectedEmail) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const session = await ensureSession();
+      if (expectedEmail && session.email !== expectedEmail) throw new Error('Tài khoản đã thay đổi. Hãy tải lại trang trước khi tiếp tục.');
+      const body = JSON.stringify({ ...payload, ...authPayload(session) });
+      const response = await fetch(url, { method: 'POST', redirect: 'follow', body,
+        keepalive: new Blob([body]).size <= 60000 });
+      if (!response.ok) throw new Error('Không kết nối được Google Apps Script (HTTP ' + response.status + ').');
+      const result = await response.json();
+      if (result.code === 'AUTH_REQUIRED') {
+        removeStore('localStorage', STORAGE_KEY);
+        removeStore('sessionStorage', STORAGE_KEY);
+        if (attempt === 0) continue;
+      }
+      return result;
+    }
+  }
   function avatarMarkup(session) {
     const initials = String(session.name || 'M').trim().split(/\s+/).slice(-2).map(part => part[0]).join('').toUpperCase();
     const escape = text => String(text).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
@@ -171,7 +220,20 @@
 
   async function ensureSession() {
     const current = getSession();
-    if (current) return current;
+    if (current) {
+      if (current.demo || current.sessionToken) return current;
+      if (legacyMigration) return legacyMigration;
+      if (migrationAttemptedFor === current.credential) return current;
+      migrationAttemptedFor = current.credential;
+      // Exchange the still-valid stored Google token once. This migration needs
+      // no Google prompt and later visits use the saved 30-day session directly.
+      legacyMigration = createSession(current.credential, current.credential).catch(error => {
+        const latest = getSession();
+        if (latest?.email === current.email) return latest;
+        throw error;
+      }).finally(() => { legacyMigration = null; });
+      return legacyMigration;
+    }
     if (!getLoginHint()) return requireSession();
     if (renewal) return renewal;
     // A stored Google token cannot be extended. Obtain and verify a fresh one,
@@ -193,16 +255,21 @@
           client_id: config().googleClientId,
           login_hint: getLoginHint(),
           auto_select: true,
+          use_fedcm_for_button: true,
           button_auto_select: true,
           callback: async response => {
+            if (started === 'verifying') return;
+            started = 'verifying';
+            message.textContent = 'Đang xác nhận tài khoản và lưu phiên đăng nhập…';
+            panel.setAttribute('aria-busy', 'true');
             try {
               const session = await createSession(response.credential);
               panel.remove();
               resolve(session);
-            } catch (error) { message.textContent = error.message; }
+            } catch (error) { started = true; panel.removeAttribute('aria-busy'); message.textContent = error.message; }
           }
         });
-        google.accounts.id.renderButton(panel.querySelector('.session-restore-google'), {theme:'outline',size:'large',shape:'pill',text:'continue_with',width:280});
+        google.accounts.id.renderButton(panel.querySelector('.session-restore-google'), {theme:'outline',size:'large',shape:'pill',text:'continue_with',width:280,click_listener:()=>{message.textContent='Đang mở tài khoản Google…';}});
         message.textContent = 'Nếu Google yêu cầu xác nhận, chọn tài khoản bên dưới để tiếp tục.';
         google.accounts.id.prompt();
       }
@@ -229,6 +296,8 @@
     createSession,
     ensureSession,
     avatarMarkup,
+    authPayload,
+    request,
     getSession,
     getLoginHint,
     isConfigured,
