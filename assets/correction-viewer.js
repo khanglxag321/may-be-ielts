@@ -20,7 +20,7 @@
   const teacher = s => `${s.theme === 'nhi' ? 'Cô' : 'Thầy'} ${s.teacher}`;
   async function load() {
     if (samples) return samples;
-    const response = await fetch('assets/correction-samples.json?v=20260929-nhi-task2');
+    const response = await fetch('assets/correction-samples.json?v=20261031');
     if (!response.ok) throw new Error('Không tải được bài mẫu.');
     samples = await response.json();
     return samples;
