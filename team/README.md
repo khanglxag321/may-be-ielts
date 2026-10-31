@@ -50,3 +50,11 @@ Tạo nhiều lớp theo tháng: công cụ lập kế hoạch cho 6 khung dạy
 Gia Khang giữ sáu khung cố định: 14–16h cho cả ba cặp thứ, 20–22h thứ 2+5 và 3+6, 18–20h thứ 4+7. Tuệ Nhi và Hồ Bách ưu tiên các khung đang dạy và từng sử dụng; nếu chưa đủ sáu khung, phần xem trước đề xuất khung còn trống để giáo viên kiểm tra trước khi lưu. Không xếp chồng lịch, kể cả khác chương trình hoặc chỉ trùng một phần giờ. Khoảng trống không đủ một khóa trọn vẹn trước lớp đã xếp sẵn sẽ được báo rõ; có thể lưu các lớp hợp lệ trong kế hoạch nhưng phần tổng kết vẫn cho biết chưa đủ công suất.
 
 Mã cũ được giữ nguyên. Mỗi tháng hỗ trợ sáu mã Writing theo giáo viên: Hồ Bách 01+, 12+–16+; Tuệ Nhi 02–05, 10–11; Gia Khang 06–09, 17–18. Speaking giữ dạng `MBSpeak dec26`, có thể dùng thêm `MBSpeak02 dec26` đến `MBSpeak06 dec26` khi cần nhiều khóa cùng đợt. Chạy lại công cụ sau khi lưu sẽ tính các lớp vừa tạo, không đề xuất trùng lớp đã có.
+
+## Học phí Writing từ đợt tháng 12/2026
+
+Gia Khang và Tuệ Nhi: 6.000.000 → 6.500.000 → 7.000.000đ; Hồ Bách: 6.500.000 → 7.000.000 → 7.500.000đ (giá sớm nhất → cận khai giảng → giá gốc). Xác định đợt bằng đuôi mã lớp; lớp chưa có đuôi tháng dùng ngày khai giảng có năm. Các đợt trước 12/2026 và biểu Speaking giữ nguyên.
+
+Website và Admin dùng chung `tuitionCutovers`, `tuitionPolicy` trong `assets/class-schedule.js`; các mốc ngày giữ theo quy tắc đã dùng trên website chính. Tạo một lớp, tạo theo batch, sửa và xuất lịch đều dùng học phí của đúng đợt. Backend áp lại chính sách khi ghi lớp Writing từ 12/2026 để giao diện cũ không ghi đè giá mới.
+
+Khi nâng cấp backend, chạy `updateDecember2026WritingTuition` trong Apps Script editor để cập nhật các lớp đủ điều kiện đã tạo. Hàm chỉ đổi hai ô học phí, không ghi lại các cột lịch/sĩ số, có khóa chống ghi đồng thời và có thể chạy lại mà không tạo thêm thay đổi. Sau đó phát hành New version cho deployment lịch hiện có.

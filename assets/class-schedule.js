@@ -39,6 +39,37 @@
     return `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
   }
   function cohort(row, fallbackMonth) {return parse(row.MaLop)?.month || date(row.KhaiGiang,fallbackMonth).slice(0,7);}
+  const tuitionEffectiveMonth = '2026-12';
+  function money(amount) {return String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+  function tuitionPolicy(teacherId,program,month) {
+    if(program!=='write'||!numbers[teacherId]||!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month||'')||month<tuitionEffectiveMonth)return null;
+    const lowest=teacherId==='bach'?6500000:6000000;
+    return {lowest,middle:lowest+500000,original:lowest+1000000,effectiveMonth:tuitionEffectiveMonth};
+  }
+  function tuitionFees(item,month=parse(item.code)?.month||item.cohort||String(item.start||'').slice(0,7)) {
+    const policy=tuitionPolicy(item.teacher,item.program,month);
+    return policy?{promoFee:money(policy.lowest),fullFee:money(policy.original)}:{promoFee:item.promoFee,fullFee:item.fullFee};
+  }
+  // Keep the public site's established cutover dates in one shared function.
+  function tuitionCutovers(startIso,classCode='') {
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(startIso||''))return null;
+    const start=new Date(startIso+'T00:00:00Z');
+    if(!Number.isFinite(start.getTime())||start.toISOString().slice(0,10)!==startIso)return null;
+    const day=start.getUTCDate(),info=parse(classCode);
+    const policy=day>=7&&day<=12?'early':day>=18&&day<=24?'late':info?(info.number>=2&&info.number<=5?'early':'late'):(day<=14||day>=25?'early':'late');
+    let year=start.getUTCFullYear(),month=start.getUTCMonth();
+    if(info){year=Number(info.month.slice(0,4));month=Number(info.month.slice(5))-1;}
+    else if(policy==='early'&&day>=25){month++;if(month>11){month=0;year++;}}
+    const iso=(y,m,d)=>new Date(Date.UTC(y,m,d)).toISOString().slice(0,10);
+    return policy==='early'?{policy,middleStartIso:iso(year,month-1,20),fullStartIso:iso(year,month,1)}:{policy,middleStartIso:iso(year,month,1),fullStartIso:iso(year,month,10)};
+  }
+  function tuitionPlan(startIso,classCode,lowestValue,originalValue,today='') {
+    const cutovers=tuitionCutovers(startIso,classCode),amount=value=>Number(String(value||'').replace(/\D/g,''))||0;
+    const lowest=amount(lowestValue),original=amount(originalValue);
+    if(!cutovers||!lowest||!original)return null;
+    const previous=iso=>{const value=new Date(iso+'T00:00:00Z');value.setUTCDate(value.getUTCDate()-1);return value.toISOString().slice(0,10);};
+    return {...cutovers,earlyIso:previous(cutovers.middleStartIso),promotionIso:previous(cutovers.fullStartIso),lowest,middle:Math.round(((lowest+original)/2)/100000)*100000,original,active:today<cutovers.middleStartIso?0:today<cutovers.fullStartIso?1:2};
+  }
   function available(row) {const n=v=>Number(String(v??'').replace(/[^\d-]/g,''))||0;return n(row.TongSlot)>n(row.HocVien);}
   function visible(rows, currentMonth) {
     const valid=rows.filter(row=>/^MBWrite/i.test(row.MaLop)||(/^MBSpeak/i.test(row.MaLop)&&teacher(row.GiangVien)==='bach'));
@@ -157,7 +188,7 @@
         const preferred=old&&old.program===program&&pool.includes(old.number)?old.number:pool[0];
         const code=[preferred,...pool.filter(number=>number!==preferred)].map(number=>make(teacherId,program,number,month)).find(value=>value&&!used.has(value.toLowerCase()));
         if(!code){result.unmet.push(`${slotLabel(slot)}: đã dùng hết mã lớp ${program==='speak'?'Speaking':'Writing'} của đợt ${month}.`);break;}
-        candidate.code=code;used.add(code.toLowerCase());combined.push(candidate);result.candidates.push(candidate);slotResult.candidates.push(candidate);
+        candidate.code=code;Object.assign(candidate,tuitionFees(candidate,month));used.add(code.toLowerCase());combined.push(candidate);result.candidates.push(candidate);slotResult.candidates.push(candidate);
         cursor=nextLesson(candidate.end,slot.days);
       }
       // Count tracks, not the number of old/new cohorts touching the month.
@@ -194,7 +225,7 @@
     if(!iso)return escapeHtml(value)||'—';
     return `<time class="schedule-date" datetime="${iso}">${iso.slice(8)}.${iso.slice(5,7)}<span class="date-year">${iso.slice(0,4)}</span></time>`;
   }
-  const api={months,numbers,speakingNumbers,parse,make,validate,teacher,date,cohort,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,monthlyPlan,timeRange,sameSlot,slotsOverlap,itemsOverlap,continuationCandidates,normalizeCode,codeMarkup,dateMarkup};
+  const api={months,numbers,speakingNumbers,parse,make,validate,teacher,date,cohort,tuitionEffectiveMonth,tuitionPolicy,tuitionFees,tuitionCutovers,tuitionPlan,available,visible,fixedKhangSlots,allowedSlot,nextLesson,lessonEnd,monthlyPlan,timeRange,sameSlot,slotsOverlap,itemsOverlap,continuationCandidates,normalizeCode,codeMarkup,dateMarkup};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.MaybeSchedule=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

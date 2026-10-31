@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
-<script src="assets/class-schedule.js?v=20261001c"></script>
+<script src="assets/class-schedule.js?v=20261031a"></script>
 
 
 <link rel="stylesheet" href="assets/class-schedule.css?v=20261001d">
@@ -1412,55 +1412,15 @@ function toggleContact(){
         renderFilteredPublicSchedule();
     }
 
-    const tuitionMonthCodes = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
-    function monthlyTuitionCodeInfo(classCode) {
-        const match = String(classCode || "").trim().match(/^MBWrite(\d{2})\+?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(\d{2})$/i);
-        if (!match) return null;
-        return {
-            number: Number(match[1]),
-            month: tuitionMonthCodes.indexOf(match[2].toLowerCase()),
-            year: 2000 + Number(match[3])
-        };
-    }
-
     function calculateTuitionCutovers(startDateValue, classCode = "") {
         const startDate = parseScheduleDate(startDateValue);
         if (!startDate) return null;
-
-        const day = startDate.getUTCDate();
-        const codeInfo = monthlyTuitionCodeInfo(classCode);
-        let policy;
-
-        if (day >= 7 && day <= 12) policy = "early";
-        else if (day >= 18 && day <= 24) policy = "late";
-        else if (codeInfo) policy = codeInfo.number >= 2 && codeInfo.number <= 5 ? "early" : "late";
-        else policy = day <= 14 || day >= 25 ? "early" : "late";
-
-        let year = startDate.getUTCFullYear();
-        let month = startDate.getUTCMonth();
-        if (codeInfo) {
-            year = codeInfo.year;
-            month = codeInfo.month;
-        } else if (policy === "early" && day >= 25) {
-            month += 1;
-            if (month > 11) {
-                month = 0;
-                year += 1;
-            }
-        }
-
-        return policy === "early"
-            ? {
-                policy,
-                firstCutover: new Date(Date.UTC(year, month - 1, 20)),
-                secondCutover: new Date(Date.UTC(year, month, 1))
-            }
-            : {
-                policy,
-                firstCutover: new Date(Date.UTC(year, month, 1)),
-                secondCutover: new Date(Date.UTC(year, month, 10))
-            };
+        const cutovers = MaybeSchedule.tuitionCutovers(startDate.toISOString().slice(0,10), classCode);
+        return cutovers ? {
+            policy: cutovers.policy,
+            firstCutover: new Date(cutovers.middleStartIso + "T00:00:00Z"),
+            secondCutover: new Date(cutovers.fullStartIso + "T00:00:00Z")
+        } : null;
     }
 
     function calculatePromotionDeadlineDate(startDateValue, classCode = "") {
@@ -1503,8 +1463,13 @@ function toggleContact(){
     let lastTuitionTrigger = null;
 
     function createTuitionPlan(row) {
-        const lowestFee = parseVnd(row.HocPhiUuDai);
-        const originalFee = parseVnd(row.HocPhiGoc);
+        const fees = MaybeSchedule.tuitionFees({
+            teacher: MaybeSchedule.teacher(row.GiangVien), program: /^MBSpeak/i.test(row.MaLop) ? "speak" : "write",
+            code: row.MaLop, start: MaybeSchedule.date(row.KhaiGiang, new Date().toISOString().slice(0,7)),
+            promoFee: row.HocPhiUuDai, fullFee: row.HocPhiGoc
+        });
+        const lowestFee = parseVnd(fees.promoFee);
+        const originalFee = parseVnd(fees.fullFee);
         const cutovers = calculateTuitionCutovers(row.KhaiGiang, row.MaLop);
         const promotionDeadline = cutovers ? addUtcDays(cutovers.secondCutover, -1) : null;
         const earlyBirdDeadline = cutovers ? addUtcDays(cutovers.firstCutover, -1) : null;

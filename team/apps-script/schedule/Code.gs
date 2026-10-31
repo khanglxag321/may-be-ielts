@@ -191,9 +191,61 @@ function findRowByClass_(sheet, headers, maLop, giangVien) {
 }
 
 function objectToRow_(data, headers) {
+  data = applyWritingTuitionPolicy_(data);
   return headers.map(function (header) {
     return Object.prototype.hasOwnProperty.call(data, header) ? data[header] : '';
   });
+}
+
+/** Monthly Writing cohorts from December 2026 share the published fee policy. */
+function writingTuitionPolicy_(item) {
+  if (!item || !/^MBWrite/i.test(String(item.MaLop || ''))) return null;
+  const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+  const code = String(item.MaLop || '').trim().match(/\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(\d{2})$/i);
+  const raw = String(item.KhaiGiang || '').trim();
+  const iso = raw.match(/^(20\d{2})-(\d{2})-\d{2}$/);
+  const dated = raw.match(/^\d{1,2}[.\/-](\d{1,2})[.\/-](20\d{2})$/);
+  const month = code ? '20' + code[2] + '-' + String(months.indexOf(code[1].toLowerCase()) + 1).padStart(2,'0')
+    : iso ? iso[1] + '-' + iso[2] : dated ? dated[2] + '-' + String(dated[1]).padStart(2,'0') : '';
+  if (!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month) || month < '2026-12') return null;
+  const name = normalizeName_(item.GiangVien);
+  const teacher = ['bach','nhi','khang'].find(function (id) { return name.indexOf(id) !== -1; });
+  if (!teacher) return null;
+  const lowest = teacher === 'bach' ? 6500000 : 6000000;
+  const format = function (value) { return String(value).replace(/\B(?=(\d{3})+(?!\d))/g,'.') + 'đ'; };
+  return { HocPhiUuDai: format(lowest), HocPhiGoc: format(lowest + 1000000) };
+}
+
+function applyWritingTuitionPolicy_(item) {
+  const fees = writingTuitionPolicy_(item);
+  return fees ? Object.assign({}, item, fees) : item;
+}
+
+/** Run once in the editor; only the two fee cells of eligible rows are updated. */
+function updateDecember2026WritingTuition() {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    const sheet = getSheet_(), headers = getHeaders_(sheet), rows = rowsAsObjects_(sheet, headers);
+    let updated = 0;
+    // Read physical rows so empty rows cannot shift the target of an update.
+    const values = sheet.getLastRow() < 2 ? [] : sheet.getRange(2, 1, sheet.getLastRow() - 1, headers.length).getDisplayValues();
+    values.forEach(function (values, index) {
+      const row = {};
+      headers.forEach(function (header, column) { row[header] = values[column]; });
+      const fees = writingTuitionPolicy_(row);
+      if (!fees || row.HocPhiUuDai === fees.HocPhiUuDai && row.HocPhiGoc === fees.HocPhiGoc) return;
+      ['HocPhiUuDai','HocPhiGoc'].forEach(function (header) {
+        sheet.getRange(index + 2, headers.indexOf(header) + 1).setValue(fees[header]);
+      });
+      updated++;
+    });
+    const message = 'Đã cập nhật học phí ' + updated + ' lớp Writing từ đợt 12/2026; tổng số lớp giữ nguyên ' + rows.length + '.';
+    console.log(message);
+    return message;
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function doGet() {
