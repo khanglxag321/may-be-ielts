@@ -29,6 +29,7 @@
 
 
 <link rel="stylesheet" href="assets/modern/v8.css?v=9"><script type="importmap">{"imports":{"three":"./assets/modern/vendor/three.module.js"}}</script><link rel="stylesheet" href="assets/ui-quality.css?v=20261026">
+<link rel="stylesheet" href="assets/enrollment.css?v=20261031a">
 </head>
 <body class="modern-site">
 
@@ -368,6 +369,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 
 
+            <p class="enrollment-shortcut">Đăng ký bằng cách nhắn trực tiếp cho giáo viên và đặt cọc <strong>10% học phí</strong>. <a href="#enrollment-guide">Xem các bước đăng ký <span aria-hidden="true">→</span></a></p>
+
             <div class="schedule-filter-shell" aria-label="Bộ lọc lịch khai giảng theo giáo viên">
                 <div class="schedule-filter-layout">
                     <div><span class="schedule-filter-label">Chọn giáo viên</span><div class="schedule-filter-buttons" id="scheduleTeacherFilter" role="group" aria-label="Chọn giáo viên muốn xem">
@@ -549,6 +552,20 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         </div>
                     </div>
                 </article>
+                <article class="faq-item">
+                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5" onclick="toggleFaq(this)">
+                        <span>Em đăng ký và thanh toán học phí như thế nào?</span>
+                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                    </button>
+                    <div class="faq-answer" id="faq-answer-5" role="region" aria-hidden="true">
+                        <div class="faq-answer-inner">
+                            <p>Em nhắn trực tiếp cho giáo viên để nhận thông tin chuyển khoản và đặt cọc <strong>10% (1/10) học phí</strong>.</p>
+                            <p>Gần ngày khai giảng, em sẽ được thêm vào <strong>nhóm chung</strong> để nhận hướng dẫn thanh toán phần còn lại. Sau khi thanh toán đầy đủ, em sẽ được thêm vào <strong>nhóm lớp</strong>.</p>
+                            <p>Nếu cần tư vấn trước khi chọn lớp, em có thể <a class="enrollment-faq-link" href="#register">để lại thông tin tại đây</a>.</p>
+                        </div>
+                    </div>
+                </article>
+
             </div>
         </div>
     </section>
@@ -590,7 +607,17 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 <div class="register-copy">
                     <div class="register-eyebrow">— MAYBE IELTS · EST. 2026</div>
                     <h2 class="register-brand-headline">chúng mình có <em>duyên</em><br> với <span>nhau</span>.</h2>
-                    <p class="section-subtitle">Để lại thông tin bên dưới, team may(be)ielts. sẽ liên hệ trực tiếp qua Facebook để trao đổi sâu hơn về lộ trình học tập của em nhé.</p>
+                    <p class="section-subtitle">Em có thể nhắn trực tiếp cho giáo viên để đăng ký, hoặc để lại thông tin để team may(be)ielts. liên hệ tư vấn qua Facebook nhé.</p>
+                    <div class="enrollment-guide" id="enrollment-guide" role="region" aria-labelledby="enrollment-title">
+                        <h3 id="enrollment-title">Đăng ký khóa học như thế nào?</h3>
+                        <ol class="enrollment-steps" role="list">
+                            <li><strong>Nhắn tin cho giáo viên</strong><p>Chọn lớp phù hợp và nhắn trực tiếp cho giáo viên để nhận thông tin chuyển khoản.</p></li>
+                            <li><strong>Đặt cọc 10% học phí</strong><p>Chuyển khoản 1/10 học phí theo thông tin giáo viên cung cấp để đặt cọc.</p></li>
+                            <li><strong>Vào nhóm chung trước khai giảng</strong><p>Gần ngày khai giảng, em sẽ được thêm vào nhóm chung và nhận hướng dẫn thanh toán 90% học phí còn lại.</p></li>
+                            <li><strong>Hoàn tất học phí, vào nhóm lớp</strong><p>Sau khi thanh toán đầy đủ phần học phí còn lại, em sẽ được thêm vào nhóm lớp.</p></li>
+                        </ol>
+                        <a class="enrollment-contact" href="#lecturers">Chọn giáo viên để nhắn tin <span aria-hidden="true">↗</span></a>
+                    </div>
                 </div>
 
             </div><div class="register-box">
@@ -620,6 +647,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     </select>
 </div>
 
+                    <p class="register-form-note">Gửi thông tin để được tư vấn. Giáo viên sẽ hướng dẫn em đặt cọc và thanh toán qua tin nhắn.</p>
                     <button type="submit" class="submit-btn" id="registerSubmitButton">Nhận lộ trình phù hợp</button>
                     <p class="register-status" id="registerStatus" role="status" aria-live="polite"></p>
                 </form>
@@ -629,9 +657,9 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <dialog class="register-success-dialog" id="registerSuccessDialog" aria-labelledby="registerSuccessTitle" aria-describedby="registerSuccessMessage">
         <div class="register-success-content">
             <div class="register-success-icon" aria-hidden="true"><i class="fa-solid fa-check"></i></div>
-            <h3 id="registerSuccessTitle">Đăng ký thành công — nhớ kiểm tra tin nhắn ngay nhé!</h3>
+            <h3 id="registerSuccessTitle">Đã gửi thông tin — nhớ kiểm tra tin nhắn nhé!</h3>
             <p id="registerSuccessMessage">
-                Anh/chị trong team hoặc giáo viên may(be)ielts. sẽ sớm liên hệ qua Facebook hoặc Zalo để tư vấn kỹ hơn về lộ trình. Em nhớ kiểm tra cả mục <strong>Tin nhắn chờ / Tin nhắn từ người lạ</strong> để không bỏ lỡ nhé.
+                Anh/chị trong team hoặc giáo viên may(be)ielts. sẽ sớm liên hệ qua Facebook hoặc Zalo để tư vấn chọn lớp và hướng dẫn đặt cọc 10% học phí. Em nhớ kiểm tra cả mục <strong>Tin nhắn chờ / Tin nhắn từ người lạ</strong> để không bỏ lỡ nhé.
             </p>
             <button type="button" class="register-success-close" id="registerSuccessClose">Đã rõ — mình kiểm tra ngay</button>
         </div>
@@ -1728,7 +1756,7 @@ function showRegisterSuccessDialog(){
         return;
     }
 
-    alert("Đăng ký thành công — nhớ kiểm tra tin nhắn ngay nhé! Anh/chị trong team hoặc giáo viên may(be)ielts. sẽ sớm liên hệ qua Facebook hoặc Zalo để tư vấn kỹ hơn về lộ trình. Em nhớ kiểm tra cả mục Tin nhắn chờ / Tin nhắn từ người lạ để không bỏ lỡ nhé.");
+    alert("Đã gửi thông tin — nhớ kiểm tra tin nhắn nhé! Anh/chị trong team hoặc giáo viên may(be)ielts. sẽ sớm liên hệ qua Facebook hoặc Zalo để tư vấn chọn lớp và hướng dẫn đặt cọc 10% học phí. Em nhớ kiểm tra cả mục Tin nhắn chờ / Tin nhắn từ người lạ để không bỏ lỡ nhé.");
 }
 
 document.getElementById("registerSuccessClose")?.addEventListener("click", () => {
