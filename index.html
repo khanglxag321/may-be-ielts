@@ -30,6 +30,7 @@
 
 <link rel="stylesheet" href="assets/modern/v8.css?v=9"><script type="importmap">{"imports":{"three":"./assets/modern/vendor/three.module.js"}}</script><link rel="stylesheet" href="assets/ui-quality.css?v=20261026">
 <link rel="stylesheet" href="assets/enrollment.css?v=20261031a">
+<link rel="stylesheet" href="assets/playbook-privileges.css?v=20261031">
 </head>
 <body class="modern-site">
 
@@ -109,7 +110,8 @@
                     <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip">04</span></div>
                     <div class="feature-card-copy">
                         <h3>Đặc quyền <span>bảo hành</span></h3>
-                        <p>Tham gia nghe giảng lại cùng khóa tiếp theo miễn phí nếu chưa thi. Sẵn sàng file tài liệu mẫu cho mọi bài về nhà.</p>
+                        <p>Chưa cần thi ngay? Em được nghe lại bài giảng miễn phí ở khóa kế tiếp cùng trình độ.</p>
+                        <p class="warranty-upgrade">Học tiếp lớp <strong>Advanced</strong>, được giảm <strong>30% học phí</strong>.</p>
                     </div>
                     <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"></use></svg><span>may(be)write.</span></div>
                 </div>
@@ -117,6 +119,15 @@
                     <div class="feature-tile-top"><span>Độc quyền học viên Maybe</span><span class="feature-chip">05</span></div>
                     <div class="feature-card-copy"><h3>Nền tảng <span>Maybe Study</span></h3><p>Đăng nhập bằng Google với email đã đăng ký lớp. Luyện Reading &amp; Listening, xem đáp án chi tiết và theo dõi lịch sử làm bài. Writing &amp; Speaking sắp ra mắt.</p><button type="button" class="privilege-link" data-privilege-open="studyDialog">▶ Xem video giới thiệu</button></div>
                     <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"></use></svg><span>may(be)study.</span></div>
+                </div>
+                <div class="feature-card feature-playbook">
+                    <div class="feature-tile-top"><span>Quà tặng cuối khóa</span><span class="feature-chip">06</span></div>
+                    <div class="feature-card-copy">
+                        <h3>Tặng <span>Writing Playbook</span></h3>
+                        <p>Cuối khóa, em nhận trọn bộ Writing Playbook của giáo viên: tổng hợp kiến thức Task 1 &amp; Task 2 để ôn tập và tra cứu khi cần.</p>
+                        <button type="button" class="privilege-link" data-privilege-open="playbookDialog" aria-haspopup="dialog">Xem vài trang mẫu ↗</button>
+                    </div>
+                    <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"></use></svg><span>may(be)write.</span></div>
                 </div>
             </div>
         </div>
@@ -165,6 +176,30 @@
         <div class="study-video-footer"><span>1 phút 38 giây · Có phụ đề tiếng Việt</span><a class="privilege-link" href="https://maybestudy.com/" target="_blank" rel="noopener">Vào Maybe Study ↗</a></div>
     </dialog>
 
+    <dialog class="privilege-dialog playbook-dialog" id="playbookDialog" aria-labelledby="playbookTitle" aria-describedby="playbookIntro">
+        <div class="privilege-dialog-head"><div><p class="privilege-eyebrow">ĐẶC QUYỀN 06 · QUÀ TẶNG CUỐI KHÓA</p><h2 id="playbookTitle">The Writing Playbook</h2></div><button type="button" class="privilege-close" aria-label="Đóng bản xem trước Writing Playbook" data-privilege-close>×</button></div>
+        <p class="privilege-intro" id="playbookIntro">Một bộ tổng hợp kiến thức để em ôn lại sau khóa học. Mỗi giáo viên có một phiên bản riêng, bám sát cách giảng và nội dung em đã học trên lớp.</p>
+        <p class="playbook-access-note">Trọn bộ được tặng riêng cho học viên vào cuối khóa. Dưới đây là một vài trang xem trước.</p>
+        <div class="playbook-tabs" role="tablist" aria-label="Chọn Writing Playbook theo giáo viên">
+            <button type="button" role="tab" id="playbookTabBach" aria-controls="playbookPanelBach" aria-selected="true" data-playbook-teacher="bach">Thầy Bách</button>
+            <button type="button" role="tab" id="playbookTabNhi" aria-controls="playbookPanelNhi" aria-selected="false" tabindex="-1" data-playbook-teacher="nhi">Cô Nhi</button>
+            <button type="button" role="tab" id="playbookTabKhang" aria-controls="playbookPanelKhang" aria-selected="false" tabindex="-1" data-playbook-teacher="khang">Thầy Khang</button>
+        </div>
+        <p class="playbook-view-hint">Bấm vào ảnh để mở trang mẫu lớn hơn.</p>
+        <div id="playbookPanelBach" class="playbook-panel" role="tabpanel" aria-labelledby="playbookTabBach">
+            <figure><a href="assets/playbook-preview/bach-cover.webp" target="_blank" rel="noopener" aria-label="Xem lớn bìa Writing Playbook của thầy Bách"><img data-src="assets/playbook-preview/bach-cover.webp" alt="Bìa The Writing Playbook của thầy Bách, phiên bản xanh dương với Bee Bách." width="1556" height="2200" decoding="async"></a><figcaption>Bìa sách · Thầy Bách</figcaption></figure>
+            <figure><a href="assets/playbook-preview/bach-sample.webp" target="_blank" rel="noopener" aria-label="Xem lớn trang Task 2 của thầy Bách"><img data-src="assets/playbook-preview/bach-sample.webp" alt="Trang mẫu Task 2 của thầy Bách: cách giải thích và nối các bước lập luận." width="1556" height="2200" decoding="async"></a><figcaption>Một trang nội dung · Task 2: nối lập luận</figcaption></figure>
+        </div>
+        <div id="playbookPanelNhi" class="playbook-panel" role="tabpanel" aria-labelledby="playbookTabNhi" hidden>
+            <figure><a href="assets/playbook-preview/nhi-cover.webp" target="_blank" rel="noopener" aria-label="Xem lớn bìa Writing Playbook của cô Nhi"><img data-src="assets/playbook-preview/nhi-cover.webp" alt="Bìa The Writing Playbook của cô Nhi, phiên bản hồng với Bee Nhi." width="1556" height="2200" decoding="async"></a><figcaption>Bìa sách · Cô Nhi</figcaption></figure>
+            <figure><a href="assets/playbook-preview/nhi-sample.webp" target="_blank" rel="noopener" aria-label="Xem lớn trang Dynamic Chart của cô Nhi"><img data-src="assets/playbook-preview/nhi-sample.webp" alt="Trang mẫu Dynamic Chart của cô Nhi: cách viết intro, overview và chọn thông tin." width="1556" height="2200" decoding="async"></a><figcaption>Một trang nội dung · Task 1: Dynamic Chart</figcaption></figure>
+        </div>
+        <div id="playbookPanelKhang" class="playbook-panel" role="tabpanel" aria-labelledby="playbookTabKhang" hidden>
+            <figure><a href="assets/playbook-preview/khang-cover.webp" target="_blank" rel="noopener" aria-label="Xem lớn bìa Writing Playbook của thầy Khang"><img data-src="assets/playbook-preview/khang-cover.webp" alt="Bìa The Writing Playbook của thầy Khang, phiên bản xanh lá với Bee miền Tây." width="1556" height="2200" decoding="async"></a><figcaption>Bìa sách · Thầy Khang</figcaption></figure>
+            <figure><a href="assets/playbook-preview/khang-sample.webp" target="_blank" rel="noopener" aria-label="Xem lớn trang outline của thầy Khang"><img data-src="assets/playbook-preview/khang-sample.webp" alt="Trang mẫu Task 2 của thầy Khang: đọc đề và lên outline trước khi viết." width="1556" height="2200" decoding="async"></a><figcaption>Một trang nội dung · Task 2: từ đề đến outline</figcaption></figure>
+        </div>
+    </dialog>
+    <script src="assets/playbook-preview.js?v=20261031" defer></script>
     <script>
     (() => {
         let opener = null;

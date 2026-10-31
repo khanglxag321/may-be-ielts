@@ -1,0 +1,43 @@
+/* Six course benefits, using the existing Maybe palette and typography. */
+#features .features-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#features .feature-card,
+#features .feature-card:nth-child(-n+2),
+#features .feature-card:last-child { grid-column: auto; min-height: 0; padding: 28px; gap: 24px; }
+#features .feature-card-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+#features .feature-card h3 { margin: 0; min-height: 2.3em; }
+#features .feature-card-copy p { font-size: 15px; line-height: 1.7; opacity: 1; }
+#features .feature-card-copy .privilege-link { margin-top: auto; }
+#features .feature-card-copy .warranty-upgrade { padding: 11px 13px; border-radius: 10px; background: #ffffff70; }
+#features .feature-playbook { background: #ded7ff; color: #0f1b4c; }
+#features .feature-playbook h3 span { color: #513497; }
+#features .feature-playbook .feature-chip { background: #513497; color: #fff; }
+
+.playbook-dialog { width: min(1040px, calc(100% - 32px)); padding: 32px; }
+.playbook-access-note { margin-top: 16px; padding: 13px 16px; border-radius: 12px; background: #f1edff; color: #513497; font-size: 14px; line-height: 1.7; font-weight: 600; }
+.playbook-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 12px; }
+.playbook-tabs button { --teacher-color: #2457d8; --teacher-tint: #eaf0ff; background: var(--teacher-tint); color: var(--teacher-color); border: 1px solid transparent; border-radius: 100px; padding: 11px 19px; min-height: 46px; font-weight: 700; font-size: 15px; }
+.playbook-tabs [data-playbook-teacher="nhi"] { --teacher-color: #b23b6a; --teacher-tint: #fff0f5; }
+.playbook-tabs [data-playbook-teacher="khang"] { --teacher-color: #146d58; --teacher-tint: #e8f5ef; }
+.playbook-tabs [aria-selected="true"] { background: var(--teacher-color); color: #fff; }
+.playbook-tabs button:hover { border-color: var(--teacher-color); }
+.playbook-view-hint { color: #58617e; font-size: 14px; margin-bottom: 18px; }
+.playbook-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+.playbook-panel figure { margin: 0; min-width: 0; }
+.playbook-panel a { display: block; border-radius: 12px; overflow: hidden; border: 1px solid #d3d9e6; background: #f4f7ff; box-shadow: 0 5px 20px #0f1b4c0a; }
+.playbook-panel img { width: 100%; height: auto; }
+.playbook-panel figcaption { color: #58617e; font-size: 13px; line-height: 1.7; margin-top: 10px; }
+
+@media (max-width: 1000px) {
+  #features .features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  #features .features-grid { grid-template-columns: 1fr; }
+  #features .feature-card,
+  #features .feature-card:nth-child(-n+2),
+  #features .feature-card:last-child { padding: 25px; gap: 23px; }
+  #features .feature-card h3 { min-height: 0; }
+  .playbook-dialog { width: calc(100% - 24px); padding: 23px 18px; }
+  .playbook-tabs { gap: 8px; }
+  .playbook-tabs button { padding: 10px 14px; font-size: 14px; }
+  .playbook-panel { grid-template-columns: 1fr; gap: 22px; }
+}
