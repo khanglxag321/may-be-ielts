@@ -210,7 +210,7 @@
     let batchCandidates=[],batchPlan=null,singleStep=1,batchStep=1;
     let classes=loadClasses(),currentTeacher=(teachers[teamSession.teacherId]?teamSession.teacherId:"bach"),viewMode="running",exportMonth="",editingKey="",modalMode="single",backgroundSyncQueue=Promise.resolve(),pendingSyncCount=0,backgroundSyncError=false;
 
-    function loadClasses(){try{const saved=localStorage.getItem(STORE_KEY);return saved?JSON.parse(saved):structuredClone(initialClasses)}catch{return structuredClone(initialClasses)}}
+    function loadClasses(){try{const saved=localStorage.getItem(STORE_KEY),items=saved?JSON.parse(saved):structuredClone(initialClasses);return items.map(item=>({...item,...MaybeSchedule.tuitionFees(item)}))}catch{return structuredClone(initialClasses)}}
     function saveClasses(){localStorage.setItem(STORE_KEY,JSON.stringify(classes))}
     function setSyncStatus(message,state=""){const el=document.getElementById("syncStatus");el.textContent=message;el.className=`saved ${state}`.trim()}
     async function apiGet(){const response=await fetch(`${API_URL}?t=${Date.now()}`,{cache:"no-store"});if(!response.ok)throw new Error(`HTTP ${response.status}`);const result=await response.json();if(result.status!=="success")throw new Error(result.message||"Google Apps Script trả về lỗi");return result}
