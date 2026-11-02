@@ -14,6 +14,11 @@
  const ease=t=>t*t*t*(t*(t*6-15)+10);
  function avatarSize(){return guide.clientWidth||112;}
  function heroAnchor(){const live=window.beeWorld?.nhiAnchor?.();if(live)return live;const r=world.querySelector('.hero-pose-fallback')?.getBoundingClientRect();return r?{x:r.x+r.width/2,y:r.y+r.height/2,size:r.height*.82}:null;}
+ function familyViewportState(){
+  // The six-member scene is taller: scrolling within the hero must not remove Nhi.
+  const bottom=(document.getElementById('hero')||world).getBoundingClientRect().bottom;
+  return {depart:bottom<innerHeight*.45,home:bottom>innerHeight*.6};
+ }
  function inView(el){if(!el?.isConnected)return false;const r=el.getBoundingClientRect();return r.bottom>110&&r.top<innerHeight-40&&r.width>0;}
  function closest(selector,root=document){return [...root.querySelectorAll(selector)].filter(inView).sort((a,b)=>Math.abs(a.getBoundingClientRect().top-innerHeight*.34)-Math.abs(b.getBoundingClientRect().top-innerHeight*.34))[0];}
  function isRecording(){return document.getElementById('recordingModal').style.display==='block';}
@@ -144,19 +149,20 @@
  }
  function returnHome(){
   const anchor=heroAnchor();if(!launched||returning||!anchor||isRecording()||touring)return;returning=true;intro=true;hidePrompt();
-  fly({x:anchor.x,y:anchor.y,scale:anchor.size/avatarSize()*1.17,size:avatarSize(),frame:null,kind:'home',facing:1},{duration:1100,complete:()=>{window.beeWorld?.return?.();world.dataset.nhiDeparted='false';world.querySelector('.hero-pose-fallback')?.classList.remove('has-departed');guide.classList.remove('is-launched','is-flying','has-prompt');launched=false;intro=false;returning=false;lastState='';mount=null;guide.dataset.flight='home';gesture('wave');if(scrollY>50)requestAnimationFrame(updateAttachment);}});
+  fly({x:anchor.x,y:anchor.y,scale:anchor.size/avatarSize()*1.17,size:avatarSize(),frame:null,kind:'home',facing:1},{duration:1100,complete:()=>{window.beeWorld?.return?.();world.dataset.nhiDeparted='false';world.querySelector('.hero-pose-fallback')?.classList.remove('has-departed');guide.classList.remove('is-launched','is-flying','has-prompt');launched=false;intro=false;returning=false;lastState='';mount=null;guide.dataset.flight='home';gesture('wave');if(familyViewportState().depart)requestAnimationFrame(updateAttachment);}});
  }
  function updateAttachment(){
-  if(scrollY>50&&!launched&&ready)launch();else if(scrollY<24&&launched&&!intro&&!guide.classList.contains('is-open'))returnHome();
+  const family=familyViewportState();
+  if(family.depart&&!launched&&ready)launch();else if(family.home&&launched&&!intro&&!guide.classList.contains('is-open'))returnHome();
   if(!launched||intro||returning||portalTransition||guide.classList.contains('is-open')||guide.classList.contains('is-flying')||mount?.kind==='side')return;
   lastState=pending[0];guide.dataset.context=lastState;const to=destination(...pending);
   if(to.frame!==mount?.frame||to.slot!==mount?.slot||Math.hypot(to.x-position.x,to.y-position.y)>210)fly(to,{duration:1450});else attach(to);
  }
  let followAt=0,followTimer=0;
  function scrollFollow(){hidePrompt();if(scrollTick||followTimer)return;const wait=Math.max(0,100-(performance.now()-followAt));followTimer=setTimeout(()=>{followTimer=0;scrollTick=requestAnimationFrame(()=>{scrollTick=0;followAt=performance.now();updateAttachment();});},wait);}
- addEventListener('bee-world-ready',()=>{ready=true;if(launched){window.beeWorld?.depart?.();return;}guide.dataset.flight='home';if(scrollY>50)launch();},{once:true});
+ addEventListener('bee-world-ready',()=>{ready=true;if(launched){window.beeWorld?.depart?.();return;}guide.dataset.flight='home';if(familyViewportState().depart)launch();},{once:true});
  addEventListener('scroll',scrollFollow,{passive:true});document.getElementById('recordingModal').addEventListener('scroll',scrollFollow,{passive:true});
- addEventListener('resize',()=>{if(launched&&!intro)updateAttachment();},{passive:true});
+ addEventListener('resize',()=>{if(ready&&!intro)updateAttachment();},{passive:true});
  addEventListener('bee-greet-team',()=>{if(launched&&!intro)fly(destination(...pending),{duration:1500,jump:true});});
  guide.querySelector('.bee-prompt-dismiss').addEventListener('click',hidePrompt);
  const originalOpenRecording=openRecording,originalCloseRecording=closeRecording;
