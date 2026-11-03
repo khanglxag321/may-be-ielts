@@ -87,3 +87,5 @@
   #halloffame .hof-album-cover,
   #halloffame .hof-album-cover .album-preview img { transition: none; }
 }
+
+#halloffame .section-title { color: #ffd84d; }
