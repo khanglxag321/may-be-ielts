@@ -1,0 +1,97 @@
+:root {
+  --family-khang: #a0efcc;
+  --family-cici: #f4bbd8;
+  --family-nhi: #ffa9cf;
+  --family-pu: #ffd1b5;
+  --family-bach: #a7c6ff;
+  --family-quynh: #d0e8ff;
+}
+.family-key-khang { --family-accent: var(--family-khang); }
+.family-key-cici { --family-accent: var(--family-cici); }
+.family-key-nhi { --family-accent: var(--family-nhi); }
+.family-key-pu { --family-accent: var(--family-pu); }
+.family-key-bach { --family-accent: var(--family-bach); }
+.family-key-quynh { --family-accent: var(--family-quynh); }
+.universe-family { max-width: 1120px; }
+.family-photo-world { position: relative; }
+.family-pins, .family-leaders {
+  position: absolute;
+  inset: 4px;
+  pointer-events: none;
+}
+.family-leaders { display: none; }
+.family-pin, .family-number {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--family-accent);
+  color: var(--navy-900);
+  font-size: 12px;
+  font-weight: 800;
+}
+.family-pin {
+  position: absolute;
+  left: var(--pin-x);
+  top: var(--pin-y);
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--navy-900);
+}
+.family-roster { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.family-member { justify-content: flex-start; align-items: center; text-align: left; gap: 8px; }
+.family-member strong { font-size: 15px; }
+.family-member[href]:hover > .family-number { color: var(--navy-900); }
+.family-member small { display: flex; flex-wrap: wrap; gap: 0 8px; }
+.family-member small span { white-space: nowrap; }
+@media (min-width: 1000px) {
+  .family-stage {
+    --family-side: clamp(146px, 16vw, 190px);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, var(--family-side)) minmax(0, 640px) minmax(0, var(--family-side));
+    gap: 0 20px;
+    justify-content: center;
+    align-items: center;
+    max-width: calc(680px + 2 * var(--family-side));
+    margin-inline: auto;
+  }
+  .family-photo-world { grid-column: 2; width: 100%; }
+  .family-roster { display: contents; }
+  .family-member {
+    position: absolute;
+    top: var(--label-y);
+    transform: translateY(-50%);
+    width: var(--family-side);
+    padding: 12px;
+    min-height: 72px;
+  }
+  .family-member small { display: grid; }
+  .family-member.family-key-cici { left: 0; --label-y: 13.1%; }
+  .family-member.family-key-khang { left: 0; --label-y: 47.3%; }
+  .family-member.family-key-pu { left: 0; --label-y: 81.4%; }
+  .family-member.family-key-nhi { right: 0; --label-y: 21.3%; }
+  .family-member.family-key-quynh { right: 0; --label-y: 54.7%; }
+  .family-member.family-key-bach { right: 0; --label-y: 88.1%; }
+  .family-leaders {
+    display: block;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    overflow: visible;
+  }
+  .family-leaders path { fill: none; stroke: var(--family-accent); stroke-width: 1.5px; }
+}
+@media (max-width: 600px) {
+  .family-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .family-member small { display: grid; }
+  .family-pins { inset: 3px; }
+}
+@media (min-width: 821px) {
+  #recordings .teacher-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  #recordings .teacher-recording-card { grid-column: span 2; }
+  #recordings .recording-pending:nth-child(4) { grid-column: 2 / span 2; }
+}
+#recordings .recording-pending button { background: var(--quality-trial-blue); color: var(--white); }
+.recording-pending-dialog { width: min(460px, calc(100% - 32px)); }
+.recording-pending-dialog p { margin: 12px 0 22px; font-size: 16px; }

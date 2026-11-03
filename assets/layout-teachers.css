@@ -1,0 +1,136 @@
+#lecturers {
+  --lecturer-cici-accent: #812b54;
+  --lecturer-cici-edge: #e6b4cb;
+  --lecturer-cici-tint: #fce7f0;
+  --lecturer-quynh-accent: #244f8c;
+  --lecturer-quynh-edge: #b5cbed;
+  --lecturer-quynh-tint: #e6f1ff;
+}
+
+#lecturers .teacher-group-nav {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--blue-50);
+}
+
+#lecturers .teacher-group-nav a {
+  justify-content: center;
+  min-width: 114px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--navy-700);
+}
+
+#lecturers .teacher-group-nav a:hover {
+  background: var(--blue-100);
+}
+
+#lecturers .teacher-group-nav a[aria-selected="true"] {
+  background: var(--navy-700);
+  color: var(--white);
+}
+
+#teacher-cici {
+  --mentor-accent: var(--lecturer-cici-accent);
+  --mentor-tint: var(--lecturer-cici-tint);
+  border-color: var(--lecturer-cici-edge);
+}
+
+#teacher-quynh {
+  --mentor-accent: var(--lecturer-quynh-accent);
+  --mentor-tint: var(--lecturer-quynh-tint);
+  border-color: var(--lecturer-quynh-edge);
+}
+
+#lecturers .lecturer-row-speaking {
+  background: linear-gradient(115deg, var(--mentor-tint), var(--white) 65%);
+}
+
+.lecturer-row-speaking .lecturer-badge {
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+
+.lecturer-row-speaking .lecturer-full-name {
+  color: var(--quality-copy-strong);
+  margin: 0 0 8px;
+}
+
+.lecturer-row-speaking .lecturer-desc p + p {
+  margin-top: 12px;
+}
+
+.lecturer-row-speaking .lecturer-pending-contacts {
+  margin-bottom: 8px;
+}
+
+.lecturer-pending-contacts span {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--blue-50);
+  color: var(--quality-copy-strong);
+}
+
+.lecturer-contact-note {
+  color: var(--quality-copy-strong);
+  font-size: 14px;
+  margin: 0;
+}
+
+.lecturer-image-link {
+  display: block;
+  border-radius: 8px;
+}
+
+#teacher-cici .portrait-frame img {
+  object-position: center 32%;
+}
+
+#teacher-quynh .portrait-frame img {
+  object-position: center 39%;
+}
+
+.speaking-profile-image-dialog form {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
+.speaking-profile-image-dialog button {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--blue-50);
+  color: var(--navy-900);
+}
+
+.speaking-profile-image-dialog img {
+  width: auto;
+  max-width: 100%;
+  max-height: 68dvh;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+@media (max-width: 1100px) {
+  #lecturers .lecturer-video-empty { display: none; }
+}
