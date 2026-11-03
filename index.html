@@ -44,6 +44,7 @@
 <link rel="stylesheet" href="assets/speaking-finish.css?v=20261103">
 <link rel="stylesheet" href="assets/bee-card-colors.css?v=20261103-teacher-gradients">
 <link rel="stylesheet" href="assets/hof-unified.css?v=20261103-gold">
+<link rel="stylesheet" href="assets/faq-registration.css?v=20261103">
 </head>
 <body class="modern-site">
 
@@ -823,70 +824,82 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
 
             <div class="faq-list">
-                <article class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-1" onclick="toggleFaq(this)">
-                        <span>Em nên chọn lớp và giáo viên như thế nào?</span>
-                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-1" role="region" aria-hidden="true">
-                        <div class="faq-answer-inner">
-                            <p>Em hãy bắt đầu tại phần <strong>Học Thử</strong> và xem các video ghi hình bài dạy <strong>Writing Task 1</strong> và <strong>Writing Task 2</strong> của thầy Hồ Bách, cô Tuệ Nhi và thầy Gia Khang. Qua đó, em sẽ cảm nhận rõ hơn cách giảng, nhịp độ lớp và phong cách tương tác của từng giáo viên.</p>
-                            <p>Khi tìm được người phù hợp với cách học của mình, em có thể nhắn tin trực tiếp cho giáo viên đó để được tư vấn kỹ hơn về khóa học và lớp nên đăng ký.</p>
+                <div class="faq-column">
+                    <article class="faq-item">
+                        <button type="button" class="faq-question" id="faq-question-1" aria-expanded="false" aria-controls="faq-answer-1" onclick="toggleFaq(this)">
+                            <span>Em nên chọn lớp và giáo viên như thế nào?</span>
+                            <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-1" role="region" aria-labelledby="faq-question-1" aria-hidden="true">
+                            <div class="faq-answer-inner">
+                                <p>Em có thể xem bản ghi <a class="enrollment-faq-link" href="#recordings">lớp học thực tế</a> hoặc xem hồ sơ <a class="enrollment-faq-link" href="#writing-team">giáo viên Writing</a> và <a class="enrollment-faq-link" href="#speaking-team">giáo viên Speaking</a>.</p>
+                                <p>Sau khi chọn kỹ năng và giáo viên, em xem <a class="enrollment-faq-link" href="#schedule">lịch khai giảng</a> để tìm ca phù hợp hoặc nhắn giáo viên để được tư vấn.</p>
+                            </div>
                         </div>
-                    </div>
-                </article>
-
-                <article class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-2" onclick="toggleFaq(this)">
-                        <span>Lộ trình học kéo dài bao lâu và bao gồm những gì?</span>
-                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-2" role="region" aria-hidden="true">
-                        <div class="faq-answer-inner">
-                            <p>Lộ trình tiêu chuẩn gồm <strong>15 buổi</strong>, thường kéo dài khoảng <strong>1,5 đến 2 tháng</strong>. Trong khóa học, giáo viên sẽ lần lượt hướng dẫn các dạng bài trọng tâm và quy trình xử lý cụ thể cho từng dạng.</p>
-                            <p>Em được chấm tổng cộng <strong>25 task</strong>: 15 homework theo từng buổi học và 10 task sau khóa, tương đương <strong>5 full tests IELTS Writing</strong>. Các đề sau khóa có thể do em tự chọn hoặc giáo viên cung cấp.</p>
+                    </article>
+                    <article class="faq-item">
+                        <button type="button" class="faq-question" id="faq-question-3" aria-expanded="false" aria-controls="faq-answer-3" onclick="toggleFaq(this)">
+                            <span>Em được luyện thêm gì ngoài giờ học?</span>
+                            <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-3" role="region" aria-labelledby="faq-question-3" aria-hidden="true">
+                            <div class="faq-answer-inner">
+                                <p><strong>Writing:</strong> 10 task sau khóa tương đương 5 đề Writing đầy đủ. Em có thể tự chọn đề hoặc nhận đề từ giáo viên.</p>
+                                <p><strong>Speaking:</strong> Em được cấp ELSA Speech Analyzer Premium để tự luyện và có thể đăng ký thêm giờ luyện với mentor Speaking.</p>
+                            </div>
                         </div>
-                    </div>
-                </article>
-
-                <article class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-3" onclick="toggleFaq(this)">
-                        <span>10 task sau khóa được học và chấm như thế nào?</span>
-                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-3" role="region" aria-hidden="true">
-                        <div class="faq-answer-inner">
-                            <p>Mười task tương đương 5 full tests IELTS Writing, với đề em tự chọn hoặc được giáo viên cung cấp. Nếu chưa thi vội, em có thể tiếp tục tham gia lớp cùng level miễn phí để ôn lại kiến thức và dành thời gian hoàn thành các bài này. Khi đăng ký học lên level mới, em được giảm 30% học phí.</p>
+                    </article>
+                    <article class="faq-item">
+                        <button type="button" class="faq-question" id="faq-question-5" aria-expanded="false" aria-controls="faq-answer-5" onclick="toggleFaq(this)">
+                            <span>Em đăng ký và thanh toán học phí như thế nào?</span>
+                            <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-5" role="region" aria-labelledby="faq-question-5" aria-hidden="true">
+                            <div class="faq-answer-inner">
+                                <p>Em nhắn trực tiếp cho giáo viên để nhận thông tin chuyển khoản và đặt cọc <strong>10% học phí</strong>.</p>
+                                <p>Gần ngày khai giảng, em vào nhóm chung để nhận hướng dẫn thanh toán phần còn lại. Sau khi thanh toán đủ, em sẽ được thêm vào nhóm lớp.</p>
+                                <p>Nếu cần tư vấn trước khi chọn lớp, em có thể <a class="enrollment-faq-link" href="#register">để lại thông tin tại đây</a>.</p>
+                            </div>
                         </div>
-                    </div>
-                </article>
-
-                <article class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-4" onclick="toggleFaq(this)">
-                        <span>Nếu vắng một buổi học thì em cần làm gì?</span>
-                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-4" role="region" aria-hidden="true">
-                        <div class="faq-answer-inner">
-                            <p>Em hãy báo với giáo viên sớm nhất có thể. Nhờ hệ thống các lớp học song song, giáo viên có thể hỗ trợ sắp xếp để em học bù nội dung tương ứng ở một lớp khác, tùy lịch học và chỗ trống tại thời điểm đó.</p>
-                            <p>Ví dụ, nếu em đang học lớp 75 vào tối thứ Hai và thứ Năm, từ 20:00 đến 22:00, nhưng bận một buổi, em có thể được sắp xếp học cùng lớp 76 hoặc 77 có nội dung tương đương. Nhờ vậy, em vẫn theo kịp lộ trình và được học trực tiếp trên lớp.</p>
+                    </article>
+                </div>
+                <div class="faq-column">
+                    <article class="faq-item">
+                        <button type="button" class="faq-question" id="faq-question-2" aria-expanded="false" aria-controls="faq-answer-2" onclick="toggleFaq(this)">
+                            <span>Lộ trình Writing và Speaking gồm những gì?</span>
+                            <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-2" role="region" aria-labelledby="faq-question-2" aria-hidden="true">
+                            <div class="faq-answer-inner">
+                                <p><strong>Writing:</strong> 15 buổi học trên lớp và 25 task được chấm chữa, gồm 15 bài theo buổi và 10 task sau khóa.</p>
+                                <p><strong>Speaking:</strong> 18 buổi, gồm 8 buổi 90 phút với giáo viên và 10 buổi 60 phút luyện nói cùng mentor.</p>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <article class="faq-item">
-                    <button type="button" class="faq-question" aria-expanded="false" aria-controls="faq-answer-5" onclick="toggleFaq(this)">
-                        <span>Em đăng ký và thanh toán học phí như thế nào?</span>
-                        <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
-                    </button>
-                    <div class="faq-answer" id="faq-answer-5" role="region" aria-hidden="true">
-                        <div class="faq-answer-inner">
-                            <p>Em nhắn trực tiếp cho giáo viên để nhận thông tin chuyển khoản và đặt cọc <strong>10% (1/10) học phí</strong>.</p>
-                            <p>Gần ngày khai giảng, em sẽ được thêm vào <strong>nhóm chung</strong> để nhận hướng dẫn thanh toán phần còn lại. Sau khi thanh toán đầy đủ, em sẽ được thêm vào <strong>nhóm lớp</strong>.</p>
-                            <p>Nếu cần tư vấn trước khi chọn lớp, em có thể <a class="enrollment-faq-link" href="#register">để lại thông tin tại đây</a>.</p>
+                    </article>
+                    <article class="faq-item">
+                        <button type="button" class="faq-question" id="faq-question-4" aria-expanded="false" aria-controls="faq-answer-4" onclick="toggleFaq(this)">
+                            <span>Nếu vắng một buổi học thì em cần làm gì?</span>
+                            <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-4" role="region" aria-labelledby="faq-question-4" aria-hidden="true">
+                            <div class="faq-answer-inner">
+                                <p>Em báo giáo viên sớm để được hướng dẫn học bù theo nội dung, lịch và chỗ trống.</p>
+                                <p>Ví dụ, nếu vắng một buổi ở <strong>MBWrite06 nov26</strong>, em có thể học bù buổi tương ứng ở <strong>MBWrite07 nov26</strong> nếu giáo viên sắp xếp được.</p>
+                            </div>
                         </div>
-                    </div>
-                </article>
-
+                    </article>
+                    <article class="faq-item">
+                        <button type="button" class="faq-question" id="faq-question-6" aria-expanded="false" aria-controls="faq-answer-6" onclick="toggleFaq(this)">
+                            <span>Nếu chưa thi vội, em có thể học lại không?</span>
+                            <span class="faq-icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                        </button>
+                        <div class="faq-answer" id="faq-answer-6" role="region" aria-labelledby="faq-question-6" aria-hidden="true">
+                            <div class="faq-answer-inner">
+                                <p>Cả Writing và Speaking đều có thể học lại lớp cùng trình độ miễn phí. Với Writing, khi đăng ký học lên trình độ mới, em được giảm 30% học phí.</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
             </div>
         </div>
     </section>
@@ -962,12 +975,20 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <input type="tel" id="phone" name="phone" class="form-control" placeholder="0943..." inputmode="tel" autocomplete="tel" required="">
     </div>
 
-<div class="form-group">
-    <label for="course">Lớp muốn đăng ký</label>
-    <select id="course" name="course" class="form-control" required="">
-        <option value="">-- Chọn lớp --</option>
-    </select>
-</div>
+                    <div class="form-group register-course-fields">
+                        <div>
+                            <label for="registerTeacher">Giáo viên</label>
+                            <select id="registerTeacher" class="form-control" required disabled>
+                                <option value="">Đang tải giáo viên…</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="course">Lớp muốn đăng ký</label>
+                            <select id="course" name="course" class="form-control" required disabled>
+                                <option value="">Chọn giáo viên trước</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <p class="register-form-note">Gửi thông tin để được tư vấn. Giáo viên sẽ hướng dẫn em đặt cọc và thanh toán qua tin nhắn.</p>
                     <button type="submit" class="submit-btn" id="registerSubmitButton">Nhận lộ trình phù hợp</button>
@@ -1375,6 +1396,7 @@ function toggleContact(){
         } catch (error) {
             console.error("Lỗi tải dữ liệu:", error);
             document.getElementById("scheduleFilterResult").textContent = "Tạm thời không thể tải lịch học.";
+            registrationTeacher.options[0].textContent = "Chưa tải được danh sách lớp";
             document.querySelectorAll('#schedule tbody').forEach(tb => {
                 tb.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Tạm thời không thể tải lịch học. Xin vui lòng liên hệ Fanpage.</td></tr>';
             });
@@ -1876,20 +1898,39 @@ function toggleContact(){
         }
     });
 
-    // Registration always uses the complete intake, independently of schedule filters.
-    function renderRegistrationCourses(rows) {
-        const select = document.getElementById("course");
-        if (!select) return;
-        const previous = select.value;
-        select.innerHTML = '<option value="">-- Chọn lớp --</option>';
-        rows.filter(classHasAvailableSlots).slice().sort(comparePublicClasses).forEach(row => {
-            const option = document.createElement("option");
-            option.value = MaybeSchedule.normalizeCode(row.MaLop) + " | " + row.GiangVien;
-            option.textContent = MaybeSchedule.normalizeCode(row.MaLop) + " - " + row.GiangVien + " (" + row.LichHoc + ")";
-            select.appendChild(option);
-        });
-        if ([...select.options].some(option => option.value === previous)) select.value = previous;
+    const registrationTeacher = document.getElementById("registerTeacher");
+    const registrationCourse = document.getElementById("course");
+    let registrationRows = [];
+
+    function updateRegistrationCourseOptions() {
+        const previous = registrationCourse.value;
+        const teacher = registrationTeacher.value;
+        registrationCourse.replaceChildren(new Option(teacher ? "Chọn lớp" : "Chọn giáo viên trước", ""));
+        registrationCourse.disabled = !teacher;
+        for (const row of registrationRows) {
+            if (String(row.GiangVien).trim() !== teacher) continue;
+            const code = MaybeSchedule.normalizeCode(row.MaLop);
+            registrationCourse.add(new Option(code + " · " + row.LichHoc, code + " | " + row.GiangVien));
+        }
+        if ([...registrationCourse.options].some(option => option.value === previous)) registrationCourse.value = previous;
     }
+
+    // Use all available classes independently of the public schedule filters.
+    function renderRegistrationCourses(rows) {
+        const previous = registrationTeacher.value;
+        registrationRows = rows.filter(row => classHasAvailableSlots(row) && String(row.GiangVien || "").trim())
+            .sort(comparePublicClasses);
+        const teachers = [...new Set(registrationRows.map(row => String(row.GiangVien).trim()))]
+            .sort((a, b) => a.localeCompare(b, "vi"));
+        registrationTeacher.replaceChildren(new Option(teachers.length ? "Chọn giáo viên" : "Chưa có lớp còn chỗ", ""));
+        for (const teacher of teachers) registrationTeacher.add(new Option(teacher, teacher));
+        registrationTeacher.disabled = !teachers.length;
+        if (teachers.includes(previous)) registrationTeacher.value = previous;
+        updateRegistrationCourseOptions();
+    }
+
+    registrationTeacher.addEventListener("change", updateRegistrationCourseOptions);
+    registrationTeacher.form.addEventListener("reset", () => queueMicrotask(updateRegistrationCourseOptions));
 
     function renderPublicTables(data) {
         const tbFoundation = document.getElementById('tbody-foundation');
@@ -1996,6 +2037,11 @@ async function submitRegister(e){
     const submitButton = document.getElementById("registerSubmitButton");
     const status = document.getElementById("registerStatus");
     if (submitButton?.disabled) return;
+    if (!document.getElementById("course").value) {
+        status.textContent = "Em cần chọn giáo viên và lớp trước khi gửi.";
+        status.className = "register-status is-error";
+        return;
+    }
     if (submitButton) {
         submitButton.disabled = true;
         submitButton.textContent = "Đang gửi thông tin…";

@@ -1,0 +1,15 @@
+#faq .faq-column {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-width: 0;
+}
+.register-course-fields {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 14px;
+}
+.register-course-fields .form-control:disabled {
+  cursor: not-allowed;
+  opacity: .75;
+}
