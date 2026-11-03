@@ -2018,7 +2018,7 @@ function toggleContact(){
                     <td data-label="Khai giảng">${MaybeSchedule.dateMarkup(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7))}<span class="schedule-end">Kết thúc: ${MaybeSchedule.dateMarkup(row.KetThuc,MaybeSchedule.date(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7)).slice(0,7))}</span></td>
                     <td data-label="Học phí"><div class="schedule-fee">
                         ${tuitionPlan}
-                        ${row.MaLop.startsWith("MBWrite") ? '<a class="schedule-fee-benefits" href="#features" aria-label="Quyền lợi Writing trong học phí. 15 buổi, 25 task chấm chữa">15 buổi · 25 task <span aria-hidden="true">↗</span></a>' : /^MBSpeak/i.test(row.MaLop) ? '<a class="schedule-fee-benefits" href="#features-speaking">Đặc quyền Speaking</a>' : ""}
+                        ${/^MBSpeak/i.test(row.MaLop) ? '<a class="schedule-fee-benefits" href="#features-speaking">Đặc quyền Speaking</a>' : ""}
                     </div></td>
                     <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft === 0 ? "Full slot" : `${slotsLeft}/${totalSlots}`}</span></td>
                 </tr>
