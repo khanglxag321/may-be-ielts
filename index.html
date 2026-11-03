@@ -122,8 +122,8 @@
         </div>
             <div id="features-speaking" role="tabpanel" aria-labelledby="benefit-tab-speaking">
                 <div class="section-heading">
-                    <p class="eyebrow">01 / Đặc quyền học viên</p>
-                    <h2 class="section-title">may(be)speak. speaking cấp tốc</h2>
+                    <p class="eyebrow" style="gap:0; letter-spacing:normal; white-space:nowrap">01 / Đặc quyền học viên / speaking cấp tốc</p>
+                    <h2 class="section-title">may(be)speak.</h2>
                 </div>
                 <div class="features-grid speak-feature-grid">
                     <article class="feature-card">
@@ -141,16 +141,6 @@
                         <div class="feature-card-copy"><h3>Tự luyện với <span>ELSA Premium</span></h3><p>Em được cấp tài khoản ELSA Speech Analyzer Premium và hướng dẫn cách dùng để tự luyện ngoài giờ với giáo viên và mentor.</p></div>
                         <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"></use></svg><span>may(be)speak.</span></div>
                     </article>
-                    <article class="feature-card">
-                        <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip" aria-hidden="true">04</span></div>
-                        <div class="feature-card-copy"><h3>Tài khoản <span>Maybe Study</span></h3><p>Học viên MAYBE có tài khoản tại <strong>maybestudy.com</strong> để luyện Listening, Reading và áp dụng tư duy Writing, Speaking theo cách học trên lớp. Với Writing, em có <strong>8 lượt</strong> tạo outline và bài mẫu cho đề em chọn.</p></div>
-                        <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"></use></svg><span>may(be)speak.</span></div>
-                    </article>
-                    <article class="feature-card">
-                        <div class="feature-tile-top"><span>@maybe.ielts</span><span class="feature-chip" aria-hidden="true">05</span></div>
-                        <div class="feature-card-copy"><h3>Tặng <span>Writing Package</span></h3><p>Gói trị giá <strong>3.000.000₫</strong> gồm 100 video lên outline từ may(be)bach. và may(be)nhi., 100 outline gốc và 100 bài mẫu viết theo đúng các outline đó.</p></div>
-                        <div class="feature-tile-foot"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#maybe-mark"></use></svg><span>may(be)speak.</span></div>
-                    </article>
                 </div>
             </div>
             <script>
@@ -159,7 +149,9 @@
                 const tabList = features.querySelector('.benefit-skill-tabs');
                 const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
                 const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+                const studyHub = features.querySelector('#studyHub');
                 function show(index) {
+                    if (studyHub.parentElement !== panels[index]) panels[index].append(studyHub);
                     tabs.forEach((tab, position) => {
                         const selected = position === index;
                         tab.setAttribute('aria-selected', String(selected));
