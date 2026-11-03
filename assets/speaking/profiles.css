@@ -1,0 +1,120 @@
+.family-roster {
+  gap: 10px;
+}
+.family-member {
+  padding: 9px 5px;
+  border-radius: 10px;
+  min-height: 52px;
+}
+a.family-member {
+  background: #ffffff0a;
+}
+a.family-member:hover {
+  background: #ffffff17;
+}
+.family-member small {
+  font-size: 12px;
+}
+.teacher-group-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+.teacher-group-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid var(--blue-300);
+  border-radius: 999px;
+  background: var(--blue-50);
+  color: var(--navy-700);
+  font-weight: 700;
+}
+.teacher-group-title {
+  font-size: clamp(26px, 3vw, 36px);
+  margin-bottom: 20px;
+}
+.speaking-team {
+  margin-top: clamp(36px, 5vw, 62px);
+}
+.speaking-team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+.speaking-profile {
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid #ddc8db;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fff2f7, #fff 70%);
+  color: var(--navy-900);
+  font-size: 16px;
+}
+#teacher-quynh {
+  border-color: #bfd3ea;
+  background: linear-gradient(145deg, #eaf4ff, #fff 70%);
+}
+.speaking-profile-head {
+  display: grid;
+  grid-template-columns: clamp(72px, 14vw, 124px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(12px, 2vw, 22px);
+}
+.speaking-profile-head img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 32%;
+  border-radius: 12px;
+}
+.speaking-profile h4 {
+  font-size: clamp(24px, 3vw, 34px);
+}
+.speaking-profile-name {
+  color: var(--quality-copy-strong);
+  margin-top: 3px;
+}
+.speaking-profile-score {
+  margin-top: 8px;
+  color: #812b54;
+  font-weight: 750;
+}
+#teacher-quynh .speaking-profile-score {
+  color: #244f8c;
+}
+.speaking-profile details {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+.speaking-profile summary {
+  cursor: pointer;
+  padding: 10px 0;
+  color: var(--quality-trial-blue);
+  font-size: 15px;
+  font-weight: 700;
+}
+.speaking-profile summary:focus-visible {
+  outline: 3px solid var(--quality-focus-light);
+  outline-offset: 3px;
+}
+.speaking-profile details img {
+  height: auto;
+  max-width: min(100%, 410px);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+@media (max-width: 680px) {
+  .speaking-team-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 460px) {
+  .family-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .family-member { font-size: 14px; }
+  .family-member small { font-size: 12px; }
+}
