@@ -47,3 +47,11 @@
 #recordings .teacher-recording-card button:hover {
   box-shadow: inset 0 0 0 2px var(--bee-edge);
 }
+
+/* Follow the Speaking roster from Bách through Cici to Kem. */
+#lecturers:has(#teacher-tab-speaking[aria-selected="true"]) {
+  background: linear-gradient(180deg, #e5f0ff 0%, #c9deff 26%, #f6d5e6 53%, #f9e2ed 64%, #fae8be 85%, #fff4dc 100%);
+}
+#speaking-team .lecturer-grid::before {
+  background: linear-gradient(180deg, #2c6bff 0%, #ce7aa6 50%, #d8b566 90%, #f4dca4 100%);
+}
