@@ -55,3 +55,17 @@
 #speaking-team .lecturer-grid::before {
   background: linear-gradient(180deg, #2c6bff 0%, #ce7aa6 50%, #d8b566 90%, #f4dca4 100%);
 }
+
+#teacher-quynh .lecturer-conversion-link {
+  background: var(--bee-action);
+  color: var(--bee-action-ink);
+  border-color: var(--bee-edge);
+}
+
+/* Match the Speaking transitions to the colors of the Writing roster. */
+#lecturers:has(#teacher-tab-writing[aria-selected="true"]) {
+  background: linear-gradient(180deg, #e5f0ff 0%, #c9deff 26%, #f6d5e6 53%, #f9e2ed 64%, #cceadd 85%, #e0f5eb 100%);
+}
+#writing-team .lecturer-grid::before {
+  background: linear-gradient(180deg, #2c6bff 0%, #ce7aa6 50%, #60bb98 90%, #92d6b9 100%);
+}
