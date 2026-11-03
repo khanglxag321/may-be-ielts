@@ -1,0 +1,51 @@
+#features .benefit-skill-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 320px);
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--blue-50);
+}
+
+#features .benefit-skill-tabs button {
+  min-height: 44px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--navy-700);
+  font-size: 15px;
+  font-weight: 750;
+}
+
+#features .benefit-skill-tabs button:hover {
+  background: var(--blue-100);
+}
+
+#features .benefit-skill-tabs button[aria-selected="true"] {
+  background: var(--navy-700);
+  color: var(--white);
+}
+
+#features-writing[hidden],
+#features-speaking[hidden],
+#features .benefit-skill-tabs[hidden] {
+  display: none;
+}
+
+.speak-feature-grid .feature-card:first-child::after {
+  content: "18";
+}
+
+.speak-benefit-schedule {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 18px;
+  color: var(--navy-700);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

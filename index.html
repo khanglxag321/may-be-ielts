@@ -39,6 +39,8 @@
 <link rel="stylesheet" href="assets/layout-family.css?v=20261103">
 <link rel="stylesheet" href="assets/layout-teachers.css?v=20261103">
 <link rel="stylesheet" href="assets/layout-schedule.css?v=20261103">
+<link rel="stylesheet" href="assets/unify-speaking.css?v=20261103">
+<link rel="stylesheet" href="assets/add-speak-benefits.css?v=20261103">
 </head>
 <body class="modern-site">
 
@@ -80,7 +82,7 @@
 <h2 class="family-kicker">Đại gia đình Bee</h2>
 <div class="family-stage">
 <div id="beeWorld" class="family-photo-world" aria-label="Ảnh đại gia đình sáu Bee">
-  <figure class="family-photo-frame"><img class="family-portrait" src="assets/modern/family/portrait.webp" srcset="assets/modern/family/portrait-768.webp 768w, assets/modern/family/portrait.webp 1536w" sizes="(max-width: 670px) calc(100vw - 40px), 632px" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Đại gia đình Bee gồm Gia Khang, Cici, Tuệ Nhi, Pu, Hồ Bách và Quỳnh Kem; thầy Bách khoanh tay đứng giữa."></figure>
+  <figure class="family-photo-frame"><img class="family-portrait" src="assets/modern/family/portrait.webp" srcset="assets/modern/family/portrait-768.webp 768w, assets/modern/family/portrait.webp 1536w" sizes="(max-width: 670px) calc(100vw - 40px), 632px" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Đại gia đình Bee gồm Gia Khang, Cici, Tuệ Nhi, Pu, Hồ Bách và Kem; thầy Bách khoanh tay đứng giữa."></figure>
   <svg class="family-leaders" viewBox="0 0 768 512" aria-hidden="true"><path class="family-key-khang" d="M -22 242 H 54 L 125 112" vector-effect="non-scaling-stroke"/><path class="family-key-cici" d="M -22 67 H 52 L 94 18 H 317 L 343 40" vector-effect="non-scaling-stroke"/><path class="family-key-nhi" d="M 790 109 H 704 L 654 123" vector-effect="non-scaling-stroke"/><path class="family-key-pu" d="M -22 417 H 56 L 113 320" vector-effect="non-scaling-stroke"/><path class="family-key-bach" d="M 790 451 H 724 L 684 491 H 493 L 445 453" vector-effect="non-scaling-stroke"/><path class="family-key-quynh" d="M 790 280 H 715 L 656 329" vector-effect="non-scaling-stroke"/></svg>
   <div class="family-pins" aria-hidden="true"><span class="family-pin family-key-khang" style="--pin-x:16.28%;--pin-y:21.88%">1</span><span class="family-pin family-key-cici" style="--pin-x:44.66%;--pin-y:7.81%">2</span><span class="family-pin family-key-nhi" style="--pin-x:85.16%;--pin-y:24.02%">3</span><span class="family-pin family-key-pu" style="--pin-x:14.71%;--pin-y:62.50%">4</span><span class="family-pin family-key-bach" style="--pin-x:57.94%;--pin-y:88.48%">5</span><span class="family-pin family-key-quynh" style="--pin-x:85.42%;--pin-y:64.26%">6</span></div>
 </div>
@@ -90,14 +92,20 @@
 <a class="family-member family-key-nhi" href="#teacher-nhi"><span class="family-number" aria-hidden="true">3</span><span><strong>Tuệ Nhi</strong><small><span>Overall 8.0</span><span>Writing 8.0</span></small></span></a>
 <div class="family-member family-key-pu"><span class="family-number" aria-hidden="true">4</span><span><strong>Pu</strong><small><span>Quản lý team</span></small></span></div>
 <a class="family-member family-key-bach" href="#teacher-bach"><span class="family-number" aria-hidden="true">5</span><span><strong>Hồ Bách</strong><small><span>Overall 8.5</span><span>Writing 8.5</span></small></span></a>
-<a class="family-member family-key-quynh" href="#teacher-quynh"><span class="family-number" aria-hidden="true">6</span><span><strong>Quỳnh Kem</strong><small><span>Overall 8.5</span><span>Speaking 8.0</span></small></span></a>
+<a class="family-member family-key-quynh" href="#teacher-quynh"><span class="family-number" aria-hidden="true">6</span><span><strong>Kem</strong><small><span>Overall 8.5</span><span>Speaking 8.0</span></small></span></a>
 </div>
 </div>
 <div class="world-controls"><button type="button" id="heroNhiIntro" aria-pressed="false"><span>♫</span> Nghe Bee Nhi <i></i><i></i><i></i></button><button type="button" id="beeTourStart">Dẫn mình đi <span>↗</span></button></div></div><div class="container hero-foot"><span class="hero-foot-brand">a little <b>maybe.</b><br>a lot of possibilities.</span><div><strong>15</strong><span>buổi học<br>có hệ thống</span></div><div><strong>25</strong><span>task Writing<br>được chấm chữa</span></div><a href="#features" class="scroll-cue">Khám phá <span>↓</span></a></div></section>
 
     <!-- Features Section -->
     <section id="features" class="section-padding">
-        <div class="container"><div class="section-heading"><p class="eyebrow">01 / Đặc quyền học viên</p><h2 class="section-title">may(be)write. writing cấp tốc</h2><p class="section-subtitle">15 buổi học trên lớp, 25 task được chấm chữa và một không gian để em tiếp tục luyện tập sau khóa.</p></div>
+        <div class="container">
+            <div class="benefit-skill-tabs" role="tablist" aria-label="Đặc quyền theo kỹ năng" hidden>
+                <button type="button" role="tab" id="benefit-tab-writing" aria-controls="features-writing" aria-selected="true">Writing</button>
+                <button type="button" role="tab" id="benefit-tab-speaking" aria-controls="features-speaking" aria-selected="false" tabindex="-1">Speaking</button>
+            </div>
+            <div id="features-writing" role="tabpanel" aria-labelledby="benefit-tab-writing">
+                <div class="section-heading"><p class="eyebrow">01 / Đặc quyền học viên</p><h2 class="section-title">may(be)write. writing cấp tốc</h2><p class="section-subtitle">15 buổi học trên lớp, 25 task được chấm chữa và một không gian để em tiếp tục luyện tập sau khóa.</p></div>
 
 
 
@@ -109,6 +117,79 @@
  <div class="study-hub-panel" id="hubPanelPackage" role="tabpanel" aria-labelledby="hubTabPackage" hidden><div class="package-benefit"><div><p class="package-gift">TẶNG KÈM GÓI TRỊ GIÁ 3.000.000Đ</p><h4>The Writing Package</h4><p>Xem cách may(be)bach. và may(be)nhi. lên ý, theo dõi outline gốc rồi đối chiếu cách triển khai trong bài sample.</p></div><div class="package-counts"><div><strong>100</strong><span>video outline độc quyền</span></div><div><strong>100</strong><span>outline gốc của video</span></div><div><strong>100</strong><span>bài sample theo outline</span></div></div></div><div class="package-first-glance"><div><strong>Thử mở một bài giảng.</strong><p>Xem giao diện Writing Package, theo dõi cách giáo viên lên ý và đối chiếu outline với bài sample.</p></div><a href="https://maybestudy.com/demo/?area=writing-package" class="package-demo-link" target="_blank" rel="noopener">Xem thử Writing Package <span aria-hidden="true">↗</span></a></div></div>
  <div class="study-hub-panel" id="hubPanelResources" role="tabpanel" aria-labelledby="hubTabResources" hidden><div class="resource-benefits"><article><p class="study-skill-label">WRITING PLAYBOOK</p><h4>Ôn lại toàn bộ các dạng bài.</h4><p>Cuối khóa, em được tặng Playbook của giáo viên để hệ thống lại kiến thức và tra cứu cách làm khi cần.</p><button type="button" class="privilege-link" data-privilege-open="playbookDialog" aria-haspopup="dialog">Xem vài trang mẫu ↗</button></article><article><p class="study-skill-label">CÔNG THỨC THỰC CHIẾN</p><h4>Nhớ cách dùng, dễ áp dụng.</h4><p>Bộ công thức giúp em ôn lại cách diễn đạt và vận dụng vào bài viết. Học liệu đang được tích hợp dần vào tài khoản Maybe Study để em dễ tìm lại khi học.</p></article></div><p class="resource-access-note">Trọn bộ học liệu dành riêng cho học viên. Phần công khai chỉ giới thiệu một số trang mẫu.</p></div>
 </section>
+        </div>
+            <div id="features-speaking" role="tabpanel" aria-labelledby="benefit-tab-speaking">
+                <div class="section-heading">
+                    <p class="eyebrow">01 / Đặc quyền học viên</p>
+                    <h2 class="section-title">may(be)speak.</h2>
+                    <p class="section-subtitle">Lớp IELTS Speaking mã MBS. Đầu vào khoảng 5.0, hướng đến 6.5–7.0+.</p>
+                </div>
+                <div class="features-grid speak-feature-grid">
+                    <article class="feature-card">
+                        <div class="feature-tile-top"><span>may(be)speak.</span><span class="feature-chip" aria-hidden="true">01</span></div>
+                        <div class="feature-card-copy"><h3>Lộ trình 18 buổi</h3><p><strong>8 buổi × 90 phút</strong> học với giáo viên IELTS Speaking 8.0–8.5. Em học trọn phần lý thuyết, thực hành trên lớp và áp dụng cách tư duy riêng của MAYBE. <strong>10 buổi × 60 phút</strong> luyện tập cùng mentor IELTS Speaking 7.0–7.5.</p></div>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-tile-top"><span>may(be)speak.</span><span class="feature-chip" aria-hidden="true">02</span></div>
+                        <div class="feature-card-copy"><h3>Học lại miễn phí</h3><p>Nếu chưa thi vội, em có thể học tiếp lớp cùng trình độ miễn phí. Học viên lớp Speaking cũng có thể đăng ký thêm giờ luyện tập cùng mentor Speaking.</p></div>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-tile-top"><span>may(be)speak.</span><span class="feature-chip" aria-hidden="true">03</span></div>
+                        <div class="feature-card-copy"><h3>ELSA Speech Analyzer Premium</h3><p>Em được cấp tài khoản Premium và hướng dẫn cách dùng để tự luyện ngoài giờ với giáo viên và mentor.</p></div>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-tile-top"><span>may(be)speak.</span><span class="feature-chip" aria-hidden="true">04</span></div>
+                        <div class="feature-card-copy"><h3>Tài khoản Maybe Study</h3><p>Học viên MAYBE có tài khoản tại <strong>maybestudy.com</strong> để luyện Listening, Reading và áp dụng tư duy Writing, Speaking theo cách học trên lớp. Với Writing, em có <strong>8 lượt</strong> tạo outline và bài mẫu cho đề em chọn.</p></div>
+                    </article>
+                    <article class="feature-card">
+                        <div class="feature-tile-top"><span>may(be)speak.</span><span class="feature-chip" aria-hidden="true">05</span></div>
+                        <div class="feature-card-copy"><h3>Tặng Writing Package</h3><p>Gói trị giá <strong>3.000.000₫</strong> gồm 100 video lên outline từ may(be)bach. và may(be)nhi., 100 outline gốc và 100 bài mẫu viết theo đúng các outline đó.</p></div>
+                    </article>
+                </div>
+                <a class="speak-benefit-schedule" href="#schedule" onclick="showTeacherSchedule('all', 'speaking')">Xem lịch lớp Speaking</a>
+            </div>
+            <script>
+            (() => {
+                const features = document.getElementById('features');
+                const tabList = features.querySelector('.benefit-skill-tabs');
+                const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+                const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+                function show(index) {
+                    tabs.forEach((tab, position) => {
+                        const selected = position === index;
+                        tab.setAttribute('aria-selected', String(selected));
+                        tab.tabIndex = selected ? 0 : -1;
+                        panels[position].hidden = !selected;
+                    });
+                }
+                function selectFromHash(hash) {
+                    if (hash === '#features-speaking') show(1);
+                    if (hash === '#features' || hash === '#features-writing') show(0);
+                }
+                tabs.forEach((tab, index) => {
+                    tab.addEventListener('click', () => show(index));
+                    tab.addEventListener('keydown', event => {
+                        const next = { ArrowLeft: 1 - index, ArrowRight: 1 - index, Home: 0, End: 1 }[event.key];
+                        if (next === undefined) return;
+                        event.preventDefault();
+                        show(next);
+                        tabs[next].focus();
+                    });
+                });
+                document.addEventListener('click', event => {
+                    const link = event.target.closest('a[href^="#"]');
+                    if (!link || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+                    selectFromHash(link.hash);
+                });
+                window.addEventListener('hashchange', () => {
+                    const wasHidden = panels[1].hidden;
+                    selectFromHash(location.hash);
+                    if (wasHidden && location.hash === '#features-speaking') panels[1].scrollIntoView();
+                });
+                show(location.hash === '#features-speaking' ? 1 : 0);
+                tabList.hidden = false;
+            })();
+            </script>
         </div>
     </section>
 
@@ -264,15 +345,15 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     <div class="teacher-recording-card recording-pending">
         <div class="recording-mascot-v4"><img src="assets/modern/family/cici.webp" alt="" loading="lazy" decoding="async"></div>
         <h3>Cici</h3>
-        <p class="aim">IELTS Speaking</p>
+        <p class="aim">Speaking 5.0 → 6.5–7.0+</p>
         <button type="button" aria-haspopup="dialog" onclick="document.getElementById('recordingPendingTitle').textContent = 'Lớp học của Cici'; document.getElementById('recordingPending').showModal()">Xem lớp học thực tế</button>
     </div>
 
     <div class="teacher-recording-card recording-pending">
         <div class="recording-mascot-v4"><img src="assets/modern/family/quynh-kem.webp" alt="" loading="lazy" decoding="async"></div>
-        <h3>Quỳnh Kem</h3>
-        <p class="aim">IELTS Speaking</p>
-        <button type="button" aria-haspopup="dialog" onclick="document.getElementById('recordingPendingTitle').textContent = 'Lớp học của Quỳnh Kem'; document.getElementById('recordingPending').showModal()">Xem lớp học thực tế</button>
+        <h3>Kem</h3>
+        <p class="aim">Speaking 5.0 → 6.5–7.0+</p>
+        <button type="button" aria-haspopup="dialog" onclick="document.getElementById('recordingPendingTitle').textContent = 'Lớp học của Kem'; document.getElementById('recordingPending').showModal()">Xem lớp học thực tế</button>
     </div>
 </div>
 
@@ -401,6 +482,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             </div>
             </div>
             <div id="speaking-team">
+                <p class="speaking-team-target">Lộ trình Speaking từ 5.0, hướng đến 6.5–7.0+.</p>
                 <div class="lecturer-grid">
                 <article class="lecturer-row lecturer-row-speaking" id="teacher-cici" aria-labelledby="teacher-cici-name">
                     <div class="teacher-media">
@@ -410,10 +492,10 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                             </a>
                         </figure>
                         <figure class="certificate-frame">
-                            <a class="lecturer-image-link" href="assets/speaking/cici-ielts.webp" aria-label="Xem điểm IELTS của Cici">
-                                <img src="assets/speaking/cici-ielts.webp" alt="Trích bảng điểm IELTS của Cici. Overall 8.0, Speaking 8.0." loading="lazy" decoding="async">
+                            <a class="lecturer-image-link" href="assets/speaking/cici-ielts-public.jpg" aria-label="Xem điểm IELTS của Cici">
+                                <img src="assets/speaking/cici-ielts-public.jpg" alt="Bảng điểm IELTS của Cici. Overall 8.0, Speaking 8.0." loading="lazy" decoding="async">
                             </a>
-                            <figcaption>Trích bảng điểm IELTS · Bấm để xem lớn</figcaption>
+                            <figcaption>Bảng điểm IELTS · Bấm để xem lớn</figcaption>
                         </figure>
                     </div>
                     <div class="lecturer-info">
@@ -421,13 +503,14 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         <h3 class="lecturer-name" id="teacher-cici-name">Cici</h3>
                         <p class="lecturer-full-name">Nguyễn Thị Lan Trinh</p>
                         <p class="lecturer-score">Overall 8.0 | Speaking 8.0</p>
-                        <div class="lecturer-desc">
-                            <p>Cici tốt nghiệp loại Giỏi ngành Ngôn ngữ Anh, định hướng Sư phạm, và đang theo học Thạc sĩ TESOL tại Đại học Edith Cowan (Úc). Cô có hơn 5 năm kinh nghiệm dạy tiếng Anh và IELTS, đồng thời là giảng viên thỉnh giảng tiếng Anh ở bậc đại học.</p>
-                            <p>Trong lớp Speaking, cô giúp học viên phát triển ý tưởng, tự xây dựng câu trả lời và diễn đạt tự nhiên hơn qua thực hành.</p>
-                        </div>
+                        <p class="lecturer-desc">Cici có hơn 5 năm dạy tiếng Anh và IELTS, từng giảng dạy ở bậc đại học và đang học Thạc sĩ TESOL tại Đại học Edith Cowan (Úc). Cô giúp học viên phát triển ý tưởng và diễn đạt tự nhiên hơn khi nói.</p>
                         <div class="social-links">
                             <a href="https://www.facebook.com/elise.young.5283" target="_blank" rel="noopener noreferrer" aria-label="Facebook của Cici"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
                             <a href="https://zalo.me/0918943544" class="contact-phone" target="_blank" rel="noopener noreferrer" aria-label="Zalo của Cici"><i class="fa-solid fa-comment" aria-hidden="true"></i> Zalo</a>
+                        </div>
+                        <div class="lecturer-conversion">
+                            <span class="lecturer-slot-note">Lịch lớp Speaking đang cập nhật</span>
+                            <button type="button" class="lecturer-conversion-link" aria-haspopup="dialog" data-speaking-slot="Cici">Xem lịch còn slot của Cici <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="lecturer-video lecturer-video-empty" aria-hidden="true"></div>
@@ -436,29 +519,30 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 <article class="lecturer-row lecturer-row-speaking" id="teacher-quynh" aria-labelledby="teacher-quynh-name">
                     <div class="teacher-media">
                         <figure class="portrait-frame">
-                            <a class="lecturer-image-link" href="assets/speaking/quynh.webp" aria-label="Xem ảnh Quỳnh Kem">
-                                <img src="assets/speaking/quynh.webp" alt="Giáo viên Quỳnh Kem" loading="lazy" decoding="async">
+                            <a class="lecturer-image-link" href="assets/speaking/quynh.webp" aria-label="Xem ảnh Kem">
+                                <img src="assets/speaking/quynh.webp" alt="Giáo viên Kem" loading="lazy" decoding="async">
                             </a>
                         </figure>
                         <figure class="certificate-frame">
-                            <a class="lecturer-image-link" href="assets/speaking/quynh-ielts.webp" aria-label="Xem điểm IELTS của Quỳnh Kem">
-                                <img src="assets/speaking/quynh-ielts.webp" alt="Trích bảng điểm IELTS của Quỳnh Kem. Overall 8.5, Speaking 8.0." loading="lazy" decoding="async">
+                            <a class="lecturer-image-link" href="assets/speaking/quynh-ielts-public.jpg" aria-label="Xem điểm IELTS của Kem">
+                                <img src="assets/speaking/quynh-ielts-public.jpg" alt="Bảng điểm IELTS của Kem. Overall 8.5, Speaking 8.0." loading="lazy" decoding="async">
                             </a>
-                            <figcaption>Trích bảng điểm IELTS · Bấm để xem lớn</figcaption>
+                            <figcaption>Bảng điểm IELTS · Bấm để xem lớn</figcaption>
                         </figure>
                     </div>
                     <div class="lecturer-info">
                         <span class="lecturer-badge">Giáo viên Speaking</span>
-                        <h3 class="lecturer-name" id="teacher-quynh-name">Quỳnh Kem</h3>
+                        <h3 class="lecturer-name" id="teacher-quynh-name">Kem</h3>
                         <p class="lecturer-full-name">Trần Như Quỳnh</p>
                         <p class="lecturer-score">Overall 8.5 | Speaking 8.0</p>
-                        <div class="lecturer-desc">
-                            <p>Quỳnh Kem là sinh viên năm cuối ngành Sư phạm Tiếng Anh tại Trường Đại học Ngoại ngữ, Đại học Quốc gia Hà Nội. Cô có khoảng 3 năm kinh nghiệm dạy tiếng Anh cho học viên ở nhiều độ tuổi và trình độ.</p>
-                            <p>Cô điều chỉnh cách dạy theo nhu cầu của từng học viên, giúp các em tự tin diễn đạt ý tưởng và giao tiếp tự nhiên hơn.</p>
-                        </div>
+                        <p class="lecturer-desc">Kem học năm cuối ngành Sư phạm Tiếng Anh tại Trường Đại học Ngoại ngữ, Đại học Quốc gia Hà Nội và có khoảng 3 năm kinh nghiệm giảng dạy. Cô điều chỉnh bài luyện Speaking theo nhu cầu của từng học viên.</p>
                         <div class="social-links">
-                            <a href="https://www.facebook.com/quynh.kem.80311" target="_blank" rel="noopener noreferrer" aria-label="Facebook của Quỳnh Kem"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
-                            <a href="https://zalo.me/0522576192" class="contact-phone" target="_blank" rel="noopener noreferrer" aria-label="Zalo của Quỳnh Kem"><i class="fa-solid fa-comment" aria-hidden="true"></i> Zalo</a>
+                            <a href="https://www.facebook.com/quynh.kem.80311" target="_blank" rel="noopener noreferrer" aria-label="Facebook của Kem"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a>
+                            <a href="https://zalo.me/0522576192" class="contact-phone" target="_blank" rel="noopener noreferrer" aria-label="Zalo của Kem"><i class="fa-solid fa-comment" aria-hidden="true"></i> Zalo</a>
+                        </div>
+                        <div class="lecturer-conversion">
+                            <span class="lecturer-slot-note">Lịch lớp Speaking đang cập nhật</span>
+                            <button type="button" class="lecturer-conversion-link" aria-haspopup="dialog" data-speaking-slot="Kem">Xem lịch còn slot của Kem <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
                         </div>
                     </div>
                     <div class="lecturer-video lecturer-video-empty" aria-hidden="true"></div>
@@ -467,6 +551,11 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             </div>
         </div>
     </section>
+    <dialog class="recording-pending-dialog" id="speaking-slot-dialog" aria-labelledby="speaking-slot-title">
+        <h2 id="speaking-slot-title">Lịch lớp Speaking</h2>
+        <p>Lịch lớp sẽ được cập nhật sau.</p>
+        <form method="dialog"><button class="submit-btn" autofocus>Đóng</button></form>
+    </dialog>
     <dialog class="speaking-profile-image-dialog" id="speaking-profile-image-dialog" aria-label="Ảnh hồ sơ giáo viên">
         <form method="dialog"><button type="submit" aria-label="Đóng ảnh" autofocus>Đóng</button></form>
         <img alt="">
@@ -534,6 +623,15 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     });
     select(0);
     selectForHash(location.hash);
+
+    const slotDialog = document.getElementById('speaking-slot-dialog');
+    const slotTitle = document.getElementById('speaking-slot-title');
+    document.querySelectorAll('[data-speaking-slot]').forEach(button => {
+        button.addEventListener('click', () => {
+            slotTitle.textContent = 'Lịch lớp Speaking của ' + button.dataset.speakingSlot;
+            slotDialog.showModal();
+        });
+    });
 
     const imageDialog = document.getElementById('speaking-profile-image-dialog');
     const enlarged = imageDialog.querySelector('img');
@@ -647,7 +745,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             </div>
                 <ul class="schedule-upcoming" aria-label="Lịch Speaking sắp cập nhật">
                     <li><strong>Cici</strong><span>Lịch lớp Speaking đang cập nhật</span></li>
-                    <li><strong>Quỳnh Kem</strong><span>Lịch lớp Speaking đang cập nhật</span></li>
+                    <li><strong>Kem</strong><span>Lịch lớp Speaking đang cập nhật</span></li>
                 </ul>
             </div>
         </div>
@@ -1914,7 +2012,7 @@ function toggleContact(){
                     <td data-label="Khai giảng">${MaybeSchedule.dateMarkup(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7))}<span class="schedule-end">Kết thúc: ${MaybeSchedule.dateMarkup(row.KetThuc,MaybeSchedule.date(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7)).slice(0,7))}</span></td>
                     <td data-label="Học phí"><div class="schedule-fee">
                         ${tuitionPlan}
-                        ${row.MaLop.startsWith("MBWrite") ? '<a class="schedule-fee-benefits" href="#features" aria-label="Quyền lợi Writing trong học phí. 15 buổi, 25 task chấm chữa">15 buổi · 25 task <span aria-hidden="true">↗</span></a>' : ""}
+                        ${row.MaLop.startsWith("MBWrite") ? '<a class="schedule-fee-benefits" href="#features" aria-label="Quyền lợi Writing trong học phí. 15 buổi, 25 task chấm chữa">15 buổi · 25 task <span aria-hidden="true">↗</span></a>' : /^MBSpeak/i.test(row.MaLop) ? '<a class="schedule-fee-benefits" href="#features-speaking">Đặc quyền Speaking</a>' : ""}
                     </div></td>
                     <td data-label="Slot còn lại"><span class="status-badge ${slotStatus}">${slotsLeft === 0 ? "Full slot" : `${slotsLeft}/${totalSlots}`}</span></td>
                 </tr>

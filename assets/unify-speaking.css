@@ -1,0 +1,25 @@
+#speaking-team .lecturer-row-speaking {
+  --quality-teacher-ink: var(--mentor-accent);
+}
+
+#speaking-team .lecturer-row-speaking .social-links a {
+  color: var(--quality-trial-blue);
+}
+
+.speaking-team-target {
+  margin-bottom: 18px;
+  color: var(--quality-copy-strong);
+  font-weight: 700;
+}
+
+.lecturer-row-speaking .lecturer-conversion-link {
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+#speaking-team .lecturer-row-speaking .certificate-frame img {
+  object-fit: contain;
+  object-position: center;
+}
