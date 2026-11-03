@@ -1,0 +1,49 @@
+/* The same Bee colors follow each teacher from the trial card to the profile. */
+#recordings [data-bee-recording="bach"], #teacher-bach {
+  --bee-surface: #edf3ff;
+  --bee-halo: #cbdcff;
+  --bee-edge: #adc5fa;
+  --bee-action: var(--quality-trial-blue);
+}
+#recordings [data-bee-recording="nhi"] {
+  --bee-surface: #fff0f5;
+  --bee-halo: #fbd2e4;
+  --bee-edge: #ebb0ca;
+  --bee-action: var(--quality-trial-pink);
+}
+#recordings [data-bee-recording="kane"] {
+  --bee-surface: #eaf7ef;
+  --bee-halo: #c5e9d5;
+  --bee-edge: #a4d3b7;
+  --bee-action: var(--quality-trial-green);
+}
+#recordings .recording-cici, #teacher-cici {
+  --bee-surface: #faeaf2;
+  --bee-halo: #efc9de;
+  --bee-edge: #dfaec8;
+  --bee-action: #8b315f;
+}
+#recordings .recording-kem, #teacher-quynh {
+  --bee-surface: #fff4dc;
+  --bee-halo: #f7e1ad;
+  --bee-edge: #d8c69e;
+  --bee-secondary: #e7f2fb;
+  --bee-action: #f2dfb3;
+  --bee-action-ink: #23445f;
+}
+#recordings .teacher-recording-card,
+#lecturers #speaking-team .lecturer-row {
+  background: linear-gradient(145deg, var(--bee-surface), var(--bee-secondary, var(--white)));
+  border-color: var(--bee-edge);
+}
+#recordings .teacher-recording-card .recording-mascot-v4::before {
+  background: radial-gradient(circle at 35% 30%, var(--bee-secondary, var(--white)), var(--bee-halo));
+  border: 1px solid var(--bee-edge);
+}
+#recordings .teacher-recording-card button {
+  background: var(--bee-action);
+  color: var(--bee-action-ink, var(--white));
+}
+#recordings .teacher-recording-card button:hover {
+  box-shadow: inset 0 0 0 2px var(--bee-edge);
+}
