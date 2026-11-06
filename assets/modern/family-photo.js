@@ -9,7 +9,7 @@
  window.beeWorld={
   nhiAnchor(){
    const r=image.getBoundingClientRect();
-   return {x:r.left+r.width*.60,y:r.top+r.height*.25,size:r.height*.32};
+   return {x:r.left+r.width*.62,y:r.top+r.height*.25,size:r.height*.32};
   },
   // A photograph stays complete when its Nhi guide appears elsewhere on the page.
   depart(){host.dataset.nhiDeparted='true';},

@@ -98,11 +98,32 @@
   }
   .family-pins { inset: 3px; }
 }
-@media (min-width: 821px) {
-  #recordings .teacher-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (min-width: 601px) and (max-width: 999px) {
+  #recordings .teacher-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (min-width: 601px) and (max-width: 820px) {
-  #recordings .teacher-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #recordings .teacher-recording-card { display: flex; text-align: center; }
+  #recordings .teacher-recording-card h3 { align-self: auto; }
+  #recordings .teacher-recording-card .aim { align-self: auto; margin-bottom: 16px; }
+  #recordings .teacher-recording-card button { margin-top: auto; }
+}
+@media (min-width: 1000px) {
+  #recordings .teacher-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  #recordings .teacher-recording-card { grid-column: span 2; padding-inline: 16px; }
+  #recordings [data-recording-skill="writing"] + [data-recording-skill="speaking"] {
+    grid-column: 3 / span 2;
+  }
+}
+@media (max-width: 380px) {
+  #recordings .teacher-recording-card {
+    grid-template-columns: 76px minmax(0, 1fr);
+    column-gap: 12px;
+    padding-inline: 16px;
+  }
+  #recordings .recording-mascot-v4 { width: 76px; }
+  #recordings .recording-mascot-v4::before { width: 72px; height: 72px; }
+  #recordings .recording-mascot-v4 img { width: 84px; height: 84px; }
+  #recordings .teacher-recording-card .aim { font-size: 14px; }
 }
 #recordings .recording-pending button { background: var(--quality-trial-blue); color: var(--white); }
 .recording-pending-dialog { width: min(460px, calc(100% - 32px)); }
