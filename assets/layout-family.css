@@ -5,6 +5,7 @@
   --family-pu: #ffd1b5;
   --family-bach: #a7c6ff;
   --family-quynh: #d0e8ff;
+  --family-binh-an: #dfbaf4;
 }
 .family-key-khang { --family-accent: var(--family-khang); }
 .family-key-cici { --family-accent: var(--family-cici); }
@@ -12,6 +13,7 @@
 .family-key-pu { --family-accent: var(--family-pu); }
 .family-key-bach { --family-accent: var(--family-bach); }
 .family-key-quynh { --family-accent: var(--family-quynh); }
+.family-key-binh-an { --family-accent: var(--family-binh-an); }
 .universe-family { max-width: 1120px; }
 .family-photo-world { position: relative; }
 .family-pins, .family-leaders {
@@ -69,11 +71,12 @@
   }
   .family-member small { display: grid; }
   .family-member.family-key-cici { left: 0; --label-y: 13.1%; }
-  .family-member.family-key-khang { left: 0; --label-y: 47.3%; }
-  .family-member.family-key-pu { left: 0; --label-y: 81.4%; }
-  .family-member.family-key-nhi { right: 0; --label-y: 21.3%; }
-  .family-member.family-key-quynh { right: 0; --label-y: 54.7%; }
-  .family-member.family-key-bach { right: 0; --label-y: 88.1%; }
+  .family-member.family-key-khang { left: 0; --label-y: 37.1%; }
+  .family-member.family-key-pu { left: 0; --label-y: 78.9%; }
+  .family-member.family-key-binh-an { right: 0; --label-y: 17.8%; }
+  .family-member.family-key-nhi { right: 0; --label-y: 42.6%; }
+  .family-member.family-key-quynh { right: 0; --label-y: 65.2%; }
+  .family-member.family-key-bach { right: 0; --label-y: 87.9%; }
   .family-leaders {
     display: block;
     width: calc(100% - 8px);
@@ -82,15 +85,24 @@
   }
   .family-leaders path { fill: none; stroke: var(--family-accent); stroke-width: 1.5px; }
 }
+@media (min-width: 601px) and (max-width: 999px) {
+  .family-member.family-key-binh-an { grid-column: 2; }
+}
 @media (max-width: 600px) {
   .family-roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .family-member small { display: grid; }
+  .family-member.family-key-binh-an {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - 8px) / 2);
+  }
   .family-pins { inset: 3px; }
 }
 @media (min-width: 821px) {
-  #recordings .teacher-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-  #recordings .teacher-recording-card { grid-column: span 2; }
-  #recordings .recording-pending:nth-child(4) { grid-column: 2 / span 2; }
+  #recordings .teacher-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 601px) and (max-width: 820px) {
+  #recordings .teacher-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 #recordings .recording-pending button { background: var(--quality-trial-blue); color: var(--white); }
 .recording-pending-dialog { width: min(460px, calc(100% - 32px)); }

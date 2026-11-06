@@ -31,10 +31,27 @@
   --bee-action: #f2dfb3;
   --bee-action-ink: #23445f;
 }
+#recordings .recording-binh-an, #teacher-binh-an {
+  --bee-surface: #f3e8fa;
+  --bee-halo: #e7c9f5;
+  --bee-edge: #cfafdf;
+  --bee-action: #65317a;
+}
 #recordings .teacher-recording-card,
-#lecturers #speaking-team .lecturer-row {
+#lecturers #speaking-team .lecturer-row,
+#lecturers #teacher-binh-an {
   background: linear-gradient(145deg, var(--bee-surface), var(--bee-secondary, var(--white)));
   border-color: var(--bee-edge);
+}
+
+#teacher-binh-an {
+  --quality-teacher-ink: var(--bee-action);
+}
+#teacher-binh-an .lecturer-badge { font-family: inherit; }
+#teacher-binh-an .lecturer-full-name { margin: 0 0 8px; }
+#teacher-binh-an .portrait-frame img { object-position: center 59%; }
+@media (min-width: 1101px) {
+  #lecturers #teacher-binh-an { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
 }
 #recordings .teacher-recording-card .recording-mascot-v4::before {
   background: radial-gradient(circle at 35% 30%, var(--bee-secondary, var(--white)), var(--bee-halo));
@@ -64,8 +81,8 @@
 
 /* Match the Speaking transitions to the colors of the Writing roster. */
 #lecturers:has(#teacher-tab-writing[aria-selected="true"]) {
-  background: linear-gradient(180deg, #e5f0ff 0%, #c9deff 26%, #f6d5e6 53%, #f9e2ed 64%, #cceadd 85%, #e0f5eb 100%);
+  background: linear-gradient(180deg, #e5f0ff 0%, #c9deff 25%, #f6d5e6 45%, #d4ede1 68%, #e4d0ef 89%, #f3e8fa 100%);
 }
 #writing-team .lecturer-grid::before {
-  background: linear-gradient(180deg, #2c6bff 0%, #ce7aa6 50%, #60bb98 90%, #92d6b9 100%);
+  background: linear-gradient(180deg, #2c6bff 0%, #ce7aa6 38%, #60bb98 65%, #af7ac9 92%, #dfbaf4 100%);
 }
