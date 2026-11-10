@@ -90,7 +90,7 @@
   </style>
   <script src="config.js"></script>
   <script src="auth.js?v=20261029a"></script>
-<script src="../assets/class-schedule.js?v=20261031a"></script>
+<script src="../assets/class-schedule.js?v=20261110a"></script>
 <link rel="stylesheet" href="../assets/class-schedule.css?v=20261001d">
 </head>
 <body>
@@ -166,10 +166,11 @@
     const teachers={
       khang:{id:"khang",name:"Gia Khang",brand:"MAY(BE)KHANG",score:"Overall 8.5 · Writing 8.0",scoreExport:"Overall 8.5 - Writing 8.0",course:"Đầu vào 5.0-5.5 - Đầu ra 6.5-7.0",fee:"6.000.000",promoFee:"5.000.000",capacity:15,minNext:102},
       nhi:{id:"nhi",name:"Tuệ Nhi",brand:"MAY(BE)NHI",score:"Overall 8.0 · Writing 8.0",scoreExport:"8.0Ox8.0W",course:"Đầu vào 5.0-5.5 - Đầu ra 6.5-7.0",fee:"6.000.000",promoFee:"5.000.000",capacity:20,minNext:94},
-      bach:{id:"bach",name:"Hồ Bách",brand:"MAY(BE)BÁCH",score:"Overall 8.5 · Writing 8.5 · Speaking 8.5",scoreExport:"8.5Ox8.5Wx8.5S",course:"Đầu vào 6.5 - Đầu ra 7.5-8.0+",speakCourse:"Đầu vào 5.0 - Đầu ra 6.5-7.0+",fee:"6.000.000",promoFee:"5.000.000",capacity:20,minNext:94}
+      bach:{id:"bach",name:"Hồ Bách",brand:"MAY(BE)BÁCH",score:"Overall 8.5 · Writing 8.5 · Speaking 8.5",scoreExport:"8.5Ox8.5Wx8.5S",course:"Đầu vào 6.5 - Đầu ra 7.5-8.0+",speakCourse:"Đầu vào 5.0 - Đầu ra 6.5-7.0+",fee:"6.000.000",promoFee:"5.000.000",capacity:20,minNext:94},
+      "binh-an":{id:"binh-an",name:"Bình An",brand:"MAY(BE)AN",score:"Overall 8.0 · Writing 8.0",scoreExport:"8.0Ox8.0W",course:"Đầu vào 5.0-5.5 - Đầu ra 6.5-7.0+",fee:"7.000.000",promoFee:"6.500.000",capacity:8,minNext:9}
     };
     if(teamSession.role==="teacher"&&!teachers[teamSession.teacherId]){MaybeTeamAuth.logout("index.html");throw new Error("Tài khoản chưa được gắn đúng giáo viên trong config.js")}
-    const teacherOrder=["bach","nhi","khang"];
+    const teacherOrder=["bach","nhi","khang","binh-an"];
     const initialClasses=[
       {teacher:"khang",program:"write",code:"MBWrite75",days:[1,4],dayLabel:"Thứ 2+5",time:"8–10PM",sessions:15,start:"2026-06-22",end:"2026-08-10",fullFee:"5.000.000",promoFee:"4.000.000",deadline:"2026-06-10",students:5,capacity:5},
       {teacher:"khang",program:"write",code:"MBWrite76",days:[2,5],dayLabel:"Thứ 3+6",time:"8–10PM",sessions:15,start:"2026-06-23",end:"2026-08-11",fullFee:"5.000.000",promoFee:"4.000.000",deadline:"2026-06-10",students:5,capacity:5},
@@ -217,7 +218,7 @@
     async function apiPost(action,data){if(teamSession.demo)throw new Error("Chế độ xem thử không được phép ghi dữ liệu thật.");const result=await MaybeTeamAuth.request(API_URL,{action,data},teamSession.email);teamSession=MaybeTeamAuth.getSession();return result}
     function queueBackgroundSync(label,task,rollback){if(pendingSyncCount===0)backgroundSyncError=false;pendingSyncCount++;setSyncStatus(`Đã lưu trên trang · đang đồng bộ ${pendingSyncCount} thay đổi…`,"syncing");const operation=backgroundSyncQueue.then(task);backgroundSyncQueue=operation.catch(()=>{});operation.then(()=>{pendingSyncCount--;if(pendingSyncCount>0)setSyncStatus(`Đã lưu trên trang · đang đồng bộ ${pendingSyncCount} thay đổi…`,"syncing");else if(!backgroundSyncError)setSyncStatus("Đã đồng bộ với Google Sheet")}).catch(error=>{console.error(error);backgroundSyncError=true;pendingSyncCount--;if(typeof rollback==="function")rollback();saveClasses();render();setSyncStatus(`Không đồng bộ được: ${label}`,"error");showToast(`${label} chưa lên được Google Sheet nên hệ thống đã hoàn tác.`)});return operation}
     function normalizeName(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}
-    function teacherIdFromName(value){const name=normalizeName(value);if(name.includes("khang"))return"khang";if(name.includes("nhi"))return"nhi";if(name.includes("bach"))return"bach";return""}
+    function teacherIdFromName(value){return MaybeSchedule.teacher(value)}
     function parseSheetDate(value){const text=String(value||"").trim();if(/^\d{4}-\d{2}-\d{2}$/.test(text))return text;const match=text.match(/^(\d{1,2})[.\/-](\d{1,2})(?:[.\/-](\d{4}))?$/);if(!match)return"";const year=Number(match[3]||new Date().getFullYear());return `${year}-${String(match[2]).padStart(2,"0")}-${String(match[1]).padStart(2,"0")}`}
     function parseSheetSchedule(value){const text=String(value||"");const dayMatch=text.match(/Thứ\s*([2-7])(?:\s*\+\s*(?:Thứ\s*)?([2-7]))?/i),numbers=dayMatch?[Number(dayMatch[1]),...(dayMatch[2]?[Number(dayMatch[2])]:[])]:[2,5],days=numbers.map(number=>number===7?6:number-1),dayLabel=dayLabels[days.join(",")]||`Thứ ${numbers.join("+")}`;const timeMatch=text.match(/(\d{1,2})\s*[-–]\s*(\d{1,2})\s*(AM|PM)/i),time=timeMatch?`${timeMatch[1]}–${timeMatch[2]}${timeMatch[3].toUpperCase()}`:"2–4PM";return{days,dayLabel,time:timeRanges[time]?time:"2–4PM"}}
     function sheetRowToItem(row){const teacher=teacherIdFromName(row.GiangVien);if(!teacher||!row.MaLop)return null;const program=/^MBSpeak/i.test(row.MaLop)?"speak":"write",schedule=parseSheetSchedule(row.LichHoc),cleanFee=value=>String(value||"").replace(/\s*đ\s*$/i,"").trim();return{teacher,program,code:String(row.MaLop).trim(),...schedule,sessions:program==="speak"?6:15,bufferSessions:2,start:MaybeSchedule.date(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||todayIso().slice(0,7)),end:MaybeSchedule.date(row.KetThuc,MaybeSchedule.date(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||todayIso().slice(0,7)).slice(0,7)||todayIso().slice(0,7)),fullFee:cleanFee(row.HocPhiGoc),promoFee:cleanFee(row.HocPhiUuDai),deadline:"",students:Number(String(row.HocVien||"0").replace(/\D/g,""))||0,capacity:Number(String(row.TongSlot||"0").replace(/\D/g,""))||1}}

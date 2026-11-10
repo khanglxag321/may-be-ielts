@@ -2,7 +2,7 @@
   'use strict';
   const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   // Keep existing class numbers stable while allowing six teaching tracks.
-  const numbers = {bach:[1,12,13,14,15,16], nhi:[2,3,4,5,10,11], khang:[6,7,8,9,17,18]};
+  const numbers = {bach:[1,12,13,14,15,16], nhi:[2,3,4,5,10,11], khang:[6,7,8,9,17,18], 'binh-an':[9,10,11]};
   const speakingNumbers = [0,2,3,4,5,6];
   function parse(code) {
     const match = String(code || '').trim().match(/^MB(Write(\d{2})(\+)?|Speak(\d{2})?)\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(\d{2})$/i);
@@ -24,6 +24,7 @@
   }
   function teacher(name) {
     const text=String(name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    if (/\bbinh[\s-]+an\b/.test(text)) return 'binh-an';
     return ['bach','nhi','khang'].find(key=>text.includes(key)) || '';
   }
   function date(value, referenceMonth) {
@@ -42,7 +43,7 @@
   const tuitionEffectiveMonth = '2026-12';
   function money(amount) {return String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
   function tuitionPolicy(teacherId,program,month) {
-    if(program!=='write'||!numbers[teacherId]||!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month||'')||month<tuitionEffectiveMonth)return null;
+    if(program!=='write'||!['bach','nhi','khang'].includes(teacherId)||!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month||'')||month<tuitionEffectiveMonth)return null;
     const lowest=teacherId==='bach'?6500000:6000000;
     return {lowest,middle:lowest+500000,original:lowest+1000000,effectiveMonth:tuitionEffectiveMonth};
   }
@@ -178,7 +179,7 @@
         const source=[...matching].filter(item=>item.end<cursor).sort((a,b)=>b.end.localeCompare(a.end))[0]||null;
         const program=source?.program==='speak'&&teacherId==='bach'?'speak':slot.program;
         const requestedSessions=Number(source?.sessions),sessions=Number.isFinite(requestedSessions)&&requestedSessions>0?Math.trunc(requestedSessions):(program==='speak'?6:15);
-        const candidate={teacher:teacherId,program,days:[...slot.days],dayLabel:slot.dayLabel,time:slot.time,sessions,bufferSessions,start:cursor,end:lessonEnd(cursor,slot.days,sessions+bufferSessions),students:0,capacity:teacherId==='khang'?15:20,source,suggestedSlot:slot.suggestedSlot,reason:source&&nextLesson(source.end,slot.days)===cursor?'successor':'vacant',fullFee:source?.fullFee||(program==='speak'?'5.000.000':'6.000.000'),promoFee:source?.promoFee||(program==='speak'?'3.500.000':'5.000.000')};
+        const candidate={teacher:teacherId,program,days:[...slot.days],dayLabel:slot.dayLabel,time:slot.time,sessions,bufferSessions,start:cursor,end:lessonEnd(cursor,slot.days,sessions+bufferSessions),students:0,capacity:teacherId==='binh-an'?8:teacherId==='khang'?15:20,source,suggestedSlot:slot.suggestedSlot,reason:source&&nextLesson(source.end,slot.days)===cursor?'successor':'vacant',fullFee:source?.fullFee||(teacherId==='binh-an'?'7.000.000':program==='speak'?'5.000.000':'6.000.000'),promoFee:source?.promoFee||(teacherId==='binh-an'?'6.500.000':program==='speak'?'3.500.000':'5.000.000')};
         const conflict=combined.filter(other=>itemsOverlap(candidate,other)).sort((a,b)=>a.start.localeCompare(b.start))[0];
         if(conflict) {
           result.unmet.push(`${slotLabel(slot)}: khoảng trống từ ${cursor} không đủ ${sessions+bufferSessions} buổi trước lớp ${normalizeCode(conflict.code)} (${conflict.start}–${conflict.end}).`);
