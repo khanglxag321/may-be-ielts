@@ -44,7 +44,7 @@
   function money(amount) {return String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
   function tuitionPolicy(teacherId,program,month) {
     if(program!=='write'||!['bach','nhi','khang'].includes(teacherId)||!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month||'')||month<tuitionEffectiveMonth)return null;
-    const lowest=teacherId==='bach'||(teacherId==='khang'&&month==='2026-12')?6500000:6000000;
+    const lowest=teacherId==='bach'||(['khang','nhi'].includes(teacherId)&&month==='2026-12')?6500000:6000000;
     return {lowest,middle:lowest+500000,original:lowest+1000000,effectiveMonth:tuitionEffectiveMonth};
   }
   function tuitionFees(item,month=parse(item.code)?.month||item.cohort||String(item.start||'').slice(0,7)) {
