@@ -211,7 +211,7 @@ function writingTuitionPolicy_(item) {
   const name = normalizeName_(item.GiangVien);
   const teacher = ['bach','nhi','khang'].find(function (id) { return name.indexOf(id) !== -1; });
   if (!teacher) return null;
-  const lowest = teacher === 'bach' ? 6500000 : 6000000;
+  const lowest = teacher === 'bach' || (teacher === 'khang' && month === '2026-12') ? 6500000 : 6000000;
   const format = function (value) { return String(value).replace(/\B(?=(\d{3})+(?!\d))/g,'.') + 'đ'; };
   return { HocPhiUuDai: format(lowest), HocPhiGoc: format(lowest + 1000000) };
 }
