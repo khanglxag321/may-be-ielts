@@ -94,7 +94,7 @@
 <a class="family-member family-key-khang" href="#teacher-khang"><span class="family-number" aria-hidden="true">1</span><span><strong>Gia Khang</strong><small><span>Overall 8.5</span><span>Writing 8.0</span></small></span></a>
 <a class="family-member family-key-cici" href="#teacher-cici"><span class="family-number" aria-hidden="true">2</span><span><strong>Cici</strong><small><span>Overall 8.0</span><span>Speaking 8.0</span></small></span></a>
 <a class="family-member family-key-nhi" href="#teacher-nhi"><span class="family-number" aria-hidden="true">3</span><span><strong>Tuệ Nhi</strong><small><span>Overall 8.0</span><span>Writing 8.0</span></small></span></a>
-<div class="family-member family-key-pu"><span class="family-number" aria-hidden="true">4</span><span><strong>Pu</strong><small><span>Quản lý team</span></small></span></div>
+<div class="family-member family-key-pu"><span class="family-number" aria-hidden="true">4</span><span><strong>Pu</strong><small><span>Phương Uyên</span><span>Quản lý team</span></small></span></div>
 <a class="family-member family-key-bach" href="#teacher-bach"><span class="family-number" aria-hidden="true">5</span><span><strong>Hồ Bách</strong><small><span>Overall 8.5</span><span>Writing 8.5</span></small></span></a>
 <a class="family-member family-key-quynh" href="#teacher-quynh"><span class="family-number" aria-hidden="true">6</span><span><strong>Kem</strong><small><span>Overall 8.5</span><span>Speaking 8.0</span></small></span></a>
 <a class="family-member family-key-binh-an" href="#teacher-binh-an"><span class="family-number" aria-hidden="true">7</span><span><strong>Bình An</strong><small><span>Overall 8.0</span><span>Writing 8.0</span></small></span></a>
@@ -1144,7 +1144,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
         <div class="recording-player">
             <iframe id="recordingFrame" title="Recording lớp học thử" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen="">
             </iframe>
-        </div><div class="recording-guide-ledge"><span>Bee Nhi<br><b>Học thử cùng bạn</b></span></div>
+        </div><div class="recording-guide-ledge"><span>Bee Pu<br><b>Học thử cùng bạn</b></span></div>
 
         <div class="recording-conversion">
             <div>
@@ -1373,14 +1373,14 @@ function toggleContact(){
 
 
 <!-- Bee Study Buddy · contextual CTA guide -->
-<aside class="bee-guide" id="beeGuide" data-expression="hello" data-voice="on" aria-label="Bee Pu · Phương Nguyên" data-gesture="wave">
+<aside class="bee-guide" id="beeGuide" data-expression="hello" data-voice="on" aria-label="Bee Pu · Phương Uyên" data-gesture="wave">
     <div class="bee-guide-prompt" id="beeGuidePrompt" aria-hidden="true" aria-live="polite">Chưa biết bắt đầu từ đâu à?</div>
 
     <div class="bee-guide-panel" id="beeGuidePanel" aria-hidden="true" aria-live="polite">
         <button type="button" class="bee-guide-close" aria-label="Thu gọn Bee Study Buddy" onclick="toggleBeeGuide(false, true)">
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
         </button>
-        <span class="bee-guide-kicker">BEE NHI · STUDY BUDDY</span>
+        <span class="bee-guide-kicker">BEE PU · PHƯƠNG UYÊN</span>
         <p class="bee-guide-message" id="beeGuideMessage">Chào bạn, mình là Bee. Cứ cho team biết band hiện tại và ngày thi dự kiến; chưa biết band cũng không sao đâu.</p>
         <a href="#register" class="bee-guide-cta" onclick="activateBeeGuide('registerCta', false)">Nhận lộ trình 7.0+ <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         <button type="button" class="bee-guide-secondary" onclick="toggleBeeContacts()">Mình muốn hỏi giáo viên trước</button>
@@ -2145,8 +2145,8 @@ async function submitRegister(e){
 const BEE_GUIDE_STATES = {
     hello: {
         expression: "hello",
-        prompt: "Chào em, chị là Phương Nguyên!",
-        message: "Chào em, chị là Phương Nguyên, quản lý của MAYBE. Chị dẫn em đi một vòng xem trên trang có gì nha."
+        prompt: "Chào em, chị là Phương Uyên!",
+        message: "Chào em. Chị dẫn em đi một vòng xem trên trang có gì nha."
     },
     features: {
         expression: "excited",
