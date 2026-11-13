@@ -7,15 +7,15 @@
  function updateProgress(){scrollFrame=false;let id='hero';for(const s of sections)if(s.getBoundingClientRect().top<innerHeight*.35)id=s.id;progress.style.setProperty('--progress',scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight));nav.forEach(a=>a.toggleAttribute('aria-current',a.hash==='#'+id));}
  addEventListener('scroll',()=>{if(!scrollFrame){scrollFrame=true;requestAnimationFrame(updateProgress);}}, {passive:true});updateProgress();
  const guide=document.getElementById('beeGuide'),audio=document.getElementById('beeGuideAudio'),world=document.getElementById('beeWorld');
- let launched=false,intro=false,ready=false,flightFrame=0,promptTimer=0,position={x:innerWidth/2,y:innerHeight/2,scale:1},lastState='',pending=['hello',null],tourToken=0,touring=false,mount=null,portalTransition=false,portalSequence=0,returning=false,scrollTick=0;
+ let launched=false,intro=false,ready=false,flightFrame=0,promptTimer=0,position={x:innerWidth/2,y:innerHeight/2,scale:1},lastState='',pending=['hello',null],touring=false,mount=null,portalTransition=false,portalSequence=0,returning=false,scrollTick=0;
  let orbitEpoch=performance.now(),orbitBase={x:0,y:0},orbitLast=0,hoverPaused=false,touchTimer=0,touchedRecording=false;
  const coarse=matchMedia('(pointer:coarse)');
  const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
  const ease=t=>t*t*t*(t*(t*6-15)+10);
  function avatarSize(){return guide.clientWidth||112;}
- function heroAnchor(){const live=window.beeWorld?.nhiAnchor?.();if(live)return live;const r=world.querySelector('.hero-pose-fallback')?.getBoundingClientRect();return r?{x:r.x+r.width/2,y:r.y+r.height/2,size:r.height*.82}:null;}
+ function heroAnchor(){return window.beeWorld?.guideAnchor?.()||null;}
  function familyViewportState(){
-  // The six-member scene is taller: scrolling within the hero must not remove Nhi.
+  // Keep Pu at home while the reader is still within the hero.
   const bottom=(document.getElementById('hero')||world).getBoundingClientRect().bottom;
   return {depart:bottom<innerHeight*.45,home:bottom>innerHeight*.6};
  }
@@ -81,11 +81,7 @@
  }
  function draw(p,tilt=0){
   position={x:p.x,y:p.y,scale:p.scale};const size=avatarSize();guide.style.transform=`translate3d(${p.x-size/2}px,${p.y-size/2}px,0) scale(${p.scale})`;guide.style.setProperty('--flight-tilt',tilt+'deg');
-  if(mount){
-   const facing=mount.facing||1,shoulder={x:p.x+(facing===1?.355-.5:.645-.5)*size,y:p.y+(.625-.5)*size},r=mount.rect;
-   const target={x:r?r.left+r.width*.47:p.x-70,y:r?r.top+Math.min(90,r.height*.35):p.y+70};
-   window.beeGuidePose={...window.beeGuidePose,facing,mount:mount.kind,pointAngle:(Math.atan2(target.y-shoulder.y,(target.x-shoulder.x)*facing)-Math.atan2(.36-.625,.14-.355))*180/Math.PI};
-  }
+  guide.style.setProperty('--bee-facing', mount?.facing || 1);
  }
  function hidePrompt(){guide.classList.remove('has-prompt');document.getElementById('beeGuidePrompt').setAttribute('aria-hidden','true');}
  function showPrompt(){
@@ -95,8 +91,8 @@
   if(obstacles(root).some(r=>overlap({left:x,top:y,right:x+w,bottom:y+84},r)>0))return;
   guide.classList.add('has-prompt');document.getElementById('beeGuidePrompt').setAttribute('aria-hidden','false');clearTimeout(promptTimer);promptTimer=setTimeout(hidePrompt,5500);
  }
- function gesture(name){if(guide.dataset.gesture===name)return;guide.dataset.gesture=name;window.beeGuidePose={...window.beeGuidePose,gesture:name};}
- function adopt(to){const rect=to.frame?.getBoundingClientRect();mount={...to,rect};guide.style.width=to.size+'px';guide.style.height=to.size+'px';guide.dataset.mount=to.kind;guide.dataset.slot=to.slot||'home';guide.dataset.anchorTarget=to.frame?.className||'none';window.beeGuidePose={...window.beeGuidePose,mount:to.kind,facing:to.facing};}
+ function gesture(name){if(guide.dataset.gesture!==name)guide.dataset.gesture=name;}
+ function adopt(to){mount=to;guide.style.width=to.size+'px';guide.style.height=to.size+'px';guide.dataset.mount=to.kind;guide.dataset.slot=to.slot||'home';guide.dataset.anchorTarget=to.frame?.className||'none';}
  function attach(to){adopt(to);if(reduced.matches){draw({...to,scale:1});captionLayout();}}
  function startOrbit(to){orbitBase={x:to.x,y:to.y};orbitEpoch=performance.now();gesture(to.frame?'point':'glide');}
  function fly(to,{duration=1500,jump=false,complete}={}){
@@ -144,12 +140,12 @@
   if(launched||returning)return;launched=true;intro=true;guide.classList.add('is-launched');const to=destination(...pending);adopt(to);
   const anchor=heroAnchor(),inHero=anchor&&anchor.y>100&&anchor.y<innerHeight;
   if(inHero)draw({x:anchor.x,y:anchor.y,scale:anchor.size/avatarSize()*1.17});else draw({x:innerWidth/2,y:145,scale:1.18});
-  window.beeWorld?.depart?.();world.dataset.nhiDeparted='true';if(typeof window.beeWorld?.depart!=='function')world.querySelector('.hero-pose-fallback')?.classList.add('has-departed');
+  window.beeWorld?.depart?.();
   fly(to,{duration:inHero?2300:1500,jump:!!inHero,complete:()=>{intro=false;lastState=pending[0];guide.dataset.context=lastState;updateAttachment();}});
  }
  function returnHome(){
-  const anchor=heroAnchor();if(!launched||returning||!anchor||isRecording()||touring)return;returning=true;intro=true;hidePrompt();
-  fly({x:anchor.x,y:anchor.y,scale:anchor.size/avatarSize()*1.17,size:avatarSize(),frame:null,kind:'home',facing:1},{duration:1100,complete:()=>{window.beeWorld?.return?.();world.dataset.nhiDeparted='false';world.querySelector('.hero-pose-fallback')?.classList.remove('has-departed');guide.classList.remove('is-launched','is-flying','has-prompt');launched=false;intro=false;returning=false;lastState='';mount=null;guide.dataset.flight='home';gesture('wave');if(familyViewportState().depart)requestAnimationFrame(updateAttachment);}});
+  const anchor=heroAnchor();if(!launched||returning||!anchor||isRecording()||touring||guide.dataset.voicePreview)return;returning=true;intro=true;hidePrompt();
+  fly({x:anchor.x,y:anchor.y,scale:anchor.size/avatarSize()*1.17,size:avatarSize(),frame:null,kind:'home',facing:1},{duration:1100,complete:()=>{window.beeWorld?.return?.();guide.classList.remove('is-launched','is-flying','has-prompt');launched=false;intro=false;returning=false;lastState='';mount=null;guide.dataset.flight='home';gesture('wave');if(familyViewportState().depart)requestAnimationFrame(updateAttachment);}});
  }
  function updateAttachment(){
   const family=familyViewportState();
@@ -168,7 +164,7 @@
  const originalOpenRecording=openRecording,originalCloseRecording=closeRecording;
  openRecording=function(teacher){
   if(touring)stopTour();const sequence=++portalSequence;portalTransition=true;originalOpenRecording(teacher);intro=false;returning=false;
-  if(!launched){launched=true;guide.classList.add('is-launched');const start=heroAnchor();if(start)draw({x:clamp(start.x,100,innerWidth-100),y:clamp(start.y,150,innerHeight-100),scale:1});window.beeWorld?.depart?.();world.dataset.nhiDeparted='true';if(typeof window.beeWorld?.depart!=='function')world.querySelector('.hero-pose-fallback')?.classList.add('has-departed');}
+  if(!launched){launched=true;guide.classList.add('is-launched');const start=heroAnchor();if(start)draw({x:clamp(start.x,100,innerWidth-100),y:clamp(start.y,150,innerHeight-100),scale:1});window.beeWorld?.depart?.();}
   cancelAnimationFrame(flightFrame);clearTimeout(touchTimer);guide.classList.remove('is-flying','is-front','is-portal-arriving');hidePrompt();
   setTimeout(()=>{
    if(sequence!==portalSequence)return;if(!isRecording()){portalTransition=false;return;}
@@ -187,34 +183,104 @@
  };
  window.beeGuideStage={metrics(){const r=guide.getBoundingClientRect();return {launched,frame:mount?.frame?.className,gesture:guide.dataset.gesture,mount:mount?.kind,slot:mount?.slot,orbit:mount?{x:mount.orbitX,y:mount.orbitY}:null,carrier:{x:r.x,y:r.y,width:r.width,height:r.height},foreground:guide.classList.contains('is-front')};}};
 
- async function playHello(){
-  if(audio&&!audio.paused){setBeeVoiceEnabled(false);return;}
-  const intent=setBeeVoiceEnabled(true);await window.connectNhiAudio?.();if(!isBeeVoiceIntentCurrent(intent))return;beeVoiceUnlocked=true;activateBeeGuide('hello',false,null,{voice:false});beePlayedVoiceTracks.delete(BEE_VOICE_TRACKS.hello);clearTimeout(beeVoicePendingTimer);playBeeVoiceForState('hello',BEE_GUIDE_STATES.hello.prompt);window.beeWorld?.greet?.();
- }
- document.getElementById('heroNhiIntro').addEventListener('click',playHello);
- document.getElementById('beeGuideToggle').addEventListener('click',()=>window.connectNhiAudio?.());
- document.addEventListener('pointerdown',()=>{if(beeVoiceEnabled)window.connectNhiAudio?.();},{once:true,passive:true});
- ['playing','ended','pause'].forEach(event=>audio.addEventListener(event,()=>{const playing=!audio.paused&&!audio.ended;const button=document.getElementById('heroNhiIntro');button.classList.toggle('is-playing',playing);button.setAttribute('aria-pressed',String(playing));}));
+ const introButton=document.getElementById('heroPuIntro');
  const tourStart=document.getElementById('beeTourStart'),tourStop=document.getElementById('beeTourStop');
- function stopTour(){tourToken++;touring=false;tourStop.hidden=true;tourStart.innerHTML='Dẫn mình đi <span>↗</span>';guide.dataset.tour='stopped';}
- tourStop.addEventListener('click',()=>{stopTour();stopBeeVoice();});
- const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
- tourStart.addEventListener('click',async()=>{
-  if(touring){stopTour();return;}const intent=setBeeVoiceEnabled(true);await window.connectNhiAudio?.();if(!isBeeVoiceIntentCurrent(intent))return;beeVoiceUnlocked=true;
-  touring=true;const token=++tourToken;tourStop.hidden=false;tourStart.textContent='Đang dẫn đường…';guide.dataset.tour='playing';toggleBeeGuide(false);
-  for(const [id,state] of [['features','features'],['recordings','recordings'],['lecturers','lecturers'],['schedule','schedule'],['halloffame','halloffame'],['faq','faq'],['register','register']]){
-   if(token!==tourToken)break;
-   document.getElementById(id).scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'});await delay(reduced.matches?100:950);
-   if(token!==tourToken)break;
-   beePlayedVoiceTracks.delete(BEE_VOICE_TRACKS[state]);activateBeeGuide(state,false);guide.dataset.tourSection=id;
-   await delay(6500);const deadline=performance.now()+38000;while(token===tourToken&&!audio.paused&&performance.now()<deadline)await delay(300);
+ let tourController;
+ function playHello(){
+  if(touring)stopTour();
+  if(audio&&!audio.paused){setBeeVoiceEnabled(false);return;}
+  setBeeVoiceEnabled(true);
+  window.connectPuAudio?.();
+  activateBeeGuide('hello',false,null,{voice:false});
+  guide.dataset.voicePreview='hello';
+  if(!launched)launch();
+  beePlayedVoiceTracks.delete(BEE_VOICE_TRACKS.hello);
+  playBeeVoiceForState('hello',BEE_GUIDE_STATES.hello.prompt).then(started=>{
+   if(!started&&beeVoiceCurrentTrack!==BEE_VOICE_TRACKS.hello)delete guide.dataset.voicePreview;
+  });
+ }
+ introButton.addEventListener('click',playHello);
+ document.getElementById('beeGuideToggle').addEventListener('click',()=>window.connectPuAudio?.());
+ document.addEventListener('pointerdown',()=>{if(beeVoiceEnabled)window.connectPuAudio?.();},{once:true,passive:true});
+ ['playing','ended','pause'].forEach(event=>audio.addEventListener(event,()=>{
+  const playing=!audio.paused&&!audio.ended&&beeVoiceCurrentTrack===BEE_VOICE_TRACKS.hello;
+  introButton.classList.toggle('is-playing',playing);
+  introButton.setAttribute('aria-pressed',String(playing));
+  if(guide.dataset.voicePreview&&!playing&&(audio.ended||!beeVoiceEnabled||beeGuideCurrentState!=='hello')){
+   delete guide.dataset.voicePreview;
+   updateAttachment();
   }
-  if(token===tourToken)stopTour();
+ }));
+ function stopTour(){
+  tourController?.abort();
+  touring=false;
+  stopBeeVoice();
+  tourStop.hidden=true;
+  tourStart.innerHTML='Dẫn mình đi <span>↗</span>';
+  guide.dataset.tour='stopped';
+ }
+ tourStop.addEventListener('click',stopTour);
+ function waitForTour(signal,ms,waitForVoice=false){
+  return new Promise(resolve=>{
+   if(signal.aborted){resolve();return;}
+   const listeners=new AbortController();
+   const finish=()=>{
+    clearTimeout(timer);
+    listeners.abort();
+    resolve();
+   };
+   const timer=setTimeout(finish,ms);
+   const options={once:true,signal:listeners.signal};
+   signal.addEventListener('abort',finish,options);
+   if(waitForVoice){
+    audio.addEventListener('ended',finish,options);
+    audio.addEventListener('error',finish,options);
+    audio.addEventListener('pause',()=>{if(!beeVoiceEnabled)finish();},options);
+   }
+  });
+ }
+ async function narrateTourStop(state,section,signal){
+  const target=section.querySelector('.section-heading')||section.querySelector('.hero-heading');
+  activateBeeGuide(state,false,target,{voice:false});
+  if(!launched)launch();
+  const { message }=getBeeGuideState(state);
+  typeBeeGuidePrompt(message);
+  if(!beeVoiceEnabled){await waitForTour(signal,4200);return;}
+  beePlayedVoiceTracks.delete(BEE_VOICE_TRACKS[state]);
+  const started=await playBeeVoiceForState(state,message);
+  if(signal.aborted)return;
+  if(!started){await waitForTour(signal,4200);return;}
+  if(!audio.ended&&!audio.paused)await waitForTour(signal,15000,true);
+  if(!beeVoiceEnabled)await waitForTour(signal,2500);
+ }
+ tourStart.addEventListener('click',async()=>{
+  if(touring){stopTour();return;}
+  delete guide.dataset.voicePreview;
+  if(beeVoiceEnabled)window.connectPuAudio?.();
+  tourController=new AbortController();
+  const { signal }=tourController;
+  touring=true;
+  tourStop.hidden=false;
+  tourStart.textContent='Đang dẫn đường…';
+  guide.dataset.tour='playing';
+  toggleBeeGuide(false);
+  for(const [id,state] of Object.entries(BEE_TOUR_SECTIONS)){
+   const section=document.getElementById(id);
+   if(id!=='hero'){
+    section.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'});
+    await waitForTour(signal,reduced.matches?100:720);
+   }
+   if(signal.aborted)return;
+   guide.dataset.tourSection=id;
+   await narrateTourStop(state,section,signal);
+   if(signal.aborted)return;
+  }
+  stopTour();
  });
  addEventListener('wheel',()=>{if(touring)stopTour();},{passive:true});addEventListener('touchstart',e=>{if(touring&&!e.target.closest('#beeGuide'))stopTour();},{passive:true});
  addEventListener('keydown',e=>{if(touring&&['Escape','ArrowDown','ArrowUp','PageDown','PageUp','Home','End'].includes(e.key))stopTour();});
  // Muted, looping previews behave like the original TikTok cards. Start on view;
- // resume when revisiting a teacher, without interrupting Bee Nhi's narration.
+ // resume when revisiting a teacher, without interrupting Pu's narration.
  const teacherStreams=[...document.querySelectorAll('video.teacher-preview-stream')];
  const visibleStreams=new Set();
  function hydrateTeacherPreview(video){if(video.dataset.src&&!video.getAttribute('src')){video.autoplay=false;video.src=video.dataset.src;video.preload='metadata';video.load();}}

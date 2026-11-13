@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="assets/class-schedule.css?v=20261001d">
 
 
-<link rel="stylesheet" href="assets/modern/v8.css?v=9"><script type="importmap">{"imports":{"three":"./assets/modern/vendor/three.module.js"}}</script><link rel="stylesheet" href="assets/ui-quality.css?v=20261026">
+<link rel="stylesheet" href="assets/modern/v8.css?v=20261113-pu"><script type="importmap">{"imports":{"three":"./assets/modern/vendor/three.module.js"}}</script><link rel="stylesheet" href="assets/ui-quality.css?v=20261026">
 <link rel="stylesheet" href="assets/enrollment.css?v=20261031a">
 <link rel="stylesheet" href="assets/playbook-privileges.css?v=20261031">
 <link rel="stylesheet" href="assets/benefits-20261102.css?v=1">
@@ -100,7 +100,7 @@
 <a class="family-member family-key-binh-an" href="#teacher-binh-an"><span class="family-number" aria-hidden="true">7</span><span><strong>Bình An</strong><small><span>Overall 8.0</span><span>Writing 8.0</span></small></span></a>
 </div>
 </div>
-<div class="world-controls"><button type="button" id="heroNhiIntro" aria-pressed="false"><span>♫</span> Nghe Bee Nhi <i></i><i></i><i></i></button><button type="button" id="beeTourStart">Dẫn mình đi <span>↗</span></button></div></div><div class="container hero-foot"><span class="hero-foot-brand">a little <b>maybe.</b><br>a lot of possibilities.</span><div><strong>15</strong><span>buổi học<br>có hệ thống</span></div><div><strong>25</strong><span>task Writing<br>được chấm chữa</span></div><a href="#features" class="scroll-cue">Khám phá <span>↓</span></a></div></section>
+<div class="world-controls"><button type="button" id="heroPuIntro" aria-pressed="false"><span>♫</span> Nghe Bee Pu <i></i><i></i><i></i></button><button type="button" id="beeTourStart">Dẫn mình đi <span>↗</span></button></div></div><div class="container hero-foot"><span class="hero-foot-brand">a little <b>maybe.</b><br>a lot of possibilities.</span><div><strong>15</strong><span>buổi học<br>có hệ thống</span></div><div><strong>25</strong><span>task Writing<br>được chấm chữa</span></div><a href="#features" class="scroll-cue">Khám phá <span>↓</span></a></div></section>
 
     <!-- Features Section -->
     <section id="features" class="section-padding">
@@ -1373,7 +1373,7 @@ function toggleContact(){
 
 
 <!-- Bee Study Buddy · contextual CTA guide -->
-<aside class="bee-guide" id="beeGuide" data-expression="hello" data-voice="on" aria-label="Bee Nhi Study Buddy" data-gesture="wave">
+<aside class="bee-guide" id="beeGuide" data-expression="hello" data-voice="on" aria-label="Bee Pu · Phương Nguyên" data-gesture="wave">
     <div class="bee-guide-prompt" id="beeGuidePrompt" aria-hidden="true" aria-live="polite">Chưa biết bắt đầu từ đâu à?</div>
 
     <div class="bee-guide-panel" id="beeGuidePanel" aria-hidden="true" aria-live="polite">
@@ -1397,7 +1397,7 @@ function toggleContact(){
     </button>
     <audio id="beeGuideAudio" preload="metadata" aria-hidden="true"></audio>
 
-    <button type="button" class="bee-guide-avatar" id="beeGuideToggle" aria-expanded="false" aria-controls="beeGuidePanel" aria-label="Mở hướng dẫn của Bee Nhi" onclick="toggleBeeGuide(undefined, true)"><div class="nhi-rig" data-rig="guide" aria-hidden="true"></div></button>
+    <button type="button" class="bee-guide-avatar" id="beeGuideToggle" aria-expanded="false" aria-controls="beeGuidePanel" aria-label="Mở hướng dẫn của Bee Pu" onclick="toggleBeeGuide(undefined, true)"><span class="pu-guide-art" aria-hidden="true"><img src="assets/modern/family/pu.webp" alt="" width="1254" height="1254" draggable="false"><svg class="pu-guide-mouth" viewBox="0 0 1254 1254" aria-hidden="true"><path class="pu-mouth-opening"/><path class="pu-mouth-tongue"/></svg></span></button>
 <button type="button" id="beeTourStop" class="bee-tour-stop" hidden="">Dừng dẫn đường</button><button type="button" class="bee-prompt-dismiss" aria-label="Thu gọn lời giới thiệu">×</button></aside>
 
 <script>
@@ -2145,18 +2145,18 @@ async function submitRegister(e){
 const BEE_GUIDE_STATES = {
     hello: {
         expression: "hello",
-        prompt: "Bee chào bạn nè ✦",
-        message: "Bee chào bạn nha! Nếu đang ngó quanh chưa biết bắt đầu từ đâu, mình xem lịch lớp trước cũng được. Chưa biết band hiện tại vẫn hỏi team thoải mái nhé."
+        prompt: "Chào em, chị là Phương Nguyên!",
+        message: "Chào em, chị là Phương Nguyên, quản lý của MAYBE. Chị dẫn em đi một vòng xem trên trang có gì nha."
     },
     features: {
         expression: "excited",
-        prompt: "15 buổi mà gói gọn cả hệ thống đó!",
-        message: "Khúc này là bộ khung của may(be)write. nè: học theo lộ trình 15 buổi, có bài tập và bảo hành. Bạn đọc thử xem đúng thứ mình đang thiếu không nhé."
+        prompt: "Xem đặc quyền Writing và Speaking.",
+        message: "Ở đây em chọn Writing hoặc Speaking để xem mình sẽ học gì và được hỗ trợ ra sao trong khóa nha."
     },
     recordings: {
         expression: "curious",
-        prompt: "Bee rủ bạn xem thử một đoạn nè.",
-        message: "Đừng vội chọn lớp nha. Mình xem thử một đoạn trước, để ý cách giáo viên giải thích và sửa bài có đúng kiểu bạn dễ tiếp thu không nhé."
+        prompt: "Xem thử một buổi học thực tế.",
+        message: "Nếu em muốn biết một buổi học diễn ra thế nào, em mở một video lên để xem thử lớp như nào nha!"
     },
     recordingBach: {
         expression: "focused",
@@ -2195,23 +2195,8 @@ const BEE_GUIDE_STATES = {
     },
     lecturers: {
         expression: "curious",
-        prompt: "Bạn đang nghiêng về ai rồi?",
-        message: "Mỗi thầy cô có một cách dẫn bài khác nhau. Bạn đang nghiêng về ai rồi, hay muốn team hỏi thêm vài câu rồi gợi ý?"
-    },
-    lecturerBach: {
-        expression: "focused",
-        prompt: "Bee đậu cạnh profile thầy Bách nè.",
-        message: () => `Thầy Bách đạt Overall 8.5 và Writing 8.5, mạnh ở lớp Master và các chủ đề khó. Nếu bạn muốn được đẩy tư duy lên band cao thì đọc kỹ profile này nha. ${getBeeSlotSentence("bach", "thầy Bách")}`
-    },
-    lecturerNhi: {
-        expression: "curious",
-        prompt: "Cô Nhi sửa bài kỹ lắm đó nha.",
-        message: () => `Cô Tuệ Nhi đạt Overall 8.0 và Writing 8.0, nổi bật ở cách sửa từng lỗi diễn đạt và xây nền câu. Bạn cần một người đồng hành kiên nhẫn thì Bee nghĩ profile này rất đáng xem. ${getBeeSlotSentence("nhi", "cô Nhi")}`
-    },
-    lecturerKhang: {
-        expression: "excited",
-        prompt: "Bee bay qua thầy Khang rồi nè!",
-        message: () => `Thầy Gia Khang đạt Overall 8.5, Writing và Speaking 8.0; cách dạy thiên về logic, hợp mục tiêu 6.5–7.0+. Nếu bạn mê mọi thứ rõ ràng, đây có thể là đúng người đó. ${getBeeSlotSentence("khang", "thầy Khang")}`
+        prompt: "Chọn Writing hoặc Speaking để xem hồ sơ.",
+        message: "Mục này có hồ sơ, cách dạy và thông tin liên hệ của các thầy cô. Em chọn tab Writing hoặc Speaking để xem nha."
     },
     teacherCtaBach: {
         expression: "excited",
@@ -2235,23 +2220,23 @@ const BEE_GUIDE_STATES = {
     },
     schedule: {
         expression: "excited",
-        prompt: "Lịch mới ở đây nè ☁",
-        message: "Bee theo kịp rồi nè! Chạm tên giáo viên để lọc đúng lớp bạn muốn xem nhé. Số slot là dữ liệu đang mở thật; thấy ca hợp thì kiểm tra sớm một chút nha."
+        prompt: "Xem lịch, học phí và số chỗ còn lại.",
+        message: "Ở đây em sẽ xem lịch khai giảng, học phí và số chỗ còn lại của từng lớp đang mở."
     },
     halloffame: {
         expression: "celebrate",
-        prompt: "Một ngày có tên bạn ở đây thì sao ta?",
-        message: "Góc này toàn điểm số thật của học viên đó ✦ Bee mong một ngày được bay vào đây chúc mừng bạn nữa. Muốn biết mình nên bắt đầu từ band nào thì cứ hỏi team nha."
+        prompt: "Ghé album kết quả của học viên MAYBE.",
+        message: "Còn đây là album kết quả IELTS của các bạn từng học ở nhà MAYBE."
     },
     faq: {
         expression: "curious",
-        prompt: "Còn câu nào làm bạn lăn tăn không?",
-        message: "Nếu vẫn còn một câu chưa được giải đáp, bấm hỏi giáo viên hoặc để lại thông tin nhé. Team trả lời rõ rồi mình quyết định sau, không cần vội đâu."
+        prompt: "Có thắc mắc về học bù hay học phí?",
+        message: "Nếu em thắc mắc về học bù hay học phí, em hãy ghé phần câu hỏi thường gặp nha!"
     },
     register: {
         expression: "excited",
-        prompt: "Bee chờ bạn ở đích nè ✦",
-        message: "Tới đây là gần xong rồi! Bạn để lại kênh liên hệ thuận tiện nhất nha. Đây chỉ là bước để team nghe mục tiêu và tư vấn, chưa có thanh toán gì cả."
+        prompt: "Để lại thông tin hoặc nhắn cho giáo viên.",
+        message: "Khi chọn được lớp, em hãy để lại thông tin hoặc nhắn cho giáo viên. Chị mong được hẹn gặp em ở lớp nha!"
     },
     registerCta: {
         expression: "focused",
@@ -2266,24 +2251,25 @@ const BEE_GUIDE_STATES = {
 };
 
 const BEE_VOICE_TRACKS = {
-    hello: "assets/audio/bee-01-hero.mp3",
-    features: "assets/audio/bee-02-features.mp3",
-    recordings: "assets/audio/bee-03-recordings-intro.mp3",
-    recordingBach: "assets/audio/bee-04-recording-bach.mp3",
-    afterRecordingBach: "assets/audio/bee-05-after-bach.mp3",
-    recordingNhi: "assets/audio/bee-06-recording-nhi.mp3",
-    afterRecordingNhi: "assets/audio/bee-07-after-nhi.mp3",
-    recordingKhang: "assets/audio/bee-08-recording-khang.mp3",
-    afterRecordingKhang: "assets/audio/bee-09-after-khang.mp3",
-    lecturers: "assets/audio/bee-10-lecturers.mp3",
-    lecturerBach: "assets/audio/bee-11-lecturer-bach.mp3",
-    lecturerNhi: "assets/audio/bee-12-lecturer-nhi.mp3",
-    lecturerKhang: "assets/audio/bee-13-lecturer-khang.mp3",
-    schedule: "assets/audio/bee-14-schedule.mp3",
-    halloffame: "assets/audio/bee-15-halloffame.mp3",
-    faq: "assets/audio/bee-16-faq.mp3",
-    register: "assets/audio/bee-17-register.mp3",
-    success: "assets/audio/bee-18-success.mp3"
+    hello: "assets/audio/pu/01-hero.mp3",
+    features: "assets/audio/pu/02-features.mp3",
+    recordings: "assets/audio/pu/03-recordings.mp3",
+    lecturers: "assets/audio/pu/04-lecturers.mp3",
+    schedule: "assets/audio/pu/05-schedule.mp3",
+    halloffame: "assets/audio/pu/06-halloffame.mp3",
+    faq: "assets/audio/pu/07-faq.mp3",
+    register: "assets/audio/pu/08-register.mp3"
+};
+
+const BEE_TOUR_SECTIONS = {
+    hero: "hello",
+    features: "features",
+    recordings: "recordings",
+    lecturers: "lecturers",
+    schedule: "schedule",
+    halloffame: "halloffame",
+    faq: "faq",
+    register: "register"
 };
 
 const BEE_VOICE_DWELL_MS = 850;
@@ -2293,10 +2279,6 @@ let beeGuideMoveTimer;
 let beeGuideTypeTimer;
 let beeGuideAutoCloseTimer;
 let beeGuideResizeTimer;
-let beeRecordingTourTimer;
-let beeRecordingIntroTimer;
-let beeRecordingViewTimer;
-let beeLecturerIntroTimer;
 let beeScrollFrame;
 let beeVoicePendingTimer;
 let beeVoicePlayToken = 0;
@@ -2308,35 +2290,21 @@ let beeVoicePendingState = null;
 let beeVoiceCurrentTrack = null;
 let beeGuideCurrentState = "hello";
 let beeViewportContext = "";
-let beeActiveSectionId = "hero";
 let beeGuideManualInteraction = false;
 let beeGuideCurrentTarget = null;
 let beeLastRecordingTeacher = null;
-let beeRecordingTourIndex = 0;
 let beeTeacherSlots = {
     bach: { total: 0, min: 0, classes: 0 },
     nhi: { total: 0, min: 0, classes: 0 },
     khang: { total: 0, min: 0, classes: 0 },
     "binh-an": { total: 0, min: 0, classes: 0 }
 };
-let beeHasOpenedRecordingTour = false;
-let beeRecordingIntroComplete = false;
-let beeRecordingIntroActive = false;
-let beeLecturerIntroComplete = false;
-let beeLecturerIntroActive = false;
-const beeSeenLecturerGuides = new Set();
 const beePlayedVoiceTracks = new Set();
 
 const BEE_RECORDING_STATES = {
     bach: { preview: "recordingBach", after: "afterRecordingBach" },
     nhi: { preview: "recordingNhi", after: "afterRecordingNhi" },
     kane: { preview: "recordingKhang", after: "afterRecordingKhang" }
-};
-
-const BEE_LECTURER_STATES = {
-    bach: "lecturerBach",
-    nhi: "lecturerNhi",
-    khang: "lecturerKhang"
 };
 
 const BEE_LECTURER_CTA_STATES = {
@@ -2484,7 +2452,7 @@ function playBeeVoiceForState(stateKey, promptText) {
     const audio = getBeeGuideAudio();
     if (!beeVoiceEnabled || !source || !audio || beePlayedVoiceTracks.has(source) || document.hidden) {
         typeBeeGuidePrompt(promptText);
-        return;
+        return Promise.resolve(false);
     }
 
     stopBeeVoice({ clearPending: false });
@@ -2509,23 +2477,25 @@ function playBeeVoiceForState(stateKey, promptText) {
     };
 
     const playAttempt = audio.play();
-    if (!playAttempt || typeof playAttempt.then !== "function") return;
-    playAttempt.then(() => {
+    if (!playAttempt || typeof playAttempt.then !== "function") return Promise.resolve(!audio.paused);
+    return playAttempt.then(() => {
         if (!beeVoiceEnabled || token !== beeVoicePlayToken || beeGuideCurrentState !== stateKey) {
             // This result may belong to an older source on the shared audio element.
-            return;
+            return false;
         }
         beeVoiceUnlocked = true;
         beeVoiceBlocked = false;
         beePlayedVoiceTracks.add(source);
         document.getElementById("beeGuide")?.classList.add("is-speaking");
         updateBeeVoiceUi();
+        return true;
     }).catch(error => {
-        if (token !== beeVoicePlayToken) return;
+        if (token !== beeVoicePlayToken) return false;
         beeVoiceCurrentTrack = null;
         beeVoiceBlocked = error?.name === "NotAllowedError";
         typeBeeGuidePrompt(promptText);
         updateBeeVoiceUi();
+        return false;
     });
 }
 
@@ -2555,7 +2525,7 @@ async function toggleBeeVoice(event) {
     const shouldRetryBlockedAutoplay = beeVoiceEnabled && beeVoiceBlocked;
     const intent = setBeeVoiceEnabled(shouldRetryBlockedAutoplay || !beeVoiceEnabled);
     if (!beeVoiceEnabled) return;
-    await window.connectNhiAudio?.();
+    await window.connectPuAudio?.();
     if (!isBeeVoiceIntentCurrent(intent)) return;
     const state = getBeeGuideState(beeGuideCurrentState);
     // Explicitly enabling sound may replay the current, previously interrupted track.
@@ -2564,7 +2534,7 @@ async function toggleBeeVoice(event) {
 }
 
 function unlockBeeVoiceFromInteraction(event) {
-    if (!beeVoiceEnabled || beeVoiceUnlocked || event.target?.closest?.("#heroNhiIntro, #beeGuideVoiceToggle, #beeTourStart")) return;
+    if (!beeVoiceEnabled || beeVoiceUnlocked || event.target?.closest?.("#heroPuIntro, #beeGuideVoiceToggle, #beeTourStart")) return;
     const state = getBeeGuideState(beeGuideCurrentState);
     clearTimeout(beeVoicePendingTimer);
     beeVoicePendingState = null;
@@ -2779,8 +2749,6 @@ function handleBeeRecordingOpen(teacher) {
     const state = BEE_RECORDING_STATES[teacher];
     if (!state) return;
     beeLastRecordingTeacher = teacher;
-    stopBeeRecordingTour();
-    clearTimeout(beeRecordingViewTimer);
     toggleBeeGuide(false);
     const player = document.querySelector("#recordingModal .recording-player");
     activateBeeGuide(state.preview, false, player);
@@ -2790,73 +2758,15 @@ function handleBeeRecordingProgress(teacher) {
     const state = BEE_RECORDING_STATES[teacher];
     if (!state) return;
     beeLastRecordingTeacher = teacher;
-    clearTimeout(beeRecordingViewTimer);
     const player = document.querySelector("#recordingModal .recording-player");
     activateBeeGuide(state.preview, false, player);
 }
 
 function handleBeeRecordingClose(teacher) {
     const state = BEE_RECORDING_STATES[teacher];
-    clearTimeout(beeRecordingViewTimer);
     beeLastRecordingTeacher = null;
     if (!state) return;
     activateBeeGuide(state.after, false, getBeeRecordingCard(teacher));
-}
-
-function stopBeeRecordingTour() {
-    clearInterval(beeRecordingTourTimer);
-    beeRecordingTourTimer = null;
-}
-
-function beginBeeRecordingIntro() {
-    clearTimeout(beeRecordingIntroTimer);
-    stopBeeRecordingTour();
-    beeRecordingIntroActive = true;
-    activateBeeGuide("recordings", false);
-    beeRecordingIntroTimer = setTimeout(() => {
-        beeRecordingIntroActive = false;
-        beeRecordingIntroComplete = true;
-        if (beeActiveSectionId !== "recordings") return;
-        requestBeeViewportSync(true);
-    }, beeVoiceEnabled ? 7400 : 1200);
-}
-
-function showBeeRecordingRecommendation(teacher, target = getBeeRecordingCard(teacher), allowVoice = false) {
-    const state = BEE_RECORDING_STATES[teacher];
-    if (!state || !target) return;
-    beeHasOpenedRecordingTour = true;
-    activateBeeGuide(state.preview, false, target, { voice: allowVoice });
-}
-
-function startBeeRecordingTour() {
-    stopBeeRecordingTour();
-    if (window.innerWidth <= 1024) return;
-    const teachers = ["bach", "nhi", "kane"];
-    const showNextTeacher = () => {
-        if (beeActiveSectionId !== "recordings") {
-            stopBeeRecordingTour();
-            return;
-        }
-        const modal = document.getElementById("recordingModal");
-        if (modal && modal.style.display === "block") return;
-        const teacher = teachers[beeRecordingTourIndex % teachers.length];
-        beeRecordingTourIndex += 1;
-        showBeeRecordingRecommendation(teacher, getBeeRecordingCard(teacher), false);
-    };
-    showNextTeacher();
-    beeRecordingTourTimer = setInterval(showNextTeacher, 6600);
-}
-
-function beginBeeLecturerIntro() {
-    clearTimeout(beeLecturerIntroTimer);
-    beeLecturerIntroActive = true;
-    activateBeeGuide("lecturers", false);
-    beeLecturerIntroTimer = setTimeout(() => {
-        beeLecturerIntroActive = false;
-        beeLecturerIntroComplete = true;
-        if (beeActiveSectionId !== "lecturers") return;
-        requestBeeViewportSync(true);
-    }, beeVoiceEnabled ? 9200 : 1200);
 }
 
 function updateLecturerSlotNotes(rows) {
@@ -2927,92 +2837,14 @@ function getClosestBeeTarget(selector) {
 }
 
 function syncBeeGuideToViewport(force = false) {
+    const guide = document.getElementById("beeGuide");
+    if (guide?.dataset.tour === "playing" || guide?.dataset.voicePreview) return;
     const modal = document.getElementById("recordingModal");
-    if (modal && modal.style.display === "block") return;
+    if (modal?.style.display === "block") return;
 
-    const section = getBeeReadingSection();
-    if (!section) return;
-    const sectionId = section.id;
-    beeActiveSectionId = sectionId;
-    if (sectionId !== "recordings") {
-        stopBeeRecordingTour();
-        clearTimeout(beeRecordingIntroTimer);
-        if (beeRecordingIntroActive) {
-            beeRecordingIntroActive = false;
-            beeRecordingIntroComplete = true;
-        }
-    }
-    if (sectionId !== "lecturers") {
-        clearTimeout(beeLecturerIntroTimer);
-        if (beeLecturerIntroActive) {
-            beeLecturerIntroActive = false;
-            beeLecturerIntroComplete = true;
-        }
-    }
-
-    if (sectionId === "recordings") {
-        if (beeRecordingIntroActive) return;
-        if (!beeRecordingIntroComplete) {
-            const context = "recordings:intro";
-            if (!force && beeViewportContext === context) return;
-            beeViewportContext = context;
-            beginBeeRecordingIntro();
-            return;
-        }
-        if (window.innerWidth > 1024) {
-            const context = "recordings:tour";
-            if (!force && beeViewportContext === context) return;
-            beeViewportContext = context;
-            startBeeRecordingTour();
-            return;
-        }
-        const card = getClosestBeeTarget("[data-bee-recording]");
-        const teacher = card?.dataset.beeRecording;
-        const context = `recordings:${teacher || "general"}`;
-        if (!force && beeViewportContext === context) return;
-        beeViewportContext = context;
-        if (teacher) showBeeRecordingRecommendation(teacher, card, false);
-        else activateBeeGuide("recordings", false);
-        return;
-    }
-
-    if (sectionId === "lecturers") {
-        if (beeLecturerIntroActive) return;
-        if (!beeLecturerIntroComplete) {
-            const context = "lecturers:intro";
-            if (!force && beeViewportContext === context) return;
-            beeViewportContext = context;
-            beginBeeLecturerIntro();
-            return;
-        }
-        const row = getClosestBeeTarget("[data-bee-teacher]");
-        const teacher = row?.dataset.beeTeacher;
-        const state = BEE_LECTURER_STATES[teacher] || "lecturers";
-        const context = `lecturers:${teacher || "general"}`;
-        if (!force && beeViewportContext === context) return;
-        beeViewportContext = context;
-        if (!row) {
-            activateBeeGuide(state, false);
-            return;
-        }
-        beeSeenLecturerGuides.add(teacher);
-        activateBeeGuide(state, false, row);
-        return;
-    }
-
-    const stateBySection = {
-        hero: "hello",
-        features: "features",
-        schedule: "schedule",
-        halloffame: "halloffame",
-        faq: "faq",
-        register: "register"
-    };
-    const state = stateBySection[sectionId];
-    if (!state) return;
-    const context = `${sectionId}:${state}`;
-    if (!force && beeViewportContext === context) return;
-    beeViewportContext = context;
+    const state = BEE_TOUR_SECTIONS[getBeeReadingSection()?.id];
+    if (!state || (!force && beeViewportContext === state)) return;
+    beeViewportContext = state;
     activateBeeGuide(state, false);
 }
 
@@ -3071,8 +2903,8 @@ document.addEventListener("DOMContentLoaded", initBeeGuide);
 </script>
 
 
-<script src="assets/modern/nhi-rig-v8.js?v=9"></script>
+<script src="assets/modern/pu-guide-art.js?v=20261113"></script>
 
 
 
-<script src="assets/modern/tiktok-stats-v8.js?v=8"></script><script src="assets/modern/v8.js?v=20261102-family1"></script><script type="module" src="assets/modern/family-photo.js?v=20261106-pose3"></script></body></html>
+<script src="assets/modern/tiktok-stats-v8.js?v=8"></script><script src="assets/modern/v8.js?v=20261113-pu"></script><script type="module" src="assets/modern/family-photo.js?v=20261113-pu"></script></body></html>

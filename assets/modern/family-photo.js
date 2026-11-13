@@ -1,4 +1,4 @@
-// The family is one approved photograph; the existing Nhi guide keeps its anchor API.
+// The family portrait stays complete while Pu is guiding elsewhere on the page.
 (() => {
  const host=document.getElementById('beeWorld');
  const image=host?.querySelector('.family-portrait');
@@ -7,13 +7,12 @@
  const members=host.closest('.family-stage').querySelectorAll('.family-member').length;
  host.dataset.memberCount=String(members);
  window.beeWorld={
-  nhiAnchor(){
+  guideAnchor(){
    const r=image.getBoundingClientRect();
-   return {x:r.left+r.width*.62,y:r.top+r.height*.25,size:r.height*.32};
+   return {x:r.left+r.width*.25,y:r.top+r.height*.67,size:r.height*.43};
   },
-  // A photograph stays complete when its Nhi guide appears elsewhere on the page.
-  depart(){host.dataset.nhiDeparted='true';},
-  return(){host.dataset.nhiDeparted='false';},
+  depart(){host.dataset.guideDeparted='true';},
+  return(){host.dataset.guideDeparted='false';},
   greet(){},
   diagnostics(){return {mode:'family-photo',members};}
  };
