@@ -56,6 +56,96 @@
   text-wrap: balance;
 }
 
+#schedule[data-schedule-teacher]:not([data-schedule-teacher="all"]) {
+  background: linear-gradient(155deg, var(--bee-surface), var(--white) 78%);
+}
+
+#schedule[data-schedule-teacher]:not([data-schedule-teacher="all"]) .schedule-filter-shell {
+  background: linear-gradient(135deg, var(--white), var(--bee-surface));
+  border-color: var(--bee-edge);
+}
+
+#schedule[data-schedule-teacher]:not([data-schedule-teacher="all"]) .schedule-category {
+  --schedule-ink: var(--bee-action-ink, var(--bee-action));
+  --schedule-edge: var(--bee-edge);
+  --schedule-tint: var(--bee-surface);
+  --schedule-stripe: var(--white);
+}
+
+#schedule .schedule-filter-button[data-teacher-filter]:not([data-teacher-filter="all"]) {
+  background: var(--bee-surface);
+  border-color: var(--bee-edge);
+  color: var(--bee-action-ink, var(--bee-action));
+}
+
+#schedule .schedule-filter-button[data-teacher-filter]:not([data-teacher-filter="all"]):hover {
+  background: var(--bee-halo);
+}
+
+#schedule .schedule-filter-button[data-teacher-filter]:not([data-teacher-filter="all"]).active {
+  background: var(--bee-action);
+  border-color: var(--bee-action);
+  color: var(--bee-action-ink, var(--white));
+}
+
+#schedule tbody tr[data-schedule-teacher] {
+  background: var(--bee-surface, var(--white));
+}
+
+#schedule tbody tr[data-schedule-teacher]:hover {
+  background: color-mix(in srgb, var(--bee-halo, var(--schedule-tint)) 45%, var(--bee-surface, var(--white)));
+}
+
+#schedule tr[data-schedule-teacher] td:first-child strong,
+#schedule .schedule-date-opening {
+  color: var(--bee-action-ink, var(--bee-action, #183b82));
+}
+
+#schedule .schedule-dates {
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) max-content;
+  align-items: baseline;
+  gap: 3px 10px;
+  width: 100%;
+}
+
+#schedule .schedule-dates-cell::before {
+  content: none;
+}
+
+#schedule .schedule-date-label {
+  color: var(--quality-copy-strong);
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-align: left;
+}
+
+#schedule .schedule-date-value {
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.4;
+  text-align: right;
+}
+
+#schedule .schedule-date-value .date-year {
+  color: var(--quality-copy-strong);
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+@media (min-width: 1151px) {
+  #schedule tr[data-schedule-teacher] td:first-child {
+    border-inline-start: 4px solid var(--bee-edge, transparent);
+  }
+}
+
+@media (max-width: 1150px) {
+  #schedule tbody tr[data-schedule-teacher] {
+    border-color: var(--bee-edge, var(--schedule-edge));
+    border-inline-start-width: 4px;
+  }
+}
+
 #schedule .schedule-upcoming {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

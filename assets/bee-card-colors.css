@@ -1,29 +1,34 @@
-/* The same Bee colors follow each teacher from the trial card to the profile. */
-#recordings [data-bee-recording="bach"], #teacher-bach {
+/* The same Bee colors follow each teacher across trial cards, profiles and schedules. */
+#recordings [data-bee-recording="bach"], #teacher-bach,
+:is([data-schedule-teacher="bach"], [data-teacher-filter="bach"]) {
   --bee-surface: #edf3ff;
   --bee-halo: #cbdcff;
   --bee-edge: #adc5fa;
   --bee-action: var(--quality-trial-blue);
 }
-#recordings [data-bee-recording="nhi"] {
+#recordings [data-bee-recording="nhi"],
+:is([data-schedule-teacher="nhi"], [data-teacher-filter="nhi"]) {
   --bee-surface: #fff0f5;
   --bee-halo: #fbd2e4;
   --bee-edge: #ebb0ca;
   --bee-action: var(--quality-trial-pink);
 }
-#recordings [data-bee-recording="kane"] {
+#recordings [data-bee-recording="kane"],
+:is([data-schedule-teacher="khang"], [data-teacher-filter="khang"]) {
   --bee-surface: #eaf7ef;
   --bee-halo: #c5e9d5;
   --bee-edge: #a4d3b7;
   --bee-action: var(--quality-trial-green);
 }
-#recordings .recording-cici, #teacher-cici {
+#recordings .recording-cici, #teacher-cici,
+:is([data-schedule-teacher="cici"], [data-teacher-filter="cici"]) {
   --bee-surface: #faeaf2;
   --bee-halo: #efc9de;
   --bee-edge: #dfaec8;
   --bee-action: #8b315f;
 }
-#recordings .recording-kem, #teacher-quynh {
+#recordings .recording-kem, #teacher-quynh,
+:is([data-schedule-teacher="kem"], [data-teacher-filter="kem"]) {
   --bee-surface: #fff4dc;
   --bee-halo: #f7e1ad;
   --bee-edge: #d8c69e;
@@ -31,7 +36,8 @@
   --bee-action: #f2dfb3;
   --bee-action-ink: #23445f;
 }
-#recordings .recording-binh-an, #teacher-binh-an {
+#recordings .recording-binh-an, #teacher-binh-an,
+:is([data-schedule-teacher="binh-an"], [data-teacher-filter="binh-an"]) {
   --bee-surface: #f3e8fa;
   --bee-halo: #e7c9f5;
   --bee-edge: #cfafdf;

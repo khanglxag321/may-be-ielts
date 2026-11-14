@@ -38,11 +38,11 @@
 <link rel="stylesheet" href="assets/speaking/schedule.css?v=20261103">
 <link rel="stylesheet" href="assets/layout-family.css?v=20261106-recordings">
 <link rel="stylesheet" href="assets/layout-teachers.css?v=20261103">
-<link rel="stylesheet" href="assets/layout-schedule.css?v=20261103">
+<link rel="stylesheet" href="assets/layout-schedule.css?v=20261114-teachers">
 <link rel="stylesheet" href="assets/unify-speaking.css?v=20261103">
 <link rel="stylesheet" href="assets/add-speak-benefits.css?v=20261103">
 <link rel="stylesheet" href="assets/speaking-finish.css?v=20261103">
-<link rel="stylesheet" href="assets/bee-card-colors.css?v=20261106-binh-an-layout">
+<link rel="stylesheet" href="assets/bee-card-colors.css?v=20261114-teachers">
 <link rel="stylesheet" href="assets/hof-unified.css?v=20261103-gold">
 <link rel="stylesheet" href="assets/faq-registration.css?v=20261103">
 </head>
@@ -662,7 +662,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 </script>
 
     <!-- Schedule Section -->
-    <section id="schedule" class="section-padding">
+    <section id="schedule" class="section-padding" data-schedule-teacher="all">
         <div class="container"><div class="section-heading"><p class="eyebrow">04 / Bắt đầu đúng thời điểm</p><h2 class="section-title">Lịch khai giảng &amp; Lớp đang mở</h2><p class="section-subtitle">Lịch khai giảng, học phí và tình trạng chỗ của từng lớp.</p></div>
 
 
@@ -704,7 +704,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                                 <th>Giáo viên</th>
                                 <th>Mã Lớp</th>
                                 <th>Lịch Học</th>
-                                <th>Khai Giảng</th>
+                                <th>Thời Gian Khóa Học</th>
                                 <th>Học Phí</th>
                                 <th>Slot Còn Lại</th>
                             </tr>
@@ -725,7 +725,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                                 <th>Giáo viên</th>
                                 <th>Mã Lớp</th>
                                 <th>Lịch Học</th>
-                                <th>Khai Giảng</th>
+                                <th>Thời Gian Khóa Học</th>
                                 <th>Học Phí</th>
                                 <th>Slot Còn Lại</th>
                             </tr>
@@ -749,7 +749,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                                 <th>Giáo viên</th>
                                 <th>Mã Lớp</th>
                                 <th>Lịch Học</th>
-                                <th>Khai Giảng</th>
+                                <th>Thời Gian Khóa Học</th>
                                 <th>Học Phí</th>
                                 <th>Slot Còn Lại</th>
                             </tr>
@@ -1605,6 +1605,7 @@ function toggleContact(){
     }
 
     function renderFilteredPublicSchedule() {
+        document.getElementById("schedule").dataset.scheduleTeacher = activeScheduleTeacher;
         if (!publicScheduleLoaded) return;
         const filtered = publicScheduleRows
             .filter(matchesActiveScheduleSkill)
@@ -1931,8 +1932,7 @@ function toggleContact(){
             let slotStatus = slotsLeft === 0 ? "full" : slotsLeft <= 5 ? "low" : "ok";
             const tuitionPlan = buildTuitionPlan(row);
             const classInfo = MaybeSchedule.parse(row.MaLop);
-            const sessionCount = classInfo?.program === "speak" && MaybeSchedule.classSessions("speak", classInfo.month);
-            const sessionsLabel = sessionCount === 18 ? `<br><small>${sessionCount} buổi</small>` : "";
+            const teacherKey = teacherFilterKey(row.GiangVien);
             const openingMonth = classInfo?.month || getTodayUtc().toISOString().slice(0, 7);
             const endingMonth = MaybeSchedule.date(row.KhaiGiang, openingMonth).slice(0, 7) || openingMonth;
 
@@ -1945,11 +1945,18 @@ function toggleContact(){
     .replace(")", "</small>");
 
             const trHTML = `
-                <tr>
+                <tr data-schedule-teacher="${teacherKey}">
                     <td data-label="Giáo viên"><strong>${row.GiangVien}</strong></td>
                     <td data-label="Mã lớp">${MaybeSchedule.codeMarkup(row.MaLop)}</td>
-                    <td data-label="Lịch học">${lichHocFormat}${sessionsLabel}</td>
-                    <td data-label="Khai giảng">${MaybeSchedule.dateMarkup(row.KhaiGiang, openingMonth)}<span class="schedule-end">Kết thúc: ${MaybeSchedule.dateMarkup(row.KetThuc, endingMonth)}</span></td>
+                    <td data-label="Lịch học">${lichHocFormat}</td>
+                    <td class="schedule-dates-cell">
+                        <div class="schedule-dates">
+                            <span class="schedule-date-label">Khai giảng</span>
+                            <span class="schedule-date-value schedule-date-opening">${MaybeSchedule.dateMarkup(row.KhaiGiang, openingMonth)}</span>
+                            <span class="schedule-date-label">Kết thúc</span>
+                            <span class="schedule-date-value">${MaybeSchedule.dateMarkup(row.KetThuc, endingMonth)}</span>
+                        </div>
+                    </td>
                     <td data-label="Học phí"><div class="schedule-fee">
                         ${tuitionPlan}
                         ${/^MBSpeak/i.test(row.MaLop) ? '<a class="schedule-fee-benefits" href="#features-speaking">Đặc quyền Speaking</a>' : ""}
@@ -1968,7 +1975,7 @@ function toggleContact(){
                     tbFoundation.innerHTML += trHTML;
                     categoryCounts.foundation++;
                 }
-            } else if (/^MBSpeak/i.test(row.MaLop) && MaybeSchedule.speakingTeachers.includes(teacherFilterKey(row.GiangVien))) {
+            } else if (/^MBSpeak/i.test(row.MaLop) && MaybeSchedule.speakingTeachers.includes(teacherKey)) {
                 // Nếu là lớp Speaking
                 tbSpeaking.innerHTML += trHTML;
                 categoryCounts.speaking++;
