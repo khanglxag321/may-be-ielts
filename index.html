@@ -38,11 +38,11 @@
 <link rel="stylesheet" href="assets/speaking/schedule.css?v=20261103">
 <link rel="stylesheet" href="assets/layout-family.css?v=20261106-recordings">
 <link rel="stylesheet" href="assets/layout-teachers.css?v=20261103">
-<link rel="stylesheet" href="assets/layout-schedule.css?v=20261114-teachers">
+<link rel="stylesheet" href="assets/layout-schedule.css?v=20261114-schedule-refine">
 <link rel="stylesheet" href="assets/unify-speaking.css?v=20261103">
 <link rel="stylesheet" href="assets/add-speak-benefits.css?v=20261103">
 <link rel="stylesheet" href="assets/speaking-finish.css?v=20261103">
-<link rel="stylesheet" href="assets/bee-card-colors.css?v=20261114-teachers">
+<link rel="stylesheet" href="assets/bee-card-colors.css?v=20261114-schedule-refine">
 <link rel="stylesheet" href="assets/hof-unified.css?v=20261103-gold">
 <link rel="stylesheet" href="assets/faq-registration.css?v=20261103">
 </head>
@@ -662,7 +662,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 </script>
 
     <!-- Schedule Section -->
-    <section id="schedule" class="section-padding" data-schedule-teacher="all">
+    <section id="schedule" class="section-padding" data-schedule-teacher="bach">
         <div class="container"><div class="section-heading"><p class="eyebrow">04 / Bắt đầu đúng thời điểm</p><h2 class="section-title">Lịch khai giảng &amp; Lớp đang mở</h2><p class="section-subtitle">Lịch khai giảng, học phí và tình trạng chỗ của từng lớp.</p></div>
 
 
@@ -677,8 +677,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             <div class="schedule-filter-shell" aria-label="Bộ lọc lịch khai giảng theo giáo viên">
                 <div class="schedule-filter-layout">
                     <div><span class="schedule-filter-label">Chọn giáo viên</span><div class="schedule-filter-buttons" id="scheduleTeacherFilter" role="group" aria-label="Chọn giáo viên muốn xem">
-                        <button class="schedule-filter-button active" type="button" data-teacher-filter="all" aria-pressed="true">Tất cả giáo viên</button>
-                        <button class="schedule-filter-button" type="button" data-teacher-filter="bach" aria-pressed="false">Hồ Bách</button>
+                        <button class="schedule-filter-button active" type="button" data-teacher-filter="bach" aria-pressed="true">Hồ Bách</button>
                         <button class="schedule-filter-button" type="button" data-teacher-filter="nhi" data-writing-filter aria-pressed="false">Tuệ Nhi</button>
                         <button class="schedule-filter-button" type="button" data-teacher-filter="khang" data-writing-filter aria-pressed="false">Gia Khang</button>
                         <button class="schedule-filter-button" type="button" data-teacher-filter="binh-an" data-writing-filter aria-pressed="false">Bình An</button>
@@ -1388,7 +1387,7 @@ function toggleContact(){
     const API_URL = 'https://script.google.com/macros/s/AKfycbyBZAXmm893kl4QA4rFwiDcVCMRTz4hXbMVCr-tkIVV6tm1NNWTQOGndH8jrbPgSylh/exec'; // Điền link thật của bạn vào đây
     let publicAllScheduleRows = [];
     let publicScheduleRows = [];
-    let activeScheduleTeacher = "all";
+    const scheduleTeacherBySkill = { writing: "bach", speaking: "bach" };
     let activeScheduleDay = "all";
     let activeScheduleSort = "class";
     let activeScheduleSkill = "writing";
@@ -1548,93 +1547,62 @@ function toggleContact(){
     }
 
     function teacherFilterLabel(key) {
-        return ({ all: "Tất cả giáo viên", khang: "Gia Khang", nhi: "Tuệ Nhi", bach: "Hồ Bách", "binh-an": "Bình An", cici: "Lan Trinh", kem: "Quỳnh Kem" })[key] || "Giáo viên";
+        return ({ khang: "Gia Khang", nhi: "Tuệ Nhi", bach: "Hồ Bách", "binh-an": "Bình An", cici: "Lan Trinh", kem: "Quỳnh Kem" })[key] || "Giáo viên";
     }
 
     function teacherNoticeLabel(key) {
         return ({ khang: "thầy Gia Khang", nhi: "cô Tuệ Nhi", bach: "thầy Hồ Bách", "binh-an": "cô Bình An", cici: "cô Lan Trinh", kem: "cô Quỳnh Kem" })[key] || teacherFilterLabel(key);
     }
 
-    function monthLabelFromDate(date) {
-        return date ? `tháng ${date.getUTCMonth() + 1}/${date.getUTCFullYear()}` : "đợt tiếp theo";
-    }
-
-    function fullScheduleNotices() {
+    function fullScheduleNotice(teacherKey) {
         const current = currentMonthInVietnam();
-        const teacherKeys = activeScheduleTeacher === "all" ? teachersForScheduleSkill(activeScheduleSkill) : [activeScheduleTeacher];
-
-        const fullTeachers = teacherKeys.flatMap(key => {
-            const currentRows = publicAllScheduleRows.filter(row => {
-                const openingDate = parseScheduleDate(row.KhaiGiang);
-                return matchesActiveScheduleSkill(row) && teacherFilterKey(row.GiangVien) === key && openingDate &&
-                    openingDate.getUTCFullYear() === current.year &&
-                    openingDate.getUTCMonth() + 1 === current.month;
-            });
-
-            if (!currentRows.length || currentRows.some(classHasAvailableSlots)) return [];
-
-            const nextOpen = publicScheduleRows
-                .filter(row => matchesActiveScheduleSkill(row) && teacherFilterKey(row.GiangVien) === key && classHasAvailableSlots(row))
-                .sort((a, b) => (parseScheduleDate(a.KhaiGiang)?.getTime() || Infinity) - (parseScheduleDate(b.KhaiGiang)?.getTime() || Infinity))[0];
-            const nextDate = nextOpen ? parseScheduleDate(nextOpen.KhaiGiang) : null;
-            const followUp = nextDate
-                ? ` Lịch ${monthLabelFromDate(nextDate)} đang mở bên dưới.`
-                : " Lịch đợt tiếp theo sẽ được cập nhật sớm.";
-            return [{ key, nextDate, followUp }];
+        const currentRows = publicAllScheduleRows.filter(row => {
+            const openingDate = parseScheduleDate(row.KhaiGiang);
+            return matchesActiveScheduleSkill(row) && teacherFilterKey(row.GiangVien) === teacherKey && openingDate &&
+                openingDate.getUTCFullYear() === current.year &&
+                openingDate.getUTCMonth() + 1 === current.month;
         });
 
-        if (activeScheduleTeacher === "all" && fullTeachers.length) {
-            const labels = fullTeachers.map(item => teacherNoticeLabel(item.key));
-            const teacherList = labels.length === 1
-                ? labels[0]
-                : labels.length === 2
-                    ? `${labels[0]} và ${labels[1]}`
-                    : `${labels.slice(0, -1).join(", ")} và ${labels[labels.length - 1]}`;
-            const nextMonths = [...new Set(fullTeachers
-                .map(item => item.nextDate ? monthLabelFromDate(item.nextDate) : "")
-                .filter(Boolean))];
-            const followUp = nextMonths.length === 1
-                ? ` Lịch ${nextMonths[0]} đang mở bên dưới.`
-                : " Các lịch tiếp theo đang mở bên dưới hoặc sẽ được cập nhật sớm.";
-            return [`Lịch tháng ${current.month}/${current.year} của ${teacherList} đã đủ học viên.${followUp}`];
-        }
+        if (!currentRows.length || currentRows.some(classHasAvailableSlots)) return "";
 
-        return fullTeachers.map(item =>
-            `Lịch tháng ${current.month}/${current.year} của ${teacherNoticeLabel(item.key)} đã đủ học viên.${item.followUp}`
-        );
+        const nextOpen = publicScheduleRows
+            .filter(row => matchesActiveScheduleSkill(row) && teacherFilterKey(row.GiangVien) === teacherKey && classHasAvailableSlots(row))
+            .sort((a, b) => (parseScheduleDate(a.KhaiGiang)?.getTime() || Infinity) - (parseScheduleDate(b.KhaiGiang)?.getTime() || Infinity))[0];
+        const nextDate = nextOpen ? parseScheduleDate(nextOpen.KhaiGiang) : null;
+        const followUp = nextDate
+            ? `Lịch tháng ${nextDate.getUTCMonth() + 1}/${nextDate.getUTCFullYear()} đang mở bên dưới.`
+            : "Lịch đợt tiếp theo sẽ được cập nhật sớm.";
+        return `Lịch tháng ${current.month}/${current.year} của ${teacherNoticeLabel(teacherKey)} đã đủ học viên. ${followUp}`;
     }
 
     function renderFilteredPublicSchedule() {
-        document.getElementById("schedule").dataset.scheduleTeacher = activeScheduleTeacher;
+        const teacherKey = scheduleTeacherBySkill[activeScheduleSkill];
+        document.getElementById("schedule").dataset.scheduleTeacher = teacherKey;
+        document.querySelectorAll("[data-teacher-filter]").forEach(button => {
+            const active = button.dataset.teacherFilter === teacherKey;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-pressed", String(active));
+        });
         if (!publicScheduleLoaded) return;
         const filtered = publicScheduleRows
             .filter(matchesActiveScheduleSkill)
-            .filter(row => activeScheduleTeacher === "all" || teacherFilterKey(row.GiangVien) === activeScheduleTeacher)
+            .filter(row => teacherFilterKey(row.GiangVien) === teacherKey)
             .filter(row => activeScheduleDay === "all" || scheduleDayKey(row.LichHoc) === activeScheduleDay)
             .sort(comparePublicClasses);
 
         renderPublicTables(filtered);
 
-        document.querySelectorAll("[data-teacher-filter]").forEach(button => {
-            const active = button.dataset.teacherFilter === activeScheduleTeacher;
-            button.classList.toggle("active", active);
-            button.setAttribute("aria-pressed", String(active));
-        });
-
-        const notices = fullScheduleNotices();
+        const notice = fullScheduleNotice(teacherKey);
         const noticeContainer = document.getElementById("scheduleFullNotices");
         if (noticeContainer) {
-            noticeContainer.innerHTML = notices.map(message => `<div class="schedule-full-notice">${message}</div>`).join("");
+            noticeContainer.innerHTML = notice ? `<div class="schedule-full-notice">${notice}</div>` : "";
         }
 
-        const current = currentMonthInVietnam();
         const result = document.getElementById("scheduleFilterResult");
         if (result) {
-            const skillLabel = activeScheduleSkill === "speaking" && activeScheduleTeacher === "all"
-                ? "Speaking" : teacherFilterLabel(activeScheduleTeacher);
             result.textContent = filtered.length
-                ? `Đang hiển thị ${filtered.length} lớp · ${filtered.filter(classHasAvailableSlots).length} lớp còn chỗ · ${skillLabel}.`
-                : notices.length
+                ? `Đang hiển thị ${filtered.length} lớp · ${filtered.filter(classHasAvailableSlots).length} lớp còn chỗ · ${teacherFilterLabel(teacherKey)}.`
+                : notice
                     ? "Các lớp trong lịch hiện tại đã đủ học viên. Vui lòng xem thông báo tuyển sinh bên trên."
                     : "Không có lớp phù hợp với bộ lọc đang chọn.";
         }
@@ -1644,9 +1612,11 @@ function toggleContact(){
         return skill === "speaking" ? MaybeSchedule.speakingTeachers : Object.keys(MaybeSchedule.numbers);
     }
 
-    function setScheduleSkill(skill, teacherKey = "all") {
+    function setScheduleSkill(skill, teacherKey) {
         activeScheduleSkill = skill === "speaking" ? "speaking" : "writing";
-        activeScheduleTeacher = teachersForScheduleSkill(activeScheduleSkill).includes(teacherKey) ? teacherKey : "all";
+        if (teachersForScheduleSkill(activeScheduleSkill).includes(teacherKey)) {
+            scheduleTeacherBySkill[activeScheduleSkill] = teacherKey;
+        }
         activeScheduleDay = "all";
         document.getElementById("scheduleDayFilter").value = "all";
         document.querySelectorAll("[data-writing-filter]").forEach(control => {
@@ -1682,7 +1652,7 @@ function toggleContact(){
         });
         document.querySelectorAll("[data-teacher-filter]").forEach(button => {
             button.addEventListener("click", () => {
-                activeScheduleTeacher = button.dataset.teacherFilter || "all";
+                scheduleTeacherBySkill[activeScheduleSkill] = button.dataset.teacherFilter;
                 renderFilteredPublicSchedule();
             });
         });
@@ -1945,7 +1915,7 @@ function toggleContact(){
     .replace(")", "</small>");
 
             const trHTML = `
-                <tr data-schedule-teacher="${teacherKey}">
+                <tr>
                     <td data-label="Giáo viên"><strong>${row.GiangVien}</strong></td>
                     <td data-label="Mã lớp">${MaybeSchedule.codeMarkup(row.MaLop)}</td>
                     <td data-label="Lịch học">${lichHocFormat}</td>
@@ -2861,5 +2831,5 @@ document.addEventListener("DOMContentLoaded", initBeeGuide);
 
 
 
-<script src="assets/modern/tiktok-stats-v8.js?v=8"></script><script src="assets/modern/v8.js?v=20261113-pu"></script><script type="module" src="assets/modern/family-photo.js?v=20261113-pu"></script></body></html>
+<script src="assets/modern/tiktok-stats-v8.js?v=8"></script><script src="assets/modern/v8.js?v=20261114-schedule-refine"></script><script type="module" src="assets/modern/family-photo.js?v=20261113-pu"></script></body></html>
 

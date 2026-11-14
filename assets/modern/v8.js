@@ -31,7 +31,7 @@
  }
  function obstacles(root){
   const rects=[];
-  const selector='.section-title,.section-subtitle,.feature-card h3,.feature-card p,.teacher-recording-card h3,.teacher-recording-card .aim,.lecturer-info h3,.lecturer-info p,.lecturer-score,.faq-question,.faq-answer-inner,.hof-cat-card h3,.hof-cat-card p,label,button,a.btn,input,select,video,iframe,.teacher-media img,.recording-mascot-v4 img,figcaption,th,td,.recording-conversion';
+  const selector='.section-title,.section-subtitle,#schedule .category-header,#schedule .speaking-meta,.feature-card h3,.feature-card p,.teacher-recording-card h3,.teacher-recording-card .aim,.lecturer-info h3,.lecturer-info p,.lecturer-score,.faq-question,.faq-answer-inner,.hof-cat-card h3,.hof-cat-card p,label,button,a.btn,input,select,video,iframe,.teacher-media img,.recording-mascot-v4 img,figcaption,th,td,.recording-conversion';
   for(const el of root.querySelectorAll(selector)){
    if(el.closest('#beeGuide')||!inView(el)||getComputedStyle(el).visibility==='hidden')continue;
    if(el.matches('button,a.btn,input,select,video,iframe,img,.recording-conversion'))rects.push(el.getBoundingClientRect());
@@ -44,7 +44,7 @@
   const frame=resolveFrame(state,target),small=innerWidth<=600,size=small?94:112;
   if(isRecording()&&small){const r=frame.getBoundingClientRect();return {x:clamp(r.right-48,size/2+24,innerWidth-size/2-24),y:r.top+r.height*.52,size,scale:1,frame,kind:'hover',facing:1,orbitX:10,orbitY:6,slot:'video-below'};}
   const section=frame?.closest('section')||getBeeReadingSection(),root=isRecording()?document.getElementById('recordingModal'):(section||document),r=frame?.getBoundingClientRect();
-  const sides={hero:'right',features:'right',recordings:'left',lecturers:'right',schedule:'left',halloffame:'right',faq:'left',register:'right'};
+  const sides={hero:'right',features:'right',recordings:'left',lecturers:'right',schedule:'right',halloffame:'right',faq:'left',register:'right'};
   const preferred=isRecording()?'right':(frame?.dataset.beeGuideSide||sides[section?.id]||'right');
   const aim=r?{x:r.left+r.width*.5,y:clamp(r.top+r.height*.28,150,innerHeight-140)}:{x:innerWidth*.5,y:innerHeight*.5};
   const candidates=[];

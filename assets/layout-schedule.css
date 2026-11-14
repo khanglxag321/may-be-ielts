@@ -1,3 +1,11 @@
+#schedule {
+  --schedule-accent: var(--bee-action-ink, var(--bee-action, var(--navy-700)));
+  --schedule-surface: #f7f8fa;
+  --schedule-line: #dce2eb;
+  --schedule-header: #eff2f6;
+  background: var(--schedule-surface);
+}
+
 #schedule .schedule-skill-tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5,9 +13,9 @@
   padding: 4px;
   gap: 4px;
   margin-bottom: 18px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--schedule-line);
   border-radius: 13px;
-  background: var(--blue-50);
+  background: var(--schedule-header);
 }
 
 #schedule .schedule-skill-tabs button {
@@ -21,7 +29,7 @@
 }
 
 #schedule .schedule-skill-tabs button:hover {
-  background: var(--blue-100);
+  background: var(--white);
 }
 
 #schedule .schedule-skill-tabs button[aria-selected="true"] {
@@ -43,7 +51,7 @@
 }
 
 #schedule .schedule-fee-benefits {
-  color: #183b82;
+  color: var(--schedule-accent);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.5;
@@ -53,52 +61,71 @@
 }
 
 #schedule .category-header {
+  color: var(--schedule-accent);
   text-wrap: balance;
 }
 
-#schedule[data-schedule-teacher]:not([data-schedule-teacher="all"]) {
-  background: linear-gradient(155deg, var(--bee-surface), var(--white) 78%);
+#schedule .schedule-filter-shell {
+  background: var(--white);
+  border-color: var(--schedule-line);
+  box-shadow: none;
 }
 
-#schedule[data-schedule-teacher]:not([data-schedule-teacher="all"]) .schedule-filter-shell {
-  background: linear-gradient(135deg, var(--white), var(--bee-surface));
-  border-color: var(--bee-edge);
+#schedule .schedule-category {
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
-#schedule[data-schedule-teacher]:not([data-schedule-teacher="all"]) .schedule-category {
-  --schedule-ink: var(--bee-action-ink, var(--bee-action));
-  --schedule-edge: var(--bee-edge);
-  --schedule-tint: var(--bee-surface);
-  --schedule-stripe: var(--white);
+#schedule .speaking-brand {
+  color: var(--quality-copy);
 }
 
-#schedule .schedule-filter-button[data-teacher-filter]:not([data-teacher-filter="all"]) {
-  background: var(--bee-surface);
-  border-color: var(--bee-edge);
-  color: var(--bee-action-ink, var(--bee-action));
+#schedule .schedule-filter-button {
+  background: var(--white);
+  border-color: var(--schedule-line);
+  color: var(--quality-copy-strong);
 }
 
-#schedule .schedule-filter-button[data-teacher-filter]:not([data-teacher-filter="all"]):hover {
-  background: var(--bee-halo);
+#schedule .schedule-filter-button:hover {
+  background: var(--schedule-header);
+  border-color: var(--gray-300);
 }
 
-#schedule .schedule-filter-button[data-teacher-filter]:not([data-teacher-filter="all"]).active {
-  background: var(--bee-action);
-  border-color: var(--bee-action);
-  color: var(--bee-action-ink, var(--white));
+#schedule .schedule-filter-button[aria-pressed="true"] {
+  background: var(--bee-surface, var(--schedule-header));
+  border-color: var(--schedule-accent);
+  color: var(--schedule-accent);
+  font-weight: 800;
 }
 
-#schedule tbody tr[data-schedule-teacher] {
-  background: var(--bee-surface, var(--white));
+#schedule tbody tr,
+#schedule tbody tr:nth-child(even) {
+  background: var(--white);
 }
 
-#schedule tbody tr[data-schedule-teacher]:hover {
-  background: color-mix(in srgb, var(--bee-halo, var(--schedule-tint)) 45%, var(--bee-surface, var(--white)));
+#schedule tbody tr:hover {
+  background: var(--schedule-surface);
 }
 
-#schedule tr[data-schedule-teacher] td:first-child strong,
 #schedule .schedule-date-opening {
-  color: var(--bee-action-ink, var(--bee-action, #183b82));
+  color: var(--schedule-accent);
+}
+
+#schedule .cohort-tag,
+#schedule .tuition-trigger {
+  background: var(--schedule-surface);
+  border-color: var(--schedule-line);
+}
+
+#schedule .cohort-tag,
+#schedule .speaking-offer span {
+  color: var(--quality-copy-strong);
+}
+
+#schedule .speaking-offer,
+#schedule .tuition-trigger-link {
+  color: var(--schedule-accent);
 }
 
 #schedule .schedule-dates {
@@ -134,15 +161,31 @@
 }
 
 @media (min-width: 1151px) {
-  #schedule tr[data-schedule-teacher] td:first-child {
-    border-inline-start: 4px solid var(--bee-edge, transparent);
+  #schedule .table-responsive {
+    border-color: var(--schedule-line);
+    border-radius: 12px;
+  }
+
+  #schedule table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  #schedule thead,
+  #schedule th {
+    background: var(--schedule-header);
+  }
+
+  #schedule th {
+    color: var(--quality-copy-strong);
+    font-weight: 750;
+    border-bottom: 1px solid var(--schedule-line);
   }
 }
 
 @media (max-width: 1150px) {
-  #schedule tbody tr[data-schedule-teacher] {
-    border-color: var(--bee-edge, var(--schedule-edge));
-    border-inline-start-width: 4px;
+  #schedule tbody tr {
+    border-color: var(--schedule-line);
   }
 }
 
