@@ -1523,7 +1523,7 @@ function toggleContact(){
 
     function scheduleDayKey(value) {
         const text = String(value || "");
-        const pair = text.match(/([2-7])\s*\+\s*([2-7])/);
+        const pair = text.match(/([2-7])\s*\+\s*(?:Thứ\s*)?([2-7])/i);
         if (pair) return `${pair[1]}+${pair[2]}`;
         const single = text.match(/Thứ\s*([2-7])/i);
         return single ? single[1] : "other";
