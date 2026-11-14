@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
-<script src="assets/class-schedule.js?v=20261110c"></script>
+<script src="assets/class-schedule.js?v=20261114a"></script>
 
 
 <link rel="stylesheet" href="assets/class-schedule.css?v=20261001d">
@@ -546,8 +546,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                             <a href="https://zalo.me/0918943544" class="contact-phone" target="_blank" rel="noopener noreferrer" aria-label="Zalo của Cici"><i class="fa-solid fa-comment" aria-hidden="true"></i> Zalo</a>
                         </div>
                         <div class="lecturer-conversion">
-                            <span class="lecturer-slot-note">Lịch lớp Speaking đang cập nhật</span>
-                            <button type="button" class="lecturer-conversion-link" aria-haspopup="dialog" data-speaking-slot="Cici">Xem lịch còn slot của Cici <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                            <span class="lecturer-slot-note" data-slot-teacher="cici">Đang kiểm tra chỗ còn lại</span>
+                            <a href="#schedule" class="lecturer-conversion-link" onclick="showTeacherSchedule('cici', 'speaking')">Xem lịch còn slot của Cici <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                     <div class="lecturer-video lecturer-video-empty" aria-hidden="true"></div>
@@ -578,8 +578,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                             <a href="https://zalo.me/0522576192" class="contact-phone" target="_blank" rel="noopener noreferrer" aria-label="Zalo của Kem"><i class="fa-solid fa-comment" aria-hidden="true"></i> Zalo</a>
                         </div>
                         <div class="lecturer-conversion">
-                            <span class="lecturer-slot-note">Lịch lớp Speaking đang cập nhật</span>
-                            <button type="button" class="lecturer-conversion-link" aria-haspopup="dialog" data-speaking-slot="Kem">Xem lịch còn slot của Kem <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                            <span class="lecturer-slot-note" data-slot-teacher="kem">Đang kiểm tra chỗ còn lại</span>
+                            <a href="#schedule" class="lecturer-conversion-link" onclick="showTeacherSchedule('kem', 'speaking')">Xem lịch còn slot của Kem <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
                         </div>
                     </div>
                     <div class="lecturer-video lecturer-video-empty" aria-hidden="true"></div>
@@ -588,11 +588,6 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             </div>
         </div>
     </section>
-    <dialog class="recording-pending-dialog" id="speaking-slot-dialog" aria-labelledby="speaking-slot-title">
-        <h2 id="speaking-slot-title">Lịch lớp Speaking</h2>
-        <p>Lịch lớp sẽ được cập nhật sau.</p>
-        <form method="dialog"><button class="submit-btn" autofocus>Đóng</button></form>
-    </dialog>
     <script>
 (() => {
     const nav = document.querySelector('.teacher-group-nav');
@@ -657,15 +652,6 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
     select(0);
     selectForHash(location.hash);
 
-    const slotDialog = document.getElementById('speaking-slot-dialog');
-    const slotTitle = document.getElementById('speaking-slot-title');
-    document.querySelectorAll('[data-speaking-slot]').forEach(button => {
-        button.addEventListener('click', () => {
-            slotTitle.textContent = 'Lịch lớp Speaking của ' + button.dataset.speakingSlot;
-            slotDialog.showModal();
-        });
-    });
-
     document.getElementById('lecturers').addEventListener('click', event => {
         const link = event.target.closest('.lecturer-image-link');
         if (!link || event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
@@ -690,12 +676,14 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
 
             <div class="schedule-filter-shell" aria-label="Bộ lọc lịch khai giảng theo giáo viên">
                 <div class="schedule-filter-layout">
-                    <div data-writing-filter><span class="schedule-filter-label">Chọn giáo viên</span><div class="schedule-filter-buttons" id="scheduleTeacherFilter" role="group" aria-label="Chọn giáo viên muốn xem">
+                    <div><span class="schedule-filter-label">Chọn giáo viên</span><div class="schedule-filter-buttons" id="scheduleTeacherFilter" role="group" aria-label="Chọn giáo viên muốn xem">
                         <button class="schedule-filter-button active" type="button" data-teacher-filter="all" aria-pressed="true">Tất cả giáo viên</button>
                         <button class="schedule-filter-button" type="button" data-teacher-filter="bach" aria-pressed="false">Hồ Bách</button>
-                        <button class="schedule-filter-button" type="button" data-teacher-filter="nhi" aria-pressed="false">Tuệ Nhi</button>
-                        <button class="schedule-filter-button" type="button" data-teacher-filter="khang" aria-pressed="false">Gia Khang</button>
-                        <button class="schedule-filter-button" type="button" data-teacher-filter="binh-an" aria-pressed="false">Bình An</button>
+                        <button class="schedule-filter-button" type="button" data-teacher-filter="nhi" data-writing-filter aria-pressed="false">Tuệ Nhi</button>
+                        <button class="schedule-filter-button" type="button" data-teacher-filter="khang" data-writing-filter aria-pressed="false">Gia Khang</button>
+                        <button class="schedule-filter-button" type="button" data-teacher-filter="binh-an" data-writing-filter aria-pressed="false">Bình An</button>
+                        <button class="schedule-filter-button" type="button" data-teacher-filter="cici" data-speaking-filter aria-pressed="false" hidden>Lan Trinh</button>
+                        <button class="schedule-filter-button" type="button" data-teacher-filter="kem" data-speaking-filter aria-pressed="false" hidden>Quỳnh Kem</button>
                     </div></div>
                     <div class="schedule-filter-selects">
                         <div class="schedule-select-field" data-writing-filter><label for="scheduleDayFilter">Lọc theo lịch học</label><select class="schedule-filter-select" id="scheduleDayFilter"><option value="all">Tất cả các thứ</option><option value="2+5">Thứ 2 + 5</option><option value="3+6">Thứ 3 + 6</option><option value="4+7">Thứ 4 + 7</option></select></div>
@@ -752,8 +740,8 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
             </div>
             <div id="schedule-speaking" class="schedule-skill-panel" role="tabpanel" aria-labelledby="schedule-tab-speaking" tabindex="0" hidden>
             <div class="schedule-category" data-schedule-category="speaking">
-                <h3 class="category-header">Speaking 5.0 → 6.5–7.0+ (Hồ Bách)</h3>
-                <div class="speaking-meta"><span class="speaking-brand">may(be)speak.</span><span class="speaking-teacher"><i class="fa-solid fa-microphone" aria-hidden="true"></i> Cùng thầy Hồ Bách</span></div>
+                <h3 class="category-header">Speaking 5.0 → 6.5–7.0+</h3>
+                <div class="speaking-meta"><span class="speaking-brand">may(be)speak.</span></div>
                 <div class="table-responsive">
                     <table>
                         <thead>
@@ -772,10 +760,6 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                     </table>
                 </div>
             </div>
-                <ul class="schedule-upcoming" aria-label="Lịch Speaking sắp cập nhật">
-                    <li><strong>Cici</strong><span>Lịch lớp Speaking đang cập nhật</span></li>
-                    <li><strong>Kem</strong><span>Lịch lớp Speaking đang cập nhật</span></li>
-                </ul>
             </div>
         </div>
     </section>
@@ -951,7 +935,7 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 <i class="fa-solid fa-xmark" aria-hidden="true"></i>
             </button>
             <p class="tuition-modal-eyebrow">Lộ trình học phí</p>
-            <h3 id="tuitionModalTitle" class="tuition-modal-title">Ba giai đoạn học phí</h3>
+            <h3 id="tuitionModalTitle" class="tuition-modal-title">Các mức học phí</h3>
             <p id="tuitionModalSubtitle" class="tuition-modal-subtitle"></p>
             <div id="tuitionModalPlan"></div>
             <p class="tuition-inclusions-note">Học phí Writing đã bao gồm 15 buổi, 25 task chấm chữa và các quyền lợi học viên. <a href="#features" onclick="closeTuitionModal()">Xem chi tiết quyền lợi ↗</a></p>
@@ -1530,16 +1514,7 @@ function toggleContact(){
     }
 
     function teacherFilterKey(value) {
-        const name = String(value || "")
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase();
-
-        if (/\bbinh\s+an\b/.test(name)) return "binh-an";
-        if (name.includes("khang")) return "khang";
-        if (name.includes("nhi")) return "nhi";
-        if (name.includes("bach")) return "bach";
-        return "other";
+        return MaybeSchedule.teacher(value) || "other";
     }
 
     function publicClassNumber(value) {
@@ -1573,11 +1548,11 @@ function toggleContact(){
     }
 
     function teacherFilterLabel(key) {
-        return ({ all: "Tất cả giáo viên", khang: "Gia Khang", nhi: "Tuệ Nhi", bach: "Hồ Bách", "binh-an": "Bình An" })[key] || "Giáo viên";
+        return ({ all: "Tất cả giáo viên", khang: "Gia Khang", nhi: "Tuệ Nhi", bach: "Hồ Bách", "binh-an": "Bình An", cici: "Lan Trinh", kem: "Quỳnh Kem" })[key] || "Giáo viên";
     }
 
     function teacherNoticeLabel(key) {
-        return ({ khang: "thầy Gia Khang", nhi: "cô Tuệ Nhi", bach: "thầy Hồ Bách", "binh-an": "cô Bình An" })[key] || teacherFilterLabel(key);
+        return ({ khang: "thầy Gia Khang", nhi: "cô Tuệ Nhi", bach: "thầy Hồ Bách", "binh-an": "cô Bình An", cici: "cô Lan Trinh", kem: "cô Quỳnh Kem" })[key] || teacherFilterLabel(key);
     }
 
     function monthLabelFromDate(date) {
@@ -1586,8 +1561,7 @@ function toggleContact(){
 
     function fullScheduleNotices() {
         const current = currentMonthInVietnam();
-        const teacherKeys = activeScheduleSkill === "speaking" ? ["bach"]
-            : activeScheduleTeacher === "all" ? ["bach", "nhi", "khang", "binh-an"] : [activeScheduleTeacher];
+        const teacherKeys = activeScheduleTeacher === "all" ? teachersForScheduleSkill(activeScheduleSkill) : [activeScheduleTeacher];
 
         const fullTeachers = teacherKeys.flatMap(key => {
             const currentRows = publicAllScheduleRows.filter(row => {
@@ -1655,7 +1629,8 @@ function toggleContact(){
         const current = currentMonthInVietnam();
         const result = document.getElementById("scheduleFilterResult");
         if (result) {
-            const skillLabel = activeScheduleSkill === "speaking" ? "Speaking" : teacherFilterLabel(activeScheduleTeacher);
+            const skillLabel = activeScheduleSkill === "speaking" && activeScheduleTeacher === "all"
+                ? "Speaking" : teacherFilterLabel(activeScheduleTeacher);
             result.textContent = filtered.length
                 ? `Đang hiển thị ${filtered.length} lớp · ${filtered.filter(classHasAvailableSlots).length} lớp còn chỗ · ${skillLabel}.`
                 : notices.length
@@ -1664,13 +1639,20 @@ function toggleContact(){
         }
     }
 
+    function teachersForScheduleSkill(skill) {
+        return skill === "speaking" ? MaybeSchedule.speakingTeachers : Object.keys(MaybeSchedule.numbers);
+    }
+
     function setScheduleSkill(skill, teacherKey = "all") {
         activeScheduleSkill = skill === "speaking" ? "speaking" : "writing";
-        activeScheduleTeacher = activeScheduleSkill === "writing" ? teacherKey : "all";
+        activeScheduleTeacher = teachersForScheduleSkill(activeScheduleSkill).includes(teacherKey) ? teacherKey : "all";
         activeScheduleDay = "all";
         document.getElementById("scheduleDayFilter").value = "all";
         document.querySelectorAll("[data-writing-filter]").forEach(control => {
             control.hidden = activeScheduleSkill !== "writing";
+        });
+        document.querySelectorAll("[data-speaking-filter]").forEach(control => {
+            control.hidden = activeScheduleSkill !== "speaking";
         });
         document.querySelectorAll("[data-schedule-skill]").forEach(tab => {
             const selected = tab.dataset.scheduleSkill === activeScheduleSkill;
@@ -1721,30 +1703,7 @@ function toggleContact(){
     }
 
     function showTeacherSchedule(teacherKey, skill = "writing") {
-        const allowed = ["bach", "nhi", "khang", "binh-an"];
-        setScheduleSkill(skill, allowed.includes(teacherKey) ? teacherKey : "all");
-    }
-
-    function calculateTuitionCutovers(startDateValue, classCode = "") {
-        const startDate = parseScheduleDate(startDateValue);
-        if (!startDate) return null;
-        const cutovers = MaybeSchedule.tuitionCutovers(startDate.toISOString().slice(0,10), classCode);
-        return cutovers ? {
-            policy: cutovers.policy,
-            firstCutover: new Date(cutovers.middleStartIso + "T00:00:00Z"),
-            secondCutover: new Date(cutovers.fullStartIso + "T00:00:00Z")
-        } : null;
-    }
-
-    function calculatePromotionDeadlineDate(startDateValue, classCode = "") {
-        const cutovers = calculateTuitionCutovers(startDateValue, classCode);
-        return cutovers ? addUtcDays(cutovers.secondCutover, -1) : null;
-    }
-
-    function addUtcDays(date, days) {
-        const result = new Date(date.getTime());
-        result.setUTCDate(result.getUTCDate() + days);
-        return result;
+        setScheduleSkill(skill, teacherKey);
     }
 
     function formatShortDate(date) {
@@ -1754,75 +1713,52 @@ function toggleContact(){
         return `${day}/${month}`;
     }
 
-    function calculatePromotionDeadline(startDateValue, classCode = "") {
-        return formatShortDate(calculatePromotionDeadlineDate(startDateValue, classCode));
-    }
-
-    function parseVnd(value) {
-        const amount = Number(String(value || "").replace(/\D/g, ""));
-        return Number.isFinite(amount) && amount > 0 ? amount : 0;
-    }
-
     function formatVnd(amount) {
         return `${String(Math.round(amount)).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}đ`;
     }
 
     function getTodayUtc() {
-        const now = new Date();
-        return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+        const parts = new Intl.DateTimeFormat("en-US", {
+            timeZone: "Asia/Ho_Chi_Minh", year: "numeric", month: "numeric", day: "numeric"
+        }).formatToParts(new Date());
+        const part = type => Number(parts.find(item => item.type === type)?.value);
+        return new Date(Date.UTC(part("year"), part("month") - 1, part("day")));
     }
 
     const tuitionPlanStore = {};
     let lastTuitionTrigger = null;
 
     function createTuitionPlan(row) {
+        const start = parseScheduleDate(row.KhaiGiang)?.toISOString().slice(0, 10);
         const fees = MaybeSchedule.tuitionFees({
-            teacher: MaybeSchedule.teacher(row.GiangVien), program: /^MBSpeak/i.test(row.MaLop) ? "speak" : "write",
-            code: row.MaLop, start: MaybeSchedule.date(row.KhaiGiang, new Date().toISOString().slice(0,7)),
+            teacher: MaybeSchedule.teacher(row.GiangVien), program: "write",
+            code: row.MaLop, start,
             promoFee: row.HocPhiUuDai, fullFee: row.HocPhiGoc
         });
-        const lowestFee = parseVnd(fees.promoFee);
-        const originalFee = parseVnd(fees.fullFee);
-        const cutovers = calculateTuitionCutovers(row.KhaiGiang, row.MaLop);
-        const promotionDeadline = cutovers ? addUtcDays(cutovers.secondCutover, -1) : null;
-        const earlyBirdDeadline = cutovers ? addUtcDays(cutovers.firstCutover, -1) : null;
+        const plan = MaybeSchedule.tuitionPlan(start, row.MaLop, fees.promoFee, fees.fullFee, getTodayUtc().toISOString().slice(0, 10));
+        if (!plan) return null;
 
-        if (!lowestFee || !originalFee || !promotionDeadline || !earlyBirdDeadline) {
-            return null;
-        }
-
-        // Mức giữa là trung bình của giá sớm nhất và giá gốc,
-        // làm tròn đến 100.000đ: 5tr → 5,5tr → 6tr; 4,5tr → 4,8tr → 5tr.
-        const middleFee = Math.round(((lowestFee + originalFee) / 2) / 100000) * 100000;
-        const middleStart = cutovers.firstCutover;
-        const fullPriceStart = cutovers.secondCutover;
-        const today = getTodayUtc();
-        const activeStage = today < middleStart ? 0 : (today < fullPriceStart ? 1 : 2);
-
-        const stages = [
-            {
-                title: "Giá sớm nhất",
-                date: `Trước ${formatShortDate(middleStart)}`,
-                price: formatVnd(lowestFee)
-            },
-            {
+        const shortDate = iso => formatShortDate(new Date(`${iso}T00:00:00Z`));
+        const stages = [{
+            title: plan.middle === null ? "Giá đăng ký sớm" : "Giá sớm nhất",
+            date: `Trước ${shortDate(plan.middleStartIso || plan.fullStartIso)}`,
+            price: formatVnd(plan.lowest)
+        }];
+        if (plan.middle !== null) {
+            stages.push({
                 title: "Giá cận khai giảng",
-                date: `${formatShortDate(middleStart)} – ${formatShortDate(promotionDeadline)}`,
-                price: formatVnd(middleFee)
-            },
-            {
-                title: "Giá gốc",
-                date: `Từ ${formatShortDate(fullPriceStart)}`,
-                price: formatVnd(originalFee)
-            }
-        ];
+                date: `${shortDate(plan.middleStartIso)} – ${shortDate(plan.promotionIso)}`,
+                price: formatVnd(plan.middle)
+            });
+        }
+        stages.push({title: "Giá gốc", date: `Từ ${shortDate(plan.fullStartIso)}`, price: formatVnd(plan.original)});
 
         return {
             className: String(row.MaLop || "Lớp học"),
             teacher: String(row.GiangVien || ""),
             openingDate: String(row.KhaiGiang || ""),
-            policy: cutovers.policy,
-            activeStage,
+            policy: plan.policy,
+            activeStage: plan.active,
             stages
         };
     }
@@ -1858,7 +1794,10 @@ function toggleContact(){
 
     function buildTuitionPlan(row) {
         if (/^MBSpeak/i.test(row.MaLop)) {
-            return `<div class="speaking-price"><span class="speaking-price-label">Học phí tiêu chuẩn</span><strong>${row.HocPhiGoc}</strong><div class="speaking-offer"><strong>${row.HocPhiUuDai}</strong><span>Giá ưu đãi cho học viên lớp Writing</span></div></div>`;
+            const policy = MaybeSchedule.tuitionPolicy(teacherFilterKey(row.GiangVien), "speak", MaybeSchedule.parse(row.MaLop)?.month);
+            const fullPrice = policy ? formatVnd(policy.original) : row.HocPhiGoc;
+            const memberPrice = policy ? formatVnd(policy.lowest) : row.HocPhiUuDai;
+            return `<div class="speaking-price"><span class="speaking-price-label">Học phí tiêu chuẩn</span><strong>${fullPrice}</strong><div class="speaking-offer"><strong>${memberPrice}</strong><span>Giá ưu đãi cho học viên lớp Writing</span></div></div>`;
         }
         const plan = createTuitionPlan(row);
         if (!plan) {
@@ -1868,20 +1807,21 @@ function toggleContact(){
         const planKey = encodeURIComponent(plan.className);
         tuitionPlanStore[planKey] = plan;
         const currentStage = plan.stages[plan.activeStage];
+        const priceCountLabel = plan.stages.length === 2 ? "hai" : "ba";
 
         return `
             <button
                 type="button"
                 class="tuition-trigger"
                 data-tuition-key="${planKey}"
-                aria-label="Giá đang áp dụng ${currentStage.price}. ${currentStage.date}. Xem ba mức học phí"
+                aria-label="Giá đang áp dụng ${currentStage.price}. ${currentStage.date}. Xem ${priceCountLabel} mức học phí"
                 onclick="openTuitionModal(this)"
             >
                 <span class="tuition-trigger-label"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Giá đang áp dụng</span>
                 <strong class="tuition-trigger-price">${currentStage.price}</strong>
                 <span class="tuition-trigger-meta">
                     <span>${currentStage.date}</span>
-                    <span class="tuition-trigger-link">Xem 3 mức giá <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
+                    <span class="tuition-trigger-link">Xem ${plan.stages.length} mức giá <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></span>
                 </span>
             </button>
         `;
@@ -1990,6 +1930,11 @@ function toggleContact(){
             const slotsLeft = Math.max(0, totalSlots - enrolled);
             let slotStatus = slotsLeft === 0 ? "full" : slotsLeft <= 5 ? "low" : "ok";
             const tuitionPlan = buildTuitionPlan(row);
+            const classInfo = MaybeSchedule.parse(row.MaLop);
+            const sessionCount = classInfo?.program === "speak" && MaybeSchedule.classSessions("speak", classInfo.month);
+            const sessionsLabel = sessionCount === 18 ? `<br><small>${sessionCount} buổi</small>` : "";
+            const openingMonth = classInfo?.month || getTodayUtc().toISOString().slice(0, 7);
+            const endingMonth = MaybeSchedule.date(row.KhaiGiang, openingMonth).slice(0, 7) || openingMonth;
 
             // Format lại cột Lịch học: "Thứ 2 + 5 (8:00 PM - 10:00 PM)" thành 2 dòng cho đẹp
             let lichHocFormat = row.LichHoc
@@ -2003,8 +1948,8 @@ function toggleContact(){
                 <tr>
                     <td data-label="Giáo viên"><strong>${row.GiangVien}</strong></td>
                     <td data-label="Mã lớp">${MaybeSchedule.codeMarkup(row.MaLop)}</td>
-                    <td data-label="Lịch học">${lichHocFormat}</td>
-                    <td data-label="Khai giảng">${MaybeSchedule.dateMarkup(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7))}<span class="schedule-end">Kết thúc: ${MaybeSchedule.dateMarkup(row.KetThuc,MaybeSchedule.date(row.KhaiGiang,MaybeSchedule.parse(row.MaLop)?.month||getTodayUtc().toISOString().slice(0,7)).slice(0,7))}</span></td>
+                    <td data-label="Lịch học">${lichHocFormat}${sessionsLabel}</td>
+                    <td data-label="Khai giảng">${MaybeSchedule.dateMarkup(row.KhaiGiang, openingMonth)}<span class="schedule-end">Kết thúc: ${MaybeSchedule.dateMarkup(row.KetThuc, endingMonth)}</span></td>
                     <td data-label="Học phí"><div class="schedule-fee">
                         ${tuitionPlan}
                         ${/^MBSpeak/i.test(row.MaLop) ? '<a class="schedule-fee-benefits" href="#features-speaking">Đặc quyền Speaking</a>' : ""}
@@ -2023,7 +1968,7 @@ function toggleContact(){
                     tbFoundation.innerHTML += trHTML;
                     categoryCounts.foundation++;
                 }
-            } else if (/^MBSpeak/i.test(row.MaLop) && teacherFilterKey(row.GiangVien) === 'bach') {
+            } else if (/^MBSpeak/i.test(row.MaLop) && MaybeSchedule.speakingTeachers.includes(teacherFilterKey(row.GiangVien))) {
                 // Nếu là lớp Speaking
                 tbSpeaking.innerHTML += trHTML;
                 categoryCounts.speaking++;
@@ -2036,7 +1981,7 @@ function toggleContact(){
         if (tbSpeaking.innerHTML === '') tbSpeaking.innerHTML = '<tr><td colspan="6" style="text-align:center;">Chưa có lịch khai giảng mới.</td></tr>';
 
         document.querySelectorAll('[data-schedule-category]').forEach(section => {
-            section.hidden = categoryCounts[section.dataset.scheduleCategory] === 0 && !(section.dataset.scheduleCategory === "speaking" && ["all","bach"].includes(activeScheduleTeacher));
+            section.hidden = categoryCounts[section.dataset.scheduleCategory] === 0 && section.dataset.scheduleCategory !== "speaking";
         });
     }
 
@@ -2774,7 +2719,9 @@ function updateLecturerSlotNotes(rows) {
         bach: { total: 0, min: Infinity, classes: 0 },
         nhi: { total: 0, min: Infinity, classes: 0 },
         khang: { total: 0, min: Infinity, classes: 0 },
-        "binh-an": { total: 0, min: Infinity, classes: 0 }
+        "binh-an": { total: 0, min: Infinity, classes: 0 },
+        cici: { total: 0, min: Infinity, classes: 0 },
+        kem: { total: 0, min: Infinity, classes: 0 }
     };
     (Array.isArray(rows) ? rows : []).forEach(row => {
         const key = teacherFilterKey(row.GiangVien);
@@ -2908,3 +2855,4 @@ document.addEventListener("DOMContentLoaded", initBeeGuide);
 
 
 <script src="assets/modern/tiktok-stats-v8.js?v=8"></script><script src="assets/modern/v8.js?v=20261113-pu"></script><script type="module" src="assets/modern/family-photo.js?v=20261113-pu"></script></body></html>
+

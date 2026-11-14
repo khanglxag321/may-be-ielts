@@ -191,15 +191,16 @@ function findRowByClass_(sheet, headers, maLop, giangVien) {
 }
 
 function objectToRow_(data, headers) {
-  data = applyWritingTuitionPolicy_(data);
+  data = applyClassTuitionPolicy_(data);
   return headers.map(function (header) {
     return Object.prototype.hasOwnProperty.call(data, header) ? data[header] : '';
   });
 }
 
-/** Monthly Writing cohorts from December 2026 share the published fee policy. */
-function writingTuitionPolicy_(item) {
-  if (!item || !/^MBWrite/i.test(String(item.MaLop || ''))) return null;
+/** Keep saved class amounts consistent with the published cohort price. */
+function classTuitionPolicy_(item) {
+  const program = String(item?.MaLop || '').trim().match(/^MB(Write|Speak)/i)?.[1].toLowerCase();
+  if (!program) return null;
   const months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
   const code = String(item.MaLop || '').trim().match(/\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)(\d{2})$/i);
   const raw = String(item.KhaiGiang || '').trim();
@@ -210,14 +211,23 @@ function writingTuitionPolicy_(item) {
   if (!/^20\d{2}-(0[1-9]|1[0-2])$/.test(month) || month < '2026-12') return null;
   const name = normalizeName_(item.GiangVien);
   const teacher = ['bach','nhi','khang'].find(function (id) { return name.indexOf(id) !== -1; });
-  if (!teacher) return null;
-  const lowest = teacher === 'bach' || (['khang', 'nhi'].includes(teacher) && month === '2026-12') ? 6500000 : 6000000;
+  if (month === '2026-12') {
+    if (program === 'write' && (teacher || /\bbinh[\s-]+an\b/.test(name))) {
+      return { HocPhiUuDai: '6.000.000đ', HocPhiGoc: '7.000.000đ' };
+    }
+    if (program === 'speak' && (teacher === 'bach' || /\b(?:lan[\s-]+trinh|cici|quynh|kem)\b/.test(name))) {
+      return { HocPhiUuDai: '4.500.000đ', HocPhiGoc: '6.000.000đ' };
+    }
+    return null;
+  }
+  if (program !== 'write' || !teacher) return null;
+  const lowest = teacher === 'bach' ? 6500000 : 6000000;
   const format = function (value) { return String(value).replace(/\B(?=(\d{3})+(?!\d))/g,'.') + 'đ'; };
   return { HocPhiUuDai: format(lowest), HocPhiGoc: format(lowest + 1000000) };
 }
 
-function applyWritingTuitionPolicy_(item) {
-  const fees = writingTuitionPolicy_(item);
+function applyClassTuitionPolicy_(item) {
+  const fees = classTuitionPolicy_(item);
   return fees ? Object.assign({}, item, fees) : item;
 }
 
@@ -233,7 +243,7 @@ function updateDecember2026WritingTuition() {
     values.forEach(function (values, index) {
       const row = {};
       headers.forEach(function (header, column) { row[header] = values[column]; });
-      const fees = writingTuitionPolicy_(row);
+      const fees = /^MBWrite/i.test(String(row.MaLop || '')) ? classTuitionPolicy_(row) : null;
       if (!fees || row.HocPhiUuDai === fees.HocPhiUuDai && row.HocPhiGoc === fees.HocPhiGoc) return;
       ['HocPhiUuDai','HocPhiGoc'].forEach(function (header) {
         sheet.getRange(index + 2, headers.indexOf(header) + 1).setValue(fees[header]);
