@@ -6,6 +6,12 @@
   background: var(--schedule-surface);
 }
 
+#schedule[data-schedule-teacher="kem"] {
+  --schedule-accent: #715116;
+  --schedule-table-line: #e1d3b2;
+  --schedule-table-header: #faf3e4;
+}
+
 #schedule .schedule-skill-tabs {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -43,7 +49,7 @@
 
 #schedule .schedule-fee {
   display: inline-grid;
-  gap: 4px;
+  gap: 5px;
   justify-items: start;
   max-width: 100%;
   text-align: left;
@@ -52,10 +58,10 @@
 
 #schedule .schedule-fee-benefits {
   color: var(--schedule-accent);
-  font-size: 13px;
+  font-size: 0.875rem;
   font-weight: 700;
-  line-height: 1.5;
-  padding: 5px 0;
+  line-height: 1.35;
+  padding: 2px 0;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -75,10 +81,6 @@
   padding: 0;
   border: 0;
   background: transparent;
-}
-
-#schedule .speaking-brand {
-  color: var(--quality-copy);
 }
 
 #schedule .schedule-filter-button {
@@ -108,31 +110,118 @@
   background: var(--schedule-surface);
 }
 
-#schedule .schedule-date-opening {
-  color: var(--schedule-accent);
+#schedule td {
+  font-size: 1rem;
+  line-height: 1.45;
 }
 
-#schedule .cohort-tag,
-#schedule .tuition-trigger {
-  background: var(--schedule-surface);
-  border-color: var(--schedule-line);
+#schedule .schedule-meeting {
+  font-weight: 700;
 }
 
-#schedule .cohort-tag,
-#schedule .speaking-offer span {
+#schedule .schedule-meeting small {
   color: var(--quality-copy-strong);
+  font-size: 0.9375rem;
+  font-weight: 550;
+  white-space: nowrap;
 }
 
-#schedule .speaking-offer,
+#schedule .cohort-tag {
+  padding: 2px 7px;
+  border: 1px solid color-mix(in srgb, var(--cohort-ink) 20%, var(--cohort-bg));
+  font-size: 0.875rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+#schedule .status-badge {
+  padding: 3px 10px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+#schedule .schedule-slot-count {
+  font-size: 1.1875rem;
+  font-weight: 800;
+}
+
+#schedule .schedule-slot-capacity {
+  margin-inline-start: 2px;
+}
+
+#schedule .tuition-trigger {
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: baseline;
+  gap: 2px 8px;
+  min-width: 0;
+  max-width: 100%;
+  padding: 6px 9px;
+  border-color: var(--schedule-line);
+  background: var(--schedule-surface);
+  line-height: 1.35;
+}
+
+#schedule .tuition-trigger-label,
+#schedule .speaking-price-label {
+  color: var(--quality-copy-strong);
+  font-size: 0.875rem;
+}
+
+#schedule .tuition-trigger-price {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#schedule .tuition-trigger-meta {
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  row-gap: 1px;
+}
+
 #schedule .tuition-trigger-link {
   color: var(--schedule-accent);
+  font-weight: 750;
+}
+
+#schedule .speaking-price {
+  display: grid;
+  gap: 2px;
+  font-size: 1rem;
+}
+
+#schedule .speaking-offer {
+  gap: 2px;
+  align-items: flex-start;
+  margin-top: 3px;
+}
+
+#schedule .speaking-offer > strong {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--bee-surface, var(--schedule-header));
+  color: var(--schedule-accent);
+  font-size: 1.1875rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+#schedule .speaking-offer > span {
+  color: var(--quality-copy-strong);
+  font-size: 0.875rem;
+  line-height: 1.35;
 }
 
 #schedule .schedule-dates {
   display: grid;
   grid-template-columns: minmax(max-content, 1fr) max-content;
   align-items: baseline;
-  gap: 3px 10px;
+  gap: 2px 8px;
   width: 100%;
 }
 
@@ -142,50 +231,87 @@
 
 #schedule .schedule-date-label {
   color: var(--quality-copy-strong);
-  font-size: 0.875rem;
-  font-weight: 650;
+  font-size: 0.9375rem;
+  font-weight: 700;
   text-align: left;
 }
 
 #schedule .schedule-date-value {
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 800;
-  line-height: 1.4;
+  line-height: 1.35;
   text-align: right;
 }
 
 #schedule .schedule-date-value .date-year {
   color: var(--quality-copy-strong);
-  font-size: 0.75rem;
-  font-weight: 650;
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
 @media (min-width: 1151px) {
   #schedule .table-responsive {
-    border-color: var(--schedule-line);
+    border-color: var(--schedule-table-line, var(--schedule-line));
     border-radius: 12px;
   }
 
-  #schedule table {
+  #schedule .table-responsive table {
+    min-width: 0;
     border-collapse: separate;
     border-spacing: 0;
   }
 
   #schedule thead,
   #schedule th {
-    background: var(--schedule-header);
+    background: var(--schedule-table-header, var(--schedule-header));
   }
 
   #schedule th {
     color: var(--quality-copy-strong);
-    font-weight: 750;
-    border-bottom: 1px solid var(--schedule-line);
+    font-size: 0.8125rem;
+    font-weight: 800;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--schedule-table-line, var(--schedule-line));
+  }
+
+  #schedule td {
+    padding: 11px 14px;
   }
 }
 
 @media (max-width: 1150px) {
+  #schedule tbody {
+    gap: 10px;
+  }
+
   #schedule tbody tr {
-    border-color: var(--schedule-line);
+    padding: 8px 12px;
+    border-color: var(--schedule-table-line, var(--schedule-line));
+  }
+
+  #schedule td {
+    padding: 6px 0;
+    gap: 4px 8px;
+  }
+
+  #schedule td::before {
+    font-size: 0.875rem;
+    font-weight: 650;
+  }
+
+  #schedule td[data-label="Học phí"] {
+    align-items: start;
+  }
+
+  #schedule .schedule-fee {
+    min-width: 0;
+    max-width: min(100%, 15rem);
+  }
+}
+
+@media (max-width: 420px) {
+  #schedule .tuition-trigger {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
