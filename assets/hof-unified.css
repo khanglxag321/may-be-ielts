@@ -15,8 +15,20 @@
   padding: clamp(14px, 3vw, 28px);
 }
 
+#halloffame .hof-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+html:has(#hof-dialog[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
 .hof-dialog-head {
   display: flex;
+  flex: none;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -34,6 +46,9 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(8px, 2vw, 18px);
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .hof-dialog-grid a {
