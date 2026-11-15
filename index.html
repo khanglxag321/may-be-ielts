@@ -1700,12 +1700,24 @@ function toggleContact(){
 
     function createTuitionPlan(row) {
         const start = parseScheduleDate(row.KhaiGiang)?.toISOString().slice(0, 10);
+        const teacher = MaybeSchedule.teacher(row.GiangVien);
+        const code = MaybeSchedule.parse(row.MaLop);
+        const today = getTodayUtc().toISOString().slice(0, 10);
         const fees = MaybeSchedule.tuitionFees({
-            teacher: MaybeSchedule.teacher(row.GiangVien), program: "write",
-            code: row.MaLop, start,
+            teacher, program: "write", code: row.MaLop, start,
             promoFee: row.HocPhiUuDai, fullFee: row.HocPhiGoc
         });
-        const plan = MaybeSchedule.tuitionPlan(start, row.MaLop, fees.promoFee, fees.fullFee, getTodayUtc().toISOString().slice(0, 10));
+
+        const hasNovemberOffer = start && teacher === "khang" && code?.program === "write" &&
+            code.month === "2026-11" && !code.plus && [6, 7].includes(code.number);
+        const offerCutover = "2026-11-20";
+        const plan = hasNovemberOffer
+            ? {
+                policy: "november-2026-khang",
+                lowest: 5500000, middle: null, original: 6000000,
+                fullStartIso: offerCutover, active: today < offerCutover ? 0 : 1
+            }
+            : MaybeSchedule.tuitionPlan(start, row.MaLop, fees.promoFee, fees.fullFee, today);
         if (!plan) return null;
 
         const shortDate = iso => formatShortDate(new Date(`${iso}T00:00:00Z`));
