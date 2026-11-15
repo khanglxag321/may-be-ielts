@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="assets/class-schedule.css?v=20261001d">
 
 
-<link rel="stylesheet" href="assets/modern/v8.css?v=20261113-pu"><script type="importmap">{"imports":{"three":"./assets/modern/vendor/three.module.js"}}</script><link rel="stylesheet" href="assets/ui-quality.css?v=20261026">
+<link rel="stylesheet" href="assets/modern/v8.css?v=20261115-nav"><script type="importmap">{"imports":{"three":"./assets/modern/vendor/three.module.js"}}</script><link rel="stylesheet" href="assets/ui-quality.css?v=20261026">
 <link rel="stylesheet" href="assets/enrollment.css?v=20261031a">
 <link rel="stylesheet" href="assets/playbook-privileges.css?v=20261031">
 <link rel="stylesheet" href="assets/benefits-20261102.css?v=1">
@@ -79,7 +79,32 @@
     </svg>
 
     <!-- Header Navbar -->
-    <header><div class="container nav-container"><a class="logo" href="#hero" aria-label="may(be)ielts. Trang chủ"><img src="assets/brand/bee-handdrawn.png" alt="" width="36" height="36"><span><b>may</b>(be)ielts.</span></a><nav class="nav-links" aria-label="Điều hướng chính"><a href="#features">Đặc quyền</a><a href="#recordings">Học thử</a><a href="#lecturers">Giáo viên</a><a href="#schedule">Lịch lớp</a><a href="#halloffame">Hall of Fame</a><a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1. ↗</a></nav><a class="cta-btn nav-cta" href="#register">Nhận lộ trình <span>↗</span></a><button type="button" class="hamburger" id="mobileMenuToggle" aria-label="Mở menu" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()"><span></span><span></span></button></div><nav class="mobile-menu" id="mobileMenu" aria-label="Menu điện thoại"><a href="#features">Đặc quyền</a><a href="#recordings">Học thử</a><a href="#lecturers">Giáo viên</a><a href="#schedule">Lịch lớp</a><a href="#halloffame">Hall of Fame</a><a href="maybe1on1.html">may(be)1on1. ↗</a><a href="#register">Nhận lộ trình</a></nav></header>
+    <header>
+        <div class="container nav-container">
+            <a class="logo" href="#hero" aria-label="may(be)ielts. Trang chủ"><img src="assets/brand/bee-handdrawn.png" alt="" width="36" height="36"><span><b>may</b>(be)ielts.</span></a>
+            <nav class="nav-links" aria-label="Điều hướng chính">
+                <a href="#features">Đặc quyền</a>
+                <a href="#recordings">Học thử</a>
+                <a href="#lecturers">Giáo viên</a>
+                <a href="#schedule">Lịch lớp</a>
+                <a href="#halloffame">Hall of Fame</a>
+                <a href="#faq">FAQ</a>
+                <a href="maybe1on1.html" class="nav-one-on-one">may(be)1on1. ↗</a>
+            </nav>
+            <a class="cta-btn nav-cta" href="#enrollment-guide">Đăng ký học thử <span aria-hidden="true">↗</span></a>
+            <button type="button" class="hamburger" id="mobileMenuToggle" aria-label="Mở menu" aria-expanded="false" aria-controls="mobileMenu" onclick="toggleMenu()"><span></span><span></span></button>
+        </div>
+        <nav class="mobile-menu" id="mobileMenu" aria-label="Menu điện thoại">
+            <a href="#features">Đặc quyền</a>
+            <a href="#recordings">Học thử</a>
+            <a href="#lecturers">Giáo viên</a>
+            <a href="#schedule">Lịch lớp</a>
+            <a href="#halloffame">Hall of Fame</a>
+            <a href="#faq">FAQ</a>
+            <a href="maybe1on1.html">may(be)1on1. ↗</a>
+            <a href="#enrollment-guide">Đăng ký học thử</a>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
     <section id="hero"><div class="hero-grain" aria-hidden="true"></div><div class="container hero-heading"><p class="eyebrow hero-eyebrow"><span></span> IELTS WRITING &amp; SPEAKING</p><h1 class="hero-title"><span>may</span>(be)ielts.</h1><p class="hero-slogan">giới hạn duy nhất của bạn chỉ là thời gian mà thôi.</p><div class="hero-buttons"><a class="btn btn-primary" href="#schedule">Xem lịch khai giảng <span>↗</span></a><a class="btn btn-secondary" href="#recordings"><span class="play-circle">▶</span> Xem lớp học thử</a></div></div><div class="container universe-shell universe-family">
@@ -1309,8 +1334,8 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleMenu(false);
         toggle?.focus();
     });
-    window.addEventListener("resize", () => {
-        if (window.innerWidth > 768 && menu?.classList.contains("show")) toggleMenu(false);
+    window.matchMedia("(min-width: 961px)").addEventListener("change", event => {
+        if (event.matches && menu?.classList.contains("show")) toggleMenu(false);
     });
 });
 
