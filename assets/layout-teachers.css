@@ -134,3 +134,79 @@
 @media (max-width: 1100px) {
   #lecturers .lecturer-video-empty { display: none; }
 }
+
+@media (max-width: 600px), (max-width: 960px) and (pointer: coarse) and (max-height: 500px) {
+  #lecturers .lecturer-video { display: none; }
+}
+
+@media (max-width: 600px) {
+  #lecturers .lecturer-grid { gap: 20px; }
+  #lecturers .lecturer-grid::before,
+  #lecturers .lecturer-row::before { display: none; }
+
+  #lecturers .lecturer-row {
+    padding: 16px;
+    gap: 18px;
+    perspective: none;
+  }
+
+  #lecturers .teacher-media {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  #lecturers .teacher-media figure {
+    padding: 5px;
+    box-shadow: none;
+  }
+
+  #lecturers .teacher-media img {
+    height: clamp(145px, 44vw, 190px);
+    object-fit: contain;
+  }
+
+  #lecturers .teacher-media figcaption {
+    font-size: 12px;
+    line-height: 1.45;
+    padding: 7px 2px 2px;
+  }
+
+  #lecturers .lecturer-badge { margin-bottom: 6px; }
+
+  #lecturers .lecturer-name {
+    font-size: 32px;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+
+  #lecturers .lecturer-score {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  #lecturers .lecturer-desc {
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 18px;
+  }
+
+  #lecturers .social-links {
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  #lecturers .social-links a {
+    min-width: 44px;
+    height: 44px;
+  }
+
+  #lecturers .lecturer-conversion {
+    gap: 10px;
+    padding-top: 14px;
+  }
+
+  #lecturers .lecturer-conversion-link {
+    min-height: 48px;
+    padding: 12px;
+  }
+}
