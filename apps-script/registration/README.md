@@ -4,7 +4,9 @@
 
 A registration is acknowledged only after `MailApp.sendEmail` succeeds. Teachers with a configured address receive the email alongside `TEAM_EMAIL`. For teachers without a configured address, the shared team inbox receives the registration. Duplicate recipient addresses are removed.
 
-The routing names follow the public class schedule. Add a teacher address to `TEACHER_EMAILS` when one is supplied, using the same accent-insensitive name normalization as the handler.
+The six current teachers have configured recipient routes. Kem and Quỳnh Kem share one teacher inbox. Cici, CC and Lan Trinh share one teacher inbox. Bình An has a separate teacher inbox. Each route includes the shared team inbox, with the Hồ Bách address deduplicated because it is also `TEAM_EMAIL`. Teacher matching ignores accents, letter case and repeated spaces.
+
+Add future teacher addresses to `TEACHER_EMAILS` using the same normalized names as the public class schedule. An unmapped future teacher still routes to the shared team inbox.
 
 Run the offline checks from the repository root.
 

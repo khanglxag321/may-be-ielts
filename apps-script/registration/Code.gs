@@ -4,7 +4,13 @@ const TEAM_EMAIL = "mbi.maybebach@gmail.com";
 const TEACHER_EMAILS = Object.freeze({
   "ho bach": "mbi.maybebach@gmail.com",
   "tue nhi": "miiiimeoooo911@gmail.com",
-  "gia khang": "khanglxagwwe@gmail.com"
+  "gia khang": "khanglxagwwe@gmail.com",
+  "quynh kem": "mbi.qkem@gmail.com",
+  "kem": "mbi.qkem@gmail.com",
+  "lan trinh": "mbi.cicintcilly@gmail.com",
+  "cici": "mbi.cicintcilly@gmail.com",
+  "cc": "mbi.cicintcilly@gmail.com",
+  "binh an": "mbi.binhan@gmail.com"
 });
 
 function doPost(e) {

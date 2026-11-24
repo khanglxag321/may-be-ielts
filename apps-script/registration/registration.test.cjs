@@ -65,9 +65,9 @@ const currentTeachers = [
   { name: 'Hồ Bách', code: 'MBWrite01+ dec26', recipients: [teamEmail] },
   { name: 'Tuệ Nhi', code: 'MBWrite02 dec26', recipients: [teamEmail, 'miiiimeoooo911@gmail.com'] },
   { name: 'Gia Khang', code: 'MBWrite06 dec26', recipients: [teamEmail, 'khanglxagwwe@gmail.com'] },
-  { name: 'Bình An', code: 'MBWrite19 dec26', recipients: [teamEmail] },
-  { name: 'Lan Trinh', code: 'MBSpeak07 dec26', recipients: [teamEmail] },
-  { name: 'Quỳnh Kem', code: 'MBSpeak08 dec26', recipients: [teamEmail] }
+  { name: 'Bình An', code: 'MBWrite19 dec26', recipients: [teamEmail, 'mbi.binhan@gmail.com'] },
+  { name: 'Lan Trinh', code: 'MBSpeak07 dec26', recipients: [teamEmail, 'mbi.cicintcilly@gmail.com'] },
+  { name: 'Quỳnh Kem', code: 'MBSpeak08 dec26', recipients: [teamEmail, 'mbi.qkem@gmail.com'] }
 ];
 
 for (const teacher of currentTeachers) {
@@ -110,6 +110,25 @@ test('preserves existing routing after normalizing accents, case and spacing', (
     const app = createApp();
     assert.equal(app.submit({ ...sample, className: 'MBWrite01 dec26 | ' + teacher }).status, 'success');
     assert.deepEqual(app.mailCalls[0].to.split(','), recipients);
+  }
+});
+
+test('routes each new teacher alias to the personal inbox and team', () => {
+  for (const [teacher, address] of [
+    ['Kem', 'mbi.qkem@gmail.com'],
+    ['Quỳnh Kem', 'mbi.qkem@gmail.com'],
+    [' QUYNH   KEM ', 'mbi.qkem@gmail.com'],
+    ['Cici', 'mbi.cicintcilly@gmail.com'],
+    ['CC', 'mbi.cicintcilly@gmail.com'],
+    ['Lan Trinh', 'mbi.cicintcilly@gmail.com'],
+    [' LAN   TRINH ', 'mbi.cicintcilly@gmail.com'],
+    ['Bình An', 'mbi.binhan@gmail.com'],
+    [' BINH   AN ', 'mbi.binhan@gmail.com']
+  ]) {
+    const app = createApp();
+    assert.deepEqual(app.submit({ ...sample, className: 'MBSpeak07 dec26 | ' + teacher }), { status: 'success' });
+    assert.equal(app.mailCalls.length, 1);
+    assert.deepEqual(app.mailCalls[0].to.split(','), [teamEmail, address]);
   }
 });
 
