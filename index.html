@@ -44,7 +44,7 @@
 <link rel="stylesheet" href="assets/speaking-finish.css?v=20261103">
 <link rel="stylesheet" href="assets/bee-card-colors.css?v=20261114-schedule-refine">
 <link rel="stylesheet" href="assets/hof-unified.css?v=20261115-dismiss">
-<link rel="stylesheet" href="assets/faq-registration.css?v=20261103">
+<link rel="stylesheet" href="assets/faq-registration.css?v=20261124">
 </head>
 <body class="modern-site">
 
@@ -1029,23 +1029,23 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                 </div>
 
             </div><div class="register-box">
-                <form onsubmit="submitRegister(event); return false;">
+                <form id="registrationForm" onsubmit="submitRegister(event); return false;">
                     <div class="form-group">
                         <label for="name">Họ và tên của em</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name" required="">
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name" maxlength="120" required="">
                     </div>
                     <div class="form-group">
                         <label for="fb-link">Link Facebook cá nhân</label>
-                        <input type="url" id="fb-link" name="facebook" class="form-control" placeholder="https://facebook.com/..." inputmode="url" autocomplete="url" required="">
+                        <input type="text" id="fb-link" name="facebook" class="form-control" placeholder="facebook.com/ten-cua-em" inputmode="url" autocomplete="url" autocapitalize="none" spellcheck="false" maxlength="500" required="">
                     </div>
                      <div class="form-group">
         <label for="email">Email cá nhân</label>
-        <input type="email" id="email" name="email" class="form-control" placeholder="emailcuaban@gmail.com" inputmode="email" autocomplete="email" required="">
+        <input type="email" id="email" name="email" class="form-control" placeholder="emailcuaban@gmail.com" inputmode="email" autocomplete="email" maxlength="200" required="">
     </div>
 
     <div class="form-group">
         <label for="phone">Số điện thoại</label>
-        <input type="tel" id="phone" name="phone" class="form-control" placeholder="0943..." inputmode="tel" autocomplete="tel" required="">
+        <input type="tel" id="phone" name="phone" class="form-control" placeholder="0943..." inputmode="tel" autocomplete="tel" maxlength="40" required="">
     </div>
 
                     <div class="form-group register-course-fields">
@@ -1063,7 +1063,11 @@ Xem trực tiếp các bản ghi hình lớp học trước khi đăng ký.
                         </div>
                     </div>
 
-                    <p class="register-form-note">Gửi thông tin để được tư vấn. Giáo viên sẽ hướng dẫn em đặt cọc và thanh toán qua tin nhắn.</p>
+                    <div class="register-schedule-notice" id="registerScheduleNotice" hidden>
+                        <p id="registerScheduleMessage">Chưa tải được danh sách lớp. Em thử tải lại nhé.</p>
+                        <button type="button" id="registerScheduleRetry" onclick="loadPublicSchedule()">Tải lại danh sách lớp</button>
+                    </div>
+                    <p class="register-form-note">Gửi thông tin để được tư vấn. Giáo viên sẽ hướng dẫn em đặt cọc và thanh toán qua tin nhắn. Nếu cần hỗ trợ, em có thể <a href="#lecturers">nhắn trực tiếp cho giáo viên</a>.</p>
                     <button type="submit" class="submit-btn" id="registerSubmitButton">Nhận lộ trình phù hợp</button>
                     <p class="register-status" id="registerStatus" role="status" aria-live="polite"></p>
                 </form>
@@ -1442,6 +1446,21 @@ function toggleContact(){
     let activeScheduleSort = "class";
     let activeScheduleSkill = "writing";
     let publicScheduleLoaded = false;
+    let publicScheduleLoading = false;
+
+    async function fetchPublicJSON(url, options = {}, timeoutMs = 25000) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+            const response = await fetch(url, { ...options, signal: controller.signal });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const result = await response.json();
+            if (!result || typeof result.status !== "string") throw new Error("Invalid API response");
+            return result;
+        } finally {
+            clearTimeout(timer);
+        }
+    }
 
     function matchesActiveScheduleSkill(row) {
         const code = String(row.MaLop || "");
@@ -1449,18 +1468,22 @@ function toggleContact(){
     }
 
     async function loadPublicSchedule() {
+        if (publicScheduleLoading) return;
+        publicScheduleLoading = true;
+        const notice = document.getElementById("registerScheduleNotice");
+        const retryButton = document.getElementById("registerScheduleRetry");
+        retryButton.disabled = true;
+        retryButton.textContent = "Đang tải danh sách lớp…";
         try {
-            const response = await fetch(`${API_URL}?t=${Date.now()}`, {
-                cache: "no-store"
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const result = await response.json();
+            const result = await fetchPublicJSON(`${API_URL}?t=${Date.now()}`, { cache: "no-store" });
 
             if (result.status === "success") {
                 publicAllScheduleRows = Array.isArray(result.data) ? result.data : [];
                 publicScheduleRows = filterClassesForRecruitment(publicAllScheduleRows);
                 publicScheduleLoaded = true;
                 renderRegistrationCourses(publicScheduleRows);
+                notice.hidden = registrationRows.length > 0;
+                document.getElementById("registerScheduleMessage").textContent = "Hiện chưa có lớp còn chỗ. Em có thể nhắn giáo viên để được tư vấn lịch mới.";
                 updateLecturerSlotNotes(publicScheduleRows);
                 renderFilteredPublicSchedule();
             } else {
@@ -1468,6 +1491,8 @@ function toggleContact(){
             }
         } catch (error) {
             console.error("Lỗi tải dữ liệu:", error);
+            notice.hidden = false;
+            document.getElementById("registerScheduleMessage").textContent = "Chưa tải được danh sách lớp. Em thử tải lại hoặc nhắn trực tiếp cho giáo viên nhé.";
             document.getElementById("scheduleFilterResult").textContent = "Tạm thời không thể tải lịch học.";
             registrationTeacher.options[0].textContent = "Chưa tải được danh sách lớp";
             document.querySelectorAll('#schedule tbody').forEach(tb => {
@@ -1476,6 +1501,10 @@ function toggleContact(){
             document.querySelectorAll('[data-slot-teacher]').forEach(note => {
                 note.textContent = note.dataset.slotEmpty || 'Chưa tải được số slot · Hỏi team để kiểm tra trực tiếp';
             });
+        } finally {
+            publicScheduleLoading = false;
+            retryButton.disabled = false;
+            retryButton.textContent = "Tải lại danh sách lớp";
         }
     }
 
@@ -2058,74 +2087,90 @@ document.getElementById("registerSuccessDialog")?.addEventListener("click", even
     if (event.target === event.currentTarget) event.currentTarget.close();
 });
 
+function normalizeFacebookLink(value) {
+    const text = value.trim();
+    try {
+        const url = new URL(/^[a-z][a-z\d+.-]*:/i.test(text) ? text : `https://${text}`);
+        const host = url.hostname.toLowerCase();
+        if (!["http:", "https:"].includes(url.protocol) || url.username || url.password ||
+            !(host === "facebook.com" || host.endsWith(".facebook.com") || host === "fb.com" || host === "fb.me")) return "";
+        return url.href;
+    } catch {
+        return "";
+    }
+}
+
+const facebookField = document.getElementById("fb-link");
+facebookField.addEventListener("input", () => facebookField.setCustomValidity(""));
+facebookField.addEventListener("blur", () => {
+    const link = normalizeFacebookLink(facebookField.value);
+    if (link) facebookField.value = link;
+});
+
 async function submitRegister(e){
     e.preventDefault();
-
     const form = e.currentTarget;
     const submitButton = document.getElementById("registerSubmitButton");
     const status = document.getElementById("registerStatus");
-    if (submitButton?.disabled) return;
+    if (submitButton.disabled) return;
+
+    const facebook = normalizeFacebookLink(facebookField.value);
+    facebookField.setCustomValidity(facebook ? "" : "Em nhập link Facebook cá nhân, ví dụ facebook.com/ten-cua-em nhé.");
+    if (!form.reportValidity()) return;
+    facebookField.value = facebook;
     if (!document.getElementById("course").value) {
-        status.textContent = "Em cần chọn giáo viên và lớp trước khi gửi.";
+        status.textContent = "Em cần chọn giáo viên và lớp trước khi gửi. Nếu chưa có danh sách lớp, em thử tải lại nhé.";
         status.className = "register-status is-error";
         return;
     }
-    if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = "Đang gửi thông tin…";
-    }
-    if (status) {
-        status.textContent = "";
-        status.className = "register-status";
-    }
-
     const data = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        facebook: document.getElementById("fb-link").value,
-           className: document.getElementById("course").value
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        facebook,
+        className: document.getElementById("course").value
     };
+    if (!data.name || !data.phone) {
+        status.textContent = "Em điền họ tên và số điện thoại trước khi gửi nhé.";
+        status.className = "register-status is-error";
+        document.getElementById(data.name ? "phone" : "name").focus();
+        return;
+    }
+    submitButton.disabled = true;
+    submitButton.textContent = "Đang gửi thông tin…";
+    form.setAttribute("aria-busy", "true");
+    status.textContent = "Đang gửi thông tin, em chờ một chút nhé…";
+    status.className = "register-status";
 
-    try{
-        const res = await fetch(REGISTER_API, {
-    method: "POST",
-    headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-    },
-    body: JSON.stringify(data)
-});
-
-        const result = await res.json();
-
-        if(result.status === "success"){
-            activateBeeGuide('success', true);
-            showRegisterSuccessDialog();
-            if (status) {
-                status.textContent = "Đã gửi thành công! Em nhớ kiểm tra Tin nhắn chờ / Tin nhắn từ người lạ trên Facebook hoặc Zalo nhé.";
-                status.classList.add("is-success");
-            }
-            form?.reset();
-        } else {
-            if (status) {
-                status.textContent = "Chưa gửi được thông tin. Em thử lại sau một chút nhé.";
-                status.classList.add("is-error");
-            }
+    try {
+        const result = await fetchPublicJSON(REGISTER_API, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(data)
+        });
+        if (result.status !== "success") {
+            console.error("Đăng ký bị từ chối:", result.message || "Unknown service error");
+            status.textContent = "Dịch vụ chưa nhận được đăng ký. Thông tin em điền vẫn được giữ lại; em thử lại hoặc nhắn trực tiếp cho giáo viên để được hỗ trợ nhé.";
+            status.className = "register-status is-error";
+            return;
         }
-
-    }catch(err){
-        if (status) {
-            status.textContent = "Không gửi được dữ liệu. Em kiểm tra kết nối rồi thử lại nhé.";
-            status.classList.add("is-error");
-        }
-        console.error(err);
-    }finally{
-        if (submitButton) {
-            submitButton.disabled = false;
-            submitButton.textContent = "Nhận lộ trình phù hợp";
-        }
+        status.textContent = "Đã gửi thành công! Em nhớ kiểm tra Tin nhắn chờ / Tin nhắn từ người lạ trên Facebook hoặc Zalo nhé.";
+        status.className = "register-status is-success";
+        form.reset();
+        showRegisterSuccessDialog();
+        // Hiệu ứng hướng dẫn không được làm thay đổi kết quả nhận đơn.
+        try { activateBeeGuide('success', true); } catch (error) { console.warn("Bee guide:", error); }
+    } catch (error) {
+        status.textContent = "Chưa xác nhận được kết quả gửi. Thông tin em điền vẫn được giữ lại. Em có thể nhắn giáo viên để kiểm tra trước khi gửi lại nhé.";
+        status.className = "register-status is-error";
+        console.error("Lỗi kết nối đăng ký:", error);
+    } finally {
+        form.removeAttribute("aria-busy");
+        submitButton.disabled = false;
+        submitButton.textContent = "Nhận lộ trình phù hợp";
     }
 }
+
 </script>
 
 <script>

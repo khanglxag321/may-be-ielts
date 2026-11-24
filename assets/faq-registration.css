@@ -13,3 +13,10 @@
   cursor: not-allowed;
   opacity: .75;
 }
+
+.register-schedule-notice { grid-column: 1 / -1; padding: 14px 16px; border: 1px solid #c9d7f5; border-radius: 10px; background: #eef3ff; color: #26385c; font-size: 15px; line-height: 1.6; }
+.register-schedule-notice[hidden] { display: none; }
+.register-schedule-notice p { margin: 0 0 8px; }
+.register-schedule-notice button { min-height: 44px; color: #174dc5; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.register-schedule-notice button:disabled { opacity: .65; cursor: wait; }
+.register-form-note a { color: #174dc5; text-decoration: underline; text-underline-offset: 3px; }
