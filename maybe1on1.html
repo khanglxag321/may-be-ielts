@@ -637,12 +637,15 @@
         .mentor-card:nth-child(3n) { --mentor-accent: #20A47C; --mentor-soft: #DDF8EF; }
         .mentor-portrait {
             position: relative;
-            height: 288px;
+            aspect-ratio: 5 / 4;
             overflow: hidden;
             background: var(--mentor-soft);
         }
         .mentor-img {
+            display: block;
             height: 100%;
+            object-position: var(--portrait-focus, 50% 20%);
+            transform-origin: var(--portrait-focus, 50% 20%);
             transition: transform .65s cubic-bezier(.2,.7,.2,1);
         }
         .mentor-card:hover .mentor-img { transform: scale(1.035); }
@@ -896,7 +899,6 @@
             .features-grid { grid-template-columns: 1fr; }
             .feature-card { min-height: 310px; }
             .mentor-grid { grid-template-columns: 1fr; max-width: 520px; margin-inline: auto; }
-            .mentor-portrait { height: 320px; }
             .tabs { width: 100%; }
             .tab-btn { flex: 1; padding-inline: 10px; font-size: .66rem; }
             .steps-grid { grid-template-columns: 1fr; }
@@ -918,7 +920,6 @@
             .section-title { font-size: 2.65rem; }
             .mentor-header { flex-direction: column; }
             .mentor-name { min-height: 0; max-width: 100%; }
-            .mentor-portrait { height: 275px; }
             .mentor-info { padding: 22px; }
             .capacity-header { align-items: flex-start; gap: 10px; }
             .capacity-header .status-text { text-align: right; }
@@ -1175,7 +1176,7 @@
     </div>
 
     <!-- Mentor data is kept separate so future updates do not touch this page. -->
-    <script src="assets/maybe1on1/mentors.js?v=20261128-contact"></script>
+    <script src="assets/maybe1on1/mentors.js?v=20261128-portraits"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyV2EXMoRm0WUXYHvkCBzZbjBkbFQ0swVYNBf70Ae6SsNt_CXnv7nCqHaPYFNm-n1oZ/exec";
         const DAYS = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
@@ -1228,7 +1229,7 @@
             grid.insertAdjacentHTML('beforeend', `
               <article class="mentor-card mentor-card--${mentor.role}">
                 <div class="mentor-portrait">
-                  <img src="${mentor.image}" alt="${mentor.name}" class="mentor-img" loading="lazy" decoding="async">
+                  <img src="${mentor.image}" alt="${mentor.name}" class="mentor-img" style="--portrait-focus: ${mentor.imagePosition || '50% 20%'}" loading="lazy" decoding="async">
                   <svg class="mentor-bee" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><use href="#maybe-mark"/></svg>
                 </div>
                 <div class="mentor-info">
