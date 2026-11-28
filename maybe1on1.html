@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Học IELTS 1-1 cùng may(be)1on1. Khám phá Writing và Speaking Mentor, xem hồ sơ, lịch trống và liên hệ chọn người đồng hành phù hợp.">
+    <meta name="description" content="Học IELTS 1-1 cùng may(be)1on1. Xem hồ sơ, lịch trống của Writing và Speaking Mentor, liên hệ cô Bình An để được tư vấn và đăng ký.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>may(be)1on1. - IELTS 1-1 Theo Cách Của Bạn</title>
     <!-- Brand favicon for browsers and Google Search -->
@@ -702,6 +702,27 @@
         .profile-link:hover { border-color: var(--mentor-accent); background: var(--mentor-soft); color: var(--mentor-accent); }
         .schedule-btn { background: var(--mentor-accent); border-color: var(--mentor-accent); box-shadow: 0 9px 20px color-mix(in srgb, var(--mentor-accent) 23%, transparent); }
 
+        .mentor-contact {
+            scroll-margin-top: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin: -24px 0 36px;
+            padding: 28px;
+            border: 1px solid var(--maybe-blue-soft);
+            border-radius: 24px;
+            background: var(--bg-secondary);
+        }
+        .mentor-contact-copy { flex: 1 1 280px; min-width: 0; }
+        .mentor-contact h3 { margin: 0 0 4px; color: var(--maybe-navy); font-size: 1.3rem; }
+        .mentor-contact p { margin: 4px 0 0; color: var(--text-muted); }
+        .mentor-contact-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+        .mentor-contact .profile-link { color: var(--maybe-blue); border-color: var(--maybe-blue-soft); }
+        .mentor-contact .profile-link:hover { background: var(--maybe-blue-soft); }
+        .mentor-contact a:focus-visible, .mentor-actions a:focus-visible { outline: 3px solid var(--maybe-blue); outline-offset: 3px; }
+
         /* Process */
         #how-it-works {
             position: relative;
@@ -1000,8 +1021,20 @@
     <section id="mentors" class="section-padding">
         <div class="container">
             <h2 class="section-title">chọn mentor của bạn.</h2>
-            <p class="section-subtitle">Gặp gỡ đội ngũ Writing & Speaking Mentor. Kiểm tra lịch trống và liên hệ trực tiếp để bắt đầu lộ trình của riêng bạn.</p>
+            <p class="section-subtitle">Gặp gỡ đội ngũ Writing & Speaking Mentor. Xem hồ sơ, kiểm tra lịch trống và liên hệ cô Bình An để được tư vấn chọn mentor phù hợp.</p>
             
+            <aside class="mentor-contact" id="contact" aria-labelledby="mentor-contact-title">
+                <div class="mentor-contact-copy">
+                    <h3 id="mentor-contact-title">Liên hệ cô Bình An</h3>
+                    <p>Leader team Speaking</p>
+                    <p>Cô Bình An hỗ trợ tư vấn, sắp xếp mentor và đăng ký lớp 1–1 cho cả Writing và Speaking.</p>
+                </div>
+                <div class="mentor-contact-actions">
+                    <a class="profile-link" href="https://www.facebook.com/binhansongbinhan" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i> Facebook cô Bình An</a>
+                    <a class="profile-link" href="https://zalo.me/0825696699" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> Zalo 0825 696 699</a>
+                </div>
+            </aside>
+
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('writing', this)">WRITING MENTOR</button>
                 <button class="tab-btn" onclick="switchTab('speaking', this)">SPEAKING MENTOR</button>
@@ -1032,8 +1065,8 @@
                 </div>
                 <div class="step-card">
                     <div class="step-num">03</div>
-                    <h3 class="step-title">Nhắn Mentor</h3>
-                    <p class="step-desc">Sử dụng nút liên hệ để nhắn tin trực tiếp qua Facebook của Mentor, thống nhất lịch học chính thức và nhận hướng dẫn chuyển khoản.</p>
+                    <h3 class="step-title">Liên hệ cô Bình An</h3>
+                    <p class="step-desc">Nhắn cô Bình An, leader team Speaking, qua Facebook hoặc Zalo để được tư vấn mentor cho cả Writing và Speaking, thống nhất lịch học và nhận hướng dẫn đăng ký.</p>
                 </div>
             </div>
         </div>
@@ -1052,7 +1085,7 @@
                 </div>
                 <div class="faq-item">
                     <div class="faq-question" onclick="toggleFaq(this)">Lịch học có cố định không? <i class="fa-solid fa-chevron-down"></i></div>
-                    <div class="faq-answer"><br>Lịch học không hoàn toàn cố định. Điểm mạnh của lớp 1-1 là sự linh hoạt. Bạn có thể chốt một lịch cố định hàng tuần, hoặc linh động điều chỉnh qua từng tuần tùy vào lịch trình cá nhân bằng cách trao đổi trực tiếp với Mentor.</div>
+                    <div class="faq-answer"><br>Lịch học không hoàn toàn cố định. Bạn có thể chọn lịch hàng tuần hoặc điều chỉnh theo lịch trình cá nhân. Hãy liên hệ cô Bình An để được hỗ trợ chọn mentor và thống nhất khung giờ phù hợp.</div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-question" onclick="toggleFaq(this)">Tôi có thể đổi lịch học không? <i class="fa-solid fa-chevron-down"></i></div>
@@ -1080,6 +1113,7 @@
             <div class="footer-links">
                 <a href="https://khanglxag321.github.io/may-be-ielts/">Trang chủ may(be)ielts</a>
                 <a href="#mentors">Chọn Mentor</a>
+                <a href="#contact">Liên hệ cô Bình An</a>
                 <a href="#faq">Câu hỏi thường gặp</a>
             </div>
             <div class="footer-bottom">
@@ -1102,7 +1136,7 @@
             <div style="padding:28px;text-align:center;color:var(--text-muted)">Đang tải lịch...</div>
           </div>
         </div>
-        <div class="modal-footer" style="margin-top:20px"><a id="scheduleContact" class="cta-btn" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> NHẮN MENTOR ĐỂ HỎI LỊCH</a></div>
+        <div class="modal-footer" style="margin-top:20px"><a id="scheduleContact" class="cta-btn" href="https://zalo.me/0825696699" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-comment-dots" aria-hidden="true"></i> Nhắn cô Bình An để hỏi lịch</a></div>
       </div>
     </div>
 
@@ -1119,7 +1153,7 @@
     </div>
 
     <!-- Mentor data is kept separate so future updates do not touch this page. -->
-    <script src="assets/maybe1on1/mentors.js"></script>
+    <script src="assets/maybe1on1/mentors.js?v=20261128-contact"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyV2EXMoRm0WUXYHvkCBzZbjBkbFQ0swVYNBf70Ae6SsNt_CXnv7nCqHaPYFNm-n1oZ/exec";
         const DAYS = ["Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7","Chủ nhật"];
@@ -1165,9 +1199,6 @@
           const grid=document.getElementById('mentorGrid');
           grid.innerHTML='';
           MENTORS.filter(m=>m.role===currentTab).forEach(mentor=>{
-            const fb=mentor.facebook
-              ? `<a class="profile-link" href="${mentor.facebook}" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i> Facebook</a>`
-              : `<span class="profile-link disabled"><i class="fa-brands fa-facebook-f"></i> Chưa cập nhật</span>`;
             grid.insertAdjacentHTML('beforeend', `
               <article class="mentor-card mentor-card--${mentor.role}">
                 <div class="mentor-portrait">
@@ -1184,8 +1215,7 @@
                     <div class="capacity-bar"><div class="capacity-fill ${(mentor.currentStudents || 0) >= (mentor.maxStudents || 10) ? 'full' : ''}" style="width:${Math.min(((mentor.currentStudents || 0)/(mentor.maxStudents || 10))*100,100)}%"></div></div>
                   </div>
                   <div class="mentor-actions">
-                    <a class="profile-link" href="${mentor.zalo}" target="_blank" rel="noopener"><i class="fa-solid fa-comment-dots"></i> Zalo</a>
-                    ${fb}
+                    <a class="profile-link" href="#contact">Liên hệ cô Bình An</a>
                     <button class="cta-btn schedule-btn" onclick="openSchedule('${mentor.id}')"><i class="fa-regular fa-calendar"></i> XEM LỊCH TRỐNG</button>
                   </div>
                 </div>
@@ -1198,7 +1228,6 @@
         function openSchedule(id){
           const m=MENTORS.find(x=>x.id===id); if(!m)return;
           document.getElementById('scheduleTitle').textContent=`Lịch trống của ${m.name}`;
-          document.getElementById('scheduleContact').href=m.zalo;
           const meta=document.getElementById('scheduleUpdatedAt');
           if(meta) meta.textContent=`Cập nhật lần cuối: ${formatUpdatedAt(m.updatedAt)}`;
           const grid=document.getElementById('liveScheduleGrid');
